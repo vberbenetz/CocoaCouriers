@@ -1,0 +1,12 @@
+{
+  "name": "CantangoHome",
+  "version": "1.0.0",
+  "description": "Cantango Solutions Inc.",
+  "main": "server.js",
+  "dependencies": {
+    "express" : "^4.0.0",    
+    "body-parser" : "^1.2.0",
+    "express-session" : "^1.0.4",
+    "serve-static" : "^1.2.3"
+  }
+}
