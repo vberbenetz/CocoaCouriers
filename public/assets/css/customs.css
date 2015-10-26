@@ -30,3 +30,7 @@
 .font-dark {
     color: #000000;
 }
+
+.font-large {
+    font-size: 55px;
+}
