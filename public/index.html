@@ -31,7 +31,7 @@
 
 
 </head>
-<body data-spy="scroll" data-target=".navbar" data-offset="70">
+<body data-spy="scroll" data-target=".navbar" data-offset="70" ng-app="app">
 	<!--[if lt IE 7]>
 		<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 	<![endif]-->
@@ -164,23 +164,18 @@
                     </div>
                 </div>
             </div>
-			</div>
 		</section>
 
     <!-- Pricing -->
-    <section id="pricing">
-        <!--/* Background pattern from subtlepatterns.com */-->
-            <div class="container-fluid bg-greyz ">
-                <div class="container">
+    <section id="pricing" ng-controller="ctrl">
+
+        <div class="container-fluid bg-greyz" ng-init="formPage=1">
+            <div class="container" ng-if="formPage==1">
                 <!-- Header -->
                 <header>
                     <div class="row">
                         <div class="col-sm-8 col-sm-offset-2 wow fadeInDown margin-top-40">
-                            <h1>Get Started</h1>
-                            <div class="dotted-break">
-                                <span></span><span></span><span></span><span></span><span></span>
-                            </div>
-                            <h2>Choose A Quantity</h2>
+                            <h1>Choose A Quantity</h1>
                             <p>Select The Right Quantity From Our Packages. Don't worry, if you buy to many or too little you can change your subscription at any time! </p>
                         </div>
                     </div>
@@ -200,7 +195,7 @@
                                     Discrete Package<br />
                                     Monthly Epic Story
                                 </div>
-                                <a href="#" title="#" class="btn btn-default btn-lg">Sign up</a>
+                                <a href="" ng-click="selectPlan(1)" title="#" class="btn btn-default btn-lg">Sign up</a>
                             </div>
                         </div>
                     </div>
@@ -216,11 +211,11 @@
                                     Discrete Package<br />
                                     Monthly Epic Story
                                 </div>
-                                <a href="#" title="#" class="btn btn-default btn-lg">Sign up</a>
+                                <a href="" ng-click="selectPlan(2)" title="#" class="btn btn-default btn-lg">Sign up</a>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-3 i wow active fadeInRight animated" data-wow-duration="0.5s" data-wow-delay="0.2s">
+                    <div class="col-xs-12 col-sm-3 i wow fadeInRight animated" data-wow-duration="0.5s" data-wow-delay="0.2s">
                         <div class="wrap borderedHover">
                             <div class="c">
                                 <h3>Don Juan</h3>
@@ -232,7 +227,7 @@
                                     Discrete Package<br />
                                     Monthly Epic Story
                                 </div>
-                                <a href="#" title="#" class="btn btn-default btn-lg">Sign up</a>
+                                <a href="" ng-click="selectPlan(3)" title="#" class="btn btn-default btn-lg">Sign up</a>
                             </div>
                         </div>
                     </div>
@@ -248,12 +243,151 @@
                                     Discrete Package<br />
                                     Monthly Epic Story
                                 </div>
-                                <a href="#" title="#" class="btn btn-default btn-lg">Sign up</a>
+                                <a href="" ng-click="selectPlan(4)" title="#" class="btn btn-default btn-lg">Sign up</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div class="container" ng-if="formPage==2">
+                <!-- Header -->
+                <header>
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2 wow fadeInDown margin-top-40">
+                            <h1>Choose A Brand</h1>
+                            <p>Select a brand. Or let us send you an assorted variety pack instead</p>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Content -->
+                <div class="row">
+                    <div class="col-xs-12 col-sm-2 col-sm-offset-1 i wow fadeInLeft animated" data-wow-duration="0.5s" data-wow-delay="0.2s">
+                        <div class="wrap borderedHover">
+                            <div class="c">
+                                <a href="" ng-click="selectBrand('trojan')" title="#" class="btn btn-default">
+                                    <img src="" alt="Trojan">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-2 i  wow fadeInUp animated" data-wow-duration="0.5s" data-wow-delay="0.2s">
+                        <div class="wrap borderedHover">
+                            <div class="c">
+                                <a href="" ng-click="selectBrand('lifestyles')" title="#" class="btn btn-default">
+                                    <img src="" alt="LifeStyles">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-2 i wow fadeInRight animated" data-wow-duration="0.5s" data-wow-delay="0.2s">
+                        <div class="wrap borderedHover">
+                            <div class="c">
+                                <a href="" ng-click="selectBrand('okamoto')" title="#" class="btn btn-default">
+                                    <img src="" alt="Okamoto">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-2 i wow fadeInRight animated" data-wow-duration="0.5s" data-wow-delay="0.2s">
+                        <div class="wrap borderedHover">
+                            <div class="c">
+                                <a href="" ng-click="selectBrand('beyondseven')" title="#" class="btn btn-default">
+                                    <img src="" alt="BeyondSeven">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-2 i wow fadeInRight animated" data-wow-duration="0.5s" data-wow-delay="0.2s">
+                        <div class="wrap borderedHover">
+                            <div class="c">
+                                <a href="" ng-click="selectBrand('crown')" title="#" class="btn btn-default">
+                                    <img src="" alt="Crown">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-xs-offset-3 col-md-4 col-md-offset-4 col-lg-2 col-lg-offset-5">
+                    <button class="btn btn-block" ng-click="goBack(1)">
+                        <span class="fa fa-backward"></span>Change Quantity
+                    </button>
+                </div>
+            </div>
+
+            <div class="container" ng-if="formPage==3">
+                <!-- Header -->
+                <header>
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2 wow fadeInDown margin-top-40">
+                            <h1>Who Are You And Where Do You Live?</h1>
+                            <p>So we can send you the goods</p>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Content -->
+                <div class="col-lg-8 col-lg-offset-2">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">First Name</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Last Name</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Email address</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Address</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Address</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">City</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Province</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Postal Code</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Country</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Card Number</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Expiry</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">CVC</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="">
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"> Check me out
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </form>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -573,6 +707,8 @@
 	<script src="assets/js/waypoints.min.js"></script>
 	<script src="assets/js/jquery.magnific-popup.min.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    <script src="assets/js/ng-app.js"></script>
 
 	<!-- Custom JS -->
 	<script src="assets/js/portfolio.js"></script>
