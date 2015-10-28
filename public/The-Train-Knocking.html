@@ -181,56 +181,34 @@
 			</div>
 		</section>
 
-		<!-- Contact -->
-		<section id="contact" >
-			<div class="container">
-				<!-- Header -->
-				<header class="font-white">
-					<div class="row">
-						<div class="col-sm-8 col-sm-offset-2 wow fadeInDown">
-							<h1>Contact us</h1>
-							<div class="dotted-break"></div>
-							<h2>Keep in touch</h2>
-						</div>
-					</div>
-				</header>
+        <!-- Content -->
+        <div class="row">
+            <div class="col-xs-12 info">
+                <span class="wow fadeInRight" data-wow-delay="0.4s"><i class="fa fa-envelope-o icon"></i> info@domerbox.com</span>
+            </div>
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+                <form class="js-contact-form" role="form" action="mail/contact.php" method="post" data-parsley-validate>
+                    <div id="msgInfo"></div>
+                    <input type="text" class="form-control wow fadeInLeft name" data-wow-delay="0.2s" placeholder="Name" required data-parsley-error-message="Enter name">
+                    <input type="email" class="form-control wow fadeInLeft email" data-wow-delay="0.4s" placeholder="Email" required data-parsley-error-message="Enter email">
+                    <textarea class="form-control wow fadeInLeft message" data-wow-delay="0.6s" rows="6" placeholder="Message" required data-parsley-error-message="Enter message"></textarea>
+                    <button type="submit" class="btn btn-lg wow fadeInUp" data-wow-delay="1s">Send message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    </section>
 
-				<!-- Content -->		
-				<div class="row">
-					<div class="col-xs-12 info">
-						<span class="wow fadeInRight" data-wow-delay="0.2s"><i class="fa fa-location-arrow icon"></i> 9532 Lexington Ave, New York, NY 10021</span>
-						<span class="wow fadeInRight" data-wow-delay="0.4s"><i class="fa fa-envelope-o icon"></i> name@emailaddress.com</span>
-						<span class="wow fadeInRight" data-wow-delay="0.6s"><i class="fa fa-phone icon"></i>+421(0) 555 555 55</span>
-					</div>
-					<div class="col-xs-12 col-sm-8 col-sm-offset-2">
-						<form class="js-contact-form" role="form" action="mail/contact.php" method="post" data-parsley-validate>
-							<div id="msgInfo"></div>
-							<input type="text" class="form-control wow fadeInLeft name" data-wow-delay="0.2s" placeholder="Name" required data-parsley-error-message="Enter name">
-							<input type="email" class="form-control wow fadeInLeft email" data-wow-delay="0.4s" placeholder="Email" required data-parsley-error-message="Enter email">
-							<textarea class="form-control wow fadeInLeft message" data-wow-delay="0.6s" rows="6" placeholder="Message" required data-parsley-error-message="Enter message"></textarea>
-							<button type="submit" class="btn btn-lg wow fadeInUp" data-wow-delay="1s">Send message</button>
-						</form>
-					</div>
-				</div>
-			</div>
-		</section>
+    <footer id="footer">
+        <div class="social">
+            <a href="#" title="#" class="icon"><i class="fa fa-facebook"></i></a>
+            <a href="#" title="#" class="icon"><i class="fa fa-twitter"></i></a>
+            <a href="#" title="#" class="icon"><i class="fa fa-linkedin"></i></a>
+            <a href="#" title="#" class="icon"><i class="fa fa-google-plus"></i></a>
+        </div>
 
-		<!-- Google map -->
-		<div class="googleMapWrap">
-			<div id="googleMap" class="wow flipInX" data-lat="40.712784" data-lng="-74.005941"></div>
-		</div>
-
-		<footer id="footer">
-			<div class="social">
-				<a href="#" title="#" class="icon"><i class="fa fa-facebook"></i></a>
-				<a href="#" title="#" class="icon"><i class="fa fa-twitter"></i></a>
-				<a href="#" title="#" class="icon"><i class="fa fa-linkedin"></i></a>
-				<a href="#" title="#" class="icon"><i class="fa fa-google-plus"></i></a>
-			</div>
-
-			<div>© 2015 PULSE / All rights reserved</div>
-			<div>Web Design by: <a href="http://jurajmolnar.com" title="#" target="_blank">Juraj Molnár</a></div>
-		</footer>
+        <div>© 2015 DomerBox / All rights reserved</div>
+    </footer>
 
 	</div>
 
