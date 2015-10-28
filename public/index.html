@@ -252,6 +252,56 @@
                     <!-- Content -->
                     <div ng-if="formPage==2">
                         <div class="margin-bottom-40">
+                            <h3 class="text-center">CHOOSE A SIZE</h3>
+                            <p class="text-center">In case you're packing a little more heat...</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3 col-sm-offset-3 i wow fadeInLeft animated" data-wow-duration="0.5s" data-wow-delay="0.2s" ng-click="selectSize('regular')">
+                                <div class="wrap borderedHover">
+                                    <div class="c">
+                                        <img class="img-responsive" src="" alt="REGULAR">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3 i  wow fadeInUp animated" data-wow-duration="0.5s" data-wow-delay="0.2s" ng-click="selectSize('large')">
+                                <div class="wrap borderedHover">
+                                    <div class="c">
+                                        <img class="img-responsive" src="" alt="LARGE">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-default margin-top-20 pull-right" ng-click="goBack(1)">Back</button>
+                    </div>
+
+                    <!-- Content -->
+                    <div ng-if="formPage==3">
+                        <div class="margin-bottom-40">
+                            <h3 class="text-center">CHOOSE A MATERIAL</h3>
+                            <p class="text-center">We know latex isn't for everyone</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3 col-sm-offset-3 i wow fadeInLeft animated" data-wow-duration="0.5s" data-wow-delay="0.2s" ng-click="selectMaterial('latex')">
+                                <div class="wrap borderedHover">
+                                    <div class="c">
+                                        <img class="img-responsive" src="" alt="LATEX">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3 i  wow fadeInUp animated" data-wow-duration="0.5s" data-wow-delay="0.2s" ng-click="selectMaterial('rubber')">
+                                <div class="wrap borderedHover">
+                                    <div class="c">
+                                        <img class="img-responsive" src="" alt="NATURAL RUBBER">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-default margin-top-20 pull-right" ng-click="goBack(2)">Back</button>
+                    </div>
+
+                    <!-- Content -->
+                    <div ng-if="formPage==4">
+                        <div class="margin-bottom-40">
                             <h3 class="text-center">CHOOSE A BRAND</h3>
                             <p class="text-center">Decide who you prefer. If you're feeling adventurous, let us decide for you</p>
                         </div>
@@ -303,11 +353,11 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="btn btn-default margin-top-20 pull-right" ng-click="goBack(1)">Back</button>
+                        <button class="btn btn-default margin-top-20 pull-right" ng-click="goBack(3)">Back</button>
                     </div>
 
                     <!-- Content -->
-                    <div class="row" ng-if="formPage==3">
+                    <div class="row" ng-if="formPage==5">
                         <div class="margin-bottom-40">
                             <h3 class="text-center">Your Shipping Info</h3>
                             <p class="text-center">We need to make sure we send the "package" to the right person</p>
@@ -610,14 +660,14 @@
                                         </select>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="next(4)">Next</button>
-                                <button type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="goBack(2)">Back</button>
+                                <button type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="next(6)">Next</button>
+                                <button type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="goBack(4)">Back</button>
                             </form>
                         </div>
                     </div>
 
                     <!-- Content -->
-                    <div class="row" ng-if="formPage==4">
+                    <div class="row" ng-if="formPage==6">
                         <div class="margin-bottom-40">
                             <h3 class="text-center">Your Payment Details</h3>
                             <p class="text-center">Unfortunately condoms don't grow on trees ...yet</p>
@@ -676,7 +726,7 @@
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="refreshPage()">Submit</button>
-                                <button type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="goBack(3)">Back</button>
+                                <button type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="goBack(5)">Back</button>
                             </form>
                         </div>
                     </div>

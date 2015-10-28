@@ -48,9 +48,19 @@ angular.module("app", [])
             $scope.formPage = 2;
         };
 
+        $scope.selectSize = function(size) {
+            $scope.size = size;
+            $scope.formPage = 3;
+        };
+
+        $scope.selectMaterial = function(material) {
+            $scope.material = material;
+            $scope.formPage = 4;
+        };
+
         $scope.selectBrand = function(brand) {
             $scope.activeBrand = brand;
-            $scope.formPage = 3;
+            $scope.formPage = 5;
         };
 
         $scope.goBack = function(formPage) {
