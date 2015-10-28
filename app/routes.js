@@ -20,6 +20,15 @@ module.exports = function(app) {
 		res.sendfile('./public/blog-detail.html');
 	});
 
+    app.get('/happy-anniversary', function(req, res) {
+        res.sendfile('./public/Happy-Anniversary.html');
+    });
+
+    app.get('//the-train-knocking', function(req, res) {
+        res.sendfile('./public//The-Train-Knocking.html');
+    });
+
+
     // TODO: ADD 404 PAGE
     // Send to home page if no route found ============================================================================/
     app.get('*', function(req, res) {
