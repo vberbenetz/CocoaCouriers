@@ -1,6 +1,6 @@
 angular.module("app", [])
 
-    .controller("ctrl", function($scope) {
+    .controller("ctrl", function($scope, $window) {
 
         $scope.plan = [
             {
@@ -25,6 +25,22 @@ angular.module("app", [])
             }
         ];
 
+        $scope.formData = {
+            firstName: '',
+            lastName: '',
+            email: '',
+            addressL1: '',
+            addressL2: '',
+            city: '',
+            province: '',
+            country: '',
+            cardHolderName: '',
+            cardNumber: '',
+            cardExpM: '',
+            cardExpY: '',
+            cardCVV: ''
+        };
+
         $scope.activePlan = 0;
 
         $scope.selectPlan = function(planId) {
@@ -38,6 +54,14 @@ angular.module("app", [])
         };
 
         $scope.goBack = function(formPage) {
-            $scope.formPage = 1;
-        }
+            $scope.formPage = formPage;
+        };
+
+        $scope.next = function(formPage) {
+            $scope.formPage = formPage;
+        };
+
+        $scope.refreshPage = function() {
+            $window.location.href = '/';
+        };
 });

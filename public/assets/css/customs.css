@@ -1,3 +1,7 @@
+.margin-top-20 {
+    margin-top: 20px;
+}
+
 .color-red {
     color:#c0392b;
 }
@@ -34,3 +38,9 @@
 .font-large {
     font-size: 55px;
 }
+
+.input-normal {
+    border-color: #080808;
+    color: #080808;
+}
+
