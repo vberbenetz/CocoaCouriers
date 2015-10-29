@@ -24,7 +24,7 @@ module.exports = function(app) {
         res.sendfile('./public/Happy-Anniversary.html');
     });
 
-    app.get('//the-train-knocking', function(req, res) {
+    app.get('/the-train-knocking', function(req, res) {
         res.sendfile('./public//The-Train-Knocking.html');
     });
 
