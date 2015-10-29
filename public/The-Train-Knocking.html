@@ -166,56 +166,68 @@
 			</div>
 		</section>
 
-        <!-- Content -->
-        <div class="row">
-            <div class="col-xs-12 info">
-                <span class="wow fadeInRight" data-wow-delay="0.4s"><i class="fa fa-envelope-o icon"></i> info@domerbox.com</span>
+        <!-- Contact -->
+        <section id="contact" >
+            <div class="container">
+                <!-- Header -->
+                <header class="font-white">
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2 wow fadeInDown">
+                            <h1>Send Us Your Stories</h1>
+                            <div class="dotted-break"></div>
+                            <h2>We May Include Them In Next Months Orders!</h2>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Content -->
+                <div class="row">
+                    <div class="col-xs-12 info">
+                        <span class="wow fadeInRight" data-wow-delay="0.4s"><i class="fa fa-envelope-o icon"></i> info@domerbox.com</span>
+                    </div>
+                    <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+                        <form class="js-contact-form" role="form" action="mail/contact.php" method="post" data-parsley-validate>
+                            <div id="msgInfo"></div>
+                            <input type="text" class="form-control wow fadeInLeft name" data-wow-delay="0.2s" placeholder="Name" required data-parsley-error-message="Enter name">
+                            <input type="email" class="form-control wow fadeInLeft email" data-wow-delay="0.4s" placeholder="Email" required data-parsley-error-message="Enter email">
+                            <textarea class="form-control wow fadeInLeft message" data-wow-delay="0.6s" rows="6" placeholder="Message" required data-parsley-error-message="Enter message"></textarea>
+                            <button type="submit" class="btn btn-lg wow fadeInUp" data-wow-delay="1s">Send message</button>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="col-xs-12 col-sm-8 col-sm-offset-2">
-                <form class="js-contact-form" role="form" action="mail/contact.php" method="post" data-parsley-validate>
-                    <div id="msgInfo"></div>
-                    <input type="text" class="form-control wow fadeInLeft name" data-wow-delay="0.2s" placeholder="Name" required data-parsley-error-message="Enter name">
-                    <input type="email" class="form-control wow fadeInLeft email" data-wow-delay="0.4s" placeholder="Email" required data-parsley-error-message="Enter email">
-                    <textarea class="form-control wow fadeInLeft message" data-wow-delay="0.6s" rows="6" placeholder="Message" required data-parsley-error-message="Enter message"></textarea>
-                    <button type="submit" class="btn btn-lg wow fadeInUp" data-wow-delay="1s">Send message</button>
-                </form>
+        </section>
+
+        <footer id="footer">
+            <div class="social">
+                <a href="#" title="#" class="icon"><i class="fa fa-facebook"></i></a>
+                <a href="#" title="#" class="icon"><i class="fa fa-twitter"></i></a>
+                <a href="#" title="#" class="icon"><i class="fa fa-linkedin"></i></a>
+                <a href="#" title="#" class="icon"><i class="fa fa-google-plus"></i></a>
+            </div>
+
+            <div>© 2015 DomerBox / All rights reserved</div>
+        </footer>
+
+        <!-- Modals -->
+        <div class="modal fade" id="modalText" tabindex="-1" role="dialog" aria-labelledby="modalText" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="fa fa-times"></span></button>
+                        <h4 class="modal-title" id="myModalLabel">This might be a detail of simple article</h4>
+                        <div class="info subtitle"><span class="fa fa-calendar"></span> 26th march 2014  |  <span class="fa fa-user"></span> John Doe</div>
+                    </div>
+                    <p class="intro">Nulla diam ex, aliquet vel iaculis vitae, consectetur et lectus. Mauris eu scelerisque ligula. Fusce in purus accumsan, faucibus lorem eget, posuere eros. Etiam ultricies vel leo at euismod. Morbi id nisi vitae felis consequat consequat ut non arcu. Vestibu lum sit amet imperdiet tellus.</p>
+                    <div class="modal-body">
+                        <img src="tmp/340x255-1.jpg" alt="#" width="340" height="255" class="img-responsive pull-right">
+                        <p>Nulla diam ex, aliquet vel iaculis vitae, consectetur et lectus. Mauris eu scelerisque ligula. Fusce in purus accumsan, faucibus lorem eget, posuere eros. Etiam ultricies vel leo at euismod.</p>
+                        <p>Morbi id nisi vitae felis consequat consequat ut non arcu. Vestibu lum sit amet imperdiet tellus. eget, posuere eros. Etiam ultricies vel leo at euismod. Nulla diam ex, aliquet vel iaculis vitae, consectetur et lectus. Mauris eu scelerisque ligula. Fusce in purus accumsan, faucibus lorem eget, posuere eros.</p>
+                        <p>Nulla diam ex, aliquet vel iaculis vitae, consectetur et lectus. Mauris eu scelerisque ligula. Fusce in purus accumsan, faucibus lorem eget, posuere eros. Etiam ultricies vel leo at euismod. Morbi id nisi vitae felis consequat consequat ut non arcu. Vestibu lum sit amet imperdiet tellus. eget, posuere eros. Etiam ultricies vel leo at euismod.</p>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    </section>
-
-    <footer id="footer">
-        <div class="social">
-            <a href="#" title="#" class="icon"><i class="fa fa-facebook"></i></a>
-            <a href="#" title="#" class="icon"><i class="fa fa-twitter"></i></a>
-            <a href="#" title="#" class="icon"><i class="fa fa-linkedin"></i></a>
-            <a href="#" title="#" class="icon"><i class="fa fa-google-plus"></i></a>
-        </div>
-
-        <div>© 2015 DomerBox / All rights reserved</div>
-    </footer>
-
-	</div>
-
-	<!-- Modals -->
-	<div class="modal fade" id="modalText" tabindex="-1" role="dialog" aria-labelledby="modalText" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="fa fa-times"></span></button>
-					<h4 class="modal-title" id="myModalLabel">This might be a detail of simple article</h4>
-					<div class="info subtitle"><span class="fa fa-calendar"></span> 26th march 2014  |  <span class="fa fa-user"></span> John Doe</div>
-				</div>
-				<p class="intro">Nulla diam ex, aliquet vel iaculis vitae, consectetur et lectus. Mauris eu scelerisque ligula. Fusce in purus accumsan, faucibus lorem eget, posuere eros. Etiam ultricies vel leo at euismod. Morbi id nisi vitae felis consequat consequat ut non arcu. Vestibu lum sit amet imperdiet tellus.</p>
-				<div class="modal-body">
-					<img src="tmp/340x255-1.jpg" alt="#" width="340" height="255" class="img-responsive pull-right">
-					<p>a. Fusce in purus accumsan, faucibus lorem eget, posuere eros. Etiam ultricies vel leo at euismod.</p>
-					<p>Morbi id nisi vitae felis consequat consequat ut non arcu. Vestibu lum sit amet imperdiet tellus. eget, posuere eros. Etiam ultricies vel leo at euismod. Nulla diam ex, aliquet vel iaculis vitae, consectetur et lectus. Mauris eu scelerisque ligula. Fusce in purus accumsan, faucibus lorem eget, posuere eros.</p>
-					<p>Nulla diam ex, aliquet vel iaculis vitae, consectetur et lectus. Mauris eu scelerisque ligula. Fusce in purus accumsan, faucibus lorem eget, posuere eros. Etiam ultricies vel leo at euismod. Morbi id nisi vitae felis consequat consequat ut non arcu. Vestibu lum sit amet imperdiet tellus. eget, posuere eros. Etiam ultricies vel leo at euismod.</p>
-				</div>
-			</div>
-		</div>
-	</div>
 
 
 	<!-- jQuery and Bootstrap JS -->
