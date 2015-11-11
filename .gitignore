@@ -1,4 +1,4 @@
 .idea/
 node_modules/
-config_priv.js
+app/configuration/config_priv.js
 *~

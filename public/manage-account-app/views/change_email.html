@@ -1,0 +1,25 @@
+<div>
+    <h1>Change Email</h1>
+    <h3>Current Email:</h3>
+    <h5>{{ email }}</h5>
+
+    <form class="form-horizontal" novalidate>
+        <div class="form-group" ng-class="{ 'has-error' : validationErrors.newEmail }">
+            <label class="col-sm-2 control-label margin-top-20" for="newEmail">Password</label>
+            <div class="col-sm-10">
+                <input type="password" class="form-control input-normal" id="newEmail" placeholder="" ng-model="account.newEmail">
+                <p class="text-danger" ng-show="validationErrors.password">{{ validationErrors.email }}</p>
+            </div>
+        </div>
+        <div class="form-group" ng-class="{ 'has-error' : validationErrors.currentPassword }">
+            <label class="col-sm-2 control-label margin-top-20" for="currentPassword">Password</label>
+            <div class="col-sm-10">
+                <input type="password" class="form-control input-normal" id="currentPassword" placeholder="" ng-model="account.currentPassword">
+                <p class="text-danger" ng-show="validationErrors.currentPassword">{{ validationErrors.currentPassword }}</p>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success margin-top-20 margin-right-10 pull-left" ng-click="saveNewEmail()">Save</button>
+        <a class="btn btn-default margin-top-20 pull-left" href="/">Cancel</a>
+    </form>
+</div>

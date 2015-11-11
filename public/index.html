@@ -2,7 +2,7 @@
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<!--[if gt IE 8]><!--> <html ng-app="domerbox"> <!--<![endif]-->
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -31,8 +31,8 @@
 
 
 </head>
-<body data-spy="scroll" data-target=".navbar" data-offset="70" ng-app="app">
-	<!--[if lt IE 7]>
+<body data-spy="scroll" data-target=".navbar" data-offset="70" ng-cloak>
+	<!--[if lt IE 9]>
 		<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 	<![endif]-->
 
@@ -46,7 +46,7 @@
 					<div class="container font-white">
 						<div class="content">
                             <div class="col-sm-12 text-center">
-							    <div class="margin-bottom-40 wow bounceInDown" data-wow-duration="1s" data-wow-delay="1s"><img src="img/logo1.png" class="img-responsive center-block"> </div>
+							    <div class="margin-bottom-40 wow bounceInDown" data-wow-duration="1s" data-wow-delay="1s"><img src="assets/img/logo1.png" class="img-responsive center-block"> </div>
                             </div>
 
 								<div class="row">
@@ -129,7 +129,7 @@
                             <br>
                         </div>
                         <div class="col-sm-8 col-sm-offset-2 text-center ">
-                            <img class="img-center img-responsive margin-bottom-40" src="img/domes.png">
+                            <img class="img-center img-responsive margin-bottom-40" src="assets/img/domes.png">
                             <p class="font-sub-para"><span class="color-red">Domebox</span> will hand select your order from our preferred suppliers and send you the most top quality products we have. Your selection of type
                                 and size will help guide us in picking the best available condom</p>
                         </div>
@@ -140,7 +140,7 @@
                             <br>
                         </div>
                         <div class="col-sm-8 col-sm-offset-2">
-                            <img class="img-center img-responsive margin-bottom-40" src="img/diary.png">
+                            <img class="img-center img-responsive margin-bottom-40" src="assets/img/diary.png">
 
                         </div>
                         <div class="col-sm-12 text-center">
@@ -154,7 +154,7 @@
                             <br>
                         </div>
                         <div class="col-sm-8 col-sm-offset-2 ">
-                            <img class="img-center img-responsive margin-bottom-35" src="img/file.png">
+                            <img class="img-center img-responsive margin-bottom-35" src="assets/img/file.png">
                         </div>
                         <div class="col-sm-12 text-center">
                             <p class="font-sub-para">Feel free to deliver it to your home, your work or even your church, we won't mark the outside packaging, this way your postman/office colleagues/mother wont know
@@ -166,7 +166,7 @@
 		</section>
 
     <!-- Pricing -->
-    <section id="pricing">
+    <section id="pricing" ng-controller="signupCtrl">
         <div class="container-fluid bg-greyz">
             <div class="container">
                 <!-- Header -->
@@ -178,72 +178,21 @@
                     </div>
                 </header>
 
-                <div ng-controller="ctrl" ng-init="formPage=1">
-
+                <div>
                     <!-- Content -->
                     <div class="row" ng-if="formPage==1">
                         <div class="margin-bottom-40">
                             <h3 class="text-center">CHOOSE A PLAN</h3>
                             <p class="text-center">Select The Right Quantity From Our Packages. Don't worry, if you buy to many or too little you can change your subscription at any time! </p>
                         </div>
-                        <div class="col-xs-12 col-sm-3 i wow fadeInLeft animated" data-wow-duration="0.5s" data-wow-delay="0.2s" ng-click="selectPlan(1)">
+                        <div ng-repeat="plan in formPlans" class="col-xs-12 col-sm-3 i wow fadeInLeft animated" data-wow-duration="0.5s" data-wow-delay="0.2s" ng-click="selectPlan(plan.id)">
                             <div class="wrap borderedHover">
                                 <div class="c">
-                                    <h3>I Do Alright</h3>
-                                    <div class="price price-lg"><sup>$</sup>4.99</div>
+                                    <h3>{{ plan.name }}</h3>
+                                    <div class="price price-lg"><sup>$</sup>{{ (plan.amount/100).toFixed(2) }}</div>
                                     <div class="info">
-                                        3 Condoms<br />
-                                        Renewed Every Month<br />
-                                        Shipped Directly To You<br />
-                                        Discrete Package<br />
-                                        Monthly Epic Story
+                                        {{ plan.metadata.desc }}
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-3 i  wow fadeInUp animated" data-wow-duration="0.5s" data-wow-delay="0.2s" ng-click="selectPlan(2)">
-                            <div class="wrap borderedHover">
-                                <div class="c">
-                                    <h3>Ladies Man</h3>
-                                    <div class="price price-lg"><sup>$</sup>8.99</div>
-                                    <div class="info">
-                                        6 Condoms<br />
-                                        Renewed Every Month<br />
-                                        Shipped Directly To You<br />
-                                        Discrete Package<br />
-                                        Monthly Epic Story
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-3 i wow fadeInRight animated" data-wow-duration="0.5s" data-wow-delay="0.2s" ng-click="selectPlan(3)">
-                            <div class="wrap borderedHover">
-                                <div class="c">
-                                    <h3>Don Juan</h3>
-                                    <div class="price price-lg"><sup>$</sup>11.99</div>
-                                    <div class="info">
-                                        12 Condoms<br />
-                                        Renewed Every Month<br />
-                                        Shipped Directly To You<br />
-                                        Discrete Package<br />
-                                        Monthly Epic Story
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-3 i wow fadeInRight animated" data-wow-duration="0.5s" data-wow-delay="0.2s" ng-click="selectPlan(4)">
-                            <div class="wrap borderedHover">
-                                <div class="c">
-                                    <h3>Clean Up Hitter</h3>
-                                    <div class="price price-lg"><sup>$</sup>20.99</div>
-                                    <div class="info">
-                                        24 Condoms<br />
-                                        Renewed Every Month<br />
-                                        Shipped Directly To You<br />
-                                        Discrete Package<br />
-                                        Monthly Epic Story
-                                    </div>
-                                    <img class="img-responsive" src="img/best-value.png">
                                 </div>
                             </div>
                         </div>
@@ -260,12 +209,12 @@
                                 <div class="wrap borderedHover">
                                     <div class="c">
                                         <h3>Regular Sized Condoms</h3>
-                                        <img class="img-responsive" src="img/car.png" alt="REGULAR">
+                                        <img class="img-responsive" src="assets/img/car.png" alt="REGULAR">
                                         <div class="info">
                                             Fits Majority of Men<br />
                                             Will Fit More Snugly<br />
                                         </div>
-                                        <img class="img-responsive" src="img/most-popular.png">
+                                        <img class="img-responsive" src="assets/img/most-popular.png">
                                     </div>
                                 </div>
                             </div>
@@ -273,11 +222,10 @@
                                 <div class="wrap borderedHover">
                                     <div class="c">
                                         <h3>Large Sized Condoms</h3>
-                                        <img class="img-responsive" src="img/Truck.png" alt="LARGE">
+                                        <img class="img-responsive" src="assets/img/Truck.png" alt="LARGE">
                                         <div class="info">
                                             Fits the Big Boys<br />
                                             Will Fit More Losely<br />
-
                                         </div>
                                     </div>
                                 </div>
@@ -298,12 +246,12 @@
                                     <div class="c">
 
                                         <h3>Natural Latex</h3>
-                                        <img class="img-responsive" src="img/latex.png" alt="LATEX">
+                                        <img class="img-responsive" src="assets/img/latex.png" alt="LATEX">
                                         <div class="info">
                                             Natural Latex<br />
                                             Most Major Brands<br />
                                         </div>
-                                        <img class="img-responsive" src="img/most-popular.png">
+                                        <img class="img-responsive" src="assets/img/most-popular.png">
                                     </div>
                                 </div>
                             </div>
@@ -311,11 +259,10 @@
                                 <div class="wrap borderedHover">
                                     <div class="c">
                                         <h3>Non-Latex</h3>
-                                        <img class="img-responsive" src="img/non-latex.png" alt="non-latex">
+                                        <img class="img-responsive" src="assets/img/non-latex.png" alt="non-latex">
                                         <div class="info">
-                                            Fits the Big Boys<br />
-                                            Will Fit More Losely<br />
-
+                                            Rubber product<br />
+                                            If allergically sensitive to latex<br />
                                         </div>
                                     </div>
                                 </div>
@@ -334,7 +281,7 @@
                             <div class="col-xs-12 col-sm-3 i wow fadeInLeft animated" data-wow-duration="0.5s" data-wow-delay="0.2s" ng-click="selectBrand('trojan')">
                                 <div class="wrap borderedHover">
                                     <div class="c">
-                                        <img class="img-responsive" src="img/Trojan-Solo.png">
+                                        <img class="img-responsive" src="assets/img/Trojan-Solo.png">
                                         <div class="info">
                                            Solid American Manufactured Condom
 
@@ -345,7 +292,7 @@
                             <div class="col-xs-12 col-sm-3 i  wow fadeInUp animated" data-wow-duration="0.5s" data-wow-delay="0.2s" ng-click="selectBrand('lifestyles')">
                                 <div class="wrap borderedHover">
                                     <div class="c">
-                                        <img class="img-responsive" src="img/Lifestyles-solo.png">
+                                        <img class="img-responsive" src="assets/img/Lifestyles-solo.png">
                                         <div class="info">
                                             Solid American Manufactured Condom
 
@@ -356,12 +303,11 @@
                             <div class="col-xs-12 col-sm-3 i wow fadeInRight animated" data-wow-duration="0.5s" data-wow-delay="0.2s" ng-click="selectBrand('okamoto')">
                                 <div class="wrap borderedHover">
                                     <div class="c">
-                                        <img class="img-responsive" src="img/beyond7-solo.png">
+                                        <img class="img-responsive" src="assets/img/beyond7-solo.png">
                                         <div class="info">
                                             Well Respected
                                             Japanese Design
                                             Great Fit
-
                                         </div>
                                     </div>
                                 </div>
@@ -373,9 +319,9 @@
                                         <h3>Assorted Pack</h3>
                                         <div class="info">
                                             Great variety pack so you can try a few kinds
-                                            <img class="img-responsive" src="img/save10.png">
+                                            <img class="img-responsive" src="assets/img/save10.png">
                                         </div>
-                                        <img class="img-responsive" src="img/gold-popular.png">
+                                        <img class="img-responsive" src="assets/img/gold-popular.png">
                                     </div>
                                 </div>
                             </div>
@@ -392,301 +338,69 @@
 
                         <div class="col-lg-7 col-lg-offset-2">
                             <form class="form-horizontal" novalidate>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label margin-top-20" for="fn">First Name</label>
+                                <div class="form-group" ng-class="{ 'has-error' : validationErrors.name }">
+                                    <label class="col-sm-2 control-label margin-top-20" for="fn">Full Name</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control input-normal" id="fn" placeholder="" ng-model="formData.firstName">
+                                        <input type="text" class="form-control input-normal" id="fn" placeholder="" ng-model="userInfo.name">
+                                        <p class="text-danger" ng-show="validationErrors.name">{{ validationErrors.name }}</p>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label margin-top-20" for="ln">Last Name</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control input-normal" id="ln" placeholder="" ng-model="formData.lastName">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label margin-top-20" for="ea">Email</label>
-                                    <div class="col-sm-10">
-                                        <input type="email" class="form-control input-normal" id="ea" placeholder="" ng-model="formData.email">
-                                    </div>
-                                </div>
-                                <div class="form-group">
+                                <div class="form-group" ng-class="{ 'has-error' : validationErrors.address.line1 }">
                                     <label class="col-sm-2 control-label margin-top-20" for="ad">Address</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control input-normal" id="ad" placeholder="" ng-model="formData.addressL1">
+                                        <input type="text" class="form-control input-normal" id="ad" placeholder="" ng-model="userInfo.address.line1">
+                                        <p class="text-danger" ng-show="validationErrors.address.line1">{{ validationErrors.address.line1 }}</p>
                                     </div>
                                     <div class="col-sm-10 col-sm-offset-2">
-                                        <input type="text" class="form-control input-normal" id="ad" placeholder="" ng-model="formData.addressL2">
+                                        <input type="text" class="form-control input-normal" id="ad" placeholder="" ng-model="userInfo.address.line2">
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" ng-class="{ 'has-error' : validationErrors.address.city }">
                                     <label class="col-sm-2 control-label margin-top-20" for="city">City</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control input-normal" id="city" placeholder="" ng-model="formData.city">
+                                        <input type="text" class="form-control input-normal" id="city" placeholder="" ng-model="userInfo.address.city">
+                                        <p class="text-danger" ng-show="validationErrors.address.city">{{ validationErrors.address.city }}</p>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label margin-top-20" for="province">Province / State</label>
+                                <div class="form-group" ng-class="{ 'has-error' : validationErrors.address.state }">
+                                    <label class="col-sm-2 control-label margin-top-20" for="state">Province / State</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control input-normal" id="province" placeholder="" ng-model="formData.province">
+                                        <select id="state" class="form-control input-normal" ng-options="o as o.name for o in formOptions.provinces" ng-model="userInfo.address.state">
+                                        </select>
+                                        <p class="text-danger" ng-show="validationErrors.address.state">{{ validationErrors.address.state }}</p>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" ng-class="{ 'has-error' : validationErrors.address.country }">
                                     <label class="col-sm-2 control-label margin-top-20" for="country">Country</label>
                                     <div class="col-sm-10">
-                                        <select id="country" class="form-control input-normal" ng-model="formData.country">
-                                            <option value="AF">Afghanistan</option>
-                                            <option value="AX">Åland Islands</option>
-                                            <option value="AL">Albania</option>
-                                            <option value="DZ">Algeria</option>
-                                            <option value="AS">American Samoa</option>
-                                            <option value="AD">Andorra</option>
-                                            <option value="AO">Angola</option>
-                                            <option value="AI">Anguilla</option>
-                                            <option value="AQ">Antarctica</option>
-                                            <option value="AG">Antigua and Barbuda</option>
-                                            <option value="AR">Argentina</option>
-                                            <option value="AM">Armenia</option>
-                                            <option value="AW">Aruba</option>
-                                            <option value="AU">Australia</option>
-                                            <option value="AT">Austria</option>
-                                            <option value="AZ">Azerbaijan</option>
-                                            <option value="BS">Bahamas</option>
-                                            <option value="BH">Bahrain</option>
-                                            <option value="BD">Bangladesh</option>
-                                            <option value="BB">Barbados</option>
-                                            <option value="BY">Belarus</option>
-                                            <option value="BE">Belgium</option>
-                                            <option value="BZ">Belize</option>
-                                            <option value="BJ">Benin</option>
-                                            <option value="BM">Bermuda</option>
-                                            <option value="BT">Bhutan</option>
-                                            <option value="BO">Bolivia, Plurinational State of</option>
-                                            <option value="BQ">Bonaire, Sint Eustatius and Saba</option>
-                                            <option value="BA">Bosnia and Herzegovina</option>
-                                            <option value="BW">Botswana</option>
-                                            <option value="BV">Bouvet Island</option>
-                                            <option value="BR">Brazil</option>
-                                            <option value="IO">British Indian Ocean Territory</option>
-                                            <option value="BN">Brunei Darussalam</option>
-                                            <option value="BG">Bulgaria</option>
-                                            <option value="BF">Burkina Faso</option>
-                                            <option value="BI">Burundi</option>
-                                            <option value="KH">Cambodia</option>
-                                            <option value="CM">Cameroon</option>
-                                            <option value="CA">Canada</option>
-                                            <option value="CV">Cape Verde</option>
-                                            <option value="KY">Cayman Islands</option>
-                                            <option value="CF">Central African Republic</option>
-                                            <option value="TD">Chad</option>
-                                            <option value="CL">Chile</option>
-                                            <option value="CN">China</option>
-                                            <option value="CX">Christmas Island</option>
-                                            <option value="CC">Cocos (Keeling) Islands</option>
-                                            <option value="CO">Colombia</option>
-                                            <option value="KM">Comoros</option>
-                                            <option value="CG">Congo</option>
-                                            <option value="CD">Congo, the Democratic Republic of the</option>
-                                            <option value="CK">Cook Islands</option>
-                                            <option value="CR">Costa Rica</option>
-                                            <option value="CI">Côte d'Ivoire</option>
-                                            <option value="HR">Croatia</option>
-                                            <option value="CU">Cuba</option>
-                                            <option value="CW">Curaçao</option>
-                                            <option value="CY">Cyprus</option>
-                                            <option value="CZ">Czech Republic</option>
-                                            <option value="DK">Denmark</option>
-                                            <option value="DJ">Djibouti</option>
-                                            <option value="DM">Dominica</option>
-                                            <option value="DO">Dominican Republic</option>
-                                            <option value="EC">Ecuador</option>
-                                            <option value="EG">Egypt</option>
-                                            <option value="SV">El Salvador</option>
-                                            <option value="GQ">Equatorial Guinea</option>
-                                            <option value="ER">Eritrea</option>
-                                            <option value="EE">Estonia</option>
-                                            <option value="ET">Ethiopia</option>
-                                            <option value="FK">Falkland Islands (Malvinas)</option>
-                                            <option value="FO">Faroe Islands</option>
-                                            <option value="FJ">Fiji</option>
-                                            <option value="FI">Finland</option>
-                                            <option value="FR">France</option>
-                                            <option value="GF">French Guiana</option>
-                                            <option value="PF">French Polynesia</option>
-                                            <option value="TF">French Southern Territories</option>
-                                            <option value="GA">Gabon</option>
-                                            <option value="GM">Gambia</option>
-                                            <option value="GE">Georgia</option>
-                                            <option value="DE">Germany</option>
-                                            <option value="GH">Ghana</option>
-                                            <option value="GI">Gibraltar</option>
-                                            <option value="GR">Greece</option>
-                                            <option value="GL">Greenland</option>
-                                            <option value="GD">Grenada</option>
-                                            <option value="GP">Guadeloupe</option>
-                                            <option value="GU">Guam</option>
-                                            <option value="GT">Guatemala</option>
-                                            <option value="GG">Guernsey</option>
-                                            <option value="GN">Guinea</option>
-                                            <option value="GW">Guinea-Bissau</option>
-                                            <option value="GY">Guyana</option>
-                                            <option value="HT">Haiti</option>
-                                            <option value="HM">Heard Island and McDonald Islands</option>
-                                            <option value="VA">Holy See (Vatican City State)</option>
-                                            <option value="HN">Honduras</option>
-                                            <option value="HK">Hong Kong</option>
-                                            <option value="HU">Hungary</option>
-                                            <option value="IS">Iceland</option>
-                                            <option value="IN">India</option>
-                                            <option value="ID">Indonesia</option>
-                                            <option value="IR">Iran, Islamic Republic of</option>
-                                            <option value="IQ">Iraq</option>
-                                            <option value="IE">Ireland</option>
-                                            <option value="IM">Isle of Man</option>
-                                            <option value="IL">Israel</option>
-                                            <option value="IT">Italy</option>
-                                            <option value="JM">Jamaica</option>
-                                            <option value="JP">Japan</option>
-                                            <option value="JE">Jersey</option>
-                                            <option value="JO">Jordan</option>
-                                            <option value="KZ">Kazakhstan</option>
-                                            <option value="KE">Kenya</option>
-                                            <option value="KI">Kiribati</option>
-                                            <option value="KP">Korea, Democratic People's Republic of</option>
-                                            <option value="KR">Korea, Republic of</option>
-                                            <option value="KW">Kuwait</option>
-                                            <option value="KG">Kyrgyzstan</option>
-                                            <option value="LA">Lao People's Democratic Republic</option>
-                                            <option value="LV">Latvia</option>
-                                            <option value="LB">Lebanon</option>
-                                            <option value="LS">Lesotho</option>
-                                            <option value="LR">Liberia</option>
-                                            <option value="LY">Libya</option>
-                                            <option value="LI">Liechtenstein</option>
-                                            <option value="LT">Lithuania</option>
-                                            <option value="LU">Luxembourg</option>
-                                            <option value="MO">Macao</option>
-                                            <option value="MK">Macedonia, the former Yugoslav Republic of</option>
-                                            <option value="MG">Madagascar</option>
-                                            <option value="MW">Malawi</option>
-                                            <option value="MY">Malaysia</option>
-                                            <option value="MV">Maldives</option>
-                                            <option value="ML">Mali</option>
-                                            <option value="MT">Malta</option>
-                                            <option value="MH">Marshall Islands</option>
-                                            <option value="MQ">Martinique</option>
-                                            <option value="MR">Mauritania</option>
-                                            <option value="MU">Mauritius</option>
-                                            <option value="YT">Mayotte</option>
-                                            <option value="MX">Mexico</option>
-                                            <option value="FM">Micronesia, Federated States of</option>
-                                            <option value="MD">Moldova, Republic of</option>
-                                            <option value="MC">Monaco</option>
-                                            <option value="MN">Mongolia</option>
-                                            <option value="ME">Montenegro</option>
-                                            <option value="MS">Montserrat</option>
-                                            <option value="MA">Morocco</option>
-                                            <option value="MZ">Mozambique</option>
-                                            <option value="MM">Myanmar</option>
-                                            <option value="NA">Namibia</option>
-                                            <option value="NR">Nauru</option>
-                                            <option value="NP">Nepal</option>
-                                            <option value="NL">Netherlands</option>
-                                            <option value="NC">New Caledonia</option>
-                                            <option value="NZ">New Zealand</option>
-                                            <option value="NI">Nicaragua</option>
-                                            <option value="NE">Niger</option>
-                                            <option value="NG">Nigeria</option>
-                                            <option value="NU">Niue</option>
-                                            <option value="NF">Norfolk Island</option>
-                                            <option value="MP">Northern Mariana Islands</option>
-                                            <option value="NO">Norway</option>
-                                            <option value="OM">Oman</option>
-                                            <option value="PK">Pakistan</option>
-                                            <option value="PW">Palau</option>
-                                            <option value="PS">Palestinian Territory, Occupied</option>
-                                            <option value="PA">Panama</option>
-                                            <option value="PG">Papua New Guinea</option>
-                                            <option value="PY">Paraguay</option>
-                                            <option value="PE">Peru</option>
-                                            <option value="PH">Philippines</option>
-                                            <option value="PN">Pitcairn</option>
-                                            <option value="PL">Poland</option>
-                                            <option value="PT">Portugal</option>
-                                            <option value="PR">Puerto Rico</option>
-                                            <option value="QA">Qatar</option>
-                                            <option value="RE">Réunion</option>
-                                            <option value="RO">Romania</option>
-                                            <option value="RU">Russian Federation</option>
-                                            <option value="RW">Rwanda</option>
-                                            <option value="BL">Saint Barthélemy</option>
-                                            <option value="SH">Saint Helena, Ascension and Tristan da Cunha</option>
-                                            <option value="KN">Saint Kitts and Nevis</option>
-                                            <option value="LC">Saint Lucia</option>
-                                            <option value="MF">Saint Martin (French part)</option>
-                                            <option value="PM">Saint Pierre and Miquelon</option>
-                                            <option value="VC">Saint Vincent and the Grenadines</option>
-                                            <option value="WS">Samoa</option>
-                                            <option value="SM">San Marino</option>
-                                            <option value="ST">Sao Tome and Principe</option>
-                                            <option value="SA">Saudi Arabia</option>
-                                            <option value="SN">Senegal</option>
-                                            <option value="RS">Serbia</option>
-                                            <option value="SC">Seychelles</option>
-                                            <option value="SL">Sierra Leone</option>
-                                            <option value="SG">Singapore</option>
-                                            <option value="SX">Sint Maarten (Dutch part)</option>
-                                            <option value="SK">Slovakia</option>
-                                            <option value="SI">Slovenia</option>
-                                            <option value="SB">Solomon Islands</option>
-                                            <option value="SO">Somalia</option>
-                                            <option value="ZA">South Africa</option>
-                                            <option value="GS">South Georgia and the South Sandwich Islands</option>
-                                            <option value="SS">South Sudan</option>
-                                            <option value="ES">Spain</option>
-                                            <option value="LK">Sri Lanka</option>
-                                            <option value="SD">Sudan</option>
-                                            <option value="SR">Suriname</option>
-                                            <option value="SJ">Svalbard and Jan Mayen</option>
-                                            <option value="SZ">Swaziland</option>
-                                            <option value="SE">Sweden</option>
-                                            <option value="CH">Switzerland</option>
-                                            <option value="SY">Syrian Arab Republic</option>
-                                            <option value="TW">Taiwan, Province of China</option>
-                                            <option value="TJ">Tajikistan</option>
-                                            <option value="TZ">Tanzania, United Republic of</option>
-                                            <option value="TH">Thailand</option>
-                                            <option value="TL">Timor-Leste</option>
-                                            <option value="TG">Togo</option>
-                                            <option value="TK">Tokelau</option>
-                                            <option value="TO">Tonga</option>
-                                            <option value="TT">Trinidad and Tobago</option>
-                                            <option value="TN">Tunisia</option>
-                                            <option value="TR">Turkey</option>
-                                            <option value="TM">Turkmenistan</option>
-                                            <option value="TC">Turks and Caicos Islands</option>
-                                            <option value="TV">Tuvalu</option>
-                                            <option value="UG">Uganda</option>
-                                            <option value="UA">Ukraine</option>
-                                            <option value="AE">United Arab Emirates</option>
-                                            <option value="GB">United Kingdom</option>
-                                            <option value="US">United States</option>
-                                            <option value="UM">United States Minor Outlying Islands</option>
-                                            <option value="UY">Uruguay</option>
-                                            <option value="UZ">Uzbekistan</option>
-                                            <option value="VU">Vanuatu</option>
-                                            <option value="VE">Venezuela, Bolivarian Republic of</option>
-                                            <option value="VN">Viet Nam</option>
-                                            <option value="VG">Virgin Islands, British</option>
-                                            <option value="VI">Virgin Islands, U.S.</option>
-                                            <option value="WF">Wallis and Futuna</option>
-                                            <option value="EH">Western Sahara</option>
-                                            <option value="YE">Yemen</option>
-                                            <option value="ZM">Zambia</option>
-                                            <option value="ZW">Zimbabwe</option>
+                                        <select id="country" class="form-control input-normal" ng-options="o as o.name for o in formOptions.countries" ng-model="userInfo.address.country">
                                         </select>
+                                        <p class="text-danger" ng-show="validationErrors.address.country">{{ validationErrors.address.country }}</p>
                                     </div>
                                 </div>
+                                <div class="form-group" ng-class="{ 'has-error' : validationErrors.address.postal_code }">
+                                    <label class="col-sm-2 control-label margin-top-20" for="postal_code">Postal Code</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control input-normal" id="postal_code" placeholder="" ng-model="userInfo.address.postal_code">
+                                        <p class="text-danger" ng-show="validationErrors.address.postal_code">{{ validationErrors.address.postal_code }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" ng-class="{ 'has-error' : validationErrors.email }">
+                                    <label class="col-sm-2 control-label margin-top-20" for="ea">Email</label>
+                                    <div class="col-sm-10">
+                                        <input type="email" class="form-control input-normal" id="ea" placeholder="" ng-model="userInfo.email">
+                                        <p class="text-danger" ng-show="validationErrors.email">{{ validationErrors.email }}</p>
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-class="{ 'has-error' : validationErrors.password }">
+                                    <label class="col-sm-2 control-label margin-top-20" for="p">Password</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control input-normal" id="p" placeholder="" ng-model="userInfo.password">
+                                        <p class="text-danger" ng-show="validationErrors.password">{{ validationErrors.password }}</p>
+                                    </div>
+                                </div>
+
                                 <button type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="next(6)">Next</button>
                                 <button type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="goBack(4)">Back</button>
                             </form>
@@ -702,57 +416,58 @@
 
                         <div class="col-lg-7 col-lg-offset-2">
                             <form class="form-horizontal" novalidate>
-                                <div class="form-group">
+                                <div class="form-group" ng-class="{ 'has-error' : validationErrors.source.name }">
                                     <label class="col-sm-2 control-label margin-top-20" for="chn">Card Holder Name</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control input-normal" id="chn" placeholder="Name as it appears on card" ng-model="formData.cardHolderName">
+                                        <input type="text" class="form-control input-normal" id="chn" placeholder="Name as it appears on card" ng-model="userInfo.source.name">
+                                        <p class="text-danger" ng-show="validationErrors.source.name">{{ validationErrors.source.name }}</p>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" ng-class="{ 'has-error' : validationErrors.source.number }">
                                     <label class="col-sm-2 control-label margin-top-20" for="cn">Card Number</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control input-normal" id="cn" placeholder="" ng-model="formData.cardNumber">
+                                        <input type="text" class="form-control input-normal" id="cn" placeholder="" ng-model="userInfo.source.number">
+                                        <p class="text-danger" ng-show="validationErrors.source.number">{{ validationErrors.source.number }}</p>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label margin-top-20" for="exp">Expiration</label>
+                                <div class="form-group" ng-class="{ 'has-error' : validationErrors.exp_month || validationErrors.exp_year }">
+                                    <label class="col-sm-2 control-label margin-top-20" for="exp_mon">Expiration</label>
                                     <div class="col-sm-4">
-                                        <select class="form-control input-normal" id="exp" placeholder="Month" ng-model="formData.cardExpM">
-                                            <option value="JAN">January</option>
-                                            <option value="FEB">February</option>
-                                            <option value="MAR">March</option>
-                                            <option value="APR">April</option>
-                                            <option value="MAY">May</option>
-                                            <option value="JUN">June</option>
-                                            <option value="JUL">July</option>
-                                            <option value="AUG">August</option>
-                                            <option value="SEP">September</option>
-                                            <option value="OCT">October</option>
-                                            <option value="NOV">November</option>
-                                            <option value="DEC">December</option>
+                                        <select class="form-control input-normal" id="exp_mon" placeholder="Month" ng-model="userInfo.source.exp_month" ng-options="mon for mon in formOptions.ccExp.month">
+                                            <option ng-repeat="option in formOptions.ccExp.month" value="{{ option.id }}">{{ option.name }}</option>
                                         </select>
+                                        <p class="text-danger" ng-show="validationErrors.source.exp_month">{{ validationErrors.source.exp_month }}</p>
                                     </div>
-                                    <div class="col-sm-4 col-sm-offset-1" placeholder="Year">
-                                        <select class="form-control input-normal" id="exp" ng-model="formData.cardExpY">
-                                            <option value="2015">2015</option>
-                                            <option value="2016">2016</option>
-                                            <option value="2017">2017</option>
-                                            <option value="2018">2018</option>
-                                            <option value="2019">2019</option>
-                                            <option value="2020">2020</option>
-                                            <option value="2021">2021</option>
-                                            <option value="2022">2022</option>
-                                            <option value="2023">2023</option>
+                                    <div class="col-sm-4 col-sm-offset-1">
+                                        <select class="form-control input-normal" id="exp_year" placeholder="Year" ng-model="userInfo.source.exp_year" ng-options="year for year in formOptions.ccExp.year">
+                                            <option ng-repeat="option in formOptions.ccExp.year" value="{{ option.id }}">{{ option.name }}</option>
                                         </select>
+                                        <p class="text-danger" ng-show="validationErrors.source.exp_year">{{ validationErrors.source.exp_year }}</p>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" ng-class="{ 'has-error' : validationErrors.source.cvc }">
                                     <label class="col-sm-2 control-label margin-top-20" for="cvv">Card CVV</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control input-normal" id="cvv" placeholder="" ng-model="formData.cardCVV">
+                                        <input type="text" class="form-control input-normal" id="cvv" placeholder="" ng-model="userInfo.source.cvc">
+                                        <p class="text-danger" ng-show="validationErrors.source.cvc">{{ validationErrors.source.cvc }}</p>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="refreshPage()">Submit</button>
+                                <button type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="next(7)">Next</button>
+                                <button type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="goBack(5)">Back</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="row" ng-if="formPage==7">
+                        <div class="margin-bottom-40">
+                            <h3 class="text-center">Confirm Your Order</h3>
+                            <p class="text-center">Just in case something doesn't look right below</p>
+                        </div>
+
+                        <div class="col-lg-7 col-lg-offset-2">
+                            <form class="form-horizontal" novalidate>
+                                <button type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="createAccount()">Confirm</button>
                                 <button type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="goBack(5)">Back</button>
                             </form>
                         </div>
@@ -784,11 +499,11 @@
                     <div class="j-carousel">
                         <!-- Carousel item -->
                         <div class="item col-xs-10 col-xs-offset-1 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
-                            <img src="img/logoset1.png" class="img-responsive">
+                            <img src="assets/img/logoset1.png" class="img-responsive">
                         </div>
                         <!-- Carousel item -->
                         <div class="item col-xs-10 col-xs-offset-1 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
-                            <img src="img/logoset2.png" class="img-responsive">
+                            <img src="assets/img/logoset2.png" class="img-responsive">
                         </div>
 
                     </div>
@@ -869,7 +584,7 @@
             </div>
         </div>
     </section> -->
-		
+
 
 
 		<!-- Blog -->
@@ -902,7 +617,7 @@
 										<div class="more">Read more</div>
 									</div>
 								</div>
-								<img src="img/Happy-Anniversary.png" alt="#" width="600" height="350" class="img-responsive">
+								<img src="assets/img/Happy-Anniversary.png" alt="#" width="600" height="350" class="img-responsive">
 							</div>
 						</a>
 						<div class="row">
@@ -935,7 +650,7 @@
 										<div class="more">Read more</div>
 									</div>
 								</div>
-								<img src="img/Love-Train.png" alt="#" width="600" height="350" class="img-responsive">
+								<img src="assets/img/Love-Train.png" alt="#" width="600" height="350" class="img-responsive">
 							</div>
 						</a>
 						<div class="row">
@@ -962,7 +677,7 @@
 				<!-- More posts -->
 				<div class="text-center">
 					<a href="/blog" title="#" class="btn btn-default btn-lg morePosts"><i class="fa fa-plus"></i> More posts</a>
-				</div>			
+				</div>
 			</div>
 		</section>
 
@@ -1011,7 +726,7 @@
 					</div>
 				</header>
 
-				<!-- Content -->		
+				<!-- Content -->
 				<div class="row">
 					<div class="col-xs-12 info">
 						<span class="wow fadeInRight" data-wow-delay="0.4s"><i class="fa fa-envelope-o icon"></i> info@domerbox.com</span>
@@ -1064,47 +779,15 @@
 
 
 	<!-- jQuery and Bootstrap JS -->
-	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script src="assets/jquery/jquery-2.1.4.min.js"></script>
 	<script src="assets/bootstrap/js/bootstrap.min.js"></script>
-	<script src="assets/js/jquery.easing.1.3.js"></script>
-	<script src="assets/js/owl.carousel.min.js"></script>
-	<script src="assets/js/parsley.min.js"></script>
-	<script src="assets/js/jquery.shuffle.min.js"></script>
-	<script src="assets/js/wow.min.js"></script>
-	<script src="assets/js/jquery.easypiechart.min.js"></script>
-	<script src="assets/js/jquery.countTo.js"></script>
-	<script src="assets/js/waypoints.min.js"></script>
-	<script src="assets/js/jquery.magnific-popup.min.js"></script>
-	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
-    <script src="assets/js/ng-app.js"></script>
+	<script src="assets/angular/angular.min.js"></script>
+    <script src="home-app/home-app.js"></script>
 
 	<!-- Custom JS -->
 	<script src="assets/js/portfolio.js"></script>
 	<script src="assets/js/script.min.js"></script>
 
-	<!-- Options (demo only) -->
-	<script src="assets/js/options.js"></script>
-	<link rel="stylesheet" href="assets/css/options.css">
-
-
-    <!-- begin SnapEngage code -->
-    <script type="text/javascript">
-        (function() {
-            var se = document.createElement('script'); se.type = 'text/javascript'; se.async = true;
-            se.src = '//storage.googleapis.com/code.snapengage.com/js/c25d03ee-7cc0-4a99-b424-0cd3f521e39b.js';
-            var done = false;
-            se.onload = se.onreadystatechange = function() {
-                if (!done&&(!this.readyState||this.readyState==='loaded'||this.readyState==='complete')) {
-                    done = true;
-                    /* Place your SnapEngage JS API code below */
-                    /* SnapEngage.allowChatSound(true); Example JS API: Enable sounds for Visitors. */
-                }
-            };
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(se, s);
-        })();
-    </script>
-    <!-- end SnapEngage code -->
 
 </body>
 </html>

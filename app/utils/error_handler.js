@@ -1,6 +1,6 @@
 'use strict';
 
-var log = require('../utils/logger');
+var log = require('./logger');
 
 var errorHandler = function() {};
 
@@ -8,7 +8,14 @@ errorHandler.prototype = {
 
     stripeHttpErrors: function (res, error, requestorIP) {
         log.error(error, requestorIP);
-        res.status(500).send("Server Error");
+
+        if (error.code) {
+            res.status(500).send(error.code);
+        }
+        else {
+            res.status(500).send("Server Error");
+        }
+
     },
 
     appErrors: function (res, errorMsg, data, requestorIP) {

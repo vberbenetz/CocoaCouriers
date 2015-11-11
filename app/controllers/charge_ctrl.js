@@ -1,6 +1,6 @@
 'use strict';
 
-var configPriv = require('../config_priv');
+var configPriv = require('../configuration/config_priv');
 var log = require('../utils/logger');
 var errorHandler = require('../utils/error_handler');
 

@@ -1,6 +1,6 @@
 'use strict';
 
-var configPriv = require('../config_priv');
+var configPriv = require('../configuration/config_priv');
 var log = require('../utils/logger');
 var errorHandler = require('../utils/error_handler');
 
@@ -30,9 +30,10 @@ tokenCtrl.prototype = {
     create: function (req, res, callback) {
 
         var payload = {
+            name: req.body.name,
             number: req.body.number,
-            exp_month: req.body.expMon,
-            exp_year: req.body.expYear,
+            exp_month: req.body.exp_month,
+            exp_year: req.body.exp_year,
             cvc: req.body.cvc
         };
 

@@ -1,6 +1,6 @@
 'use strict';
 
-var configPriv = require('../config_priv');
+var configPriv = require('../configuration/config_priv');
 var log = require('../utils/logger');
 var errorHandler = require('../utils/error_handler');
 var helpers = require('../utils/helpers');
@@ -31,14 +31,13 @@ subscriptionCtrl.prototype = {
 
     create: function (req, res, callback) {
 
-        var customerId = req.body.customerId;
+        var customerId = req.body.customer;
         var payload = {
-            plan: req.body.plan,
-            trial_end: helpers.getNextBillingDate(customerId)
+            plan: req.body.plan
         };
 
         // Attach coupon code if supplied
-        if (typeof req.body.coupon !== 'undefined') {
+        if ( (typeof req.body.coupon !== 'undefined') && (req.body.coupon.length !== 0) && (req.body.coupon !== '') ) {
             payload.coupon = req.body.coupon;
         }
 
@@ -54,6 +53,7 @@ subscriptionCtrl.prototype = {
         })
     },
 
+
     update: function (req, res, callback) {
 
         var customerId = req.query.customerId;
@@ -61,8 +61,7 @@ subscriptionCtrl.prototype = {
         var plan = req.query.planId;
         var payload = {
             plan: plan,
-            prorate: false,
-            trial_end: helpers.getNextBillingDate(customerId)
+            prorate: false
         };
 
         stripe.customers.updateSubscription(customerId, subscriptionId, payload, function(err, subscription) {
@@ -76,6 +75,7 @@ subscriptionCtrl.prototype = {
             }
         })
     },
+
 
     cancel: function (req, res, callback) {
 

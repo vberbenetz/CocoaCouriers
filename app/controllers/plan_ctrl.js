@@ -1,6 +1,6 @@
 'use strict';
 
-var configPriv = require('../config_priv');
+var configPriv = require('../configuration/config_priv');
 var log = require('../utils/logger');
 var errorHandler = require('../utils/error_handler');
 
@@ -25,14 +25,25 @@ planCtrl.prototype = {
         });
     },
 
+    list: function (req, res, callback) {
+        stripe.plans.list({limit: 100}, function(err, plans) {
+            if (err) {
+                console.log(err);
+                errorHandler.stripeHttpErrors(res, err, req.connection.remoteAddress);
+            }
+            else {
+                return callback(plans);
+            }
+        });
+    }
+/*
     create: function (req, res, callback) {
         var payload = {
             id: req.body.id,
             amount: req.body.amount,
             currency: req.body.currency,
             interval: req.body.interval,
-            name: req.body.name,
-            trial_period_days: 1    // Set as 1 day so that the subscription can be modified after this call to the correct billing date
+            name: req.body.name
         };
 
         stripe.plans.create(payload, function(err, plan) {
@@ -64,6 +75,7 @@ planCtrl.prototype = {
             }
         })
     }
+    */
 };
 
 module.exports = new planCtrl();

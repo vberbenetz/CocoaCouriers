@@ -1,6 +1,6 @@
 'use strict';
 
-var config = require('../config');
+var config = require('../configuration/config');
 var log = require('./logger');
 
 var helpers = function() {};
