@@ -9,6 +9,8 @@ var planCtrl = require('../controllers/plan_ctrl');
 var subscriptionCtrl = require('../controllers/subscription_ctrl');
 var userCtrl = require('../controllers/user_ctrl');
 
+var errorHandler = require('../utils/error_handler');
+
 // var chargeCtrl = require('../controllers/charge_ctrl');
 
 module.exports = function(app, passport, dbConnPool) {
@@ -35,15 +37,6 @@ module.exports = function(app, passport, dbConnPool) {
         res.send(req.isAuthenticated());
     });
 
-    app.get('/emailexists', function(req, res) {
-        userCtrl.checkEmailExists(req.query.email, dbConnPool, function(err, exists) {
-            if (err) {
-                res.send(500);
-            }
-            res.send({exists: exists})
-        });
-    });
-
     app.post('/login', passport.authenticate('local-login'), function(req, res) {
         res.send(req.user);
     });
@@ -59,14 +52,13 @@ module.exports = function(app, passport, dbConnPool) {
 
 
     // ======================== STATIC PAGES ========================= //
-
+/*
     app.get('/', function(req, res) {
         res.sendfile('./public/index.html');
     });
-
-    app.get('/My-Account', function(req, res) {
-        console.log(req);
-        res.sendfile('./public/user-mgmt.html');
+*/
+    app.get('/My-Account/', auth, function(req, res) {
+        res.sendfile('./public/user_mgmt.html');
     });
 
     app.get('/blog', function(req, res) {
@@ -92,8 +84,57 @@ module.exports = function(app, passport, dbConnPool) {
 
     // ==================== APP ROUTES ========================== //
 
-    app.get('/user-info', function(req, res, next) {
-        return userCtrl.getUserDetails(req, res);
+    app.get('/api/emailexists', function(req, res) {
+        userCtrl.checkEmailExists(req.query.email, dbConnPool, function(err, exists) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send({exists: exists})
+            }
+        });
+    });
+
+    app.get('/api/user', function(req, res, next) {
+        res.send( userCtrl.getUserDetails(req, res) );
+    });
+
+    app.put('/api/user', function(req, res, next) {
+        if (req.query.item === 'email') {
+            userCtrl.updateEmail(req, dbConnPool, function(err, updatedCustomer) {
+                if (err) {
+                    errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                }
+                else {
+                    var payload = {
+                        body: {
+                            connection: {
+                                remoteAddress: req.connection.remoteAddress
+                            },
+                            item: 'email',
+                            data: updatedCustomer.email,
+                            customerId: updatedCustomer.stId
+                        }
+                    };
+                    customerCtrl.update(payload, res, function (err, stCustomer) {
+                        res.send(updatedCustomer);
+                    })
+                }
+            });
+        }
+        else if (req.query.item === 'password') {
+            userCtrl.updatePassword(req, dbConnPool, function(err, result) {
+                if (err) {
+                    errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                }
+                else {
+                    res.send(200);
+                }
+            });
+        }
+        else {
+            res.status(400).send('incorrect_parameter');
+        }
     });
 
 
@@ -101,17 +142,26 @@ module.exports = function(app, passport, dbConnPool) {
 
     // ----------------- Token Related -------------------- //
 
-/*
-    app.get('/token', function (req, res, next) {
-        tokenCtrl.get(req, res, function(result) {
-            res.send(result);
+    app.get('/api/token', function (req, res, next) {
+        tokenCtrl.get(req, res, function(err, result) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(result);
+            }
         });
     });
-*/
 
-    app.post('/token', function (req, res, next) {
-        tokenCtrl.create(req, res, function(result) {
-            res.send(result);
+
+    app.post('/api/token', function (req, res, next) {
+        tokenCtrl.create(req, res, function(err, result) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(result);
+            }
         });
     });
 
@@ -137,103 +187,172 @@ module.exports = function(app, passport, dbConnPool) {
 */
 
     // ----------------- Customer Related -------------------- //
-    app.get('/customer', auth, function (req, res, next) {
-        customerCtrl.get(req, res, function (result) {
-            res.send(result);
+    app.get('/api/customer', auth, function (req, res, next) {
+        customerCtrl.get(req, res, function (err, result) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(result);
+            }
         });
     });
 
-    app.post('/customer', function (req, res, next) {
+    app.post('/api/customer', function (req, res, next) {
+
+        // Create customer internally
+        passport.authenticate('local-signup');
 
         // Create customer withing Stripe
-        customerCtrl.create(req, res, function (result) {
-
-            // Create customer internally
-            passport.authenticate('local-signup');
-
-            res.send(result);
+        customerCtrl.create(req, res, function (err, newCustomer) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(newCustomer);
+            }
         });
     });
 
-    app.put('/customer', auth, function (req, res, next) {
-        customerCtrl.update(req, res, function (result) {
-            res.send(result);
+    app.put('/api/customer', auth, function (req, res, next) {
+        customerCtrl.update(req, res, function (err, result) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(result);
+            }
         });
     });
 
 
     // ----------------- Plan Related ------------------------ //
-    app.get('/plan', function(req, res, next) {
-        planCtrl.get(req, res, function(result) {
-            res.send(result);
+    app.get('/api/plan', function(req, res, next) {
+        planCtrl.get(req, res, function(err, result) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(result);
+            }
         });
     });
 
-    app.get('/plan/list', function(req, res, next) {
-        planCtrl.list(req, res, function(result) {
-            res.send(result);
+    app.get('/api/plan/list', function(req, res, next) {
+        planCtrl.list(req, res, function(err, result) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(result);
+            }
         })
     });
 
-    app.post('/plan', auth, function (req, res, next) {
-        planCtrl.create(req, res, function(result) {
-            res.send(result);
+    app.post('/api/plan', auth, function (req, res, next) {
+        planCtrl.create(req, res, function(err, result) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(result);
+            }
         });
     });
 
 
     // ----------------- Subscription Related ------------------------ //
 
-    app.get('/subscription', auth, function (req, res, next) {
-        subscriptionCtrl.get(req, res, function(result) {
-            res.send(result);
+    app.get('/api/subscription', auth, function (req, res, next) {
+        subscriptionCtrl.get(req, res, function(err, result) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(result);
+            }
         });
     });
 
-    app.post('/subscription', auth, function (req, res, next) {
-        subscriptionCtrl.create(req, res, function(result) {
-            res.send(result);
+    app.post('/api/subscription', auth, function (req, res, next) {
+        subscriptionCtrl.create(req, res, function(err, result) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(result);
+            }
         });
     });
 
-    app.put('/subscription', auth, function (req, res, next) {
-        subscriptionCtrl.update(req, res, function(result) {
-            res.send(result);
+    app.put('/api/subscription', auth, function (req, res, next) {
+        subscriptionCtrl.update(req, res, function(err, result) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(result);
+            }
         });
     });
 
-    app.delete('/subscription', auth, function (req, res, next) {
-        subscriptionCtrl.cancel(req, res, function(result) {
-            res.send(result);
+    app.delete('/api/subscription', auth, function (req, res, next) {
+        subscriptionCtrl.cancel(req, res, function(err, result) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(result);
+            }
         });
     });
 
 
     // ----------------- Coupon Related ------------------------ //
-    app.get('/coupon', function (req, res, next) {
+    app.get('/api/coupon', function (req, res, next) {
 
         // Check if getting one coupon or list
         if (typeof req.query.id !== 'undefined') {
-            couponCtrl.get(req, res, function(result) {
-                res.send(result);
+            couponCtrl.get(req, res, function(err, result) {
+                if (err) {
+                    errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                }
+                else {
+                    res.send(result);
+                }
             });
         }
         else {
-            couponCtrl.getAll(req, res, function(result) {
-                res.send(result);
+            couponCtrl.getAll(req, res, function(err, result) {
+                if (err) {
+                    errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                }
+                else {
+                    res.send(result);
+                }
             });
         }
     });
 
-    app.post('/coupon', function (req, res, next) {
-        couponCtrl.create(req, res, function(result) {
-            res.send(result);
+    app.post('/api/coupon', function (req, res, next) {
+        couponCtrl.create(req, res, function(err, result) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(result);
+            }
         });
     });
 
-    app.delete('/coupon', function (req, res, next) {
-        couponCtrl.remove(req, res, function(result) {
-            res.send(result);
+    app.delete('/api/coupon', function (req, res, next) {
+        couponCtrl.remove(req, res, function(err, result) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(result);
+            }
         });
     });
 
@@ -262,8 +381,10 @@ module.exports = function(app, passport, dbConnPool) {
     // ==================================================================================== //
     // TODO: ADD 404 PAGE
     // Send to home page if no route found ============================================================================/
+
     app.get('*', function(req, res) {
         res.sendfile('./public/index.html');
     });
+
 };
 

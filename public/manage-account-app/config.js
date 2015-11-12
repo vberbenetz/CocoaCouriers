@@ -1,51 +1,44 @@
 'use strict';
 
-function config($stateProvider, $locationProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise("/");
+function config($routeProvider, $locationProvider) {
 
-    $stateProvider
+    $routeProvider
 
-        .state('main', {
-            url: '/',
-            templateUrl: 'views/main.html'
+        .when('/', {
+            templateUrl: '/manage-account-app/views/main.html'
         })
 
-        .state('change-email', {
-            url: '/change-email',
-            templateUrl: 'views/change_email.html'
+        .when('/change-email', {
+            controller: 'membershipCtrl',
+            templateUrl: '/manage-account-app/views/change_email.html'
         })
 
-        .state('change-password', {
-            url: '/change-password',
-            templateUrl: 'views/change_password.html'
+        .when('/change-password', {
+            controller: 'membershipCtrl',
+            templateUrl: '/manage-account-app/views/change_password.html'
         })
 
-        .state('email-preferences', {
-            url: '/email-preferences',
-            templateUrl: 'views/email_preferences.html'
+        .when('/email-preferences', {
+            templateUrl: '/manage-account-app/views/email_preferences.html'
         })
 
-        .state('change-plan', {
-            url: '/change-plan',
-            templateUrl: 'views/change_plan.html'
+        .when('/change-plan', {
+            templateUrl: '/manage-account-app/views/change_plan.html'
         })
 
-        .state('update-payment', {
-            url: '/update-payment',
-            templateUrl: 'views/update_payment.html'
+        .when('/update-payment', {
+            templateUrl: '/manage-account-app/views/update_payment.html'
         })
 
-        .state('billing-details', {
-            url: '/billing-details',
-            templateUrl: 'views/billing_details.html'
+        .when('/billing-details', {
+            templateUrl: '/manage-account-app/views/billing_details.html'
         });
 
     $locationProvider.html5Mode(true);
 
 }
 angular
-    .module('mgmt')
+    .module('account')
     .config(config)
-    .run(function($rootScope, $state) {
-        $rootScope.$state = $state;
+    .run(function() {
     });

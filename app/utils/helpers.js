@@ -1,5 +1,7 @@
 'use strict';
 
+var bcrypt = require('bcrypt');
+
 var config = require('../configuration/config');
 var log = require('./logger');
 
@@ -34,7 +36,15 @@ helpers.prototype = {
 
         // Return unix timestamp of next billing date
         return (nextBillingDate.getTime() / 1000);
+
+    },
+
+    verifyPassword: function (existingPassword, passToCompare, callback) {
+        bcrypt.compare(passToCompare, existingPassword, function(err, res) {
+            return callback(res);
+        });
     }
+
 };
 
 module.exports = new helpers();

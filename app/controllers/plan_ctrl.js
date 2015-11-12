@@ -2,7 +2,6 @@
 
 var configPriv = require('../configuration/config_priv');
 var log = require('../utils/logger');
-var errorHandler = require('../utils/error_handler');
 
 var stripe = require('stripe')(
     configPriv.sKey
@@ -17,10 +16,17 @@ planCtrl.prototype = {
         stripe.plans.retrieve(planId, function(err, plan) {
             if (err) {
                 console.log(err);
-                errorHandler.stripeHttpErrors(res, err, req.connection.remoteAddress);
+                return callback({
+                    status: 500,
+                    type: 'stripe',
+                    msg: {
+                        simplified: 'server_error',
+                        detailed: err
+                    }
+                }, null);
             }
             else {
-                return callback(plan);
+                return callback(false, plan);
             }
         });
     },
@@ -29,10 +35,17 @@ planCtrl.prototype = {
         stripe.plans.list({limit: 100}, function(err, plans) {
             if (err) {
                 console.log(err);
-                errorHandler.stripeHttpErrors(res, err, req.connection.remoteAddress);
+                return callback({
+                    status: 500,
+                    type: 'stripe',
+                    msg: {
+                        simplified: 'server_error',
+                        detailed: err
+                    }
+                }, null);
             }
             else {
-                return callback(plans);
+                return callback(false, plans);
             }
         });
     }

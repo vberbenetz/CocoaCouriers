@@ -2,7 +2,6 @@
 
 var configPriv = require('../configuration/config_priv');
 var log = require('../utils/logger');
-var errorHandler = require('../utils/error_handler');
 
 var subscriptionCtrl = require('./subscription_ctrl');
 var invoiceCtrl = require('./invoice_ctrl');
@@ -17,15 +16,22 @@ var customerCtrl = function() {};
 customerCtrl.prototype = {
 
     get: function (req, res, callback) {
-        var customerId = req.user.stripeId;
+        var customerId = req.user.stId;
 
         stripe.customers.retrieve(customerId, function(err, customer) {
             if(err) {
                 console.log(err);
-                errorHandler.stripeHttpErrors(res, err, req.connection.remoteAddress);
+                return callback({
+                    status: 500,
+                    type: 'stripe',
+                    msg: {
+                        simplified: 'server_error',
+                        detailed: err
+                    }
+                }, null);
             }
             else {
-                return callback(customer);
+                return callback(false, customer);
             }
         })
     },
@@ -63,30 +69,44 @@ customerCtrl.prototype = {
         stripe.customers.create(payload, function(err, customer) {
             if (err) {
                 console.log(err);
-                errorHandler.stripeHttpErrors(res, err, req.connection.remoteAddress);
+                return callback({
+                    status: 500,
+                    type: 'stripe',
+                    msg: {
+                        simplified: 'server_error',
+                        detailed: err
+                    }
+                }, null);
             }
             else {
 
                 // Update user with stripe customer Id
                 userCtrl.updateCustomerId(dbConnPool, function (err, result) {
                     if (err) {
-                        errorHandler.appErrors(res, err, customer, req.connection.remoteAddress);
+                        return callback(err, null);
                     }
                     else {
                         log.info('Created customer', {customer: customer}, req.connection.remoteAddress);
 
                         // Create invoice tax line
-                        invoiceCtrl.addTaxItem(customer.id, planId, tax, res, function(invoiceItem) {
+                        invoiceCtrl.addTaxItem(customer.id, planId, tax, res, function(err, invoiceItem) {
+                            if (err) {
+                                return callback(err, null);
+                            }
+
                             log.info('Added sales tax to customer invoice', {customer: customer.id, invoiceItem: invoiceItem}, req.connection.remoteAddress);
 
                             req.body.customer = customer.id;
 
                             // Subscribe user to a plan
-                            subscriptionCtrl.create(req, res, function(subscription) {
-                                if (!err) {
-                                    customer.subscriptions.data.push(subscription);
+                            subscriptionCtrl.create(req, res, function(err, subscription) {
+                                if (err) {
+                                    return callback(err, null);
                                 }
-                                return callback(customer);
+
+                                customer.subscriptions.data.push(subscription);
+
+                                return callback(false, customer);
                             });
 
                         });
@@ -99,9 +119,9 @@ customerCtrl.prototype = {
     },
 
     update: function (req, res, callback) {
-        var customerId = req.query.id;
         var item = req.body.item;
         var data = req.body.data;
+        var customerId = req.body.customerId;
         var payload;
 
         switch (item) {
@@ -118,18 +138,31 @@ customerCtrl.prototype = {
                 payload = {source: data};
                 break;
             default:
-                errorHandler.appErrors(res, 'Unknown item: ' + item, {object: 'customerCtrl.update()', httpErrorCode: 404}, req.connection.remoteAddress);
+                return callback({
+                    status: 400,
+                    msg: {
+                        simplified: 'incorrect_parameter',
+                        detailed: 'customerCtrl.update() -- item value: ' + item + ' does not match any options'
+                    }
+                }, null);
                 break;
         }
 
         stripe.customers.update(customerId, payload, function(err, customer) {
             if (err) {
                 console.log(err);
-                errorHandler.stripeHttpErrors(res, err, req.connection.remoteAddress);
+                return callback({
+                    status: 500,
+                    type: 'stripe',
+                    msg: {
+                        simplified: 'server_error',
+                        detailed: err
+                    }
+                }, null);
             }
             else {
-                log.info('Updated customer', {customerId: customerId, item: item, data: data}, req.connection.remoteAddress);
-                return callback(customer);
+                log.info('Updated customer', {customerId: customerId, item: item, data: data}, 'localhost');
+                return callback(false, customer);
             }
         });
     }

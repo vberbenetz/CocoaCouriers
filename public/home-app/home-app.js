@@ -10,7 +10,7 @@ angular.module('domerbox', [])
         // Get plan list
         $scope.formPlans = [];
         $http({
-                url: '/plan/list',
+                url: '/api/plan/list',
                 method: 'GET'
             }).success(function (plans) {
                 $scope.formPlans = plans.data;
@@ -157,7 +157,7 @@ angular.module('domerbox', [])
 
                 // Create Customer On Stripe (No subscription for now to deal with tax rate)
                 $http({
-                    url: '/customer',
+                    url: '/api/customer',
                     method: 'POST',
                     data: {
                         email: newUser.email,
@@ -172,7 +172,7 @@ angular.module('domerbox', [])
                         BOX_TYPE: $scope.userInfo.BOX_TYPE
                     }
                 }).success(function(newCustomer) {
-                    $window.location.href('/');
+                    $window.location.href = '/';
 
                 }).error(function(error) {
 
@@ -245,7 +245,7 @@ angular.module('domerbox', [])
             // Check if email exists
             if (!validateEmailFailed) {
                 $http({
-                    url: '/emailexists',
+                    url: '/api/emailexists',
                     method: 'GET',
                     params: {
                         email: $scope.userInfo.email
@@ -470,7 +470,7 @@ angular.module('domerbox', [])
             // Attempt to generate token
             if (!validationFailed) {
                 $http({
-                    url: '/token',
+                    url: '/api/token',
                     method: 'POST',
                     data: {
                         name: $scope.userInfo.source.name,
@@ -542,6 +542,26 @@ angular.module('domerbox', [])
 
         }
 
+})
+
+.controller('loginCtrl', function ($scope, $http, $window, $location) {
+
+        $scope.loginForm = {
+            email: '',
+            password: ''
+        };
+
+        $scope.login = function() {
+            $http({
+                url: '/login',
+                method: 'POST',
+                data: $scope.loginForm
+            }).success(function(result) {
+                $window.location.href = '/My-Account/';
+            }).error(function(err) {
+                $scope.loginError = 'Email or password is incorrect';
+            });
+        }
 });
 
 

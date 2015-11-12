@@ -2,7 +2,6 @@
 
 var configPriv = require('../configuration/config_priv');
 var log = require('../utils/logger');
-var errorHandler = require('../utils/error_handler');
 
 var stripe = require('stripe')(
     configPriv.sKey
@@ -21,7 +20,14 @@ invoiceCtrl.prototype = {
 
             if (err) {
                 console.log(err);
-                errorHandler.stripeHttpErrors(res, err);
+                return callback({
+                    status: 500,
+                    type: 'stripe',
+                    msg: {
+                        simplified: 'server_error',
+                        detailed: err
+                    }
+                }, null);
             }
 
             var taxRate = tax.rate;
@@ -39,10 +45,17 @@ invoiceCtrl.prototype = {
 
                 if (err) {
                     console.log(err);
-                    errorHandler.stripeHttpErrors(res, err);
+                    return callback({
+                        status: 500,
+                        type: 'stripe',
+                        msg: {
+                            simplified: 'server_error',
+                            detailed: err
+                        }
+                    }, null);
                 }
 
-                return callback(invoiceItem);
+                return callback(false, invoiceItem);
             });
 
         });

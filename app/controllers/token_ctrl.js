@@ -2,7 +2,6 @@
 
 var configPriv = require('../configuration/config_priv');
 var log = require('../utils/logger');
-var errorHandler = require('../utils/error_handler');
 
 var stripe = require('stripe')(
     configPriv.sKey
@@ -19,10 +18,17 @@ tokenCtrl.prototype = {
         stripe.tokens.retrieve(tokenId, function(err, token) {
             if (err) {
                 console.log(err);
-                errorHandler.stripeHttpErrors(res, err, req.connection.remoteAddress);
+                return callback({
+                    status: 500,
+                    type: 'stripe',
+                    msg: {
+                        simplified: 'server_error',
+                        detailed: err
+                    }
+                }, null);
             }
             else {
-                return callback(token);
+                return callback(false, token);
             }
         });
     },
@@ -40,11 +46,18 @@ tokenCtrl.prototype = {
         stripe.tokens.create({card: payload}, function(err, token) {
             if (err) {
                 console.log(err);
-                errorHandler.stripeHttpErrors(res, err, req.connection.remoteAddress);
+                return callback({
+                    status: 500,
+                    type: 'stripe',
+                    msg: {
+                        simplified: 'server_error',
+                        detailed: err
+                    }
+                }, null);
             }
             else {
                 log.info('Created new token', token, req.connection.remoteAddress);
-                return callback(token);
+                return callback(false, token);
             }
         });
     }

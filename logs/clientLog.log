@@ -1,0 +1,183 @@
+{"name":"log","hostname":"user-All-Series","pid":3047,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T17:03:18.007Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":3047,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-11T17:03:18.008Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":3047,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T17:03:18.008Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":3731,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T18:47:53.810Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":3731,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-11T18:47:53.811Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":3731,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T18:47:53.811Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":4187,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T19:05:46.893Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":4187,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-11T19:05:46.893Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":4187,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T19:05:46.894Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":4381,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T19:11:28.703Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":4381,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-11T19:11:28.704Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":4381,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T19:11:28.704Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":4431,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T19:13:06.463Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":4431,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-11T19:13:06.464Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":4431,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T19:13:06.464Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":4444,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T19:13:20.507Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":4444,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-11T19:13:20.508Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":4444,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T19:13:20.508Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":4849,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T19:45:35.037Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":4849,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-11T19:45:35.037Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":4849,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T19:45:35.037Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5068,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T19:53:56.108Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5068,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-11T19:53:56.109Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5068,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T19:53:56.109Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5170,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T19:57:53.565Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5170,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-11T19:57:53.566Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5170,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T19:57:53.566Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5181,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T19:58:20.951Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5181,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-11T19:58:20.951Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5181,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T19:58:20.952Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5356,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T20:07:24.402Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5356,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-11T20:07:24.403Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5356,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T20:07:24.403Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5370,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T20:07:46.555Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5370,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-11T20:07:46.556Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5370,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T20:07:46.556Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5420,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T20:09:45.500Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5420,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-11T20:09:45.501Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5420,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T20:09:45.501Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5569,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T20:19:38.437Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5569,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-11T20:19:38.437Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5569,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T20:19:38.437Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5775,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T20:29:36.431Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5775,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-11T20:29:36.432Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5775,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T20:29:36.432Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5796,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T20:29:59.628Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5796,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-11T20:29:59.628Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5796,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T20:29:59.628Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5854,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T20:33:01.553Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5854,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-11T20:33:01.554Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5854,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T20:33:01.554Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5868,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T20:33:26.916Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5868,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-11T20:33:26.917Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5868,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T20:33:26.917Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":6178,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T21:10:47.149Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":6178,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-11T21:10:47.150Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":6178,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T21:10:47.150Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":6195,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T21:11:19.837Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":6195,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-11T21:11:19.837Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":6195,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T21:11:19.838Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":7029,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T22:04:54.759Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":7029,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-11T22:04:54.760Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":7029,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-11T22:04:54.760Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5198,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T15:55:01.403Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5198,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T15:55:01.404Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5198,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T15:55:01.404Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5408,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T15:58:20.814Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5408,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T15:58:20.815Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5408,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T15:58:20.815Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5408,"level":30,"msg":"Updated email on internal DB { oldEmail: 'qa@as.com',\n  newEmail: 'qwe@qwe.com',\n  requestorIP: '127.0.0.1' }","time":"2015-11-12T15:59:44.862Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5434,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:00:19.605Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5434,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T16:00:19.606Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5434,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:00:19.606Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5510,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:05:24.474Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5510,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T16:05:24.475Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5510,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:05:24.475Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5510,"level":30,"msg":"Updated email on internal DB { oldEmail: 'qwe@qwe.com',\n  newEmail: 'zas@zas.com',\n  requestorIP: '127.0.0.1' }","time":"2015-11-12T16:06:55.137Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5592,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:09:32.361Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5592,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T16:09:32.362Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5592,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:09:32.362Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5592,"level":30,"msg":"Updated email on internal DB { oldEmail: 'zas@zas.com',\n  newEmail: 'qa@as.com',\n  requestorIP: '127.0.0.1' }","time":"2015-11-12T16:09:37.569Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5615,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:10:24.250Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5615,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T16:10:24.251Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5615,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:10:24.251Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5615,"level":30,"msg":"Updated email on internal DB { oldEmail: 'qa@as.com',\n  newEmail: 'qas@qas.com',\n  requestorIP: '127.0.0.1' }","time":"2015-11-12T16:10:35.481Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5648,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:12:20.807Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5648,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T16:12:20.808Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5648,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:12:20.808Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5648,"level":30,"msg":"Updated email on internal DB { oldEmail: 'qas@qas.com',\n  newEmail: 'qaz@qaz.com',\n  requestorIP: '127.0.0.1' }","time":"2015-11-12T16:12:27.350Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5715,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:16:51.533Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5715,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T16:16:51.534Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5715,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:16:51.534Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5715,"level":30,"msg":"Updated email on internal DB { oldEmail: 'qaz@qaz.com',\n  newEmail: 'waz@waz.com',\n  requestorIP: '127.0.0.1' }","time":"2015-11-12T16:16:57.637Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5736,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:17:38.339Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5736,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T16:17:38.339Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5736,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:17:38.339Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5736,"level":30,"msg":"Updated email on internal DB { oldEmail: 'waz@waz.com',\n  newEmail: 'wfz@wfz.com',\n  requestorIP: '127.0.0.1' }","time":"2015-11-12T16:17:43.314Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5798,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:21:37.022Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5798,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T16:21:37.022Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5798,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:21:37.023Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5798,"level":30,"msg":"Updated email on internal DB { oldEmail: 'wfz@wfz.com',\n  newEmail: 'a@zzz.com',\n  requestorIP: '127.0.0.1' }","time":"2015-11-12T16:21:48.950Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5828,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:23:26.332Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5828,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T16:23:26.332Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5828,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:23:26.333Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5828,"level":30,"msg":"Updated email on internal DB { oldEmail: 'a@zzz.com',\n  newEmail: 'sa@zzz.com',\n  requestorIP: '127.0.0.1' }","time":"2015-11-12T16:23:29.854Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5874,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:25:12.394Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5874,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T16:25:12.395Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5874,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:25:12.395Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5874,"level":30,"msg":"Updated email on internal DB { oldEmail: 'sa@zzz.com',\n  newEmail: 'a@zzz.com',\n  requestorIP: '127.0.0.1' }","time":"2015-11-12T16:25:15.993Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5933,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:28:43.868Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5933,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T16:28:43.869Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5933,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:28:43.869Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5933,"level":30,"msg":"Updated email on internal DB { oldEmail: 'a@zzz.com',\n  newEmail: 'bb@zzz.com',\n  requestorIP: '127.0.0.1' }","time":"2015-11-12T16:28:47.804Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":5933,"level":30,"msg":"Updated customer { customerId: 'cus_7JzH0UzHb9fKKw',\n  item: 'email',\n  data: 'bb@zzz.com',\n  requestorIP: 'localhost' }","time":"2015-11-12T16:28:48.384Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":6072,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:37:28.057Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":6072,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T16:37:28.058Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":6072,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:37:28.058Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":6124,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:40:03.132Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":6124,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T16:40:03.132Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":6124,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:40:03.132Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":6124,"level":30,"msg":"Updated user password { id: 15,\n  email: 'bb@zzz.com',\n  password: '$2a$11$yE6/pWiVyYERbHLOOu8hGee0kdBVlJzDtMuXGhZR/4pOfWcADiAM.',\n  stId: 'cus_7JzH0UzHb9fKKw',\n  requestorIP: '127.0.0.1' }","time":"2015-11-12T16:40:05.269Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":6275,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:48:52.020Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":6275,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T16:48:52.021Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":6275,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:48:52.021Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":6302,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:49:58.865Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":6302,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T16:49:58.866Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":6302,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:49:58.866Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":6302,"level":30,"msg":"Updated user password { id: 15,\n  email: 'bb@zzz.com',\n  password: '$2a$11$HSmjNo7UKvqndXx2Vy8IYOmn168RLrU9vMb3kaJeRPeziVcS70CaK',\n  stId: 'cus_7JzH0UzHb9fKKw',\n  requestorIP: '127.0.0.1' }","time":"2015-11-12T16:50:34.760Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":6368,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:54:07.219Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":6368,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T16:54:07.219Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":6368,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T16:54:07.220Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":7436,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T19:52:11.717Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":7436,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T19:52:11.717Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":7436,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T19:52:11.717Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":7436,"level":30,"msg":"Updated email on internal DB { oldEmail: 'bb@zzz.com',\n  newEmail: 'asdf@zzz.com',\n  requestorIP: '127.0.0.1' }","time":"2015-11-12T19:52:53.646Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":7436,"level":30,"msg":"Updated customer { customerId: 'cus_7JzH0UzHb9fKKw',\n  item: 'email',\n  data: 'asdf@zzz.com',\n  requestorIP: 'localhost' }","time":"2015-11-12T19:52:54.208Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":9359,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T21:54:22.505Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":9359,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T21:54:22.506Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":9359,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T21:54:22.506Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":9398,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T21:56:37.451Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":9398,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T21:56:37.451Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":9398,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T21:56:37.451Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":9627,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T22:11:42.325Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":9627,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T22:11:42.325Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":9627,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T22:11:42.325Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":9734,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T22:17:14.054Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":9734,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T22:17:14.054Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":9734,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T22:17:14.055Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":9862,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T22:27:17.855Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":9862,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T22:27:17.856Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":9862,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T22:27:17.856Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":9898,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T22:29:28.177Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":9898,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T22:29:28.178Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":9898,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T22:29:28.178Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":9962,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T22:33:45.567Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":9962,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T22:33:45.568Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":9962,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T22:33:45.568Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10049,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T22:39:46.372Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10049,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T22:39:46.373Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10049,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T22:39:46.373Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10152,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T22:40:42.825Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10152,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T22:40:42.826Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10152,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T22:40:42.826Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10264,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T22:47:25.031Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10264,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T22:47:25.031Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10264,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T22:47:25.032Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10264,"level":50,"msg":"userCtrl.updateEmail() -- current password does not match { id: 15,\n  email: 'asdf@zzz.com',\n  stId: 'cus_7JzH0UzHb9fKKw',\n  requestorIP: '127.0.0.1' }","time":"2015-11-12T22:48:27.912Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10328,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T22:51:12.560Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10328,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T22:51:12.561Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10328,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T22:51:12.561Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10328,"level":50,"msg":"userCtrl.updateEmail() -- current password does not match { id: 15,\n  email: 'asdf@zzz.com',\n  stId: 'cus_7JzH0UzHb9fKKw',\n  requestorIP: '127.0.0.1' }","time":"2015-11-12T22:51:25.890Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10328,"level":50,"msg":"userCtrl.updateEmail() -- current password does not match { id: 15,\n  email: 'asdf@zzz.com',\n  stId: 'cus_7JzH0UzHb9fKKw',\n  requestorIP: '127.0.0.1' }","time":"2015-11-12T22:53:58.856Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10328,"level":50,"msg":"userCtrl.updateEmail() -- current password does not match { id: 15,\n  email: 'asdf@zzz.com',\n  stId: 'cus_7JzH0UzHb9fKKw',\n  requestorIP: '127.0.0.1' }","time":"2015-11-12T22:55:34.072Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10328,"level":50,"msg":"userCtrl.updateEmail() -- current password does not match { id: 15,\n  email: 'asdf@zzz.com',\n  stId: 'cus_7JzH0UzHb9fKKw',\n  requestorIP: '127.0.0.1' }","time":"2015-11-12T22:55:40.657Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10328,"level":50,"msg":"userCtrl.updateEmail() -- current password does not match { id: 15,\n  email: 'asdf@zzz.com',\n  stId: 'cus_7JzH0UzHb9fKKw',\n  requestorIP: '127.0.0.1' }","time":"2015-11-12T22:55:45.700Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10441,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T22:58:12.001Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10441,"level":30,"msg":"====     SERVER STARTED     ==== { RequestorIP: undefined }","time":"2015-11-12T22:58:12.001Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10441,"level":30,"msg":"================================ { RequestorIP: undefined }","time":"2015-11-12T22:58:12.001Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10441,"level":50,"msg":"userCtrl.updateEmail() -- current password does not match { id: 15,\n  email: 'asdf@zzz.com',\n  stId: 'cus_7JzH0UzHb9fKKw',\n  requestorIP: '127.0.0.1' }","time":"2015-11-12T22:58:26.154Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10441,"level":30,"msg":"Updated email on internal DB { oldEmail: 'asdf@zzz.com',\n  newEmail: 'test@test.com',\n  requestorIP: '127.0.0.1' }","time":"2015-11-12T22:58:29.074Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10441,"level":30,"msg":"Updated customer { customerId: 'cus_7JzH0UzHb9fKKw',\n  item: 'email',\n  data: 'test@test.com',\n  requestorIP: 'localhost' }","time":"2015-11-12T22:58:29.952Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10441,"level":50,"msg":"userCtrl.updateEmail() -- email exists { id: 15,\n  email: 'test@test.com',\n  stId: 'cus_7JzH0UzHb9fKKw',\n  requestorIP: '127.0.0.1' }","time":"2015-11-12T22:58:50.875Z","v":0}
+{"name":"log","hostname":"user-All-Series","pid":10441,"level":50,"msg":"userCtrl.updateEmail() -- email exists { id: 15,\n  email: 'test@test.com',\n  stId: 'cus_7JzH0UzHb9fKKw',\n  requestorIP: '127.0.0.1' }","time":"2015-11-12T22:58:58.521Z","v":0}

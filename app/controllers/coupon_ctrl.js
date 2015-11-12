@@ -2,7 +2,6 @@
 
 var configPriv = require('../configuration/config_priv');
 var log = require('../utils/logger');
-var errorHandler = require('../utils/error_handler');
 
 var stripe = require('stripe')(
     configPriv.sKey
@@ -18,10 +17,17 @@ couponCtrl.prototype = {
         stripe.coupons.retrieve(couponId, function(err, coupon) {
             if (err) {
                 console.log(err);
-                errorHandler.stripeHttpErrors(res, err, req.connection.remoteAddress);
+                return callback({
+                    status: 500,
+                    type: 'stripe',
+                    msg: {
+                        simplified: 'server_error',
+                        detailed: err
+                    }
+                }, null);
             }
             else {
-                return callback(coupon);
+                return callback(false, coupon);
             }
         })
     },
@@ -41,10 +47,17 @@ couponCtrl.prototype = {
         stripe.coupons.list(params, function(err, coupons) {
             if (err) {
                 console.log(err);
-                errorHandler.stripeHttpErrors(res, err, req.connection.remoteAddress);
+                return callback({
+                    status: 500,
+                    type: 'stripe',
+                    msg: {
+                        simplified: 'server_error',
+                        detailed: err
+                    }
+                }, null, null);
             }
             else {
-                return callback(coupons, (cursor + limit) );
+                return callback(false, coupons, (cursor + limit) );
             }
         })
     },
@@ -69,11 +82,18 @@ couponCtrl.prototype = {
         stripe.coupons.create(payload, function(err, coupon) {
             if (err) {
                 console.log(err);
-                errorHandler.stripeHttpErrors(res, err, req.connection.remoteAddress);
+                return callback({
+                    status: 500,
+                    type: 'stripe',
+                    msg: {
+                        simplified: 'server_error',
+                        detailed: err
+                    }
+                }, null);
             }
             else {
                 log.info("Created new coupon", coupon, req.connection.remoteAddress);
-                return callback(coupon);
+                return callback(false, coupon);
             }
         });
     },
@@ -84,11 +104,18 @@ couponCtrl.prototype = {
         stripe.coupons.del(couponId, function(err, result) {
             if (err) {
                 console.log(err);
-                errorHandler.stripeHttpErrors(res, err, req.connection.remoteAddress);
+                return callback({
+                    status: 500,
+                    type: 'stripe',
+                    msg: {
+                        simplified: 'server_error',
+                        detailed: err
+                    }
+                }, null);
             }
             else {
                 log.info("Removed coupon with id: ", req.connection.remoteAddress);
-                return callback(result);
+                return callback(false, result);
             }
         });
     }

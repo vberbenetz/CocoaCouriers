@@ -2,8 +2,6 @@
 
 var configPriv = require('../configuration/config_priv');
 var log = require('../utils/logger');
-var errorHandler = require('../utils/error_handler');
-var helpers = require('../utils/helpers');
 
 var stripe = require('stripe')(
     configPriv.sKey
@@ -21,10 +19,17 @@ subscriptionCtrl.prototype = {
         stripe.customers.retrieveSubscription(customerId, subscriptionId, function(err, subscription) {
             if (err) {
                 console.log(err);
-                errorHandler.stripeHttpErrors(res, err, req.connection.remoteAddress);
+                return callback({
+                    status: 500,
+                    type: 'stripe',
+                    msg: {
+                        simplified: 'server_error',
+                        detailed: err
+                    }
+                }, null);
             }
             else {
-                return callback(subscription);
+                return callback(false, subscription);
             }
         });
     },
@@ -44,11 +49,18 @@ subscriptionCtrl.prototype = {
         stripe.customers.createSubscription(customerId, payload, function(err, subscription) {
             if (err) {
                 console.log(err);
-                errorHandler.stripeHttpErrors(res, err, req.connection.remoteAddress);
+                return callback({
+                    status: 500,
+                    type: 'stripe',
+                    msg: {
+                        simplified: 'server_error',
+                        detailed: err
+                    }
+                }, null);
             }
             else {
                 log.info("Created new subscription", subscription, req.connection.remoteAddress);
-                return callback(subscription);
+                return callback(false, subscription);
             }
         })
     },
@@ -67,11 +79,18 @@ subscriptionCtrl.prototype = {
         stripe.customers.updateSubscription(customerId, subscriptionId, payload, function(err, subscription) {
             if (err) {
                 console.log(err);
-                errorHandler.stripeHttpErrors(res, err, req.connection.remoteAddress);
+                return callback({
+                    status: 500,
+                    type: 'stripe',
+                    msg: {
+                        simplified: 'server_error',
+                        detailed: err
+                    }
+                }, null);
             }
             else {
                 log.info("Updated subscription", subscription, req.connection.remoteAddress);
-                return callback(subscription);
+                return callback(false, subscription);
             }
         })
     },
@@ -85,11 +104,18 @@ subscriptionCtrl.prototype = {
         stripe.customers.cancelSubscription(customerId, subscriptionId, function(err, confirmation) {
             if (err) {
                 console.log(err);
-                errorHandler.stripeHttpErrors(res, err, req.connection.remoteAddress);
+                return callback({
+                    status: 500,
+                    type: 'stripe',
+                    msg: {
+                        simplified: 'server_error',
+                        detailed: err
+                    }
+                }, null);
             }
             else {
                 log.info("Cancelled subscription", {customerId: customerId, subscriptionId: subscriptionId}, req.connection.remoteAddress);
-                return callback(confirmation);
+                return callback(false, confirmation);
             }
         })
     }

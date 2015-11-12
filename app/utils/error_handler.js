@@ -6,41 +6,34 @@ var errorHandler = function() {};
 
 errorHandler.prototype = {
 
-    stripeHttpErrors: function (res, error, requestorIP) {
-        log.error(error, requestorIP);
+    handle: function (res, err, user, requestorIP) {
+        // Remove user password for logging
+        delete user.password;
+        log.error(err.msg.detailed, user, requestorIP);
 
-        if (error.code) {
-            res.status(500).send(error.code);
-        }
-        else {
-            res.status(500).send("Server Error");
-        }
+        switch (err.type) {
+            case 'app':
+                res.status(err.status).send(err.msg.simplified);
+                break;
 
-    },
+            case 'stripe':
+                // Send token verification error code to user
+                if (err.msg.detailed.type === 'card_error') {
+                    res.status(400).send(err.msg.detailed.code);
+                }
 
-    appErrors: function (res, errorMsg, data, requestorIP) {
-        log.error(errorMsg, data, requestorIP);
-        var retMsg = '';
+                // All other stripe errors
+                else {
+                    res.status(500).send('server_error');
+                }
+                break;
 
-        switch (data.httpErrorCode) {
-            case 400:
-                retMsg = 'Bad Request';
-                break;
-            case 403:
-                retMsg = 'Forbidden';
-                break;
-            case 404:
-                retMsg = 'Not Found';
-                break;
-            case 500:
-                retMsg = 'Server Error';
-                break;
             default:
+                res.status(500).send('server_error');
                 break;
         }
-
-        res.send(data.httpErrorCode).send(errorMsg);
     }
+
 };
 
 module.exports = new errorHandler();
