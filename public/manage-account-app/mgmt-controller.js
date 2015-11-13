@@ -64,10 +64,9 @@ function membershipCtrl($scope, appService, stService) {
             appService.user.updateEmail(payload, function(data) {
                 // Reset vars
                 $scope.validationErrors = {};
-                $scope.formData.email = '';
-                $scope.formData.currentPassword = '';
+                $scope.formData = {};
 
-                $scope.account.email = data.email;
+                $scope.$parent.account.email = data.email;
 
             }, function(err) {
                 if (err.data === 'email_exists') {
@@ -82,6 +81,10 @@ function membershipCtrl($scope, appService, stService) {
                 }
             });
         }
+    };
+
+    $scope.changePassword = function () {
+
     }
 
 
