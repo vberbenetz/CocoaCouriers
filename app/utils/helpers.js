@@ -43,6 +43,10 @@ helpers.prototype = {
         bcrypt.compare(passToCompare, existingPassword, function(err, res) {
             return callback(res);
         });
+    },
+
+    hashPasswordSync: function (rawPassword) {
+        return bcrypt.hashSync(rawPassword, 11);
     }
 
 };

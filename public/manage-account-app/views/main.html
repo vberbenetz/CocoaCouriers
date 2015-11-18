@@ -1,4 +1,5 @@
 <h1>My Account</h1>
+<button class="btn btn-default" ng-click="logout()">Logout</button>
 <hr/>
 <div class="col-xs-4 col-lg-2">
     <h3>Membership</h3>
@@ -13,7 +14,7 @@
                 <a ng-href="/My-Account/change-email">Change Email</a>
             </li>
             <li class="list-group-item">
-                <a>Change Password</a>
+                <a ng-href="/My-Account/change-password">Change Password</a>
             </li>
             <li class="list-group-item">
                 <a>Email Preferences</a>
@@ -42,7 +43,7 @@
     <div class="col-xs-6">
         <ul class="list-group pull-right">
             <li class="list-group-item">
-                <a>Update Payment And Shipping Info</a>
+                <a ng-href="/My-Account/update-payment">Update Payment And Shipping Info</a>
             </li>
             <li class="list-group-item">
                 <a>Billing Details</a>

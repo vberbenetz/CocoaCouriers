@@ -42,8 +42,11 @@ module.exports = function(app, passport, dbConnPool) {
     });
 
     app.post('/logout', function(req, res) {
-        req.logOut();
-        res.redirect('/');
+        req.logout();
+
+        req.session.destroy(function(err) {
+            res.send('OK');
+        });
     });
 
     app.post('/signup', passport.authenticate('local-signup'), function(req, res) {
@@ -122,7 +125,7 @@ module.exports = function(app, passport, dbConnPool) {
                 }
             });
         }
-        else if (req.query.item === 'password') {
+        else if (req.query.item === 'pass') {
             userCtrl.updatePassword(req, dbConnPool, function(err, result) {
                 if (err) {
                     errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
@@ -200,11 +203,8 @@ module.exports = function(app, passport, dbConnPool) {
 
     app.post('/api/customer', function (req, res, next) {
 
-        // Create customer internally
-        passport.authenticate('local-signup');
-
-        // Create customer withing Stripe
-        customerCtrl.create(req, res, function (err, newCustomer) {
+        // Create customer within Stripe
+        customerCtrl.create(req, res, dbConnPool, function (err, newCustomer) {
             if (err) {
                 errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
             }
@@ -212,6 +212,7 @@ module.exports = function(app, passport, dbConnPool) {
                 res.send(newCustomer);
             }
         });
+
     });
 
     app.put('/api/customer', auth, function (req, res, next) {

@@ -40,7 +40,8 @@ tokenCtrl.prototype = {
             number: req.body.number,
             exp_month: req.body.exp_month,
             exp_year: req.body.exp_year,
-            cvc: req.body.cvc
+            cvc: req.body.cvc,
+            address_zip: req.body.address_zip
         };
 
         stripe.tokens.create({card: payload}, function(err, token) {

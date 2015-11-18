@@ -14,7 +14,7 @@ var log = function() {};
 
 log.prototype = {
     info: function(msg, data, requestorIP) {
-        if (typeof requestorIP === 'undefined') {
+        if ( (typeof data === 'undefined') || (data === null) ) {
             logger.info(msg, {RequestorIP: requestorIP});
         }
         else {
@@ -23,7 +23,7 @@ log.prototype = {
         }
     },
     warn: function(msg, data, requestorIP) {
-        if (typeof requestorIP === 'undefined') {
+        if ( (typeof data === 'undefined') || (data === null) ) {
             logger.warn(msg, {RequestorIP: requestorIP});
         }
         else {
@@ -32,7 +32,7 @@ log.prototype = {
         }
     },
     error: function(msg, data, requestorIP) {
-        if (typeof requestorIP === 'undefined') {
+        if ( (typeof data === 'undefined') || (data === null) ) {
             logger.error(msg, {RequestorIP: requestorIP});
         }
         else {

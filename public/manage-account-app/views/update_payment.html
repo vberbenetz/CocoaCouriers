@@ -1,0 +1,108 @@
+<div>
+    <h1>Shipping and Billing Details</h1>
+
+    <div class="col-lg-7 col-lg-offset-2">
+        <h3>Shipping Address</h3>
+        <form class="form-horizontal" novalidate>
+            <div class="form-group" ng-class="{ 'has-error' : validationErrors.name }">
+                <label class="col-sm-2 control-label margin-top-20" for="fn">Full Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control input-normal" id="fn" placeholder="" ng-model="userInfo.name">
+                    <p class="text-danger" ng-show="validationErrors.name">{{ validationErrors.name }}</p>
+                </div>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error' : validationErrors.address.line1 }">
+                <label class="col-sm-2 control-label margin-top-20" for="ad">Address</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control input-normal" id="ad" placeholder="" ng-model="userInfo.address.line1">
+                    <p class="text-danger" ng-show="validationErrors.address.line1">{{ validationErrors.address.line1 }}</p>
+                </div>
+                <div class="col-sm-10 col-sm-offset-2">
+                    <input type="text" class="form-control input-normal" id="ad2" placeholder="" ng-model="userInfo.address.line2">
+                    <p class="text-danger" ng-show="validationErrors.address.line2">{{ validationErrors.address.line2 }}</p>
+                </div>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error' : validationErrors.address.city }">
+                <label class="col-sm-2 control-label margin-top-20" for="city">City</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control input-normal" id="city" placeholder="" ng-model="userInfo.address.city">
+                    <p class="text-danger" ng-show="validationErrors.address.city">{{ validationErrors.address.city }}</p>
+                </div>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error' : validationErrors.address.state }">
+                <label class="col-sm-2 control-label margin-top-20" for="state">Province / State</label>
+                <div class="col-sm-10">
+                    <select id="state" class="form-control input-normal" ng-options="o as o.name for o in formOptions.provinces" ng-model="userInfo.address.state">
+                    </select>
+                    <p class="text-danger" ng-show="validationErrors.address.state">{{ validationErrors.address.state }}</p>
+                </div>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error' : validationErrors.address.country }">
+                <label class="col-sm-2 control-label margin-top-20" for="country">Country</label>
+                <div class="col-sm-10">
+                    <select id="country" class="form-control input-normal" ng-options="o as o.name for o in formOptions.countries" ng-model="userInfo.address.country">
+                    </select>
+                    <p class="text-danger" ng-show="validationErrors.address.country">{{ validationErrors.address.country }}</p>
+                </div>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error' : validationErrors.address.postal_code }">
+                <label class="col-sm-2 control-label margin-top-20" for="postal_code">Postal Code</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control input-normal" id="postal_code" placeholder="" ng-model="userInfo.address.postal_code">
+                    <p class="text-danger" ng-show="validationErrors.address.postal_code">{{ validationErrors.address.postal_code }}</p>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="updateShipping()">Update Shipping</button>
+        </form>
+    </div>
+
+    <div class="col-lg-7 col-lg-offset-2">
+        <h3>Billing Information</h3>
+        <form class="form-horizontal" novalidate>
+            <div class="form-group" ng-class="{ 'has-error' : validationErrors.source.name }">
+                <label class="col-sm-2 control-label margin-top-20" for="chn">Card Holder Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control input-normal" id="chn" placeholder="Name as it appears on card" ng-model="userInfo.source.name">
+                    <p class="text-danger" ng-show="validationErrors.source.name">{{ validationErrors.source.name }}</p>
+                </div>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error' : validationErrors.source.number }">
+                <label class="col-sm-2 control-label margin-top-20" for="cn">Card Number</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control input-normal" id="cn" placeholder="" ng-model="userInfo.source.number">
+                    <p class="text-danger" ng-show="validationErrors.source.number">{{ validationErrors.source.number }}</p>
+                </div>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error' : validationErrors.exp_month || validationErrors.exp_year }">
+                <label class="col-sm-2 control-label margin-top-20" for="exp_mon">Expiration</label>
+                <div class="col-sm-4">
+                    <select id="exp_mon" class="form-control input-normal" placeholder="Month" ng-options="mon as mon.name for mon in formOptions.ccExp.month" ng-model="userInfo.source.exp_month">
+                    </select>
+                    <p class="text-danger" ng-show="validationErrors.source.exp_month">{{ validationErrors.source.exp_month }}</p>
+                </div>
+                <div class="col-sm-4 col-sm-offset-1">
+                    <select class="form-control input-normal" id="exp_year" placeholder="Year" ng-model="userInfo.source.exp_year" ng-options="year for year in formOptions.ccExp.year">
+                        <option ng-repeat="option in formOptions.ccExp.year" value="{{ option.id }}">{{ option.name }}</option>
+                    </select>
+                    <p class="text-danger" ng-show="validationErrors.source.exp_year">{{ validationErrors.source.exp_year }}</p>
+                </div>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error' : validationErrors.source.cvc }">
+                <label class="col-sm-2 control-label margin-top-20" for="cvv">Card CVV</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control input-normal" id="cvv" placeholder="" ng-model="userInfo.source.cvc">
+                    <p class="text-danger" ng-show="validationErrors.source.cvc">{{ validationErrors.source.cvc }}</p>
+                </div>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error' : validationErrors.source.address_zip }">
+                <label class="col-sm-2 control-label margin-top-20" for="cn">Postal Code</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control input-normal" id="pc" placeholder="" ng-model="userInfo.source.address_zip">
+                    <p class="text-danger" ng-show="validationErrors.source.address_zip">{{ validationErrors.source.address_zip }}</p>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="updatePayment()">Update Payment</button>
+        </form>
+    </div>
+</div>

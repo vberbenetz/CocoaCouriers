@@ -15,18 +15,33 @@ function appService($resource) {
                 updatePassword: {
                     method: 'PUT',
                     params: {
-                        item: 'password'
+                        item: 'pass'
                     },
                     isArray: false
                 }
             }
-        )
+        ),
+
+        logout: $resource('/logout')
     }
 }
 
 function stService($resource) {
     return {
-        customer: $resource('/api/customer')
+        customer: $resource('/api/customer',
+            {},
+            {
+                update: {
+                    method: 'PUT',
+                    params: {},
+                    isArray: false
+                }
+            }
+        ),
+
+        token: $resource('/api/token'),
+
+        plan: $resource('/api/plan')
     }
 }
 

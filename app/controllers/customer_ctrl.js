@@ -47,41 +47,48 @@ customerCtrl.prototype = {
         var planId = req.body.plan;
         var tax = calculateTaxPercentage(shipping.address.state);
 
-        var size = req.body.size;
-        var material = req.body.material;
-        var brand = req.body.brand;
-        var boxType = req.body.BOX_TYPE;
-
         var payload = {
             email: email,
             shipping: shipping,
             source: source,
             metadata: {
-                size: size,
-                material: material,
-                brand: brand,
-                BOX_TYPE: boxType,
                 taxRate: tax.rate,
                 taxDesc: tax.desc
             }
         };
 
-        stripe.customers.create(payload, function(err, customer) {
-            if (err) {
-                console.log(err);
-                return callback({
-                    status: 500,
-                    type: 'stripe',
-                    msg: {
-                        simplified: 'server_error',
-                        detailed: err
+        stripe.customers.create(payload, function(stripeErr, customer) {
+            if (stripeErr) {
+
+                req.logout();
+
+                req.session.destroy(function(err) {
+
+                    if (!err) {
+                        // Delete newly created user for user to retry request
+                        userCtrl.removeUser(email, dbConnPool, function(err, result) {
+                            if (err) {
+                                log.error(err);
+                            }
+
+                            return callback({
+                                status: 500,
+                                type: 'stripe',
+                                msg: {
+                                    simplified: 'server_error',
+                                    detailed: stripeErr
+                                }
+                            }, null);
+                        });
                     }
-                }, null);
+
+                });
+
             }
             else {
 
                 // Update user with stripe customer Id
-                userCtrl.updateCustomerId(dbConnPool, function (err, result) {
+                userCtrl.updateCustomerId(email, customer.id, dbConnPool, function (err, result) {
                     if (err) {
                         return callback(err, null);
                     }

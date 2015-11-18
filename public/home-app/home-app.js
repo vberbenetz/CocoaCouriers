@@ -26,18 +26,18 @@ angular.module('domerbox', [])
             ],
             ccExp: {
                 month: [
-                    '01',
-                    '02',
-                    '03',
-                    '04',
-                    '05',
-                    '06',
-                    '07',
-                    '08',
-                    '09',
-                    '10',
-                    '11',
-                    '12'
+                    { id: 1, name: 'January - 01' },
+                    { id: 2, name: 'February - 02' },
+                    { id: 3, name: 'March - 03' },
+                    { id: 4, name: 'April - 04' },
+                    { id: 5, name: 'May - 05' },
+                    { id: 6, name: 'June - 06' },
+                    { id: 7, name: 'July - 07' },
+                    { id: 8, name: 'August - 08' },
+                    { id: 9, name: 'September - 09' },
+                    { id: 10, name: 'October - 10' },
+                    { id: 11, name: 'November - 11' },
+                    { id: 12, name: 'December - 12' }
                 ]
             }
         };
@@ -82,7 +82,7 @@ angular.module('domerbox', [])
                 number: '',
                 cvc: '',
                 name: '',
-                postal_code: ''
+                address_zip: ''
             }
         };
         $scope.validationErrors = {};
@@ -127,6 +127,9 @@ angular.module('domerbox', [])
                             if (result) {
                                 $scope.formPage = 6;
                             }
+                            else {
+                                prePopulateShippingForm();
+                            }
                         });
                     }
                     break;
@@ -144,45 +147,56 @@ angular.module('domerbox', [])
 
         // After validation and CC token generation, register the user and create the customer in Stripe
         $scope.createAccount = function() {
-/*
-            // Create Customer Account
-            $http({
-                url: '/signup',
-                method: 'POST',
-                data: {
-                    email: $scope.userInfo.email,
-                    password: $scope.userInfo.password
+
+            $scope.validateUserPayment(function(result) {
+                if (result) {
+
+                    // Create St Customer Account
+                    $http({
+                        url: '/signup',
+                        method: 'POST',
+                        data: {
+                            email: $scope.userInfo.email,
+                            password: $scope.userInfo.password
+                        }
+                    }).success(function(newUser) {
+
+                        if (typeof newUser !== 'undefined') {
+                            if (typeof newUser.password !== 'undefined') {
+                                delete newUser.password;
+                            }
+                        }
+                        $scope.newUser = newUser;
+
+                        // Create Customer On Stripe
+                        $http({
+                            url: '/api/customer',
+                            method: 'POST',
+                            data: {
+                                email: newUser.email,
+                                name: $scope.userInfo.name,
+                                address: $scope.userInfo.address,
+                                source: $scope.userInfo.token,
+                                coupon: $scope.userInfo.subscription.couponCode,
+                                plan: $scope.userInfo.subscription.planId
+                            }
+                        }).success(function(newCustomer) {
+                            $window.location.href = '/My-Account/';
+                        }).error(function(err) {
+                            handleStCCErr(err);
+                        });
+
+                        // Reset form
+                        prePopulatePaymentForm();
+
+                    }).error(function(error) {
+                        $scope.validationErrors.email = 'Email already in use';
+                        return callback(false);
+                    });
+
                 }
-            }).success(function(newUser) {
-
-                // Create Customer On Stripe (No subscription for now to deal with tax rate)
-                $http({
-                    url: '/api/customer',
-                    method: 'POST',
-                    data: {
-                        email: newUser.email,
-                        name: $scope.userInfo.name,
-                        address: $scope.userInfo.address,
-                        source: $scope.userInfo.token,
-                        size: $scope.userInfo.subscription.size,
-                        material: $scope.userInfo.subscription.material,
-                        brand: $scope.userInfo.subscription.brand,
-                        coupon: $scope.userInfo.subscription.couponCode,
-                        plan: $scope.userInfo.subscription.planId,
-                        BOX_TYPE: $scope.userInfo.BOX_TYPE
-                    }
-                }).success(function(newCustomer) {
-                    $window.location.href = '/';
-
-                }).error(function(error) {
-
-                })
-
-            }).error(function(error) {
-                $scope.validationErrors.email = 'Email already in use';
-                return callback(false);
             });
-*/
+
         };
 
         // Validate new account creation
@@ -315,6 +329,10 @@ angular.module('domerbox', [])
                 $scope.validationErrors.address.line1 = 'Address is too long. Please enter a valid address';
                 validationFailed = true;
             }
+            if ($scope.userInfo.address.line2.length > 1024) {
+                $scope.validationErrors.address.line2 = 'Address line 2 is too long. Please enter a valid address for line 2';
+                validationFailed = true;
+            }
 
             // City validation
             if (typeof $scope.userInfo.address.city === 'undefined') {
@@ -438,6 +456,13 @@ angular.module('domerbox', [])
                 $scope.validationErrors.source.exp_month = 'Please select an expiration month';
                 validationFailed = true;
             }
+            else if (typeof $scope.userInfo.source.exp_month.id === 'undefined') {
+                $scope.validationErrors.source.exp_month = 'Please select an expiration month';
+                validationFailed = true;
+            }
+            else {      // Set card month expiry to number value
+                $scope.userInfo.source.exp_month = $scope.userInfo.source.exp_month.id;
+            }
             if (typeof $scope.userInfo.source.exp_year === 'undefined') {
                 $scope.validationErrors.source.exp_year = 'Please select an expiration year';
                 validationFailed = true;
@@ -461,10 +486,18 @@ angular.module('domerbox', [])
                 validationFailed = true;
             }
 
-            // Use postal code of card holder if different from shipping
-            var ccPostalCodeVerification = $scope.userInfo.address.postal_code;
-            if ( (typeof $scope.userInfo.source.postal_code !== 'undefined') && ($scope.userInfo.source.postal_code.length != 0) ) {
-                ccPostalCodeVerification = $scope.userInfo.source.postal_code;
+            // Use postal code of card holder
+            if (typeof $scope.userInfo.source.address_zip === 'undefined') {
+                $scope.validationErrors.source.address_zip = 'Please enter the zip / postal code associated with your card';
+                validationFailed = true;
+            }
+            else if ( ($scope.userInfo.source.address_zip.length == 0) || ($scope.userInfo.source.address_zip === '') ) {
+                $scope.validationErrors.source.address_zip = 'Please enter the zip / postal code associated with your card';
+                validationFailed = true;
+            }
+            else if ($scope.userInfo.source.address_zip.length > 255) {
+                $scope.validationErrors.source.address_zip = 'Please enter a valid zip / postal code';
+                validationFailed = true;
             }
 
             // Attempt to generate token
@@ -472,66 +505,13 @@ angular.module('domerbox', [])
                 $http({
                     url: '/api/token',
                     method: 'POST',
-                    data: {
-                        name: $scope.userInfo.source.name,
-                        number: $scope.userInfo.source.number,
-                        exp_month: $scope.userInfo.source.exp_month,
-                        exp_year: $scope.userInfo.source.exp_year,
-                        cvc: $scope.userInfo.source.cvc,
-                        address_zip: ccPostalCodeVerification
-                    }
+                    data: $scope.userInfo.source
                 }).success(function(token) {
                     $scope.userInfo.token = token.id;
                     return callback(true);
 
-                }).error(function(error) {
-                    switch (error) {
-                        case 'invalid_number':
-                            $scope.validationErrors.source.number = 'Please enter a valid number. You can use dashes or spaces to separate blocks of numbers if you choose';
-                            validationFailed = true;
-                            break;
-                        case 'incorrect_number':
-                            $scope.validationErrors.source.number = 'Please enter a correct number. You can use dashes or spaces to separate blocks of numbers if you choose';
-                            validationFailed = true;
-                            break;
-                        case 'card_declined':
-                            $scope.validationErrors.source.number = 'Your card has been declined. Please try another card.';
-                            validationFailed = true;
-                            break;
-                        case 'processing_error':
-                            $scope.validationErrors.source.number = 'There was an issue processing your payment. Please try again or contact our support team';
-                            validationFailed = true;
-                            break;
-                        case 'expired_card':
-                            $scope.validationErrors.source.number = 'This card has expired. Please use a different card';
-                            validationFailed = true;
-                            break;
-                        case 'invalid_expiry_month':
-                            $scope.validationErrors.source.exp_month = 'Please enter a valid expiry month';
-                            validationFailed = true;
-                            break;
-                        case 'invalid_expiry_year':
-                            $scope.validationErrors.source.exp_month = 'Please enter a valid expiry year';
-                            validationFailed = true;
-                            break;
-                        case 'invalid_cvc':
-                            $scope.validationErrors.source.cvc = 'Please enter a valid CVV';
-                            validationFailed = true;
-                            break;
-                        case 'incorrect_cvc':
-                            $scope.validationErrors.source.cvc = 'Please enter a correct CVV';
-                            validationFailed = true;
-                            break;
-                        case 'incorrect_zip':
-                            $scope.validationErrors.source.address_zip = 'Please enter the postal code / zip relating to your credit card';
-                            validationFailed = true;
-                            break;
-                        default:
-                            $scope.validationErrors.source.number = 'There was an issue processing your payment. Please try again or contact our support team';
-                            validationFailed = true;
-                            break;
-                    }
-
+                }).error(function(err) {
+                    handleStCCErr(err);
                     return callback(false);
                 });
             }
@@ -540,6 +520,72 @@ angular.module('domerbox', [])
                 callback(false);
             }
 
+        };
+
+
+        // Pre-populate province and country on form from existing values
+        function prePopulateShippingForm() {
+            var stateList = $scope.formOptions.provinces;
+            for (var j = 0; j < stateList.length; j++) {
+                if (stateList[j].id === $scope.userInfo.address.state) {
+                    $scope.userInfo.address.state = stateList[j];
+                }
+            }
+            var countryList = $scope.formOptions.countries;
+            for (var k = 0; k < countryList.length; k++) {
+                if (countryList[k].id === $scope.userInfo.address.country) {
+                    $scope.userInfo.address.country = countryList[k];
+                }
+            }
+        }
+
+        // Pre-populate exp_month on form from existing values
+        function prePopulatePaymentForm() {
+            var ccMonExpList = $scope.formOptions.ccExp.month;
+            for (var l = 0; l < ccMonExpList.length; l++) {
+                if (ccMonExpList[l].id === $scope.userInfo.source.exp_month) {
+                    $scope.userInfo.source.exp_month = ccMonExpList[l];
+                }
+            }
+        }
+
+        // Handle payment cc error codes
+        function handleStCCErr(errCode) {
+            switch (errCode) {
+                case 'invalid_number':
+                    $scope.validationErrors.source.number = 'Please enter a valid number. You can use dashes or spaces to separate blocks of numbers if you choose';
+                    break;
+                case 'incorrect_number':
+                    $scope.validationErrors.source.number = 'Please enter a correct number. You can use dashes or spaces to separate blocks of numbers if you choose';
+                    break;
+                case 'card_declined':
+                    $scope.validationErrors.source.number = 'Your card has been declined. Please try another card.';
+                    break;
+                case 'processing_error':
+                    $scope.validationErrors.source.number = 'There was an issue processing your payment. Please try again or contact our support team';
+                    break;
+                case 'expired_card':
+                    $scope.validationErrors.source.number = 'This card has expired. Please use a different card';
+                    break;
+                case 'invalid_expiry_month':
+                    $scope.validationErrors.source.exp_month = 'Please enter a valid expiry month';
+                    break;
+                case 'invalid_expiry_year':
+                    $scope.validationErrors.source.exp_month = 'Please enter a valid expiry year';
+                    break;
+                case 'invalid_cvc':
+                    $scope.validationErrors.source.cvc = 'Please enter a valid CVV';
+                    break;
+                case 'incorrect_cvc':
+                    $scope.validationErrors.source.cvc = 'Please enter a correct CVV';
+                    break;
+                case 'incorrect_zip':
+                    $scope.validationErrors.source.address_zip = 'Please enter the postal code / zip relating to your credit card';
+                    break;
+                default:
+                    $scope.validationErrors.source.number = 'There was an issue processing your payment. Please try again or contact our support team';
+                    break;
+            }
         }
 
 })

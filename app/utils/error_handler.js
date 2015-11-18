@@ -8,7 +8,11 @@ errorHandler.prototype = {
 
     handle: function (res, err, user, requestorIP) {
         // Remove user password for logging
-        delete user.password;
+        if ( (typeof user !== 'undefined') && (user != null) ) {
+            if (typeof user.password !== 'undefined') {
+                delete user.password;
+            }
+        }
         log.error(err.msg.detailed, user, requestorIP);
 
         switch (err.type) {
@@ -18,8 +22,8 @@ errorHandler.prototype = {
 
             case 'stripe':
                 // Send token verification error code to user
-                if (err.msg.detailed.type === 'card_error') {
-                    res.status(400).send(err.msg.detailed.code);
+                if (err.msg.detailed.rawType === 'card_error') {
+                    res.status(402).send(err.msg.detailed.code);
                 }
 
                 // All other stripe errors

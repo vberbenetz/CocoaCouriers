@@ -19,18 +19,22 @@ function config($routeProvider, $locationProvider) {
         })
 
         .when('/email-preferences', {
+            controller: 'contactCtrl',
             templateUrl: '/manage-account-app/views/email_preferences.html'
         })
 
         .when('/change-plan', {
+            controller: 'planCtrl',
             templateUrl: '/manage-account-app/views/change_plan.html'
         })
 
         .when('/update-payment', {
+            controller: 'updatePaymentCtrl',
             templateUrl: '/manage-account-app/views/update_payment.html'
         })
 
         .when('/billing-details', {
+            controller: 'billingHistoryCtrl',
             templateUrl: '/manage-account-app/views/billing_details.html'
         });
 

@@ -150,7 +150,7 @@ userCtrl.prototype = {
                             type: 'app',
                             msg: {
                                 simplified: 'incorrect_password',
-                                detailed: 'userCtrl.updateEmail() -- current password does not match'
+                                detailed: 'userCtrl.updateEmail() -- current password incorrect'
                             }
                         }, null);
                     }
@@ -160,6 +160,33 @@ userCtrl.prototype = {
     },
 
     updatePassword: function (req, dbConnPool, callback) {
+
+        var newPassword = req.body.newPass;
+        var currentPassword = req.body.currentPass;
+
+        // Validate that new password meets criteria
+        var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+        if (typeof newPassword === 'undefined') {
+            return callback({
+                status: 400,
+                type: 'app',
+                msg: {
+                    simplified: 'invalid_new_password',
+                    detailed: 'userCtrl.updatePassword() -- new password is empty'
+                }
+            }, null);
+        }
+        else if ( !passwordRegex.test(newPassword) ) {
+            return callback({
+                status: 400,
+                type: 'app',
+                msg: {
+                    simplified: 'invalid_new_password',
+                    detailed: 'userCtrl.updatePassword() -- new password does not match criteria'
+                }
+            }, null);
+        }
+
 
         // Verify user's password
         helpers.verifyPassword(req.user.password, currentPassword, function (result) {
@@ -178,13 +205,13 @@ userCtrl.prototype = {
                     }
 
                     // Hash password
-                    var newPass = bcrypt.hashSync(req.body.newPass, 11);
+                    var hashedPass = helpers.hashPasswordSync(req.body.newPass);
 
                     // Get and update user password
                     var updatedUser = req.user;
-                    updatedUser.password = newPass;
+                    updatedUser.password = hashedPass;
 
-                    connection.query("UPDATE users SET password = ? WHERE id = ?", [newPass, req.user.id], function (err, rows) {
+                    connection.query("UPDATE users SET password = ? WHERE id = ?", [hashedPass, req.user.id], function (err, rows) {
                         connection.release();
 
                         if (err) {
@@ -226,7 +253,7 @@ userCtrl.prototype = {
                     type: 'app',
                     msg: {
                         simplified: 'incorrect_password',
-                        detailed: 'userCtrl.updateEmail() -- current password does not match'
+                        detailed: 'userCtrl.updatePassword() -- current password incorrect'
                     }
                 }, null);
             }
@@ -267,6 +294,40 @@ userCtrl.prototype = {
                 }
             });
         })
+    },
+
+    // Delete user. This is only called when the Stripe CC verification fails and the user needs to resubmit a registration form.
+    // Email needs to be removed from the system temporarily
+    removeUser: function (email, dbConnPool, callback) {
+
+        dbConnPool.getConnection(function (err, connection) {
+            if (err) {
+                return callback({
+                    status: 500,
+                    type: 'app',
+                    msg: {
+                        simplified: 'db_connection_error',
+                        detailed: err
+                    }
+                }, null);
+            }
+
+            connection.query("DELETE FROM users WHERE email = ?", [email], function (err, rows) {
+                if (err) {
+                    return callback({
+                        status: 500,
+                        type: 'app',
+                        msg: {
+                            simplified: 'failed_to_remove_user',
+                            detailed: err
+                        }
+                    }, null);
+                }
+                else {
+                    return callback(false, rows[0]);
+                }
+            });
+        });
     }
 };
 
