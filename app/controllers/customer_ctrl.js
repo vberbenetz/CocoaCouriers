@@ -3,8 +3,6 @@
 var configPriv = require('../configuration/config_priv');
 var log = require('../utils/logger');
 
-var subscriptionCtrl = require('./subscription_ctrl');
-var invoiceCtrl = require('./invoice_ctrl');
 var userCtrl = require('./user_ctrl');
 
 var stripe = require('stripe')(
@@ -42,9 +40,8 @@ customerCtrl.prototype = {
             address: req.body.address
         };
 
-        var email = req.body.email;
+        var email = req.user.email;
         var source = req.body.source;
-        var planId = req.body.plan;
         var tax = calculateTaxPercentage(shipping.address.state);
 
         var payload = {
@@ -94,29 +91,7 @@ customerCtrl.prototype = {
                     }
                     else {
                         log.info('Created customer', {customer: customer}, req.connection.remoteAddress);
-
-                        // Create invoice tax line
-                        invoiceCtrl.addTaxItem(customer.id, planId, tax, res, function(err, invoiceItem) {
-                            if (err) {
-                                return callback(err, null);
-                            }
-
-                            log.info('Added sales tax to customer invoice', {customer: customer.id, invoiceItem: invoiceItem}, req.connection.remoteAddress);
-
-                            req.body.customer = customer.id;
-
-                            // Subscribe user to a plan
-                            subscriptionCtrl.create(req, res, function(err, subscription) {
-                                if (err) {
-                                    return callback(err, null);
-                                }
-
-                                customer.subscriptions.data.push(subscription);
-
-                                return callback(false, customer);
-                            });
-
-                        });
+                        return callback(false, customer);
                     }
 
                 });

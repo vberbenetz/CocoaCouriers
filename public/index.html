@@ -470,13 +470,16 @@
                                         <p class="text-danger" ng-show="validationErrors.source.address_zip">{{ validationErrors.source.address_zip }}</p>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="createAccount()">Register</button>
+                                <button ng-disabled="processingReg" type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="createAccount()">Register</button>
                                 <button type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="goBack(5)">Back</button>
                             </form>
                         </div>
                     </div>
 
                 </div>
+
+                <div ng-show="subErr" class="alert alert-danger">Error subscribing to plan. Please go to your account management page to resolve the issue.</div>
+
             </div>
         </div>
     </section>

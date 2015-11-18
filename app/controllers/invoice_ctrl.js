@@ -11,12 +11,10 @@ var invoiceCtrl = function() {};
 
 invoiceCtrl.prototype = {
 
-    addTaxItem: function (customer, plan, tax, res, callback) {
-
-        console.log(plan);
+    addTaxItem: function (customer, planId, tax, res, callback) {
 
         // Retrieve plan amount details
-        stripe.plans.retrieve(plan, function(err, plan) {
+        stripe.plans.retrieve(planId, function(err, plan) {
 
             if (err) {
                 console.log(err);
@@ -60,6 +58,25 @@ invoiceCtrl.prototype = {
 
         });
 
+    },
+
+    removeItem: function (invoiceItemId, res, callback) {
+
+        stripe.invoiceItems.del(invoiceItemId, function(err, confirmation) {
+            if (err) {
+                console.log(err);
+                return callback({
+                    status: 500,
+                    type: 'stripe',
+                    msg: {
+                        simplified: 'server_error',
+                        detailed: err
+                    }
+                }, null);
+            }
+
+            return callback(false, confirmation);
+        });
     }
 };
 

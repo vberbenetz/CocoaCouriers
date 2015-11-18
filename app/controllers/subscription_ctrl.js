@@ -3,6 +3,8 @@
 var configPriv = require('../configuration/config_priv');
 var log = require('../utils/logger');
 
+var invoiceCtrl = require('./invoice_ctrl');
+
 var stripe = require('stripe')(
     configPriv.sKey
 );
@@ -36,17 +38,18 @@ subscriptionCtrl.prototype = {
 
     create: function (req, res, callback) {
 
-        var customerId = req.body.customer;
+        var customerId = req.user.stId;
         var payload = {
             plan: req.body.plan
         };
 
         // Attach coupon code if supplied
-        if ( (typeof req.body.coupon !== 'undefined') && (req.body.coupon.length !== 0) && (req.body.coupon !== '') ) {
+        if ( (typeof req.body.coupon !== 'undefined') && (req.body.coupon !== null) && (req.body.coupon.length !== 0) && (req.body.coupon !== '') ) {
             payload.coupon = req.body.coupon;
         }
 
-        stripe.customers.createSubscription(customerId, payload, function(err, subscription) {
+        // Get customer data
+        stripe.customers.retrieve(customerId, function(err, customer) {
             if (err) {
                 console.log(err);
                 return callback({
@@ -56,13 +59,56 @@ subscriptionCtrl.prototype = {
                         simplified: 'server_error',
                         detailed: err
                     }
-                }, null);
+                });
             }
-            else {
-                log.info("Created new subscription", subscription, req.connection.remoteAddress);
-                return callback(false, subscription);
-            }
-        })
+
+            var tax = {
+                rate: parseFloat(customer.metadata.taxRate),
+                desc: customer.metadata.taxDesc
+            };
+
+            // Create invoice tax line
+            invoiceCtrl.addTaxItem(customer.id, payload.plan, tax, res, function(err, invoiceItem) {
+                if (err) {
+                    return callback(err, null);
+                }
+
+                log.info('Added sales tax to customer invoice', {customer: customer.id, invoiceItem: invoiceItem}, req.connection.remoteAddress);
+
+                // Create subscription
+                stripe.customers.createSubscription(customerId, payload, function(subErr, subscription) {
+                    if (subErr) {
+                        console.log(subErr);
+
+                        // Delete the tax item added above because subscription didn't go through
+                        invoiceCtrl.removeItem(invoiceItem.id, res, function(invoiceErr, confimration) {
+                            if (invoiceErr) {
+                                console.log(invoiceErr);
+                                return callback(invoiceErr, null);
+                            }
+
+                            return callback({
+                                status: 500,
+                                type: 'stripe',
+                                msg: {
+                                    simplified: 'server_error',
+                                    detailed: subErr
+                                }
+                            }, null);
+
+                        });
+
+                    }
+                    else {
+                        log.info("Created new subscription", subscription, req.connection.remoteAddress);
+                        return callback(false, subscription);
+                    }
+                });
+
+            });
+
+        });
+
     },
 
 

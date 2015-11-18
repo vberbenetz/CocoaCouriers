@@ -148,6 +148,8 @@ angular.module('domerbox', [])
         // After validation and CC token generation, register the user and create the customer in Stripe
         $scope.createAccount = function() {
 
+            $scope.processingReg = true;
+
             $scope.validateUserPayment(function(result) {
                 if (result) {
 
@@ -176,14 +178,28 @@ angular.module('domerbox', [])
                                 email: newUser.email,
                                 name: $scope.userInfo.name,
                                 address: $scope.userInfo.address,
-                                source: $scope.userInfo.token,
-                                coupon: $scope.userInfo.subscription.couponCode,
-                                plan: $scope.userInfo.subscription.planId
+                                source: $scope.userInfo.token
                             }
                         }).success(function(newCustomer) {
-                            $window.location.href = '/My-Account/';
+
+                            // Subscribe user to plan
+                            $http({
+                                url: '/api/subscription',
+                                method: 'POST',
+                                data: {
+                                    coupon: $scope.userInfo.subscription.couponCode,
+                                    plan: $scope.userInfo.subscription.planId
+                                }
+                            }).success(function(newSubscription) {
+                                $window.location.href = '/My-Account/';
+                            }).error(function(err) {
+                                handleStCCErr(err);
+                                $scope.subErr = true;
+                            });
+
                         }).error(function(err) {
                             handleStCCErr(err);
+                            $scope.processingReg = false;
                         });
 
                         // Reset form
@@ -191,10 +207,16 @@ angular.module('domerbox', [])
 
                     }).error(function(error) {
                         $scope.validationErrors.email = 'Email already in use';
+                        $scope.processingReg = false;
                         return callback(false);
                     });
 
                 }
+                else {
+                    $scope.processingReg = false;
+                    prePopulatePaymentForm();
+                }
+
             });
 
         };
@@ -559,7 +581,7 @@ angular.module('domerbox', [])
                     $scope.validationErrors.source.number = 'Please enter a correct number. You can use dashes or spaces to separate blocks of numbers if you choose';
                     break;
                 case 'card_declined':
-                    $scope.validationErrors.source.number = 'Your card has been declined. Please try another card.';
+                    $scope.validationErrors.source.number = 'Your card has been declined.';
                     break;
                 case 'processing_error':
                     $scope.validationErrors.source.number = 'There was an issue processing your payment. Please try again or contact our support team';
