@@ -48,8 +48,8 @@ planCtrl.prototype = {
                 return callback(false, plans);
             }
         });
-    }
-/*
+    },
+
     create: function (req, res, callback) {
         var payload = {
             id: req.body.id,
@@ -62,11 +62,18 @@ planCtrl.prototype = {
         stripe.plans.create(payload, function(err, plan) {
             if (err) {
                 console.log(err);
-                errorHandler.stripeHttpErrors(res, err, req.connection.remoteAddress);
+                return callback({
+                    status: 500,
+                    type: 'stripe',
+                    msg: {
+                        simplified: 'server_error',
+                        detailed: err
+                    }
+                }, null);
             }
             else {
-                log.info('Created new plan', plan, req.connection.remoteAddress);
-                return callback(plan);
+                log.info("Created new plan", plan, req.connection.remoteAddress);
+                return callback(false, plan);
             }
         });
     },
@@ -80,15 +87,22 @@ planCtrl.prototype = {
         stripe.plans.del(planId, function(err, confirmation) {
             if (err) {
                 console.log(err);
-                errorHandler.stripeHttpErrors(res, err, req.connection.remoteAddress);
+                return callback({
+                    status: 500,
+                    type: 'stripe',
+                    msg: {
+                        simplified: 'server_error',
+                        detailed: err
+                    }
+                }, null);
             }
             else {
-                log.info('Removed plan: ' + planId, req.connection.remoteAddress);
-                return callback(confirmation);
+                log.info("Deleted plan", {planId: planId}, req.connection.remoteAddress);
+                return callback(false, true);
             }
         })
     }
-    */
+
 };
 
 module.exports = new planCtrl();

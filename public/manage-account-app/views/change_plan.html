@@ -1,10 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+<h1>Change Plan</h1>
+<hr/>
 
-</body>
-</html>
+<div class="row">
+    <h4>Current Plan</h4>
+    <p ng-show="currentPlan">
+        {{ currentPlan.name }}<br/>
+        ${{ (currentPlan.amount/100).toFixed(2) }}<br/>
+        {{ currentPlan.metadata.desc }}<br/>
+    </p>
+    <p class="text-danger" ng-hide="currentPlan">
+        You are currently not subscribed to a plan
+    </p>
+</div>
+
+<div>
+    <div class="col-xs-6 col-md-3 col-lg-2" ng-repeat="plan in $parent.plans">
+        <a class="thumbnail" href="" ng-click="selectPlan(plan.id)" ng-class="{ 'active-thumbnail' : selectedPlan == plan.id }">
+            {{ plan.name }}<br/>
+            ${{ (plan.amount/100).toFixed(2) }}<br/>
+            {{ plan.metadata.desc }}<br/>
+        </a>
+    </div>
+
+    <button class="btn btn-primary" ng-click="updatePlan()">Update</button>
+
+    <div class="alert-danger" ng-show="cardError">
+        {{ cardError }}. Please update your <a ng-href="/My-Account/update-payment">payment method</a> or contact our support team.
+    </div>
+</div>

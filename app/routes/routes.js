@@ -229,28 +229,31 @@ module.exports = function(app, passport, dbConnPool) {
 
     // ----------------- Plan Related ------------------------ //
     app.get('/api/plan', function(req, res, next) {
-        planCtrl.get(req, res, function(err, result) {
-            if (err) {
-                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-            }
-            else {
-                res.send(result);
-            }
-        });
+
+        if (typeof req.query.id !== 'undefined') {
+            planCtrl.get(req, res, function(err, result) {
+                if (err) {
+                    errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                }
+                else {
+                    res.send(result);
+                }
+            });
+        }
+        else {
+            planCtrl.list(req, res, function(err, result) {
+                if (err) {
+                    errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                }
+                else {
+                    res.send(result);
+                }
+            });
+        }
     });
 
-    app.get('/api/plan/list', function(req, res, next) {
-        planCtrl.list(req, res, function(err, result) {
-            if (err) {
-                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-            }
-            else {
-                res.send(result);
-            }
-        })
-    });
-
-    app.post('/api/plan', auth, function (req, res, next) {
+/*
+    app.post('/api/plan', function (req, res, next) {
         planCtrl.create(req, res, function(err, result) {
             if (err) {
                 errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
@@ -260,7 +263,7 @@ module.exports = function(app, passport, dbConnPool) {
             }
         });
     });
-
+*/
 
     // ----------------- Subscription Related ------------------------ //
 
@@ -278,10 +281,29 @@ module.exports = function(app, passport, dbConnPool) {
     app.post('/api/subscription', auth, function (req, res, next) {
         subscriptionCtrl.create(req, res, function(err, result) {
             if (err) {
-                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                // Attach card error code to customer
+                if (typeof err.cardErrorCode !== 'undefined') {
+                    req.body.item = 'metadata';
+                    req.body.data = {
+                        card_error_code: err.cardErrorCode
+                    };
+                    customerCtrl.update(req, res, function(customerErr, result) {
+                        errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                    });
+                }
+                else {
+                    errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                }
             }
             else {
-                res.send(result);
+                // Remove card error code from user because the subscription was successful
+                req.body.item = 'metadata';
+                req.body.data = {
+                    card_error_code: null
+                };
+                customerCtrl.update(req, res, function(customerErr, result) {
+                    res.send(result);
+                });
             }
         });
     });

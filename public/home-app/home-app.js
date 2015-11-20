@@ -10,7 +10,7 @@ angular.module('domerbox', [])
         // Get plan list
         $scope.formPlans = [];
         $http({
-                url: '/api/plan/list',
+                url: '/api/plan',
                 method: 'GET'
             }).success(function (plans) {
                 $scope.formPlans = plans.data;

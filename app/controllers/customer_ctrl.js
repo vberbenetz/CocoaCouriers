@@ -103,7 +103,7 @@ customerCtrl.prototype = {
     update: function (req, res, callback) {
         var item = req.body.item;
         var data = req.body.data;
-        var customerId = req.body.customerId;
+        var customerId = req.user.stId;
         var payload;
 
         switch (item) {
@@ -118,6 +118,9 @@ customerCtrl.prototype = {
                 break;
             case 'source':
                 payload = {source: data};
+                break;
+            case 'metadata':
+                payload = {metadata: data};
                 break;
             default:
                 return callback({

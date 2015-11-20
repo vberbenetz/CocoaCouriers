@@ -39,6 +39,20 @@ subscriptionCtrl.prototype = {
     create: function (req, res, callback) {
 
         var customerId = req.user.stId;
+
+        // Verify plan has been included in request
+        if (typeof req.body.plan === 'undefined') {
+            return callback({
+                status: 400,
+                type: 'app',
+                no_logging: true,
+                msg: {
+                    simplified: 'Missing plan value',
+                    detailed: 'subscriptionCtrl.create() no planId supplied'
+                }
+            }, null);
+        }
+
         var payload = {
             plan: req.body.plan
         };
@@ -59,7 +73,7 @@ subscriptionCtrl.prototype = {
                         simplified: 'server_error',
                         detailed: err
                     }
-                });
+                }, null);
             }
 
             var tax = {
@@ -80,6 +94,12 @@ subscriptionCtrl.prototype = {
                     if (subErr) {
                         console.log(subErr);
 
+                        // Add card issue tag to customer
+                        var cardErrorCode = 'processing_error';
+                        if (subErr.rawType === 'card_error') {
+                            cardErrorCode = subErr.code;
+                        }
+
                         // Delete the tax item added above because subscription didn't go through
                         invoiceCtrl.removeItem(invoiceItem.id, res, function(invoiceErr, confimration) {
                             if (invoiceErr) {
@@ -93,7 +113,8 @@ subscriptionCtrl.prototype = {
                                 msg: {
                                     simplified: 'server_error',
                                     detailed: subErr
-                                }
+                                },
+                                cardErrorCode: cardErrorCode
                             }, null);
 
                         });

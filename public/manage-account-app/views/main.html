@@ -1,69 +1,80 @@
 <h1>My Account</h1>
 <button class="btn btn-default" ng-click="logout()">Logout</button>
 <hr/>
-<div class="col-xs-4 col-lg-2">
-    <h3>Membership</h3>
-</div>
-<div class="col-xs-8 col-lg-10">
-    <div class="col-xs-6">
-        {{ account.email }}
-    </div>
-    <div class="col-xs-6">
-        <ul class="list-group pull-right">
-            <li class="list-group-item">
-                <a ng-href="/My-Account/change-email">Change Email</a>
-            </li>
-            <li class="list-group-item">
-                <a ng-href="/My-Account/change-password">Change Password</a>
-            </li>
-            <li class="list-group-item">
-                <a>Email Preferences</a>
-            </li>
-        </ul>
-    </div>
-</div>
-<hr/>
 
-<div class="col-xs-4 col-lg-2">
-    <h3>Payment Information</h3>
-</div>
-<div class="col-xs-8 col-lg-10">
-    <div class="col-xs-6">
-        <p class="pull-left" ng-show="customer.sources">
-            <span ng-if="customer.sources.data[0].brand=='Visa'" class="fa fa-cc-visa"></span>
-            <span ng-if="customer.sources.data[0].brand=='MasterCard'" class="fa fa-cc-mastercard"></span>
-            <span ng-if="customer.sources.data[0].brand=='Amex'" class="fa fa-cc-amex"></span>
-            <span ng-if="customer.sources.data[0].brand=='Discover'" class="fa fa-cc-discover"></span>
-            <span ng-if="customer.sources.data[0].brand=='Diners-Club'" class="fa fa-cc-diners-club"></span>
-            <span ng-if="customer.sources.data[0].brand=='JCB'" class="fa fa-cc-jcb"></span>
-            .... .... .... {{ customer.sources.data[0].last4 }}
-        </p>
-    </div>
+<div ng-show="customer">
 
-    <div class="col-xs-6">
-        <ul class="list-group pull-right">
-            <li class="list-group-item">
-                <a ng-href="/My-Account/update-payment">Update Payment And Shipping Info</a>
-            </li>
-            <li class="list-group-item">
-                <a>Billing Details</a>
-            </li>
-        </ul>
+    <div class="col-xs-4 col-lg-2">
+        <h3>Membership</h3>
+    </div>
+    <div class="col-xs-8 col-lg-10">
+        <div class="col-xs-6">
+            {{ account.email }}
+        </div>
+        <div class="col-xs-6">
+            <ul class="list-group pull-right">
+                <li class="list-group-item">
+                    <a ng-href="/My-Account/change-email">Change Email</a>
+                </li>
+                <li class="list-group-item">
+                    <a ng-href="/My-Account/change-password">Change Password</a>
+                </li>
+                <li class="list-group-item">
+                    <a>Email Preferences</a>
+                </li>
+            </ul>
+        </div>
     </div>
     <hr/>
-</div>
 
-<div class="col-xs-4 col-lg-2">
-    <h3>Plan Details</h3>
-</div>
-<div class="col-xs-8 col-lg-10">
-    <div class="col-xs-6" ng-show="customer.sources">
-        <h4>{{ customer.subscriptions.data[0].plan.id }}</h4>
-        <p>{{ customer.subscriptions.data[0].plan.name }}</p>
-        <h5>{{ customer.subscriptions.data[0].plan.amount / 100 }}</h5>
-        <p>{{ customer.subscriptions.data[0].current_period_start * 1000 | date:'MMM dd, yyyy' }} - {{ customer.subscriptions.data[0].current_period_end * 1000 | date:'MMM dd, yyyy' }}</p>
+    <div class="col-xs-4 col-lg-2">
+        <h3>Payment Information</h3>
     </div>
-    <div class="col-xs-6">
-        <a class="pull-right">Change Plan</a>
+    <div class="col-xs-8 col-lg-10">
+        <div class="col-xs-6">
+            <p class="pull-left" ng-show="customer.sources">
+                <span ng-if="customer.sources.data[0].brand=='Visa'" class="fa fa-cc-visa"></span>
+                <span ng-if="customer.sources.data[0].brand=='MasterCard'" class="fa fa-cc-mastercard"></span>
+                <span ng-if="customer.sources.data[0].brand=='Amex'" class="fa fa-cc-amex"></span>
+                <span ng-if="customer.sources.data[0].brand=='Discover'" class="fa fa-cc-discover"></span>
+                <span ng-if="customer.sources.data[0].brand=='Diners-Club'" class="fa fa-cc-diners-club"></span>
+                <span ng-if="customer.sources.data[0].brand=='JCB'" class="fa fa-cc-jcb"></span>
+                .... .... .... {{ customer.sources.data[0].last4 }}
+            </p>
+            <div class="alert-danger" ng-show="$scope.$parent.cardError">
+                There was an issue charging your card. Please <a ng-href="/My-Account/update-payment">update your payment method</a> then <a ng-href="/My-Account/change-plan">select a plan</a>
+            </div>
+        </div>
+
+        <div class="col-xs-6">
+            <ul class="list-group pull-right">
+                <li class="list-group-item">
+                    <a ng-href="/My-Account/update-payment">Update Payment And Shipping Info</a>
+                </li>
+                <li class="list-group-item">
+                    <a>Billing Details</a>
+                </li>
+            </ul>
+        </div>
+        <hr/>
     </div>
+
+    <div class="col-xs-4 col-lg-2">
+        <h3>Plan Details</h3>
+    </div>
+    <div class="col-xs-8 col-lg-10">
+        <div class="col-xs-6" ng-show="customer.subscriptions.data[0]">
+            <h4>{{ customer.subscriptions.data[0].plan.id }}</h4>
+            <p>{{ customer.subscriptions.data[0].plan.name }}</p>
+            <h5>{{ customer.subscriptions.data[0].plan.amount / 100 }}</h5>
+            <p>{{ customer.subscriptions.data[0].current_period_start * 1000 | date:'MMM dd, yyyy' }} - {{ customer.subscriptions.data[0].current_period_end * 1000 | date:'MMM dd, yyyy' }}</p>
+        </div>
+        <div class="col-xs-6" ng-hide="customer.subscriptions.data[0]">
+            <h4 class="text-danger">You are currently not subscribed to plan. Please select a plan --></h4>
+        </div>
+        <div class="col-xs-6">
+            <a ng-href="/My-Account/change-plan" class="pull-right">Change Plan</a>
+        </div>
+    </div>
+
 </div>

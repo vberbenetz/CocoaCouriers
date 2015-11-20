@@ -39,6 +39,8 @@ function stService($resource) {
             }
         ),
 
+        subscription: $resource('/api/subscription'),
+
         token: $resource('/api/token'),
 
         plan: $resource('/api/plan')

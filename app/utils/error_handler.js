@@ -13,7 +13,10 @@ errorHandler.prototype = {
                 delete user.password;
             }
         }
-        log.error(err.msg.detailed, user, requestorIP);
+
+        if (typeof err.no_logging === 'undefined') {
+            log.error(err.msg.detailed, user, requestorIP);
+        }
 
         switch (err.type) {
             case 'app':

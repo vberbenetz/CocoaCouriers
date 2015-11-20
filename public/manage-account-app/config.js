@@ -24,7 +24,7 @@ function config($routeProvider, $locationProvider) {
         })
 
         .when('/change-plan', {
-            controller: 'planCtrl',
+            controller: 'updatePlanCtrl',
             templateUrl: '/manage-account-app/views/change_plan.html'
         })
 

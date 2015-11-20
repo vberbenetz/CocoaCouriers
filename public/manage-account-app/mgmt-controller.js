@@ -6,7 +6,6 @@ function mainCtrl($scope, $window, appService, stService) {
         email: '',
         stId: ''
     };
-    $scope.customer = {};
 
     // --------------------------------------
     // Retrieve user account details
@@ -22,6 +21,12 @@ function mainCtrl($scope, $window, appService, stService) {
         });
 
     }, function (error) {
+    });
+
+    // Retrieve plans
+    stService.plan.get(function(plans) {
+        $scope.plans = plans.data;
+    }, function(err) {
     });
 
 
@@ -260,7 +265,7 @@ function updatePaymentCtrl ($scope, stService) {
                     $scope.userInfo.source.number = '**** **** **** ' + data.sources.data[0].last4;
                     $scope.userInfo.source.cvc = '';
                 }, function(err) {
-                    handleStCCErr(err.data);
+                    translateStCCErr( handleStCCErr(err.data) );
                 });
 
                 prePopulatePaymentForm();
@@ -512,7 +517,7 @@ function updatePaymentCtrl ($scope, stService) {
                 return callback(true, data.id);
 
             }, function(err, status, headers, config) {
-                handleStCCErr(err.data);
+                translateStCCErr( handleStCCErr(err.data) );
                 return callback(false, null);
             });
 
@@ -525,40 +530,25 @@ function updatePaymentCtrl ($scope, stService) {
     }
 
     // Handle payment cc error codes
-    function handleStCCErr(errCode) {
-        switch (errCode) {
-            case 'invalid_number':
-                $scope.validationErrors.source.number = 'Please enter a valid number. You can use dashes or spaces to separate blocks of numbers if you choose';
+    function translateStCCErr(err) {
+        switch (err.variable) {
+            case 'number':
+                $scope.validationErrors.source.number = err.msg;
                 break;
-            case 'incorrect_number':
-                $scope.validationErrors.source.number = 'Please enter a correct number. You can use dashes or spaces to separate blocks of numbers if you choose';
+            case 'exp_month':
+                $scope.validationErrors.source.exp_month = err.msg;
                 break;
-            case 'card_declined':
-                $scope.validationErrors.source.number = 'Your card has been declined. Please try another card.';
+            case 'exp_year':
+                $scope.validationErrors.source.exp_year = err.msg;
                 break;
-            case 'processing_error':
-                $scope.validationErrors.source.number = 'There was an issue processing your payment. Please try again or contact our support team';
+            case 'cvc':
+                $scope.validationErrors.source.cvc = err.msg;
                 break;
-            case 'expired_card':
-                $scope.validationErrors.source.number = 'This card has expired. Please use a different card';
-                break;
-            case 'invalid_expiry_month':
-                $scope.validationErrors.source.exp_month = 'Please enter a valid expiry month';
-                break;
-            case 'invalid_expiry_year':
-                $scope.validationErrors.source.exp_month = 'Please enter a valid expiry year';
-                break;
-            case 'invalid_cvc':
-                $scope.validationErrors.source.cvc = 'Please enter a valid CVV';
-                break;
-            case 'incorrect_cvc':
-                $scope.validationErrors.source.cvc = 'Please enter a correct CVV';
-                break;
-            case 'incorrect_zip':
-                $scope.validationErrors.source.address_zip = 'Please enter the postal code / zip relating to your credit card';
+            case 'address_zip':
+                $scope.validationErrors.source.address_zip = err.msg;
                 break;
             default:
-                $scope.validationErrors.source.number = 'There was an issue processing your payment. Please try again or contact our support team';
+                $scope.validationErrors.source.number = err.msg;
                 break;
         }
     }
@@ -567,8 +557,93 @@ function updatePaymentCtrl ($scope, stService) {
 
 function updatePlanCtrl($scope, stService) {
 
+    if (typeof $scope.$parent.customer.subscriptions.data[0] !== 'undefined') {
+        $scope.currentPlan = $scope.$parent.customer.subscriptions.data[0].plan;
+    }
+
+    $scope.selectPlan = function(planId) {
+        $scope.selectedPlan = planId;
+    };
+
+    $scope.updatePlan = function() {
+
+        // Subscribe to a new plan because the user was not subscribed or was removed because of a card charge issue
+        if (typeof $scope.currentPlan === 'undefined') {
+            var payload = {
+                plan: $scope.selectedPlan,
+                coupon: $scope.couponCode
+            };
+
+            stService.subscription.save(payload, function(newSubscription) {
+                if (typeof newSubscription.data[0] !== 'undefined') {
+                    $scope.currentPlan = newSubscription.data[0].plan;
+                }
+            }, function(err) {
+                var result = handleStCCErr(err.data);
+                $scope.$parent.customer.metadata.card_error_code = result.msg;
+                $scope.cardError = result.msg;
+            });
+        }
+    }
 
 }
+
+function handleStCCErr(errCode) {
+    var ret = {
+        variable: '',
+        msg: ''
+    };
+
+    switch (errCode) {
+        case 'invalid_number':
+            ret.variable = 'number';
+            ret.msg = 'Please enter a valid number. You can use dashes or spaces to separate blocks of numbers if you choose';
+            break;
+        case 'incorrect_number':
+            ret.variable = 'number';
+            ret.msg = 'Please enter a correct number. You can use dashes or spaces to separate blocks of numbers if you choose';
+            break;
+        case 'card_declined':
+            ret.variable = 'number';
+            ret.msg = 'Your card has been declined';
+            break;
+        case 'processing_error':
+            ret.variable = 'number';
+            ret.msg = 'There was an issue processing your payment. Please try again or use another card';
+            break;
+        case 'expired_card':
+            ret.variable = 'number';
+            ret.msg = 'Your card has expired';
+            break;
+        case 'invalid_expiry_month':
+            ret.variable = 'exp_month';
+            ret.msg = 'Expiry month on your card is invalid';
+            break;
+        case 'invalid_expiry_year':
+            ret.variable = 'exp_year';
+            ret.msg = 'Expiry year on your card is invalid';
+            break;
+        case 'invalid_cvc':
+            ret.variable = 'cvc';
+            ret.msg = 'CVV for your card is invalid';
+            break;
+        case 'incorrect_cvc':
+            ret.variable = 'cvc';
+            ret.msg = 'CVV for your card is incorrect';
+            break;
+        case 'incorrect_zip':
+            ret.variable = 'address_zip';
+            ret.msg = 'Postal / zip code check failed';
+            break;
+        default:
+            ret.variable = 'number';
+            ret.msg = 'There was an issue processing your payment. Please try again or use another card';
+            break;
+    }
+
+    return ret;
+}
+
 
 angular
     .module('account')
