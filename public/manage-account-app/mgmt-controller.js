@@ -567,17 +567,27 @@ function updatePlanCtrl($scope, stService) {
 
     $scope.updatePlan = function() {
 
+        var payload = {
+            new_plan: $scope.selectedPlan,
+            coupon: $scope.couponCode
+        };
+
         // Subscribe to a new plan because the user was not subscribed or was removed because of a card charge issue
         if (typeof $scope.currentPlan === 'undefined') {
-            var payload = {
-                plan: $scope.selectedPlan,
-                coupon: $scope.couponCode
-            };
-
             stService.subscription.save(payload, function(newSubscription) {
                 if (typeof newSubscription.data[0] !== 'undefined') {
                     $scope.currentPlan = newSubscription.data[0].plan;
                 }
+            }, function(err) {
+                var result = handleStCCErr(err.data);
+                $scope.$parent.customer.metadata.card_error_code = result.msg;
+                $scope.cardError = result.msg;
+            });
+        }
+        // Change existing subscription
+        else {
+            stService.subscription.updatePlan(payload, function(newSubscription) {
+                $scope.currentPlan = newSubscription.data[0].plan;
             }, function(err) {
                 var result = handleStCCErr(err.data);
                 $scope.$parent.customer.metadata.card_error_code = result.msg;

@@ -39,7 +39,16 @@ function stService($resource) {
             }
         ),
 
-        subscription: $resource('/api/subscription'),
+        subscription: $resource('/api/subscription',
+            {},
+            {
+                updatePlan: {
+                    method: 'PUT',
+                    params: {},
+                    isArray: false
+                }
+            }
+        ),
 
         token: $resource('/api/token'),
 

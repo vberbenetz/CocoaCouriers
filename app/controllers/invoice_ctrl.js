@@ -11,7 +11,13 @@ var invoiceCtrl = function() {};
 
 invoiceCtrl.prototype = {
 
-    addTaxItem: function (customer, planId, tax, res, callback) {
+    addTaxItem: function (customer, planId, tax, isCoolDownPeriod, res, callback) {
+
+        // Flag used to prevent adding tax item if user subscribes during cool-down period.
+        // This is used a fix here to prevent callback hell in the subscription controller
+        if (isCoolDownPeriod) {
+            return callback(false, null);
+        }
 
         // Retrieve plan amount details
         stripe.plans.retrieve(planId, function(err, plan) {
