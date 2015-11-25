@@ -380,25 +380,6 @@ module.exports = function(app, passport, dbConnPool) {
     });
 
 
-// TODO: IMPLEMENT WEBHOOKS FOR TAXES AND INVOICES
-    /*
-     You would offer your customers the ability to enter their card details and then you would follow this flow:
-     * Create a customer in Stripe with the card token.
-     * Create the first Invoice Item for the first invoice (always closed by default) for the tax.
-     * Create the subscription to the monthly plan => automatically bills the Invoice Item created before.
-     * Each month, listen for the `invoice.created` event and create a new Invoice Item for the correct amount for the tax.
-     */
-    // ========================= Webhooks From Stripe ============================= //
-
-    // Listen for invoices created
-    app.post('/webhooks/stripe/invoice-created', function (req, res) {
-        var payload = req.body;
-        res.send(200);
-    });
-
-
-
-
     // ==================================================================================== //
     // ================================== ERROR HANDLING ================================== //
     // ==================================================================================== //

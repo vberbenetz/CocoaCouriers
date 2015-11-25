@@ -13,6 +13,12 @@ var config = require('./app/configuration/config');
 var configPriv = require('./app/configuration/config_priv');
 var log = require('./app/utils/logger');
 
+// Tests
+/*
+var helperTests = require('./app/test/helper_test');
+helperTests.findCoolDownStartAndEndDate();
+*/
+
 var app = express();
 
 app.use(bodyParser.json());

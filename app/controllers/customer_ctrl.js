@@ -115,6 +115,11 @@ customerCtrl.prototype = {
                 break;
             case 'shipping':
                 payload = {shipping: data};
+                var tax = calculateTaxPercentage(data.address.state);
+                payload.metadata = {
+                        taxRate: tax.rate,
+                        taxDesc: tax.desc
+                    };
                 break;
             case 'source':
                 payload = {source: data};
@@ -147,7 +152,35 @@ customerCtrl.prototype = {
             }
             else {
                 log.info('Updated customer', {customerId: customerId, item: item, data: data}, 'localhost');
-                return callback(false, customer);
+
+                // Update customer's subscription tax rate because province to ship to has changed
+                if (item === 'shipping') {
+                    if (typeof customer.subscriptions.data[0] !== 'undefined') {
+                        stripe.customers.updateSubscription(
+                            customerId,
+                            customer.subscriptions.data[0].id,
+                            {tax_percent: tax.rate},
+                            function(err, subscription) {
+                                if (err) {
+                                    console.log(err);
+                                    return callback({
+                                        status: 500,
+                                        type: 'stripe',
+                                        msg: {
+                                            simplified: 'server_error',
+                                            detailed: err
+                                        }
+                                    }, null);
+                                }
+                                else {
+                                    return callback(false, customer);
+                                }
+                        });
+                    }
+                }
+                else {
+                    return callback(false, customer);
+                }
             }
         });
     }
@@ -200,7 +233,7 @@ function calculateTaxPercentage(province) {
             break;
         case 'QC':
             taxDesc = 'GST / QST -- (5% + 9.975%)';
-            taxPercentage = 14.975;
+            taxPercentage = 14.98;
             break;
         case 'SK':
             taxDesc = 'GST + PST -- (5% + 10%)';
@@ -211,6 +244,8 @@ function calculateTaxPercentage(province) {
             taxPercentage = 5;
             break;
         default:
+            taxDesc = '';
+            taxPercentage = 0;
             break;
     }
 

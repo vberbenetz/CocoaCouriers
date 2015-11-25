@@ -176,7 +176,8 @@ function updatePaymentCtrl ($scope, stService) {
 
     $scope.formOptions = {
         provinces: [
-            { id: 'AB', name: 'Alberta' }
+            { id: 'AB', name: 'Alberta' },
+            { id: 'ON', name: 'Ontario' }
         ],
         countries: [
             {id: 'CA', name: 'Canada'}
@@ -244,10 +245,12 @@ function updatePaymentCtrl ($scope, stService) {
 
             stService.customer.update(payload, function(data) {
                 $scope.$parent.customer.shipping = data.shipping;
+                prePopulateShippingForm();
             }, function(err) {
+                prePopulateShippingForm();
             });
 
-            prePopulateShippingForm();
+
         }
     };
 
@@ -264,11 +267,12 @@ function updatePaymentCtrl ($scope, stService) {
                     $scope.$parent.customer.sources = data.sources;
                     $scope.userInfo.source.number = '**** **** **** ' + data.sources.data[0].last4;
                     $scope.userInfo.source.cvc = '';
+                    prePopulatePaymentForm();
                 }, function(err) {
                     translateStCCErr( handleStCCErr(err.data) );
+                    prePopulatePaymentForm();
                 });
 
-                prePopulatePaymentForm();
             }
         })
     };
@@ -568,7 +572,7 @@ function updatePlanCtrl($scope, stService) {
     $scope.updatePlan = function() {
 
         var payload = {
-            new_plan: $scope.selectedPlan,
+            plan: $scope.selectedPlan,
             coupon: $scope.couponCode
         };
 

@@ -3,11 +3,11 @@ var config = {};
 // Server Related
 config.serverPort = 3000;
 
-// App Related
-config.billingDay = 1;
+// App related values
 config.coolDownPeriod = {
-    start: 20,
-    end: 'end_of_month'
+    day: 'friday',
+    start: 3,
+    end: 'first_of_next_month'
 };
 
 module.exports = config;

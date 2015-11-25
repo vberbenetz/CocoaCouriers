@@ -82,86 +82,69 @@ subscriptionCtrl.prototype = {
                 desc: customer.metadata.taxDesc
             };
 
-            // Create invoice tax line
-            invoiceCtrl.addTaxItem(customer.id, payload.plan, tax, helpers.isCoolDownPeriod(), res, function(err, invoiceItem) {
-                if (err) {
-                    return callback(err, null);
+            // Attach tax rate to payload
+            payload.tax_percent = tax.rate;
+
+            // Check if subscription currently falls within cool-down period.
+            // Do not bill user until next cycle if currently in cool-down
+            if (helpers.isCoolDownPeriod()) {
+                payload.trial_end = helpers.getNextBillingDate();
+                payload.metadata = { cool_down: true }
+            }
+
+            // Create subscription
+            stripe.customers.createSubscription(customerId, payload, function(subErr, subscription) {
+                if (subErr) {
+                    console.log(subErr);
+
+                    // Add card issue tag to customer
+                    var cardErrorCode = 'processing_error';
+                    if (subErr.rawType === 'card_error') {
+                        cardErrorCode = subErr.code;
+                    }
+
+                    return callback({
+                        status: 500,
+                        type: 'stripe',
+                        msg: {
+                            simplified: 'server_error',
+                            detailed: subErr
+                        },
+                        cardErrorCode: cardErrorCode
+                    }, null);
                 }
+                else {
+                    log.info("Created new subscription", subscription, req.connection.remoteAddress);
 
-                log.info('Added sales tax to customer invoice', {customer: customer.id, invoiceItem: invoiceItem}, req.connection.remoteAddress);
-
-                // Check if subscription currently falls within cool-down period.
-                // Do not bill user until next cycle if currently in cool-down
-                if (helpers.isCoolDownPeriod()) {
-                    payload.trial_end = helpers.getNextBillingDate(customerId);
-                    payload.metadata = { cool_down: true }
-                }
-
-                // Create subscription
-                stripe.customers.createSubscription(customerId, payload, function(subErr, subscription) {
-                    if (subErr) {
-                        console.log(subErr);
-
-                        // Add card issue tag to customer
-                        var cardErrorCode = 'processing_error';
-                        if (subErr.rawType === 'card_error') {
-                            cardErrorCode = subErr.code;
-                        }
-
-                        // Delete the tax item added above because subscription didn't go through
-                        invoiceCtrl.removeItem(invoiceItem.id, res, function(invoiceErr, confimration) {
-                            if (invoiceErr) {
-                                console.log(invoiceErr);
-                                return callback(invoiceErr, null);
-                            }
-
-                            return callback({
-                                status: 500,
-                                type: 'stripe',
-                                msg: {
-                                    simplified: 'server_error',
-                                    detailed: subErr
-                                },
-                                cardErrorCode: cardErrorCode
-                            }, null);
-
-                        });
-
+                    // Adjust billing period to fall on same as within config file
+                    // -----------------------------------------------------------
+                    // User registered within cool-down period and has already had their billing period synced with the config
+                    if (subscription.trial_end != null) {
+                        return callback(false, subscription);
                     }
                     else {
-                        log.info("Created new subscription", subscription, req.connection.remoteAddress);
+                        payload = {
+                            trial_end: helpers.getNextBillingDate(),
+                            prorate: false
+                        };
 
-                        // Adjust billing period to fall on same as within config file
-                        // -----------------------------------------------------------
-                        // User registered within cool-down period and has already had their billing period synced with the config
-                        if (subscription.trial_end != null) {
-                            return callback(false, subscription);
-                        }
-                        else {
-                            payload = {
-                                trial_end: helpers.getNextBillingDate(customerId),
-                                prorate: false
-                            };
+                        stripe.customers.updateSubscription(customerId, subscription.id, payload, function(err, updatedSubscription) {
+                            if (err) {
+                                console.log(err);
+                                return callback({
+                                    status: 500,
+                                    type: 'stripe',
+                                    msg: {
+                                        simplified: 'server_error',
+                                        detailed: err
+                                    }
+                                }, null);
+                            }
 
-                            stripe.customers.updateSubscription(customerId, subscription.id, payload, function(err, updatedSubscription) {
-                                if (err) {
-                                    console.log(err);
-                                    return callback({
-                                        status: 500,
-                                        type: 'stripe',
-                                        msg: {
-                                            simplified: 'server_error',
-                                            detailed: err
-                                        }
-                                    }, null);
-                                }
-
-                                return callback(false, updatedSubscription);
-                            });
-                        }
+                            return callback(false, updatedSubscription);
+                        });
                     }
-                });
-
+                }
             });
 
         });
@@ -176,7 +159,7 @@ subscriptionCtrl.prototype = {
         var payload = {
             plan: newPlan,
             prorate: false,
-            trial_end: helpers.getNextBillingDate(customerId)
+            trial_end: helpers.getNextBillingDate()
         };
 
         // Get customer which needs to have their subscription updated
