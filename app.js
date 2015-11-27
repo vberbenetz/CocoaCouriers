@@ -16,7 +16,7 @@ var log = require('./app/utils/logger');
 // Tests
 /*
 var helperTests = require('./app/test/helper_test');
-helperTests.findCoolDownStartAndEndDate();
+helperTests.coolDownTest();
 */
 
 var app = express();

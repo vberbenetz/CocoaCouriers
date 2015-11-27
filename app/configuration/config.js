@@ -5,9 +5,8 @@ config.serverPort = 3000;
 
 // App related values
 config.coolDownPeriod = {
-    day: 'friday',
-    start: 3,
-    end: 'first_of_next_month'
+    start: 1,
+    end: 15
 };
 
 module.exports = config;

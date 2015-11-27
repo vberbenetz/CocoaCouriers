@@ -50,6 +50,8 @@ angular.module('domerbox', [])
         }
         $scope.formOptions.ccExp.year = expiryYears;
 
+        // Skip registration option for gift packages
+        $scope.skipRegistration = false;
 
 
         // -------------- MODELS -------------- //
@@ -96,36 +98,17 @@ angular.module('domerbox', [])
             $scope.formPage = 2;
         };
 
-        // Select a size
-        $scope.selectSize = function (size) {
-            $scope.userInfo.subscription.size = size;
-            $scope.formPage = 3;
-
-        };
-
-        // Select the material
-        $scope.selectMaterial = function (material) {
-            $scope.userInfo.subscription.material = material;
-            $scope.formPage = 4;
-        };
-
-        // Select brand
-        $scope.selectBrand = function (brand) {
-            $scope.userInfo.subscription.brand = brand;
-            $scope.formPage = 5;
-        };
-
         $scope.goBack = function(formPage) {
             $scope.formPage = formPage;
         };
 
         $scope.next = function(nextSection) {
             switch (nextSection) {
-                case 6:
+                case 3:
                     if ($scope.validateAddressInfo()) {
                         $scope.validateNewAccount(function(result) {
                             if (result) {
-                                $scope.formPage = 6;
+                                $scope.formPage = 3;
                             }
                             else {
                                 prePopulateShippingForm();
@@ -133,83 +116,31 @@ angular.module('domerbox', [])
                         });
                     }
                     break;
-                case 7:
-                    $scope.validateUserPayment(function(result) {
-                        if (result) {
-                            $scope.formPage = 7;
-                        }
-                    });
-                    break;
                 default:
                     break;
             }
         };
 
+
+
+
         // After validation and CC token generation, register the user and create the customer in Stripe
-        $scope.createAccount = function() {
+        $scope.completeRegistration = function() {
 
             $scope.processingReg = true;
 
             $scope.validateUserPayment(function(result) {
                 if (result) {
 
-                    // Create St Customer Account
-                    $http({
-                        url: '/signup',
-                        method: 'POST',
-                        data: {
-                            email: $scope.userInfo.email,
-                            password: $scope.userInfo.password
-                        }
-                    }).success(function(newUser) {
+                    // One time gift charge and creation
+                    if ($scope.userInfo.subscription.planId.toUpperCase().indexOf('CC_GIFT') > -1) {
+                        createOneTimeGift();
+                    }
 
-                        if (typeof newUser !== 'undefined') {
-                            if (typeof newUser.password !== 'undefined') {
-                                delete newUser.password;
-                            }
-                        }
-                        $scope.newUser = newUser;
-
-                        // Create Customer On Stripe
-                        $http({
-                            url: '/api/customer',
-                            method: 'POST',
-                            data: {
-                                email: newUser.email,
-                                name: $scope.userInfo.name,
-                                address: $scope.userInfo.address,
-                                source: $scope.userInfo.token
-                            }
-                        }).success(function(newCustomer) {
-
-                            // Subscribe user to plan
-                            $http({
-                                url: '/api/subscription',
-                                method: 'POST',
-                                data: {
-                                    coupon: $scope.userInfo.subscription.couponCode,
-                                    plan: $scope.userInfo.subscription.planId
-                                }
-                            }).success(function(newSubscription) {
-                                $window.location.href = '/My-Account/';
-                            }).error(function(err) {
-                                handleStCCErr(err);
-                                $scope.subErr = true;
-                            });
-
-                        }).error(function(err) {
-                            handleStCCErr(err);
-                            $scope.processingReg = false;
-                        });
-
-                        // Reset form
-                        prePopulatePaymentForm();
-
-                    }).error(function(error) {
-                        $scope.validationErrors.email = 'Email already in use';
-                        $scope.processingReg = false;
-                        return callback(false);
-                    });
+                    // Recurring monthly plan
+                    else {
+                        createRecurringPlan();
+                    }
 
                 }
                 else {
@@ -260,6 +191,16 @@ angular.module('domerbox', [])
                 validateEmailFailed = true;
             }
 
+            // Skip remainder of validation if user is not registering and only wants a one time gift
+            if ($scope.skipRegistration) {
+                if (!validationFailed) {
+                    return callback(true);
+                }
+                else {
+                    return callback(false);
+                }
+            }
+
             // Password validation
             if (typeof $scope.userInfo.password === 'undefined') {
                 $scope.validationErrors.password = 'Please enter your password';
@@ -292,6 +233,7 @@ angular.module('domerbox', [])
                     if (result.exists) {
                         $scope.validationErrors.email = 'Email already in use';
                         validationFailed = true;
+                        return callback(false);
                     }
                     else {
                         return callback(true);
@@ -543,6 +485,102 @@ angular.module('domerbox', [])
             }
 
         };
+
+
+        function registerCustomerLocally (callback) {
+
+            // Create Customer Account Locally
+            $http({
+                url: '/signup',
+                method: 'POST',
+                data: {
+                    email: $scope.userInfo.email,
+                    password: $scope.userInfo.password
+                }
+            }).success(function(newUser) {
+
+                if (typeof newUser !== 'undefined') {
+                    if (typeof newUser.password !== 'undefined') {
+                        delete newUser.password;
+                    }
+                }
+                return callback(newUser);
+
+            }).error(function(error) {
+                $scope.validationErrors.email = 'Email already in use';
+                $scope.processingReg = false;
+                return callback(false);
+            });
+
+        }
+
+        // Create a new Stripe customer
+        function createStripeCustomer(newUserEmail, callback) {
+            $http({
+                url: '/api/customer',
+                method: 'POST',
+                data: {
+                    email: newUserEmail,
+                    name: $scope.userInfo.name,
+                    address: $scope.userInfo.address,
+                    source: $scope.userInfo.token
+                }
+            }).success(function(newCustomer) {
+                return callback(newCustomer);
+            }).error(function(err) {
+                handleStCCErr(err);
+                $scope.processingReg = false;
+                return callback(false);
+            });
+        }
+
+        // Subscribe user to plan
+        function subscribeToStripePlan(callback) {
+            $http({
+                url: '/api/subscription',
+                method: 'POST',
+                data: {
+                    coupon: $scope.userInfo.subscription.couponCode,
+                    plan: $scope.userInfo.subscription.planId
+                }
+            }).success(function(newSubscription) {
+                return callback(newSubscription);
+            }).error(function(err) {
+                handleStCCErr(err);
+                $scope.subErr = true;
+                return callback(false);
+            });
+        }
+
+        function createOneTimeGift() {
+
+        }
+
+        function createRecurringPlan() {
+
+            registerCustomerLocally( function(newUser) {
+                if (newUser) {
+                    $scope.newUser = newUser;
+
+                    createStripeCustomer(newUser.email, function(customer) {
+
+                        // Reset form
+                        prePopulatePaymentForm();
+
+                        if (customer) {
+
+                            subscribeToStripePlan(function(newSubscription) {
+                                if (newSubscription) {
+                                    $window.location.href = '/My-Account/';
+                                }
+
+                            });
+                        }
+                    });
+                }
+            });
+
+        }
 
 
         // Pre-populate province and country on form from existing values
