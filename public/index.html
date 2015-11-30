@@ -1,675 +1,407 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html ng-app="domerbox"> <!--<![endif]-->
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>DomerBox Condom Subscription</title>
-	<meta name="description" content="...">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="emblem.ico">
+<!--[if IE 8]>			<html class="ie ie8"> <![endif]-->
+<!--[if IE 9]>			<html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
+	<head>
+		<meta charset="utf-8" />
+		<title>Coco Couriers | Monthly Artisan Chocolate Club</title>
+		<meta name="keywords" content="Chocolate, Club, Subscription, Artisan, Bean to Bar, Fair Trade" />
+		<meta name="description" content="A Monthly Box of Artisan Chocolate | Fair Trade | Bean to Bar | Sign Up to Get Some of The Best Chocolate This World Has to Offer!" />
+		<meta name="Author" content="Cocoa Couriers" />
 
-	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+		<!-- mobile settings -->
+		<meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=0" />
+		<!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
 
-	<!-- CSS -->
-	<link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-	<link href="assets/css/style.css" rel="stylesheet">
-	<link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-	<link href="assets/css/owl.carousel.css" rel="stylesheet">
-	<link href="assets/css/animate.css" rel="stylesheet">
-	<link href="assets/css/magnific-popup.css" rel="stylesheet">
-    <link href="assets/css/customs.css" rel="stylesheet">
-	
-	<!-- Modernizr -->
-	<script src="assets/js/modernizr-2.6.2.min.js"></script>
+		<!-- WEB FONTS : use %7C instead of | (pipe) -->
+		<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400%7CRaleway:300,400,500,600,700%7CLato:300,400,400italic,600,700" rel="stylesheet" type="text/css" />
+        <link href='https://fonts.googleapis.com/css?family=Playball' rel='stylesheet' type='text/css'>
 
-	<!-- Google font -->
-	<link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Questrial' rel='stylesheet' type='text/css'>
+		<!-- CORE CSS -->
+		<link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+		
+		<!-- THEME CSS -->
+		<link href="assets/css/essentials.css" rel="stylesheet" type="text/css" />
+		<link href="assets/css/layout.css" rel="stylesheet" type="text/css" />
 
+		<!-- PAGE LEVEL SCRIPTS -->
+		<link href="assets/css/header-1.css" rel="stylesheet" type="text/css" />
+		<link href="assets/css/color_scheme/green.css" rel="stylesheet" type="text/css" id="color_scheme" />
+	</head>
 
-</head>
-<body data-spy="scroll" data-target=".navbar" data-offset="70" ng-cloak>
-	<!--[if lt IE 9]>
-		<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-	<![endif]-->
+	<!--
+		AVAILABLE BODY CLASSES:
+		
+		smoothscroll 			= create a browser smooth scroll
+		enable-animation		= enable WOW animations
 
-	<div id="wrapper">
-		<!-- Home: carousel -->
-		<div id="home" class="section carousel slide home-carousel carousel-fade" data-ride="carousel">
+		bg-grey					= grey background
+		grain-grey				= grey grain background
+		grain-blue				= blue grain background
+		grain-green				= green grain background
+		grain-blue				= blue grain background
+		grain-orange			= orange grain background
+		grain-yellow			= yellow grain background
+		
+		boxed 					= boxed layout
+		pattern1 ... patern11	= pattern background
+		menu-vertical-hide		= hidden, open on click
+		
+		BACKGROUND IMAGE [together with .boxed class]
+		data-background="assets/images/boxed_background/1.jpg"
+	-->
+	<body class="smoothscroll enable-animation">
 
-			<!-- Wrapper for slides -->
-			<div class="carousel-inner">
-				<div class="item item-1 active">
-					<div class="container font-white">
-						<div class="content">
-                            <div class="col-sm-12 text-center">
-							    <div class="margin-bottom-40 wow bounceInDown" data-wow-duration="1s" data-wow-delay="1s"><img src="assets/img/logo1.png" class="img-responsive center-block"> </div>
-                            </div>
+		<!-- wrapper -->
+		<div id="wrapper">
 
-								<div class="row">
-									<div class="col-sm-12 col-md-8 col-md-offset-2">
-										<h1 class="wow bounceInUp font-large ">Subscription Condom Service</h1>
-										<h2 class="wow bounceInDown">Condoms Delivered Directly To You, Cheaper Than The Stores</h2>
-									</div>
-								</div>
-						</div>
-					</div>
-				</div>
-			</div>
+			<!-- 
+				AVAILABLE HEADER CLASSES
 
+				Default nav height: 96px
+				.header-md 		= 70px nav height
+				.header-sm 		= 60px nav height
 
-			<!-- Scroll to the next section -->
+				.noborder 		= remove bottom border (only with transparent use)
+				.transparent	= transparent header
+				.translucent	= translucent header
+				.sticky			= sticky header
+				.static			= static header
+				.dark			= dark header
+				.bottom			= header on bottom
+				
+				shadow-before-1 = shadow 1 header top
+				shadow-after-1 	= shadow 1 header bottom
+				shadow-before-2 = shadow 2 header top
+				shadow-after-2 	= shadow 2 header bottom
+				shadow-before-3 = shadow 3 header top
+				shadow-after-3 	= shadow 3 header bottom
 
-            <a class="j-scroll scrollDown text-center" href="#features">
-				<span class="fa fa-arrow-circle-down"></span>
-			</a>
+				.clearfix		= required for mobile menu, do not remove!
 
-		</div>
+				Example Usage:  class="clearfix sticky header-sm transparent noborder"
+			-->
+			<div id="header" class="sticky clearfix">
 
-		<!-- Header -->
-		<header id="header" ng-controller="loginCtrl">
-			<!-- Static navbar -->
-			<div class="navbar navbar-fixed-top" role="navigation">
-				<div class="container">
-					<div class="navbar-header">
-						<button type="button" class="navbar-toggle visible-xs" data-toggle="collapse" data-target=".navbar-collapse">
-							<span class="sr-only">Toggle navigation</span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
+				<!-- TOP NAV -->
+				<header id="topNav">
+					<div class="container">
+
+						<!-- Mobile Menu Button -->
+						<button class="btn btn-mobile" data-toggle="collapse" data-target=".nav-main-collapse">
+							<i class="fa fa-bars"></i>
 						</button>
-						<a class="navbar-brand j-scroll" href="#home">DB</a>
-					</div>
-					<nav class="navbar-collapse collapse">
-						<ul class="nav navbar-nav navbar-right">
-							<li><a href="#home" class="j-scroll" title="Home">Home</a></li>
-							<li><a href="#features" class="j-scroll" title="Features">What You Get</a></li>
-                            <li><a href="#pricing" class="j-scroll" title="Pricing">Get Started</a></li>
-                            <li><a href="#team" class="j-scroll" title="Our Team">Brands</a></li>
-							<li><a href="#blog" class="j-scroll" title="Blog">Epic Stores</a></li>
-							<li><a href="#contact" class="j-scroll" title="Contact">Contact</a></li>
-						</ul>
-					</nav>
-                    <form class="form-inline">
-                        <div class="form-group">
-                            <label for="loginEmail">Email</label>
-                            <input ng-model="loginForm.email" type="email" class="form-control" id="loginEmail" placeholder="" />
-                        </div>
-                        <div class="form-group">
-                            <label for="loginPassword">Password</label>
-                            <input ng-model="loginForm.password" type="password" class="form-control" id="loginPassword" placeholder="" />
-                        </div>
-                        <button ng-click="login()" class="btn btn-success">Sign in</button>
-                    </form>
-				</div>
-			</div>
-		</header>
 
-		<!-- Section: Services -->
-		<section id="features">
-			<div class="container">
-				<!-- Header -->
-				<header>
-					<div class="row">
-						<div class="col-sm-8 col-sm-offset-2 wow fadeInDown">
-                            <h1 class="title-what">What You'll Get From Us</h1>
-							<div class="dotted-break">
-								<span></span><span></span><span></span><span></span><span></span>
-							</div>
+						<!-- Logo -->
+						<a class="logo pull-left" href="#">
+							<img src="assets/images/Logo-cocoa.png" alt="" />
+						</a>
+
+						<!-- 
+							Top Nav 
+							
+							AVAILABLE CLASSES:
+							submenu-dark = dark sub menu
+						-->
+						<div class="navbar-collapse pull-right nav-main-collapse collapse">
+							<nav class="nav-main">
+
+								<!-- 
+									.nav-onepage
+									Required for onepage navigation links
+									
+									Add .external for an external link!
+								-->
+								<ul id="topMain" class="nav nav-pills nav-main nav-onepage">
+
+									<li><!-- FEATURES -->
+										<a href="">
+											PARTNERS
+										</a>
+									</li>
+                                    <li><!-- FEATURES -->
+                                        <a href="">
+                                            LEARN
+                                        </a>
+                                    </li>
+
+									<li><!-- TESTIMONIALS -->
+										<a href="">
+											GIFT
+										</a>
+									</li>
+									<li><!-- PURCHASE -->
+										<a class="external" href="">
+											MY ACCOUNT
+										</a>
+									</li>
+								</ul>
+
+							</nav>
 						</div>
+
 					</div>
 				</header>
+				<!-- /Top Nav -->
 
-				<!-- Content -->
-                <div class=" font-questrial">
-                    <div class="text-center col-sm-12 margin-bottom-60 margin-top-20">
+			</div>
 
-                    </div>
-                    <div class="col-sm-12 text-center">
-                        <p class="font-sub-para">We deliver condom packages each month on the same day, so you can expect your delivery to be within a few days of then they arrived the month before.
-                            We discreetly package the product to avoid awkward moments, and we will throw in an epic story from one of our subscribers we bet you'll get a chuckle out of.</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-4 ">
-                        <div class="col-sm-12 text-center">
-                            <h1 class="font-questrial">1. Condoms</h1>
-                            <br>
-                        </div>
-                        <div class="col-sm-8 col-sm-offset-2 text-center ">
-                            <img class="img-center img-responsive margin-bottom-40" src="assets/img/domes.png">
-                            <p class="font-sub-para"><span class="color-red">Domebox</span> will hand select your order from our preferred suppliers and send you the most top quality products we have. Your selection of type
-                                and size will help guide us in picking the best available condom</p>
-                        </div>
-                    </div>
-                    <div class="col-sm-4 ">
-                        <div class="col-sm-12 text-center">
-                            <h1 class="font-questrial">2. An Epic Story</h1>
-                            <br>
-                        </div>
-                        <div class="col-sm-8 col-sm-offset-2">
-                            <img class="img-center img-responsive margin-bottom-40" src="assets/img/diary.png">
 
-                        </div>
-                        <div class="col-sm-12 text-center">
-                            <p class="font-sub-para">Each month we will select the most epic story sent in to us by you and distribute it to all of our subscribers. We want to hear how <span class="color-red">Domebox</span>
-                                made your night awesome! Tweet at us or email us for a chance to be included in next month's deliveries!</p>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="col-sm-12 text-center">
-                            <h1 class="font-questrial">3. Private Packaging</h1>
-                            <br>
-                        </div>
-                        <div class="col-sm-8 col-sm-offset-2 ">
-                            <img class="img-center img-responsive margin-bottom-35" src="assets/img/file.png">
-                        </div>
-                        <div class="col-sm-12 text-center">
-                            <p class="font-sub-para">Feel free to deliver it to your home, your work or even your church, we won't mark the outside packaging, this way your postman/office colleagues/mother wont know
-                                how much tail your getting!</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-		</section>
+			<!-- HOME -->
+			<section id="home">
+						
+				<div class="container text-center">
+					
+					<h1 class="nomargin size-50 weight-300 wow fadeInUp" data-wow-delay="0.4s">Monthly Box of Artisan Chocolate</h1>
+					<p class="lead font-lato size-30 wow fadeInUp" data-wow-delay="0.7s">The best <span class="theme-color">Fair Trade</span>  <span class="theme-color">Bean to Bar</span> chocolate in the world</p>
+					
+					<div class="margin-top-30">
+                        <a href="#" class="btn btn-3d btn-lg btn-green"><i class="glyphicon glyphicon-user"></i>GET STARTED</a>
+						<span class="size-17 hidden-xs">&nbsp; OR &nbsp;</span>
+                        <a href="#" class="btn btn-3d btn-lg btn-teal"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
+					</div>
 
-    <!-- Pricing -->
-    <section id="pricing" ng-controller="signupCtrl">
-        <div class="container-fluid bg-greyz">
-            <div class="container">
-                <!-- Header -->
-                <header>
-                    <div class="row">
-                        <div class="col-sm-8 col-sm-offset-2 wow fadeInDown margin-top-40">
-                            <h1>Sign Up!</h1>
-                        </div>
-                    </div>
-                </header>
+				</div>
 
-                <div>
-                    <!-- Content -->
-                    <div class="row" ng-if="formPage==1">
-                        <div class="margin-bottom-40">
-                            <h3 class="text-center">CHOOSE A PLAN</h3>
-                            <p class="text-center">Select The Right Quantity From Our Packages. Don't worry, if you buy to many or too little you can change your subscription at any time! </p>
-                        </div>
-                        <div ng-repeat="plan in formPlans" class="col-xs-12 col-sm-3 i wow fadeInLeft animated" data-wow-duration="0.5s" data-wow-delay="0.2s" ng-click="selectPlan(plan.id)">
-                            <div class="wrap borderedHover">
-                                <div class="c">
-                                    <h3>{{ plan.name }}</h3>
-                                    <div class="price price-lg"><sup>$</sup>{{ (plan.amount/100).toFixed(2) }}</div>
-                                    <div class="info">
-                                        {{ plan.metadata.desc }}
-                                    </div>
+			</section>
+			<!-- /HOME -->
+
+
+
+
+			<!-- FEATURES -->
+			<section id="features">
+				<div class="container">
+					<header class="text-center margin-bottom-30">
+						<h2 class="font-cursive">How It Works</h2>
+						<p class="lead font-lato">It's Simple!</p>
+						<hr />
+					</header>
+
+					<!-- FEATURED BOXES 3 -->
+					<div class="row">
+						<div class="col-md-4 col-xs-12">
+							<div class="text-center">
+                                <div class="col-sm-12">
+                                    <img src="assets/images/step1.png" alt="" />
+                                </div>
+                                <div class="col-sm-12">
+								    <h4>Sign Up</h4>
+                                </div>
+                                <div class="col-sm-12">
+								    <p>Select a monthly subscription or choose from our wide selection of gifts!</p>
+                                </div>
+							</div>
+						</div>
+						<div class="col-md-4 col-xs-12">
+							<div class="text-center">
+                                <img src="assets/images/step2.png" alt="" />
+								<h4>We Curate</h4>
+								<p>We Taste Hundreds of Makers and Select Our Favorite. All of our makers are artisan chocolatiers and specialize in fair trade cocao beans! </p>
+							</div>
+						</div>
+						<div class="col-md-4 col-xs-12">
+							<div class="text-center">
+                                <img src="assets/images/step3.png" alt="" />
+								<h4>Get Excited!</h4>
+								<p>We send you your box!</p>
+							</div>
+						</div>
+
+					</div>
+					<!-- /FEATURED BOXES 3 -->
+				</div>
+			</section>
+			<!-- /FEATURES -->
+
+			<!-- -->
+			<section class="alternate">
+				<div class="container">
+					
+					<div class="text-center">
+						<h2 class="wow fadeInUp nomargin" data-wow-delay="0.3s">Learn More About Our Partners!</h2>
+
+						<p class="lead font-lato size-30 wow fadeInUp margin-bottom-60" data-wow-delay="0.5s">Here Are Just a few of our featured makers, these are some of the most artistic people we've ever met! </p>
+						
+
+                        <!--
+                   controlls-over		= navigation buttons over the image
+                   buttons-autohide 	= navigation buttons visible on mouse hover only
+
+                   data-plugin-options:
+                       "singleItem": true
+                       "autoPlay": true (or ms. eg: 4000)
+                       "navigation": true
+                       "pagination": true
+               -->
+                        <div class="text-center margin-top-10 margin-bottom-100">
+                            <div class="owl-carousel nomargin" data-plugin-options='{"singleItem": false, "autoPlay": true}'>
+                                <div>
+                                    <img class="img-responsive" src="assets/images/partners/acalli.png" alt="">
+                                </div>
+                                <div>
+                                    <img class="img-responsive" src="assets/images/partners/brasstown.png" alt="">
+                                </div>
+                                <div>
+                                    <img class="img-responsive" src="assets/images/partners/habitual.png" alt="">
+                                </div>
+                                <div>
+                                    <img class="img-responsive" src="assets/images/partners/hello_cocoa.png" alt="">
+                                </div>
+                                <div>
+                                    <img class="img-responsive" src="assets/images/partners/kyya.png" alt="">
+                                </div>
+                                <div>
+                                    <img class="img-responsive" src="assets/images/partners/ritual.png" alt="">
+                                </div>
+                                <div>
+                                    <img class="img-responsive" src="assets/images/partners/starchild.png" alt="">
+                                </div>
+                                <div>
+                                    <img class="img-responsive" src="assets/images/partners/pitchdark.png" alt="">
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Content -->
-                    <div class="row" ng-if="formPage==2">
-                        <div class="margin-bottom-40">
-                            <h3 class="text-center">Your Shipping Info</h3>
-                            <p class="text-center">We need to make sure we send the "package" to the right person</p>
-                        </div>
-
-                        <div class="col-lg-7 col-lg-offset-2">
-                            <form class="form-horizontal" novalidate>
-                                <div class="form-group" ng-class="{ 'has-error' : validationErrors.name }">
-                                    <label class="col-sm-2 control-label margin-top-20" for="fn">Full Name</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control input-normal" id="fn" placeholder="" ng-model="userInfo.name">
-                                        <p class="text-danger" ng-show="validationErrors.name">{{ validationErrors.name }}</p>
-                                    </div>
-                                </div>
-                                <div class="form-group" ng-class="{ 'has-error' : validationErrors.address.line1 }">
-                                    <label class="col-sm-2 control-label margin-top-20" for="ad">Address</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control input-normal" id="ad" placeholder="" ng-model="userInfo.address.line1">
-                                        <p class="text-danger" ng-show="validationErrors.address.line1">{{ validationErrors.address.line1 }}</p>
-                                    </div>
-                                    <div class="col-sm-10 col-sm-offset-2">
-                                        <input type="text" class="form-control input-normal" id="ad" placeholder="" ng-model="userInfo.address.line2">
-                                        <p class="text-danger" ng-show="validationErrors.address.line2">{{ validationErrors.address.line2 }}</p>
-                                    </div>
-                                </div>
-                                <div class="form-group" ng-class="{ 'has-error' : validationErrors.address.city }">
-                                    <label class="col-sm-2 control-label margin-top-20" for="city">City</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control input-normal" id="city" placeholder="" ng-model="userInfo.address.city">
-                                        <p class="text-danger" ng-show="validationErrors.address.city">{{ validationErrors.address.city }}</p>
-                                    </div>
-                                </div>
-                                <div class="form-group" ng-class="{ 'has-error' : validationErrors.address.state }">
-                                    <label class="col-sm-2 control-label margin-top-20" for="state">Province / State</label>
-                                    <div class="col-sm-10">
-                                        <select id="state" class="form-control input-normal" ng-options="o as o.name for o in formOptions.provinces" ng-model="userInfo.address.state">
-                                        </select>
-                                        <p class="text-danger" ng-show="validationErrors.address.state">{{ validationErrors.address.state }}</p>
-                                    </div>
-                                </div>
-                                <div class="form-group" ng-class="{ 'has-error' : validationErrors.address.country }">
-                                    <label class="col-sm-2 control-label margin-top-20" for="country">Country</label>
-                                    <div class="col-sm-10">
-                                        <select id="country" class="form-control input-normal" ng-options="o as o.name for o in formOptions.countries" ng-model="userInfo.address.country">
-                                        </select>
-                                        <p class="text-danger" ng-show="validationErrors.address.country">{{ validationErrors.address.country }}</p>
-                                    </div>
-                                </div>
-                                <div class="form-group" ng-class="{ 'has-error' : validationErrors.address.postal_code }">
-                                    <label class="col-sm-2 control-label margin-top-20" for="postal_code">Postal Code</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control input-normal" id="postal_code" placeholder="" ng-model="userInfo.address.postal_code">
-                                        <p class="text-danger" ng-show="validationErrors.address.postal_code">{{ validationErrors.address.postal_code }}</p>
-                                    </div>
-                                </div>
-
-                                <div class="form-group" ng-class="{ 'has-error' : validationErrors.email }">
-                                    <label class="col-sm-2 control-label margin-top-20" for="ea">Email</label>
-                                    <div class="col-sm-10">
-                                        <input type="email" class="form-control input-normal" id="ea" placeholder="" ng-model="userInfo.email">
-                                        <p class="text-danger" ng-show="validationErrors.email">{{ validationErrors.email }}</p>
-                                    </div>
-                                </div>
-                                <div class="form-group" ng-class="{ 'has-error' : validationErrors.password }">
-                                    <label class="col-sm-2 control-label margin-top-20" for="p">Password</label>
-                                    <div class="col-sm-10">
-                                        <input type="password" class="form-control input-normal" id="p" placeholder="" ng-model="userInfo.password">
-                                        <p class="text-danger" ng-show="validationErrors.password">{{ validationErrors.password }}</p>
-                                    </div>
-                                </div>
-
-                                <!-- Skip registration option if user is buying a gift -->
-                                <div ng-show="userInfo.subscription.planId.toUpperCase().indexOf('GIFT') > -1" class="form-group">
-                                    <p>Check this if you would like to skip registration for the one-time gift</p>
-                                    <input type="checkbox" ng-model="skipRegistration" />
-                                </div>
-
-                                <button type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="next(3)">Next</button>
-                                <button type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="goBack(1)">Back</button>
-                            </form>
+                        <div class="margin-top-10">
+                            <a href="#" class="btn btn-3d btn-lg wow fadeInUp btn-primary" data-wow-delay="0.59"><i class="glyphicon glyphicon-user"></i>Learn More</a>
                         </div>
                     </div>
-
-                    <!-- Content -->
-                    <div class="row" ng-if="formPage==3">
-                        <div class="margin-bottom-40">
-                            <h3 class="text-center">Your Payment Details</h3>
-                            <p class="text-center">Unfortunately condoms don't grow on trees ...yet</p>
-                        </div>
-
-                        <div class="col-lg-7 col-lg-offset-2">
-                            <form class="form-horizontal" novalidate>
-                                <div class="form-group" ng-class="{ 'has-error' : validationErrors.source.name }">
-                                    <label class="col-sm-2 control-label margin-top-20" for="chn">Card Holder Name</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control input-normal" id="chn" placeholder="Name as it appears on card" ng-model="userInfo.source.name">
-                                        <p class="text-danger" ng-show="validationErrors.source.name">{{ validationErrors.source.name }}</p>
-                                    </div>
-                                </div>
-                                <div class="form-group" ng-class="{ 'has-error' : validationErrors.source.number }">
-                                    <label class="col-sm-2 control-label margin-top-20" for="cn">Card Number</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control input-normal" id="cn" placeholder="" ng-model="userInfo.source.number">
-                                        <p class="text-danger" ng-show="validationErrors.source.number">{{ validationErrors.source.number }}</p>
-                                    </div>
-                                </div>
-                                <div class="form-group" ng-class="{ 'has-error' : validationErrors.exp_month || validationErrors.exp_year }">
-                                    <label class="col-sm-2 control-label margin-top-20" for="exp_mon">Expiration</label>
-                                    <div class="col-sm-4">
-                                        <select id="exp_mon" class="form-control input-normal" placeholder="Month" ng-options="mon as mon.name for mon in formOptions.ccExp.month" ng-model="userInfo.source.exp_month">
-                                        </select>
-                                        <p class="text-danger" ng-show="validationErrors.source.exp_month">{{ validationErrors.source.exp_month }}</p>
-                                    </div>
-                                    <div class="col-sm-4 col-sm-offset-1">
-                                        <select class="form-control input-normal" id="exp_year" placeholder="Year" ng-model="userInfo.source.exp_year" ng-options="year for year in formOptions.ccExp.year">
-                                            <option ng-repeat="option in formOptions.ccExp.year" value="{{ option.id }}">{{ option.name }}</option>
-                                        </select>
-                                        <p class="text-danger" ng-show="validationErrors.source.exp_year">{{ validationErrors.source.exp_year }}</p>
-                                    </div>
-                                </div>
-                                <div class="form-group" ng-class="{ 'has-error' : validationErrors.source.cvc }">
-                                    <label class="col-sm-2 control-label margin-top-20" for="cvv">Card CVV</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control input-normal" id="cvv" placeholder="" ng-model="userInfo.source.cvc">
-                                        <p class="text-danger" ng-show="validationErrors.source.cvc">{{ validationErrors.source.cvc }}</p>
-                                    </div>
-                                </div>
-                                <div class="form-group" ng-class="{ 'has-error' : validationErrors.source.address_zip }">
-                                    <label class="col-sm-2 control-label margin-top-20" for="cn">Postal Code</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control input-normal" id="pc" placeholder="" ng-model="userInfo.source.address_zip">
-                                        <p class="text-danger" ng-show="validationErrors.source.address_zip">{{ validationErrors.source.address_zip }}</p>
-                                    </div>
-                                </div>
-                                <button ng-disabled="processingReg" type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="completeRegistration()">Register</button>
-                                <button type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="goBack(2)">Back</button>
-                            </form>
-                        </div>
-                    </div>
-
                 </div>
 
-                <div ng-show="subErr" class="alert alert-danger">Error subscribing to plan. Please go to your account management page to resolve the issue.</div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Team -->
-    <section id="team">
-        <div class="container">
-            <!-- Header -->
-            <header>
-                <div class="row">
-                    <div class="col-sm-8 col-sm-offset-2 wow fadeInDown">
-                        <h1>Our Brands</h1>
-                        <div class="dotted-break">
-                            <span></span><span></span><span></span><span></span><span></span>
-                        </div>
-                        <h2>Brands We Love</h2>
-                        <p class="font-sub-para">These aren't the only brands we carry, but these are our personal favorites</p>
-                    </div>
-                </div>
-            </header>
-            <div class="container">
-                <div class="row">
-                    <!-- Carousel -->
-                    <div class="j-carousel">
-                        <!-- Carousel item -->
-                        <div class="item col-xs-10 col-xs-offset-1 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
-                            <img src="assets/img/logoset1.png" class="img-responsive">
-                        </div>
-                        <!-- Carousel item -->
-                        <div class="item col-xs-10 col-xs-offset-1 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
-                            <img src="assets/img/logoset2.png" class="img-responsive">
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- Social -->
-    <section id="social">
-        <div class="container">
-            <div class="row">
-                <!-- Carousel -->
-                <div class="j-carousel">
-                    <!-- Carousel item -->
-                    <div class="item col-xs-10 col-xs-offset-1 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
-                        <span class="fa fa-twitter icon"></span>
-                        <p>Anything that makes my life easier at no extra cost are my favorite things in the world</p>
-                        <div class="author">- @pentofrank-</div>
-                    </div>
-                    <!-- Carousel item -->
-                    <div class="item col-xs-10 col-xs-offset-1 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
-                        <span class="fa fa-twitter icon"></span>
-                        <p>Awesome service, super simple!</p>
-                        <div class="author">- @estavan72 -</div>
-                    </div>
-                    <!-- Carousel item -->
-                    <div class="item col-xs-10 col-xs-offset-1 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
-                        <span class="fa fa-twitter icon"></span>
-                        <p>I can rely on @domerbox to save me from babies 99.99999% of the time</p>
-                        <div class="author">- @banteyyz12 -</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+			</section>
+			<!-- / -->
 
 
 
+            <footer id="footer">
+                <div class="container">
 
-
-		<!-- Video -->
-    <!--	<section class="video">
-            <div class="parallax js-video" data-mfp-src="http://vimeo.com/92112616">
-                <div class="container content">
                     <div class="row">
-                        <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
-                            <span class="icon">
-                                <i class="fa fa-play"></i>
-                            </span>
-                            <h2>Watch this video to learn more about our features</h2>
+
+                        <div class="col-md-8">
+
+                            <!-- Footer Logo -->
+                            <img class="footer-logo footer-2" src="assets/images/logo-cocoa-white.png" alt="" />
+
+                            <!-- Small Description -->
+                            <p>Chocolate means different things to different people. Some just enjoy the taste, some appreciate the story right back to the farm it was grown on.
+                            With every box of gift purchased from Cocoa Couriers you are helping support the farmers who grew the fabulous beans and the small artisan crafters who
+                            pour their passion into every bar.</p>
+
+                            <hr />
+
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6">
+
+                                    <!-- Newsletter Form -->
+                                    <p class="margin-bottom-10">Subscribe to Our <strong>Newsletter</strong></p>
+
+
+                                        <div class="input-group">
+                                            <!-- Begin MailChimp Signup Form -->
+                                            <div id="mc_embed_signup">
+                                                <form action="//cantangosolutions.us11.list-manage.com/subscribe/post?u=a042a04bae8cf062c8ee3f447&amp;id=6c231aad4e" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+                                                    <div id="mc_embed_signup_scroll">
+                                                        <div class="mc-field-group">
+                                                            <label for="mce-EMAIL">
+                                                            </label>
+                                                            <input type="email" value="" placeholder=" Enter An Email " name="EMAIL" class="required email" id="mce-EMAIL">
+                                                        </div>
+
+                                                        <div id="mce-responses" class="clear">
+                                                            <div class="response" id="mce-error-response" style="display:none"></div>
+                                                            <div class="response" id="mce-success-response" style="display:none"></div>
+                                                        </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+                                                        <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_a042a04bae8cf062c8ee3f447_6c231aad4e" tabindex="-1" value=""></div>
+                                                        <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="btn btn-success"></div>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                            <!--End mc_embed_signup-->
+
+                                        </div>
+                                    </form>
+                                    <!-- /Newsletter Form -->
+                                </div>
+
+                                <div class="col-md-6 col-sm-6">
+
+                                    <!-- Social Icons -->
+                                    <div class="margin-left-50 clearfix">
+
+                                        <p class="margin-bottom-10">Follow Us</p>
+
+                                        <div class="fb-follow" data-href="https://www.facebook.com/cocoacouriers" data-layout="button" data-show-faces="true"></div>
+                                        <div id="fb-root"></div>
+                                        <script>(function(d, s, id) {
+                                            var js, fjs = d.getElementsByTagName(s)[0];
+                                            if (d.getElementById(id)) return;
+                                            js = d.createElement(s); js.id = id;
+                                            js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5";
+                                            fjs.parentNode.insertBefore(js, fjs);
+                                        }(document, 'script', 'facebook-jssdk'));</script>
+
+
+                                        <a href="https://twitter.com/CocoaCouriers" class="twitter-follow-button" data-show-count="false">Follow @CocoaCouriers</a>
+                                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+
+                                        <a data-pin-do="buttonFollow" href="https://www.pinterest.com/cocoacouriers/">Cocoa&nbsp;Couriers</a>
+                                        <!-- Please call pinit.js only once per page -->
+                                        <script async defer src="//assets.pinterest.com/js/pinit.js"></script>
+
+                                        <span class="ig-follow" data-id="f04f3f0c49" data-handle="cocoacouriers" data-count="true" data-size="medium" data-username="true"></span>
+                                        <script>(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.src="//x.instagramfollowbutton.com/follow.js";s.parentNode.insertBefore(g,s);}(document,"script"));</script>
+
+                                    </div>
+                                    <!-- /Social Icons -->
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+                            <h3 class="letter-spacing-1">Instagram Photos!</h3>
+                            <!-- INSTANSIVE WIDGET --><script src="//instansive.com/widget/js/instansive.js"></script><iframe src="//instansive.com/widgets/6f7d16825aa28a488bdef2ebe62af4b98bc0eff1.html" id="instansive_6f7d16825a" name="instansive_6f7d16825a"  scrolling="no" allowtransparency="true" class="instansive-widget" style="width: 100%; border: 0; overflow: hidden;"></iframe>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- Charts -->
-    <!--<section class="charts">
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12 col-sm-4 i">
-                    <div class="chart" data-percent="48"><span>48%</span></div>
-                    <h3>Basic</h3>
-                    <h4>Great for beginners</h4>
+                <div class="copyright">
+                    <div class="container">
+                        <ul class="pull-right nomargin list-inline mobile-block">
+                            <li><a href="#">Terms & Conditions</a></li>
+                            <li>&bull;</li>
+                            <li><a href="#">Privacy</a></li>
+                        </ul>
+                        &copy; All Rights Reserved, <i class=" fa fa-trademark"></i> Cocoa Couriers 2015
+                    </div>
                 </div>
-                <div class="col-xs-12 col-sm-4 i">
-                    <div class="chart" data-percent="86"><span>86%</span></div>
-                    <h3>Premium</h3>
-                    <h4>Give a try</h4>
-                </div>
-                <div class="col-xs-12 col-sm-4 i">
-                    <div class="chart" data-percent="74"><span>74%</span></div>
-                    <h3>Ultimate</h3>
-                    <h4>Wow, this is it</h4>
-                </div>
-            </div>
-        </div>
-    </section> -->
-
-
-
-		<!-- Blog -->
-		<section id="blog">
-			<div class="container">
-				<!-- Header -->
-				<header>
-					<div class="row">
-						<div class="col-sm-8 col-sm-offset-2 wow fadeInDown">
-							<h1>Epic Stories</h1>
-							<div class="dotted-break">
-								<span></span><span></span><span></span><span></span><span></span>
-							</div>
-							<h2>Send us your stories and we will post them here!</h2>
-							<p class="font-sub-para">Here are some of the stories our customers have sent us about their crazy nights out and how <span class="color-red">D</span>omer<span class="color-red">B</span>ox helped them make it that much better!</p>
-						</div>
-					</div>
-				</header>
-
-				<!-- Content -->
-				<div class="row articles">
-
-					<!-- Article -->
-					<article class="col-xs-6 article wow animated fadeInLeft">
-						<a href="/happy-anniversary" title="#" class="c borderedHover">
-							<div class="wrap">
-								<div class="info">
-									<div class="info-wrap">
-										<i class="fa fa-plus"></i>
-										<div class="more">Read more</div>
-									</div>
-								</div>
-								<img src="assets/img/Happy-Anniversary.png" alt="#" width="600" height="350" class="img-responsive">
-							</div>
-						</a>
-						<div class="row">
-							<div class="col-lg-2 visible-lg asideArticleInfo">
-								<div class="date">
-									<div class="day">15</div>
-									<div class="month">Oct 2015</div>
-								</div>
-								<div class="comments">
-									<i class="fa fa-comments"></i> 3
-								</div>
-							</div>
-							<div class="col-lg-10">
-								<h3><a href="/happy-anniversary" title="#">Our Anniversary was awesome, might need a second shipment...</a></h3>
-								<div class="articleInfo clearfix">
-									<div class="i">Post by: <strong>Ashley</strong></div>
-								</div>
-								<p>So maybe this isn't an "Epic" story but I thought it worth sharing anyways, because it truley was one of my favorite nights I've had in a while. My Hubby an I were celebrating our 5th Anniverary last week and he <a href="/happy-anniversary" title="#">Read more...</a></p>
-							</div>
-						</div>
-					</article>
-
-					<!-- Article  -->
-					<article class="col-xs-6 article wow animated fadeInRight">
-						<a href="/the-train-knocking" title="#" class="c borderedHover">
-							<div class="wrap">
-								<div class="info">
-									<div class="info-wrap">
-										<i class="fa fa-plus"></i>
-										<div class="more">Read more</div>
-									</div>
-								</div>
-								<img src="assets/img/Love-Train.png" alt="#" width="600" height="350" class="img-responsive">
-							</div>
-						</a>
-						<div class="row">
-							<div class="col-lg-2 visible-lg asideArticleInfo">
-								<div class="date">
-									<div class="day">21</div>
-									<div class="month">Oct 2015</div>
-								</div>
-								<div class="comments">
-									<i class="fa fa-comments"></i> 2
-								</div>
-							</div>
-							<div class="col-lg-10">
-								<h3><a href="/the-train-knocking" title="#">When the trains'a rollin' don't come'a knocking</a></h3>
-								<div class="articleInfo clearfix">
-									<div class="i">Post by: <strong>Joshua</strong></div>
-								</div>
-								<p>So the other day I had the freakiest tinder date I've ever had. Let me clarify that "Freaky" is fucking awesome! So I was pretty bored and down to my last few right swipes for the day and I matched with this redhead chick with a great body, duh I swiped right...  <a href="/the-train-knocking" title="#">Read more...</a></p>
-							</div>
-						</div>
-					</article>
-				</div>
-
-				<!-- More posts -->
-				<div class="text-center">
-					<a href="/blog" title="#" class="btn btn-default btn-lg morePosts"><i class="fa fa-plus"></i> More posts</a>
-				</div>
-			</div>
-		</section>
-
-		<!-- Counter -->
-<!--		<section class="counter striped-image">
-			<div class="container">
-				<div class="row">
-					<div class="col-xs-12 col-sm-3 i">
-						<i class="fa fa-trophy icon"></i>
-						<h3 class="timer" data-to="389" data-speed="3000">389</h3>
-						<h4>Completed projects</h4>
-					</div>
-					<div class="col-xs-12 col-sm-3 i">
-						<i class="fa fa-smile-o icon"></i>
-						<h3 class="timer" data-to="697" data-speed="3000">697</h3>
-						<h4>Happy costumers</h4>
-					</div>
-					<div class="col-xs-12 col-sm-3 i">
-						<i class="fa fa-clock-o icon"></i>
-						<h3 class="timer" data-to="2640" data-speed="3000">2640</h3>
-						<h4>Working hours</h4>
-					</div>
-					<div class="col-xs-12 col-sm-3 i">
-						<i class="fa fa-heart icon"></i>
-						<h3 class="timer" data-to="415" data-speed="3000">415</h3>
-						<h4>Favourites</h4>
-					</div>
-				</div>
-			</div>
-		</section>
-
-
-		<!-- Contact -->
-		<section id="contact" >
-			<div class="container">
-				<!-- Header -->
-				<header class="font-white">
-					<div class="row">
-						<div class="col-sm-8 col-sm-offset-2 wow fadeInDown">
-							<h1>Contact us</h1>
-							<div class="dotted-break">
-								<span></span><span></span><span></span><span></span><span></span>
-							</div>
-							<h2>Keep in touch</h2>
-						</div>
-					</div>
-				</header>
-
-				<!-- Content -->
-				<div class="row">
-					<div class="col-xs-12 info">
-						<span class="wow fadeInRight" data-wow-delay="0.4s"><i class="fa fa-envelope-o icon"></i> info@domerbox.com</span>
-					</div>
-					<div class="col-xs-12 col-sm-8 col-sm-offset-2">
-						<form class="js-contact-form" role="form" action="mail/contact.php" method="post" data-parsley-validate>
-							<div id="msgInfo"></div>
-							<input type="text" class="form-control wow fadeInLeft name" data-wow-delay="0.2s" placeholder="Name" required data-parsley-error-message="Enter name">
-							<input type="email" class="form-control wow fadeInLeft email" data-wow-delay="0.4s" placeholder="Email" required data-parsley-error-message="Enter email">
-							<textarea class="form-control wow fadeInLeft message" data-wow-delay="0.6s" rows="6" placeholder="Message" required data-parsley-error-message="Enter message"></textarea>
-							<button type="submit" class="btn btn-lg wow fadeInUp" data-wow-delay="1s">Send message</button>
-						</form>
-					</div>
-				</div>
-			</div>
-		</section>
-
-		<footer id="footer">
-			<div class="social">
-				<a href="#" title="#" class="icon"><i class="fa fa-facebook"></i></a>
-				<a href="#" title="#" class="icon"><i class="fa fa-twitter"></i></a>
-				<a href="#" title="#" class="icon"><i class="fa fa-linkedin"></i></a>
-				<a href="#" title="#" class="icon"><i class="fa fa-google-plus"></i></a>
-			</div>
-
-			<div>© 2015 DomerBox / All rights reserved</div>
-		</footer>
-
-	</div>
-
-	<!-- Modals -->
-	<div class="modal fade" id="modalText" tabindex="-1" role="dialog" aria-labelledby="modalText" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="fa fa-times"></span></button>
-					<h4 class="modal-title" id="myModalLabel">This might be a detail of simple article</h4>
-					<div class="info subtitle"><span class="fa fa-calendar"></span> 26th march 2014  |  <span class="fa fa-user"></span> John Doe</div>
-				</div>
-				<p class="intro">Nulla diam ex, aliquet vel iaculis vitae, consectetur et lectus. Mauris eu scelerisque ligula. Fusce in purus accumsan, faucibus lorem eget, posuere eros. Etiam ultricies vel leo at euismod. Morbi id nisi vitae felis consequat consequat ut non arcu. Vestibu lum sit amet imperdiet tellus.</p>
-				<div class="modal-body">
-					<img src="tmp/340x255-1.jpg" alt="#" width="340" height="255" class="img-responsive pull-right">
-					<p>Nulla diam ex, aliquet vel iaculis vitae, consectetur et lectus. Mauris eu scelerisque ligula. Fusce in purus accumsan, faucibus lorem eget, posuere eros. Etiam ultricies vel leo at euismod.</p>
-					<p>Morbi id nisi vitae felis consequat consequat ut non arcu. Vestibu lum sit amet imperdiet tellus. eget, posuere eros. Etiam ultricies vel leo at euismod. Nulla diam ex, aliquet vel iaculis vitae, consectetur et lectus. Mauris eu scelerisque ligula. Fusce in purus accumsan, faucibus lorem eget, posuere eros.</p>
-					<p>Nulla diam ex, aliquet vel iaculis vitae, consectetur et lectus. Mauris eu scelerisque ligula. Fusce in purus accumsan, faucibus lorem eget, posuere eros. Etiam ultricies vel leo at euismod. Morbi id nisi vitae felis consequat consequat ut non arcu. Vestibu lum sit amet imperdiet tellus. eget, posuere eros. Etiam ultricies vel leo at euismod.</p>
-				</div>
-			</div>
+            </footer>
 		</div>
-	</div>
+		<!-- /wrapper -->
 
 
-	<!-- jQuery and Bootstrap JS -->
-	<script src="assets/jquery/jquery-2.1.4.min.js"></script>
-	<script src="assets/bootstrap/js/bootstrap.min.js"></script>
-	<script src="assets/angular/angular.min.js"></script>
-    <script src="home-app/home-app.js"></script>
-
-	<!-- Custom JS -->
-	<script src="assets/js/portfolio.js"></script>
-	<script src="assets/js/script.min.js"></script>
+		<!-- SCROLL TO TOP -->
+		<a href="#" id="toTop"></a>
 
 
-</body>
+		<!-- PRELOADER -->
+		<div id="preloader">
+			<div class="inner">
+				<span class="loader"></span>
+			</div>
+		</div><!-- /PRELOADER -->
+
+
+		<!-- JAVASCRIPT FILES -->
+		<script type="text/javascript">var plugin_path = 'assets/plugins/';</script>
+		<script type="text/javascript" src="assets/plugins/jquery/jquery-2.1.4.min.js"></script>
+
+		<script type="text/javascript" src="assets/js/scripts.js"></script>
+		
+
+	</body>
 </html>
