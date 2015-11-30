@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('domerbox', [])
+angular.module('subscribe', [])
 
 .controller('signupCtrl', function ($scope, $http, $window) {
 

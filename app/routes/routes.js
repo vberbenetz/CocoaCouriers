@@ -55,29 +55,37 @@ module.exports = function(app, passport, dbConnPool) {
 
 
     // ======================== STATIC PAGES ========================= //
-/*
+
     app.get('/', function(req, res) {
         res.sendfile('./public/index.html');
     });
-*/
-    app.get('/My-Account/', auth, function(req, res) {
-        res.sendfile('./public/user_mgmt.html');
+
+    app.get('/partners', function(req, res) {
+        res.sendfile('./public/pages/partners.html');
+    });
+
+    app.get('/gift', function(req, res) {
+        res.sendfile('./public/pages/gift.html');
+    });
+
+    app.get('/holiday-gift-box', function(req, res) {
+        res.sendfile('./public/pages/holiday-gift-box.html');
+    });
+
+    app.get('/subscribe', function(req, res) {
+        res.sendfile('./public/pages/subscribe.html');
     });
 
     app.get('/blog', function(req, res) {
-        res.sendfile('./public/blog-listing.html');
+        res.sendfile('./public/blog/blog.html');
     });
 
-    app.get('/blog-item', function(req, res) {
-        res.sendfile('./public/blog-detail.html');
+    app.get('/Cocoa-Couriers-First-Annual-Tasting-Event', function(req, res) {
+        res.sendfile('./public/blog/Cocoa-Couriers-First-Annual-Tasting-Event.html');
     });
 
-    app.get('/happy-anniversary', function(req, res) {
-        res.sendfile('./public/Happy-Anniversary.html');
-    });
-
-    app.get('/the-train-knocking', function(req, res) {
-        res.sendfile('./public/The-Train-Knocking.html');
+    app.get('/My-Account/', auth, function(req, res) {
+        res.sendfile('./public/user_mgmt.html');
     });
 
 
@@ -252,7 +260,7 @@ module.exports = function(app, passport, dbConnPool) {
         }
     });
 
-/*
+
     app.post('/api/plan', function (req, res, next) {
         planCtrl.create(req, res, function(err, result) {
             if (err) {
@@ -263,7 +271,7 @@ module.exports = function(app, passport, dbConnPool) {
             }
         });
     });
-*/
+
 
     // ----------------- Subscription Related ------------------------ //
 
@@ -385,10 +393,11 @@ module.exports = function(app, passport, dbConnPool) {
     // ==================================================================================== //
     // TODO: ADD 404 PAGE
     // Send to home page if no route found ============================================================================/
-
+/*
     app.get('*', function(req, res) {
         res.sendfile('./public/index.html');
     });
+*/
 
 };
 
