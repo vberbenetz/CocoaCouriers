@@ -26,10 +26,6 @@
 
         <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
 
-        <link href="../assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-        <link href="../assets/css/essentials.css" rel="stylesheet" type="text/css" />
-        <link href="../assets/css/layout.css" rel="stylesheet" type="text/css" />
-
 		<!-- PAGE LEVEL SCRIPTS -->
 		<link href="/assets/css/header-1.css" rel="stylesheet" type="text/css" />
 		<link href="/assets/css/color_scheme/green.css" rel="stylesheet" type="text/css" id="color_scheme" />
@@ -345,7 +341,7 @@
                                         </div>
                                         <div class="col-md-6 col-sm-6" ng-class="{ 'has-error' : validationErrors.password }">
                                             <label for="account_password">Password *</label>
-                                            <input id="account_password" name="billing[email]" type="text" class="form-control required" ng-model="userInfo.password" />
+                                            <input id="account_password" name="billing[email]" type="password" class="form-control required" ng-model="userInfo.password" />
                                             <p class="text-danger" ng-show="validationErrors.password">{{ validationErrors.password }}</p>
                                         </div>
                                     </div>
@@ -366,8 +362,8 @@
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6">
                                             <label>Coupon Code</label>
-                                            <div class="input-group">
-                                                <input class="form-control" ng-model="userInfo.subscription.couponCode" />
+                                            <div class="input-group" ng-class="{ 'has-error' : validationErrors.couponCode }">
+                                                <input class="form-control" ng-model="misc.testCouponCode" />
                                                 <span class="input-group-btn">
                                                     <button class="btn btn-primary" ng-click="applyCoupon()">
                                                         Apply
@@ -375,6 +371,7 @@
                                                 </span>
                                             </div>
                                             <p class="text-danger" ng-show="validationErrors.couponCode">{{ validationErrors.couponCode }}</p>
+                                            <p class="text-success" ng-show="userInfo.subscription.couponCode.length>0">Successfully applied coupon!</p>
                                         </div>
                                     </div>
                                 </fieldset>
@@ -391,17 +388,17 @@
 
                                         <div class="clearfix">
                                             <h4 class="pull-left">1x {{ chosenPlan.name }}</h4>
-                                            <h4 class="pull-right">$ {{ (chosenPlan.amount/100) }} {{ chosenPlan.id }}</h4>
+                                            <h4 class="pull-right">$ {{ (chosenPlan.amount/100).toFixed(2) }} {{ chosenPlan.id }}</h4>
                                         </div>
                                         <span class="clearfix">
                                             <button type="submit" class="btn btn-xs btn-default margin-bottom-20 pull-right" ng-click="goBack(1)">Change Plan</button>
                                         </span>
                                         <span class="clearfix">
-                                            <span class="pull-right">- $ {{ discount }}</span>
-                                            <span class="pull-left">Coupon Discount:  <em class="text-green" ng-show="discount > 0">{{ userInfo.subscription.id }}</em></span>
+                                            <span class="pull-right">- $ {{ misc.discount.toFixed(2) }}</span>
+                                            <span class="pull-left">Coupon Discount:  <em class="text-green" ng-show="misc.discount > 0">{{ userInfo.subscription.id }}</em></span>
                                         </span>
                                         <span class="clearfix">
-                                            <span class="pull-right" ng-show="userInfo.address.country.id!=='CA'">$ {{ shippingCharge }}</span>
+                                            <span class="pull-right" ng-show="userInfo.address.country.id!=='CA'">$ {{ misc.shippingCharge.toFixed(2) }}</span>
                                             <span class="pull-right" ng-show="userInfo.address.country.id==='CA'"><strong>FREE!</strong></span>
                                             <span class="pull-left">Shipping:</span>
                                         </span>
@@ -409,11 +406,11 @@
                                         <hr />
 
                                         <span class="clearfix">
-                                            <span class="pull-right">$ {{ (chosenPlan.amount/100) - discount + shippingCharge }}</span>
+                                            <span class="pull-right">$ {{ ( (chosenPlan.amount/100) - misc.discount + misc.shippingCharge ).toFixed(2) }}</span>
                                             <strong class="pull-left">Subtotal:</strong>
                                         </span>
                                         <span class="clearfix">
-                                            <span ng-show="userInfo.address.country.id==='CA'" class="pull-right">$ {{(tax.rate*( (chosenPlan.amount/100) - discount + shippingCharge)).toFixed(2) }}</span>
+                                            <span ng-show="userInfo.address.country.id==='CA'" class="pull-right">$ {{(tax.rate*( (chosenPlan.amount/100) - misc.discount + misc.shippingCharge)).toFixed(2) }}</span>
                                             <span ng-show="userInfo.address.country.id==='CA'" class="pull-left">Tax {{ tax.desc }}:</span>
                                             <span class="pull-left">&nbsp;</span>
                                         </span>
@@ -421,7 +418,7 @@
                                         <hr />
 
                                         <span class="clearfix">
-                                            <span class="pull-right size-20">$ {{ (chosenPlan.amount/100) - discount + shippingCharge + parseFloat( (tax.rate*( (chosenPlan.amount/100) - discount + shippingCharge)).toFixed(2) )  }}</span>
+                                            <span class="pull-right size-20">$ {{ ( (chosenPlan.amount/100) - misc.discount + misc.shippingCharge + parseFloat( (tax.rate*( (chosenPlan.amount/100) - misc.discount + misc.shippingCharge)).toFixed(2) ) ).toFixed(2) }}</span>
                                             <strong class="pull-left">TOTAL:</strong>
                                         </span>
 

@@ -127,7 +127,6 @@ angular.module('subscribe', [])
             }
         });
 
-
         // Populate the expiry years for the form
         var currentYear = new Date().getFullYear();
         var expiryYears = [];
@@ -147,8 +146,11 @@ angular.module('subscribe', [])
             desc: ''
         };
 
-        $scope.discount = 0;
-        $scope.shippingCharge = 0;
+        $scope.misc = {
+            discount: 0,
+            shippingCharge: 0,
+            testCouponCode: ''
+        };
 
 
         // -------------- MODELS -------------- //
@@ -594,25 +596,41 @@ angular.module('subscribe', [])
         };
 
         $scope.applyCoupon = function() {
+            var couponCode = $scope.misc.testCouponCode;
+
             delete $scope.validationErrors.couponCode;
 
-            $http({
-                url: '/api/coupon',
-                method: 'GET',
-                params: {
-                    id: $scope.userInfo.subscription.couponCode
-                }
-            }).success(function(coupon) {
-                if (coupon.amount_off !== null) {
-                    $scope.discount = (coupon.amount_off/100);
-                }
-                else {
-                    $scope.discount = parseFloat( ( ($scope.chosenPlan.amount/100) * (coupon.percent_off/100) ).toFixed(2) );
-                }
-            }).error(function(err) {
-                $scope.discount = 0;
+            if ( (typeof couponCode !== 'undefined') && (couponCode !== null) && (couponCode.length !== 0) && (couponCode !== '') ) {
+
+                $http({
+                    url: '/api/coupon',
+                    method: 'GET',
+                    params: {
+                        id: couponCode
+                    }
+                }).success(function(coupon) {
+                    if (coupon.amount_off !== null) {
+                        $scope.userInfo.subscription.couponCode = couponCode;
+                        $scope.misc.discount = (coupon.amount_off/100);
+                    }
+                    else {
+                        $scope.userInfo.subscription.couponCode = couponCode;
+                        $scope.misc.discount = parseFloat( ( ($scope.chosenPlan.amount/100) * (coupon.percent_off/100) ).toFixed(2) );
+                    }
+                }).error(function(err) {
+                    $scope.misc.discount = 0;
+                    $scope.userInfo.subscription.couponCode = '';
+                    $scope.validationErrors.couponCode = 'Coupon code is invalid';
+                });
+
+            }
+            else {
+                $scope.misc.discount = 0;
+                $scope.userInfo.subscription.couponCode = '';
                 $scope.validationErrors.couponCode = 'Coupon code is invalid';
-            });
+            }
+
+
         };
 
         $scope.$watch('userInfo.address.state', function (newVal, oldVal) {

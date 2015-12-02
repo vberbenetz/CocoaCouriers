@@ -107,9 +107,6 @@ customerCtrl.prototype = {
         var payload;
 
         switch (item) {
-            case 'coupon':
-                payload = {coupon: data};
-                break;
             case 'email':
                 payload = {email: data};
                 break;

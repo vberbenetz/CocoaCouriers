@@ -85,7 +85,7 @@ module.exports = function(app, passport, dbConnPool) {
     });
 
     app.get('/My-Account/', auth, function(req, res) {
-        res.sendfile('./public/user_mgmt.html');
+        res.sendfile('./public/pages/user_mgmt.html');
     });
 
 
