@@ -26,7 +26,7 @@ module.exports = function(app, passport, dbConnPool) {
 
     var auth = function (req, res, next) {
         if (!req.isAuthenticated()) {
-            res.send(401);
+            res.redirect('/signin');
         }
         else {
             next();
@@ -38,7 +38,7 @@ module.exports = function(app, passport, dbConnPool) {
     });
 
     app.post('/login', passport.authenticate('local-login'), function(req, res) {
-        res.send(req.user);
+        res.sendStatus(200);
     });
 
     app.post('/logout', function(req, res) {
@@ -58,6 +58,15 @@ module.exports = function(app, passport, dbConnPool) {
 
     app.get('/', function(req, res) {
         res.sendfile('./public/index.html');
+    });
+
+    app.get('/signin', function(req, res) {
+        if (req.isAuthenticated()) {
+            res.redirect('/My-Account');
+        }
+        else {
+            res.sendfile('./public/pages/signin.html');
+        }
     });
 
     app.get('/partners', function(req, res) {
@@ -84,7 +93,7 @@ module.exports = function(app, passport, dbConnPool) {
         res.sendfile('./public/blog/Cocoa-Couriers-First-Annual-Tasting-Event.html');
     });
 
-    app.get('/My-Account/', auth, function(req, res) {
+    app.get('/My-Account', auth, function(req, res) {
         res.sendfile('./public/pages/user_mgmt.html');
     });
 
@@ -260,7 +269,7 @@ module.exports = function(app, passport, dbConnPool) {
         }
     });
 
-/*
+
     app.post('/api/plan', function (req, res, next) {
         planCtrl.create(req, res, function(err, result) {
             if (err) {
@@ -271,7 +280,7 @@ module.exports = function(app, passport, dbConnPool) {
             }
         });
     });
-*/
+
 
     // ----------------- Subscription Related ------------------------ //
 

@@ -70,6 +70,7 @@ module.exports = function(passport, dbConnPool) {
 
     // Local Login
     passport.use('local-login', new LocalStrategy({
+        failureRedirect: '/',
         usernameField: 'email',
         passwordField: 'password',
         passReqToCallback: true

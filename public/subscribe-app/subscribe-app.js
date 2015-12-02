@@ -5,7 +5,11 @@ angular.module('subscribe', [])
 .controller('signupCtrl', function ($scope, $http, $window) {
 
         // ------------- DATA INITIALIZATIONS ------------- //
+        $scope.templateUrl = '/subscribe-app/views/signup.html';
+
         $scope.formPage = 1;
+
+        $scope.validationErrors = {};
 
         // Get plan list
         $scope.formPlans = [];
@@ -186,7 +190,6 @@ angular.module('subscribe', [])
                 address_zip: ''
             }
         };
-        $scope.validationErrors = {};
 
 
         // Select a plan
