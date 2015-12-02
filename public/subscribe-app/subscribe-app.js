@@ -18,11 +18,10 @@ angular.module('subscribe', [])
         });
 
         $scope.formOptions = {
-            provinces: [
-                { id: 'AB', name: 'Alberta' }
-            ],
+            provinces: [],
             countries: [
-                {id: 'CA', name: 'Canada'}
+                {id: 'CA', name: 'Canada'},
+                {id: 'US', name: 'United States'}
             ],
             ccExp: {
                 month: [
@@ -41,6 +40,93 @@ angular.module('subscribe', [])
                 ]
             }
         };
+        $scope.provincesAndStates = {
+            caProvinces: [
+                { id: 'AB', name: 'Alberta' },
+                { id: 'BC', name: 'British Columbia' },
+                { id: 'MB', name: 'Manitoba' },
+                { id: 'NB', name: 'New Brunswick' },
+                { id: 'NL', name: 'Newfoundland and Labrador' },
+                { id: 'NS', name: 'Nova Scotia' },
+                { id: 'ON', name: 'Ontario' },
+                { id: 'PE', name: 'Prince Edward Island' },
+                { id: 'QC', name: 'Quebec' },
+                { id: 'SK', name: 'Saskatchewan' },
+                { id: 'NT', name: 'Northwest Territories' },
+                { id: 'NU', name: 'Nunavut' },
+                { id: 'YT', name: 'Yukon' }
+            ],
+            usStates: [
+                { id: 'AL', name: 'Alabama' },
+                { id: 'AK', name: 'Alaska' },
+                { id: 'AR', name: 'Arkansas' },
+                { id: 'AZ', name: 'Arizona' },
+                { id: 'CA', name: 'California' },
+                { id: 'CO', name: 'Colorado' },
+                { id: 'CT', name: 'Connecticut' },
+                { id: 'DE', name: 'Delaware' },
+                { id: 'FL', name: 'Florida' },
+                { id: 'GA', name: 'Georgia' },
+                { id: 'HI', name: 'Hawaii' },
+                { id: 'ID', name: 'Idaho' },
+                { id: 'IL', name: 'Illinois' },
+                { id: 'IA', name: 'Indiana' },
+                { id: 'KS', name: 'Kansas' },
+                { id: 'KY', name: 'Kentucky' },
+                { id: 'LA', name: 'Louisiana' },
+                { id: 'ME', name: 'Maine' },
+                { id: 'MD', name: 'Maryland' },
+                { id: 'MA', name: 'Massachusetts' },
+                { id: 'MI', name: 'Michigan' },
+                { id: 'MN', name: 'Minnesota' },
+                { id: 'MS', name: 'Mississippi' },
+                { id: 'MO', name: 'Missouri' },
+                { id: 'MT', name: 'Montana' },
+                { id: 'NE', name: 'Nebraska' },
+                { id: 'NV', name: 'Nevada' },
+                { id: 'NH', name: 'New Hampshire' },
+                { id: 'NJ', name: 'New Jersey' },
+                { id: 'NM', name: 'New Mexico' },
+                { id: 'NY', name: 'New York' },
+                { id: 'NC', name: 'North Carolina' },
+                { id: 'ND', name: 'North Dakota' },
+                { id: 'OH', name: 'Ohio' },
+                { id: 'OK', name: 'Oklahoma' },
+                { id: 'OR', name: 'Oregon' },
+                { id: 'PA', name: 'Pennsylvania' },
+                { id: 'RI', name: 'Rhode Island' },
+                { id: 'SC', name: 'South Carolina' },
+                { id: 'SD', name: 'South Dakota' },
+                { id: 'TN', name: 'Tennessee' },
+                { id: 'TX', name: 'Texas' },
+                { id: 'UT', name: 'Utah' },
+                { id: 'VT', name: 'Vermont' },
+                { id: 'VA', name: 'Virginia' },
+                { id: 'WA', name: 'Washington' },
+                { id: 'WV', name: 'West Virginia' },
+                { id: 'WI', name: 'Wisconsin' },
+                { id: 'WY', name: 'Wyoming' },
+                { id: 'DC', name: 'District of Columbia' },
+                { id: 'AS', name: 'American Samoa' },
+                { id: 'GU', name: 'Guan' },
+                { id: 'MP', name: 'Nothern Mariana Islands' },
+                { id: 'PR', name: 'Puerto Rico' },
+                { id: 'UM', name: 'United States Minor Outlying Islands' },
+                { id: 'VI', name: 'Virgin Islands, U.S.' }
+            ]
+        };
+
+        $scope.$watch('userInfo.address.country', function (newVal, oldVal) {
+            if (newVal !== oldVal) {
+                if (newVal.id === 'CA') {
+                    $scope.formOptions.provinces = $scope.provincesAndStates.caProvinces;
+                }
+                else if (newVal.id === 'US') {
+                    $scope.formOptions.provinces = $scope.provincesAndStates.usStates;
+                }
+            }
+        });
+
 
         // Populate the expiry years for the form
         var currentYear = new Date().getFullYear();
@@ -50,13 +136,24 @@ angular.module('subscribe', [])
         }
         $scope.formOptions.ccExp.year = expiryYears;
 
+        // Global validation flag for alert
+        $scope.globalValidationFailed = false;
+
         // Skip registration option for gift packages
         $scope.skipRegistration = false;
+
+        $scope.tax = {
+            rate: 0,
+            desc: ''
+        };
+
+        $scope.discount = 0;
+        $scope.shippingCharge = 0;
 
 
         // -------------- MODELS -------------- //
         $scope.userInfo = {
-            BOX_TYPE: 'domerbox',
+            BOX_TYPE: '',
             name: '',
             email: '',
             password: '',
@@ -90,66 +187,76 @@ angular.module('subscribe', [])
         $scope.validationErrors = {};
 
 
-
-
         // Select a plan
         $scope.selectPlan = function(planId) {
-            $scope.userInfo.subscription.planId = planId;
-            $scope.formPage = 2;
+
+            // Check if plans have been loaded yet
+            if ($scope.formPlans.length > 0) {
+                $scope.userInfo.subscription.planId = planId;
+                $scope.formPage = 2;
+
+                for (var i = 0; i < $scope.formPlans.length; i++) {
+                    if ($scope.formPlans[i].id === planId) {
+                        $scope.chosenPlan = $scope.formPlans[i];
+                    }
+                }
+            }
         };
 
         $scope.goBack = function(formPage) {
             $scope.formPage = formPage;
         };
 
-        $scope.next = function(nextSection) {
-            switch (nextSection) {
-                case 3:
-                    if ($scope.validateAddressInfo()) {
+
+        // After CC token generation, register the user and create the customer in Stripe
+        $scope.completeRegistration = function() {
+
+            $scope.globalValidationFailed = false;
+            $scope.processingReg = true;
+
+            if ($scope.validateAddressInfo()) {
+
+                $scope.validateUserPayment(function(result) {
+                    if (result) {
+
                         $scope.validateNewAccount(function(result) {
+
                             if (result) {
-                                $scope.formPage = 3;
+
+                                // One time gift charge and creation
+                                if ($scope.userInfo.subscription.planId.toUpperCase().indexOf('CC_GIFT') > -1) {
+                                    createOneTimeGift();
+                                }
+
+                                // Recurring monthly plan
+                                else {
+                                    createRecurringPlan();
+                                }
+
                             }
                             else {
                                 prePopulateShippingForm();
+                                prePopulatePaymentForm();
+                                $scope.processingReg = false;
+                                $scope.globalValidationFailed = true;
                             }
                         });
+
                     }
-                    break;
-                default:
-                    break;
-            }
-        };
-
-
-
-
-        // After validation and CC token generation, register the user and create the customer in Stripe
-        $scope.completeRegistration = function() {
-
-            $scope.processingReg = true;
-
-            $scope.validateUserPayment(function(result) {
-                if (result) {
-
-                    // One time gift charge and creation
-                    if ($scope.userInfo.subscription.planId.toUpperCase().indexOf('CC_GIFT') > -1) {
-                        createOneTimeGift();
-                    }
-
-                    // Recurring monthly plan
                     else {
-                        createRecurringPlan();
+                        prePopulateShippingForm();
+                        prePopulatePaymentForm();
+                        $scope.processingReg = false;
+                        $scope.globalValidationFailed = true;
                     }
+                });
 
-                }
-                else {
-                    $scope.processingReg = false;
-                    prePopulatePaymentForm();
-                }
-
-            });
-
+            }
+            else {
+                prePopulateShippingForm();
+                $scope.processingReg = false;
+                $scope.globalValidationFailed = true;
+            }
         };
 
         // Validate new account creation
@@ -373,7 +480,7 @@ angular.module('subscribe', [])
             // CC Number basic validation
             var numSpaceDashRegex = /^[0-9 -]+$/i;
             var creditCardRegex = /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/;
-            var cvvRegex = /^[0-9]{3,4}$/;
+            var cvvRegex = /^[0-9]{3,6}$/;
 
             // Name validation
             if (typeof $scope.userInfo.source.name === 'undefined') {
@@ -484,6 +591,157 @@ angular.module('subscribe', [])
                 callback(false);
             }
 
+        };
+
+        $scope.applyCoupon = function() {
+            delete $scope.validationErrors.couponCode;
+
+            $http({
+                url: '/api/coupon',
+                method: 'GET',
+                params: {
+                    id: $scope.userInfo.subscription.couponCode
+                }
+            }).success(function(coupon) {
+                if (coupon.amount_off !== null) {
+                    $scope.discount = (coupon.amount_off/100);
+                }
+                else {
+                    $scope.discount = parseFloat( ( ($scope.chosenPlan.amount/100) * (coupon.percent_off/100) ).toFixed(2) );
+                }
+            }).error(function(err) {
+                $scope.discount = 0;
+                $scope.validationErrors.couponCode = 'Coupon code is invalid';
+            });
+        };
+
+        $scope.$watch('userInfo.address.state', function (newVal, oldVal) {
+            if (newVal !== oldVal) {
+                calculateTaxRate();
+            }
+        });
+
+        function calculateTaxRate () {
+            var province = $scope.userInfo.address.state.id;
+            var taxPercentage = 0;
+            var taxDesc = '';
+            switch(province) {
+                case 'AB':
+                    taxPercentage = 0.05;
+                    taxDesc = 'GST (5%)';
+                    break;
+                case 'BC':
+                    taxPercentage = 0.12;
+                    taxDesc = 'GST / PST (5% + 7%)';
+                    break;
+                case 'MB':
+                    taxPercentage = 0.13;
+                    taxDesc = 'GST / PST (5% + 8%)';
+                    break;
+                case 'NB':
+                    taxPercentage = 0.13;
+                    taxDesc = 'HST (13%)';
+                    break;
+                case 'NL':
+                    taxDesc = 'HST (13%)';
+                    taxPercentage = 0.13;
+                    break;
+                case 'NS':
+                    taxDesc = 'HST (15%)';
+                    taxPercentage = 0.15;
+                    break;
+                case 'NT':
+                    taxDesc = 'GST (5%)';
+                    taxPercentage = 0.05;
+                    break;
+                case 'NU':
+                    taxDesc = 'GST (5%)';
+                    taxPercentage = 0.05;
+                    break;
+                case 'ON':
+                    taxDesc = 'HST (13%)';
+                    taxPercentage = 0.13;
+                    break;
+                case 'PE':
+                    taxDesc = 'HST (14%)';
+                    taxPercentage = 0.14;
+                    break;
+                case 'QC':
+                    taxDesc = 'GST / QST (5% + 9.975%)';
+                    taxPercentage = 0.1498;
+                    break;
+                case 'SK':
+                    taxDesc = 'GST + PST (5% + 10%)';
+                    taxPercentage = 0.15;
+                    break;
+                case 'YT':
+                    taxDesc = 'GST (5%)';
+                    taxPercentage = 0.05;
+                    break;
+                default:
+                    taxDesc = '';
+                    taxPercentage = 0;
+                    break;
+            }
+
+            $scope.tax = {rate: taxPercentage, desc: taxDesc};
+        }
+
+
+        $scope.identifyCardType = function() {
+            var number = $scope.userInfo.source.number;
+            number = number.toString();
+
+            // Visa 4XXX
+            if ( (number.length >= 1) && (number[0] === '4') ) {
+                return 'visa';
+            }
+
+            // Mastercard 51XX 52XX 53XX 54XX 55XX
+            if ( (number.length >=2) && (number[0] === '5') &&
+                ( (number[1] === '1') || (number[1] === '2') || (number[1] === '3') || (number[1] === '4') || (number[1] === '5') ) ) {
+                return 'mastercard';
+            }
+
+            // AMEX 34XX 37XX
+            if ( (number.length >= 2) && (number[0] === '3') && ( (number[1] === '4') || (number[1] === '7') ) ) {
+                return 'amex';
+            }
+
+            // Diners club 36XX 38XX 39XX
+            if ( (number.length >= 2) && (number[0] === '3') && ( (number[1] === '6') || (number[1] === '8') || (number[1] === '9') ) ) {
+                return 'diners-club';
+            }
+            // 300X 301X 302X 303X 304X 305X 309X
+            else if ( (number.length >=3) && (number[0] === '3') && (number[1] === '0') &&
+                ( (number[2] === '0') || (number[2] === '1') || (number[2] === '2') || (number[2] === '3') || (number[2] === '4') ||
+                  (number[2] === '5') || (number[2]) === '9' ) ) {
+                return 'diners-club';
+            }
+
+            // Discover 65XX
+            if ( (number.length >= 6) && (number[0] === '5') ) {
+                return 'discover';
+            }
+            // 644X 645X 646X 647X 648X 649X
+            else if ( (number.length >=3) && (number[0] === '6') && (number[1] === '4') &&
+                ( (number[2] === '4') || (number[2] === '5') || (number[2] === '6') || (number[2] === '7') || (number[2] === '8') ||
+                (number[2] === '9') ) ) {
+                return 'discover';
+            }
+            // 6011
+            else if ( (number.length >= 4) && (number[0] === '6') && (number[1] === '0') && (number[2] === '1') && (number[3] === '1') ) {
+                return 'discover';
+            }
+
+            // JCB 352X 353X 354X 355X 356X 357X 358X
+            if ( (number.length >=3) && (number[0] === '3') && (number[1] === '5') &&
+                ( (number[2] === '2') || (number[2] === '3') || (number[2] === '4') || (number[2] === '5') || (number[2] === '6') ||
+                (number[2] === '7') || (number[2]) === '8' ) ) {
+                return 'jcb';
+            }
+
+            return null;
         };
 
 
@@ -646,6 +904,11 @@ angular.module('subscribe', [])
                     $scope.validationErrors.source.number = 'There was an issue processing your payment. Please try again or contact our support team';
                     break;
             }
+        }
+
+        // Expose parse float function to scope
+        $scope.parseFloat = function(str) {
+            return parseFloat(str);
         }
 
 })

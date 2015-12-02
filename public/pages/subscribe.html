@@ -24,6 +24,12 @@
 		<link href="/assets/css/essentials.css" rel="stylesheet" type="text/css" />
 		<link href="/assets/css/layout.css" rel="stylesheet" type="text/css" />
 
+        <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
+
+        <link href="../assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="../assets/css/essentials.css" rel="stylesheet" type="text/css" />
+        <link href="../assets/css/layout.css" rel="stylesheet" type="text/css" />
+
 		<!-- PAGE LEVEL SCRIPTS -->
 		<link href="/assets/css/header-1.css" rel="stylesheet" type="text/css" />
 		<link href="/assets/css/color_scheme/green.css" rel="stylesheet" type="text/css" id="color_scheme" />
@@ -101,15 +107,15 @@
             <!-- /Header -->
 
             <div class="container" ng-controller="signupCtrl">
-                <div class="row text-center margin-top-60">
+                <div class="row heading-title heading-dotted text-center margin-top-60">
                     <h1 class="pricing-head" ng-show="formPage==1">
                         Select the Package That Fits You
                     </h1>
                     <h1 class="pricing-head" ng-show="formPage==2">
-                        Select the Package That Fits You
+                        Shipping and Billing Details
                     </h1>
                     <h1 class="pricing-head" ng-show="formPage==3">
-                        Select the Package That Fits You
+                        Order Has Been Completed
                     </h1>
                 </div>
 
@@ -135,11 +141,11 @@
                                 <p>Shipped On the 3rd Week of Each Month</p>
                                 <hr />
 
-                                <a href="" ng-click="selectPlan('annual')" class="btn btn-3d btn-success">SELECT</a>
+                                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('annual')" class="btn btn-3d btn-success">SELECT</a>
                                 <br/>
                                 <span class="size-17 hidden-xs">&nbsp; OR &nbsp;</span>
                                 <br/>
-                                <a href="" ng-click="selectPlan('annual')" class="btn btn-3d btn-teal"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
+                                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('annual')" class="btn btn-3d btn-teal"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
                             </div>
                         </div>
                         <div class="col-md-3 col-sm-3">
@@ -160,11 +166,11 @@
                                 <p>Shipped On the 3rd Week of Each Month</p>
                                 <hr />
 
-                                <a href="" ng-click="selectPlan('quarterly')" class="btn btn-3d btn-success">SELECT</a>
+                                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('quarterly')" class="btn btn-3d btn-success">SELECT</a>
                                 <br/>
                                 <span class="size-17 hidden-xs">&nbsp; OR &nbsp;</span>
                                 <br/>
-                                <a href="" ng-click="selectPlan('quarterly')" class="btn btn-3d btn-teal"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
+                                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('quarterly')" class="btn btn-3d btn-teal"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
                             </div>
 
                         </div>
@@ -184,11 +190,11 @@
                                 <p>Shipped On the 3rd Week of Each Month</p>
                                 <hr />
 
-                                <a href="" ng-click="selectPlan('monthly')" class="btn btn-3d btn-success">SELECT</a>
+                                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('monthly')" class="btn btn-3d btn-success">SELECT</a>
                                 <br/>
                                 <span class="size-17 hidden-xs">&nbsp; OR &nbsp;</span>
                                 <br/>
-                                <a href="" ng-click="selectPlan('monthly')" class="btn btn-3d btn-teal"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
+                                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('monthly')" class="btn btn-3d btn-teal"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
                             </div>
 
                         </div>
@@ -211,22 +217,17 @@
                     <!-- Shipping Information -->
                     <div ng-if="formPage==2">
                         <form class="row clearfix" novalidate>
-                            <div class="col-lg-7 col-sm-7">
+                            <div class="col-lg-7 col-sm-7 margin-top-30">
                                 <div class="heading-title">
                                     <h4>Shipping Address</h4>
                                 </div>
 
-                                <fieldset class="margin-top-60">
+                                <fieldset class="margin-top-30">
                                     <div class="row">
-                                        <div class="col-md-6 col-sm-6 form-group" ng-class="{ 'has-error' : validationErrors.name }">
-                                            <label for="billing_firstname">First Name *</label>
+                                        <div class="col-lg-12 form-group" ng-class="{ 'has-error' : validationErrors.name }">
+                                            <label for="billing_firstname">Full Name *</label>
                                             <input id="billing_firstname" name="billing[firstname]" type="text" class="form-control required" ng-model="userInfo.name" />
                                             <p class="text-danger" ng-show="validationErrors.name">{{ validationErrors.name }}</p>
-                                        </div>
-                                        <div class="col-md-6 col-sm-6 form-group" ng-class="{ 'has-error' : validationErrors.lastName }">
-                                            <label for="billing_lastname">Last Name *</label>
-                                            <input id="billing_lastname" name="billing[lastname]" type="text" class="form-control required" />
-                                            <p class="text-danger" ng-show="validationErrors.name">{{ validationErrors.lastName }}</p>
                                         </div>
                                     </div>
 
@@ -257,7 +258,7 @@
 
                                     <div class="row">
                                         <div class="col-md-6 col-sm-6 form-group" ng-class="{ 'has-error' : validationErrors.address.postal_code }">
-                                            <label for="billing_zipcode">Zip/Postal Code *</label>
+                                            <label for="billing_zipcode">Postal/Zip Code *</label>
                                             <input id="billing_zipcode" name="billing[zipcode]" type="text" class="form-control required" ng-model="userInfo.address.postal_code" />
                                             <p class="text-danger" ng-show="validationErrors.address.postal_code">{{ validationErrors.address.postal_code }}</p>
                                         </div>
@@ -271,7 +272,66 @@
 
                                 </fieldset>
 
-                                <hr class="margin-top-50 margin-bottom-30"/>
+                                <hr class="margin-top-60 margin-bottom-30"/>
+
+                                <div class="heading-title margin-top-60">
+                                    <h4>Billing Information</h4>
+                                </div>
+                                <fieldset class="margin-top-30">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <span class="fa fa-cc-visa fa-3x" ng-class="{ 'color-visa' : identifyCardType()==='visa', 'text-gray' : identifyCardType()!=='visa' }"></span>
+                                            <span class="fa fa-cc-mastercard fa-3x" ng-class="{ 'color-mastercard' : identifyCardType()==='mastercard', 'text-gray' : identifyCardType()!=='mastercard' }"></span>
+                                            <span class="fa fa-cc-amex fa-3x" ng-class="{ 'color-amex' : identifyCardType()==='amex', 'text-gray' : identifyCardType()!=='amex' }"></span>
+                                            <span class="fa fa-cc-discover fa-3x" ng-class="{ 'color-discover' : identifyCardType()==='discover', 'text-gray' : identifyCardType()!=='discover' }"></span>
+                                            <span class="fa fa-cc-diners-club fa-3x" ng-class="{ 'color-diners-club' : identifyCardType()==='diners-club', 'text-gray' : identifyCardType()!=='diners-club' }"></span>
+                                            <span class="fa fa-cc-jcb fa-3x" ng-class="{ 'color-jcb' : identifyCardType()==='jcb', 'text-gray' : identifyCardType()!=='jcb' }"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.source.name }">
+                                            <label>Name On Card *</label>
+                                            <input type="text" class="form-control input-normal" id="chn" ng-model="userInfo.source.name">
+                                            <p class="text-danger" ng-show="validationErrors.source.name">{{ validationErrors.source.name }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.source.number }">
+                                            <label>Card Number *</label>
+                                            <input type="text" class="form-control input-normal" id="chn" ng-model="userInfo.source.number">
+                                            <p class="text-danger" ng-show="validationErrors.source.name">{{ validationErrors.source.number }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6 form-group" ng-class="{ 'has-error' : validationErrors.source.exp_month }">
+                                            <label>Expiry Month *</label>
+                                            <select id="exp_mon" class="form-control input-normal" ng-options="mon as mon.name for mon in formOptions.ccExp.month" ng-model="userInfo.source.exp_month">
+                                            </select>
+                                            <p class="text-danger" ng-show="validationErrors.source.exp_month">{{ validationErrors.source.exp_month }}</p>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6 form-group" ng-class="{ 'has-error' : validationErrors.source.exp_year }">
+                                            <label>Expiry Year *</label>
+                                            <select class="form-control input-normal" id="exp_year" ng-model="userInfo.source.exp_year" ng-options="year for year in formOptions.ccExp.year">
+                                                <option ng-repeat="option in formOptions.ccExp.year" value="{{ option.id }}">{{ option.name }}</option>
+                                            </select>
+                                            <p class="text-danger" ng-show="validationErrors.source.exp_year">{{ validationErrors.source.exp_year }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6 form-group" ng-class="{ 'has-error' : validationErrors.source.cvc }">
+                                            <label>CVV2 *</label>
+                                            <input type="text" class="form-control required" ng-model="userInfo.source.cvc" />
+                                            <p class="text-danger" ng-show="validationErrors.source.cvc">{{ validationErrors.source.cvc }}</p>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6 form-group" ng-class="{ 'has-error' : validationErrors.source.address_zip }">
+                                            <label>Postal/Zip Code *</label>
+                                            <input type="text" class="form-control required" ng-model="userInfo.source.address_zip" />
+                                            <p class="text-danger" ng-show="validationErrors.source.address_zip">{{ validationErrors.source.address_zip }}</p>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <hr class="margin-top-60 margin-bottom-30"/>
 
                                 <div class="heading-title">
                                     <h4>Account Setup</h4>
@@ -300,52 +360,21 @@
 
                                 </fieldset>
 
-                                <hr class="margin-top-50 margin-bottom-30"/>
+                                <hr class="margin-top-60 margin-bottom-30"/>
 
-                                <div class="heading-title">
-                                    <h4>Billing Information</h4>
-                                </div>
                                 <fieldset class="margin-top-60">
                                     <div class="row">
-                                        <div class="col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.source.name }">
-                                            <label>Name On Card *</label>
-                                            <input type="text" class="form-control input-normal" id="chn" ng-model="userInfo.source.name">
-                                            <p class="text-danger" ng-show="validationErrors.source.name">{{ validationErrors.source.name }}</p>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.source.number }">
-                                            <label>Name On Card *</label>
-                                            <input type="text" class="form-control input-normal" id="chn" ng-model="userInfo.source.number">
-                                            <p class="text-danger" ng-show="validationErrors.source.name">{{ validationErrors.source.number }}</p>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6 col-sm-6 form-group" ng-class="{ 'has-error' : validationErrors.exp_month || validationErrors.exp_year }">
-                                            <label>Expiry Month *</label>
-                                            <select id="exp_mon" class="form-control input-normal" ng-options="mon as mon.name for mon in formOptions.ccExp.month" ng-model="userInfo.source.exp_month">
-                                            </select>
-                                            <p class="text-danger" ng-show="validationErrors.address.postal_code">{{ validationErrors.exp_month }}</p>
-                                        </div>
-                                        <div class="col-md-6 col-sm-6 form-group" ng-class="{ 'has-error' : validationErrors.exp_year }">
-                                            <label>Expiry Year *</label>
-                                            <select class="form-control input-normal" id="exp_year" ng-model="userInfo.source.exp_year" ng-options="year for year in formOptions.ccExp.year">
-                                                <option ng-repeat="option in formOptions.ccExp.year" value="{{ option.id }}">{{ option.name }}</option>
-                                            </select>
-                                            <p class="text-danger" ng-show="validationErrors.address.country">{{ validationErrors.exp_year }}</p>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6 col-sm-6 form-group" ng-class="{ 'has-error' : validationErrors.source.cvc }">
-                                            <label>Zip/Postal Code *</label>
-                                            <input type="text" class="form-control required" ng-model="userInfo.source.cvc" />
-                                            <p class="text-danger" ng-show="validationErrors.source.cvc">{{ validationErrors.source.cvc }}</p>
-                                        </div>
-                                        <div class="col-md-6 col-sm-6 form-group" ng-class="{ 'has-error' : validationErrors.source.address_zip }">
-                                            <label>Country *</label>
-                                            <select class="form-control input-normal" ng-options="o as o.name for o in formOptions.countries" ng-model="userInfo.source.address_zip">
-                                            </select>
-                                            <p class="text-danger" ng-show="validationErrors.source.address_zip">{{ validationErrors.source.address_zip }}</p>
+                                        <div class="col-md-6 col-sm-6">
+                                            <label>Coupon Code</label>
+                                            <div class="input-group">
+                                                <input class="form-control" ng-model="userInfo.subscription.couponCode" />
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-primary" ng-click="applyCoupon()">
+                                                        Apply
+                                                    </button>
+                                                </span>
+                                            </div>
+                                            <p class="text-danger" ng-show="validationErrors.couponCode">{{ validationErrors.couponCode }}</p>
                                         </div>
                                     </div>
                                 </fieldset>
@@ -356,29 +385,55 @@
                                 <div class="clearfix margin-top-30">
                                     <div class="toggle-content">
 
+                                        <div class="heading-title">
+                                            <h4>Order Details</h4>
+                                        </div>
+
+                                        <div class="clearfix">
+                                            <h4 class="pull-left">1x {{ chosenPlan.name }}</h4>
+                                            <h4 class="pull-right">$ {{ (chosenPlan.amount/100) }} {{ chosenPlan.id }}</h4>
+                                        </div>
                                         <span class="clearfix">
-                                            <span class="pull-right"></span>
-                                            <strong class="pull-left">Subtotal:</strong>
+                                            <button type="submit" class="btn btn-xs btn-default margin-bottom-20 pull-right" ng-click="goBack(1)">Change Plan</button>
                                         </span>
                                         <span class="clearfix">
-                                            <span class="pull-right"></span>
-                                            <span class="pull-left">Discount:</span>
+                                            <span class="pull-right">- $ {{ discount }}</span>
+                                            <span class="pull-left">Coupon Discount:  <em class="text-green" ng-show="discount > 0">{{ userInfo.subscription.id }}</em></span>
                                         </span>
                                         <span class="clearfix">
-                                            <span class="pull-right"></span>
-                                            <span class="pull-left">Tax:</span>
-                                        </span>
-                                        <span class="clearfix">
-                                            <span class="pull-right"></span>
+                                            <span class="pull-right" ng-show="userInfo.address.country.id!=='CA'">$ {{ shippingCharge }}</span>
+                                            <span class="pull-right" ng-show="userInfo.address.country.id==='CA'"><strong>FREE!</strong></span>
                                             <span class="pull-left">Shipping:</span>
                                         </span>
 
                                         <hr />
 
                                         <span class="clearfix">
-                                            <span class="pull-right"></span>
+                                            <span class="pull-right">$ {{ (chosenPlan.amount/100) - discount + shippingCharge }}</span>
+                                            <strong class="pull-left">Subtotal:</strong>
+                                        </span>
+                                        <span class="clearfix">
+                                            <span ng-show="userInfo.address.country.id==='CA'" class="pull-right">$ {{(tax.rate*( (chosenPlan.amount/100) - discount + shippingCharge)).toFixed(2) }}</span>
+                                            <span ng-show="userInfo.address.country.id==='CA'" class="pull-left">Tax {{ tax.desc }}:</span>
+                                            <span class="pull-left">&nbsp;</span>
+                                        </span>
+
+                                        <hr />
+
+                                        <span class="clearfix">
+                                            <span class="pull-right size-20">$ {{ (chosenPlan.amount/100) - discount + shippingCharge + parseFloat( (tax.rate*( (chosenPlan.amount/100) - discount + shippingCharge)).toFixed(2) )  }}</span>
                                             <strong class="pull-left">TOTAL:</strong>
                                         </span>
+
+                                        <hr />
+
+                                        <button type="submit" ng-disabled="processingReg" class="btn btn-primary btn-lg btn-block" ng-click="completeRegistration()">
+                                            Place Order <span class="fa fa-chevron-circle-right"></span>
+                                        </button>
+
+                                        <div ng-show="globalValidationFailed" class="alert alert-danger margin-top-30">
+                                            <strong>Please resolve the highlighted form errors</strong>
+                                        </div>
 
                                     </div>
                                 </div>
@@ -386,14 +441,7 @@
 
                         </form>
 
-
-                        <button type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="next(3)">Next</button>
-                        <button type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="goBack(1)">Back</button>
-
                         <div ng-show="subErr" class="alert alert-danger">Error subscribing to plan. Please go to your account management page to resolve the issue.</div>
-
-                        <button ng-disabled="processingReg" type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="completeRegistration()">Register</button>
-                        <button type="submit" class="btn btn-default margin-top-20 pull-right" ng-click="goBack(2)">Back</button>
 
                     </div>
 

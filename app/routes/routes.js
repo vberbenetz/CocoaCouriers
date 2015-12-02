@@ -260,7 +260,7 @@ module.exports = function(app, passport, dbConnPool) {
         }
     });
 
-
+/*
     app.post('/api/plan', function (req, res, next) {
         planCtrl.create(req, res, function(err, result) {
             if (err) {
@@ -271,7 +271,7 @@ module.exports = function(app, passport, dbConnPool) {
             }
         });
     });
-
+*/
 
     // ----------------- Subscription Related ------------------------ //
 

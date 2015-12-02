@@ -1,4 +1,5 @@
 .idea/
 node_modules/
+logs/
 app/configuration/config_priv.js
 *~
