@@ -4,6 +4,17 @@ angular.module('subscribe', [])
 
 .controller('signupCtrl', function ($scope, $http, $window) {
 
+        // Check if user is logged in
+        $http({
+            url: '/isloggedin',
+            method: 'GET'
+        }).success(function(result) {
+                $scope.loggedIn = !!(result);
+        }).error(function(error) {
+                $scope.loggedIn = false;
+        });
+
+
         // ------------- DATA INITIALIZATIONS ------------- //
         $scope.templateUrl = '/subscribe-app/views/signup.html';
 
@@ -203,6 +214,7 @@ angular.module('subscribe', [])
                 for (var i = 0; i < $scope.formPlans.length; i++) {
                     if ($scope.formPlans[i].id === planId) {
                         $scope.chosenPlan = $scope.formPlans[i];
+                        $scope.chosenPlan.cleanName = $scope.chosenPlan.name.split('_')[0];
                     }
                 }
             }
@@ -228,9 +240,23 @@ angular.module('subscribe', [])
 
                             if (result) {
 
-                                // One time gift charge and creation
+                                // Gift plan creation
                                 if ($scope.userInfo.subscription.planId.toUpperCase().indexOf('CC_GIFT') > -1) {
-                                    createOneTimeGift();
+
+                                    if (typeof $scope.chosenPlan.metadata.recurring_frequency !== 'undefined') {
+                                        if ($scope.chosenPlan.metadata.recurring_frequency === 1) {
+                                            createOneTimeGift();
+                                        }
+                                        else {
+                                            createRecurringGift();
+                                        }
+                                    }
+                                    else {
+                                        prePopulateShippingForm();
+                                        prePopulatePaymentForm();
+                                        $scope.processingReg = false;
+                                        $scope.globalValidationFailed = true;
+                                    }
                                 }
 
                                 // Recurring monthly plan
@@ -275,12 +301,6 @@ angular.module('subscribe', [])
             // Email format
             var emailRegex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
 
-            // Min 8 characters
-            // 1 Uppercase
-            // 1 Lowercase
-            // 1 Number
-            var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-
             // Check if email is valid
             if (typeof $scope.userInfo.email === 'undefined') {
                 $scope.validationErrors.email = 'Please enter your email';
@@ -322,8 +342,8 @@ angular.module('subscribe', [])
                 $scope.validationErrors.password = 'Please enter your password';
                 validationFailed = true;
             }
-            else if ( $scope.userInfo.password.length > 254 ) {
-                $scope.validationErrors.password = 'Please limit password to 250 characters';
+            else if ( ($scope.userInfo.password.length < 6) || ($scope.userInfo.password.length > 254) ) {
+                $scope.validationErrors.password = 'Please use a password that is 6 to 200 characters';
                 validationFailed = true;
             }
             else if ( !passwordRegex.test($scope.userInfo.password) ) {
@@ -343,7 +363,7 @@ angular.module('subscribe', [])
 
                     // Email exists validation
                     if (result.exists) {
-                        $scope.validationErrors.email = 'Email already in use';
+                        $scope.validationErrors.email = 'Email already in use. If this is your email, please login to your account.';
                         validationFailed = true;
                         return callback(false);
                     }
@@ -352,7 +372,7 @@ angular.module('subscribe', [])
                     }
 
                 }).error(function(error) {
-                    $scope.validationErrors.email = 'Email already in use';
+                    $scope.validationErrors.email = 'Email already in use. If this is your email, please login to your account.';
                     return callback(false);
                 });
             }
@@ -831,31 +851,78 @@ angular.module('subscribe', [])
             });
         }
 
-        function createOneTimeGift() {
+        /**
+         * Create a gift item.
+         * If a user is already registered, then skip customer registration and add the shipping address meta-data.
+         * If user is not registered, then follow the recurring plan steps.
+         */
+        function createRecurringGift(callback) {
+            if ($scope.loggedIn) {
+                $scope.userInfo.subscription.metadata = {
+                    full_name: $scope.userInfo.name,
+                    line1: $scope.userInfo.address.line1,
+                    line2: $scope.userInfo.address.line2,
+                    city: $scope.userInfo.address.city,
+                    state: $scope.userInfo.address.state,
+                    postal_code: $scope.userInfo.address.postal_code,
+                    country: $scope.userInfo.address.country
+                };
 
+                subscribeToStripePlan(function(newSubscription) {
+                    if (newSubscription) {
+                        $window.location.href = '/My-Account';
+                    }
+                    else {
+                        return callback(false);
+                    }
+                });
+            }
+
+            else {
+                createRecurringPlan();
+            }
         }
 
-        function createRecurringPlan() {
+        /**
+         * Same as recurring gift above, but account creation can be skipped.
+         * The subscription is instantly deleted after creation charge so user is only charged one time.
+         */
+        function createOnTimeGift() {
+            
+        }
+
+        /**
+         * Register a new customer both internally to maintain their account and on stripe.
+         * Finally subscribe them to the plan.
+         */
+        function createRecurringPlan(callback) {
 
             registerCustomerLocally( function(newUser) {
+
                 if (newUser) {
                     $scope.newUser = newUser;
 
                     createStripeCustomer(newUser.email, function(customer) {
 
-                        // Reset form
-                        prePopulatePaymentForm();
-
                         if (customer) {
 
                             subscribeToStripePlan(function(newSubscription) {
+
                                 if (newSubscription) {
                                     $window.location.href = '/My-Account/';
                                 }
-
+                                else {
+                                    return callback(false);
+                                }
                             });
                         }
+                        else {
+                            return callback(false);
+                        }
                     });
+                }
+                else {
+                    return callback(false);
                 }
             });
 
@@ -932,26 +999,4 @@ angular.module('subscribe', [])
             return parseFloat(str);
         }
 
-})
-
-.controller('loginCtrl', function ($scope, $http, $window, $location) {
-
-        $scope.loginForm = {
-            email: '',
-            password: ''
-        };
-
-        $scope.login = function() {
-            $http({
-                url: '/login',
-                method: 'POST',
-                data: $scope.loginForm
-            }).success(function(result) {
-                $window.location.href = '/My-Account/';
-            }).error(function(err) {
-                $scope.loginError = 'Email or password is incorrect';
-            });
-        }
 });
-
-

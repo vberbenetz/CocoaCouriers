@@ -217,7 +217,7 @@ subscriptionCtrl.prototype = {
 
     cancel: function (req, res, callback) {
 
-        var customerId = req.query.customerId;
+        var customerId = req.user.stId;
         var subscriptionId = req.query.subscriptionId;
 
         stripe.customers.cancelSubscription(customerId, subscriptionId, function(err, confirmation) {

@@ -32,11 +32,11 @@
                 <p>Shipped On the 3rd Week of Each Month</p>
                 <hr />
 
-                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('annual')" class="btn btn-3d btn-success">SELECT</a>
+                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('annual_cad')" class="btn btn-3d btn-success">SELECT</a>
                 <br/>
                 <span class="size-17 hidden-xs">&nbsp; OR &nbsp;</span>
                 <br/>
-                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('annual')" class="btn btn-3d btn-teal"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
+                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('annual_cad')" class="btn btn-3d btn-teal"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
             </div>
         </div>
         <div class="col-md-3 col-sm-3">
@@ -57,11 +57,11 @@
                 <p>Shipped On the 3rd Week of Each Month</p>
                 <hr />
 
-                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('quarterly')" class="btn btn-3d btn-success">SELECT</a>
+                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('quarterly_cad')" class="btn btn-3d btn-success">SELECT</a>
                 <br/>
                 <span class="size-17 hidden-xs">&nbsp; OR &nbsp;</span>
                 <br/>
-                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('quarterly')" class="btn btn-3d btn-teal"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
+                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('quarterly_cad')" class="btn btn-3d btn-teal"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
             </div>
 
         </div>
@@ -81,11 +81,11 @@
                 <p>Shipped On the 3rd Week of Each Month</p>
                 <hr />
 
-                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('monthly')" class="btn btn-3d btn-success">SELECT</a>
+                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('monthly_cad')" class="btn btn-3d btn-success">SELECT</a>
                 <br/>
                 <span class="size-17 hidden-xs">&nbsp; OR &nbsp;</span>
                 <br/>
-                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('monthly')" class="btn btn-3d btn-teal"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
+                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('monthly_cad')" class="btn btn-3d btn-teal"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
             </div>
 
         </div>
@@ -282,7 +282,7 @@
                         </div>
 
                         <div class="clearfix">
-                            <h4 class="pull-left">1x {{ chosenPlan.name }}</h4>
+                            <h4 class="pull-left">1x {{ chosenPlan.cleanName }}</h4>
                             <h4 class="pull-right">$ {{ (chosenPlan.amount/100).toFixed(2) }} {{ chosenPlan.id }}</h4>
                         </div>
                         <span class="clearfix">
