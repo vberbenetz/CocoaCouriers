@@ -36,7 +36,7 @@
                 <br/>
                 <span class="size-17 hidden-xs">&nbsp; OR &nbsp;</span>
                 <br/>
-                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('annual_cad')" class="btn btn-3d btn-teal"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
+                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('annual_cad_gift')" class="btn btn-3d btn-teal"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
             </div>
         </div>
         <div class="col-md-3 col-sm-3">
@@ -61,7 +61,7 @@
                 <br/>
                 <span class="size-17 hidden-xs">&nbsp; OR &nbsp;</span>
                 <br/>
-                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('quarterly_cad')" class="btn btn-3d btn-teal"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
+                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('quarterly_cad_gift')" class="btn btn-3d btn-teal"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
             </div>
 
         </div>
@@ -85,7 +85,7 @@
                 <br/>
                 <span class="size-17 hidden-xs">&nbsp; OR &nbsp;</span>
                 <br/>
-                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('monthly_cad')" class="btn btn-3d btn-teal"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
+                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('monthly_cad_gift')" class="btn btn-3d btn-teal"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
             </div>
 
         </div>
@@ -240,16 +240,8 @@
                             <p class="text-danger" ng-show="validationErrors.password">{{ validationErrors.password }}</p>
                         </div>
                     </div>
-
-                    <!-- Skip registration option if user is buying a gift -->
-                    <div class="row" ng-show="userInfo.subscription.planId.toUpperCase().indexOf('GIFT') > -1">
-                        <div class="form-group">
-                            <p>Check this if you would like to skip registration for the one-time gift</p>
-                            <input type="checkbox" ng-model="skipRegistration" />
-                        </div>
-                    </div>
-
                 </fieldset>
+                <p class="margin-top-20">We create a simple account for you in case there is an issue with processing your payment, or your package destination address changes. This can be deleted at anytime.</p>
 
                 <hr class="margin-top-60 margin-bottom-30"/>
 
@@ -333,7 +325,7 @@
 
         </form>
 
-        <div ng-show="subErr" class="alert alert-danger">Error subscribing to plan. Please go to your account management page to resolve the issue.</div>
+        <div ng-show="subErr" class="alert alert-danger">Error completing checkout. Your have not yet been charged. Please go to your <strong><a href="/My-Account">Account Management Page</a></strong> to verify your payment method and subscription.</div>
 
     </div>
 

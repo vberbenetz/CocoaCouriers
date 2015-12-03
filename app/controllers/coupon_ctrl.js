@@ -11,8 +11,7 @@ var couponCtrl = function() {};
 
 couponCtrl.prototype = {
 
-    get: function(req, res, callback) {
-        var couponId = req.query.id;
+    get: function(couponId, callback) {
 
         stripe.coupons.retrieve(couponId, function(err, coupon) {
             if (err) {
@@ -32,9 +31,11 @@ couponCtrl.prototype = {
         })
     },
 
-    getAll: function(req, res, callback) {
-        var limit = req.query.limit;
-        var cursor = req.query.cursor;
+    getAll: function(limit, cursor, callback) {
+
+        if (typeof limit === 'undefined') {
+            limit = 100;
+        }
 
         var params = {
             limit: limit
@@ -62,22 +63,7 @@ couponCtrl.prototype = {
         })
     },
 
-    create: function (req, res, callback) {
-        var payload = {
-            id: req.body.id,
-            duration: req.body.duration,
-            percent_off: req.body.percentOff
-        };
-
-        // Check if expiry date for coupon passed in
-        if (typeof req.body.reedemBy !== 'undefined') {
-            payload.redeem_by = req.body.redeemBy;
-        }
-
-        // Check if redemption frequency passed in
-        if (typeof req.body.maxRedemptions !== 'undefined') {
-            payload.max_redemptions = req.body.maxRedemptions;
-        }
+    create: function (payload, reqIP, callback) {
 
         stripe.coupons.create(payload, function(err, coupon) {
             if (err) {
@@ -92,14 +78,13 @@ couponCtrl.prototype = {
                 }, null);
             }
             else {
-                log.info("Created new coupon", coupon, req.connection.remoteAddress);
+                log.info("Created new coupon", coupon, reqIP);
                 return callback(false, coupon);
             }
         });
     },
 
-    remove: function (req, res, callback) {
-        var couponId = req.query.id;
+    remove: function (couponId, reqIP, callback) {
 
         stripe.coupons.del(couponId, function(err, result) {
             if (err) {
@@ -114,7 +99,7 @@ couponCtrl.prototype = {
                 }, null);
             }
             else {
-                log.info("Removed coupon with id: ", req.connection.remoteAddress);
+                log.info("Removed coupon with id: ", reqIP);
                 return callback(false, result);
             }
         });

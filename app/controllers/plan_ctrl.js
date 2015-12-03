@@ -11,8 +11,7 @@ var planCtrl = function() {};
 
 planCtrl.prototype = {
 
-    get: function (req, res, callback) {
-        var planId = req.query.id;
+    get: function (planId, callback) {
         stripe.plans.retrieve(planId, function(err, plan) {
             if (err) {
                 console.log(err);
@@ -50,15 +49,7 @@ planCtrl.prototype = {
         });
     },
 
-    create: function (req, res, callback) {
-        var payload = {
-            id: req.body.id,
-            amount: req.body.amount,
-            currency: req.body.currency,
-            interval: req.body.interval,
-            name: req.body.name
-        };
-
+    create: function (payload, reqIP, callback) {
         stripe.plans.create(payload, function(err, plan) {
             if (err) {
                 console.log(err);
@@ -72,13 +63,13 @@ planCtrl.prototype = {
                 }, null);
             }
             else {
-                log.info("Created new plan", plan, req.connection.remoteAddress);
+                log.info("Created new plan", plan, reqIP);
                 return callback(false, plan);
             }
         });
     },
 
-    remove: function (req, res, callback) {
+    remove: function (req, res, reqIP, callback) {
 
 // TODO: NEED TO MODIFY USERS WHO ARE CURRENTLY SUBSCRIBED TO THIS.
 // TODO: SUGGEST FORCING THE ADMIN TO SELECT A NEW PLAN FOR EXISTING USERS PRIOR TO DELETION

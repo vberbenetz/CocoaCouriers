@@ -13,8 +13,7 @@ var customerCtrl = function() {};
 
 customerCtrl.prototype = {
 
-    get: function (req, res, callback) {
-        var customerId = req.user.stId;
+    get: function (customerId, callback) {
 
         stripe.customers.retrieve(customerId, function(err, customer) {
             if(err) {
@@ -34,7 +33,7 @@ customerCtrl.prototype = {
         })
     },
 
-    create: function (req, res, dbConnPool, callback) {
+    create: function (req, res, dbConnPool, reqIP, callback) {
         var shipping = {
             name: req.body.name,
             address: req.body.address

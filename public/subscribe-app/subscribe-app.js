@@ -170,16 +170,12 @@ angular.module('subscribe', [])
 
         // -------------- MODELS -------------- //
         $scope.userInfo = {
-            BOX_TYPE: '',
             name: '',
             email: '',
             password: '',
 
             subscription: {
                 planId: '',
-                size: '',
-                material: '',
-                brand: '',
                 couponCode: ''
             },
 
@@ -240,28 +236,48 @@ angular.module('subscribe', [])
 
                             if (result) {
 
-                                // Gift plan creation
-                                if ($scope.userInfo.subscription.planId.toUpperCase().indexOf('CC_GIFT') > -1) {
+                                createNewUser(function(result) {
 
-                                    if (typeof $scope.chosenPlan.metadata.recurring_frequency !== 'undefined') {
-                                        if ($scope.chosenPlan.metadata.recurring_frequency === 1) {
-                                            createOneTimeGift();
-                                        }
-                                        else {
-                                            createRecurringGift();
-                                        }
+                                });
+
+                                // Gift recurring plan OR one-time purchase
+                                if ( (typeof $scope.chosenPlan !== 'undefined') && $scope.chosenPlan.metadata.isGift ) {
+
+                                    // One time gift
+                                    if ( ($scope.chosenPlan.interval === 'month') && ($scope.chosenPlan.interval_count === 12) ) {
+                                        createOneTimeGift(function(result) {
+                                            if (!result) {
+                                                prePopulateShippingForm();
+                                                prePopulatePaymentForm();
+                                                $scope.processingReg = false;
+                                                $scope.globalValidationFailed = true;
+                                            }
+                                        });
                                     }
+
+                                    // Recurring gift
                                     else {
-                                        prePopulateShippingForm();
-                                        prePopulatePaymentForm();
-                                        $scope.processingReg = false;
-                                        $scope.globalValidationFailed = true;
+                                        createRecurringGift(function(result) {
+                                            if (!result) {
+                                                prePopulateShippingForm();
+                                                prePopulatePaymentForm();
+                                                $scope.processingReg = false;
+                                                $scope.globalValidationFailed = true;
+                                            }
+                                        });
                                     }
                                 }
 
                                 // Recurring monthly plan
                                 else {
-                                    createRecurringPlan();
+                                    createRecurringPlan(function(result) {
+                                        if (!result) {
+                                            prePopulateShippingForm();
+                                            prePopulatePaymentForm();
+                                            $scope.processingReg = false;
+                                            $scope.globalValidationFailed = true;
+                                        }
+                                    });
                                 }
 
                             }
@@ -785,6 +801,30 @@ angular.module('subscribe', [])
             return null;
         };
 
+        function createUser (callback) {
+
+            registerCustomerLocally( function(newUser) {
+
+                if (newUser) {
+                    $scope.newUser = newUser;
+
+                    createStCustomer(newUser.email, function(customer) {
+
+                        if (customer) {
+                            return callback(customer);
+                        }
+                        else {
+                            return callback(false);
+                        }
+                    });
+                }
+                else {
+                    return callback(false);
+                }
+            });
+
+        }
+
 
         function registerCustomerLocally (callback) {
 
@@ -814,7 +854,7 @@ angular.module('subscribe', [])
         }
 
         // Create a new Stripe customer
-        function createStripeCustomer(newUserEmail, callback) {
+        function createStCustomer(newUserEmail, callback) {
             $http({
                 url: '/api/customer',
                 method: 'POST',
@@ -834,7 +874,7 @@ angular.module('subscribe', [])
         }
 
         // Subscribe user to plan
-        function subscribeToStripePlan(callback) {
+        function subscribeToRecurringPlan(callback) {
             $http({
                 url: '/api/subscription',
                 method: 'POST',
@@ -852,23 +892,47 @@ angular.module('subscribe', [])
         }
 
         /**
+         * Charge user for one-time gift
+         * @param callback
+         */
+        function createOneTimeGift(callback) {
+
+            createStCustomer(newUser.email, function(customer) {
+
+                if (customer) {
+
+                    $http({
+                        url: '/api/charge',
+                        method: 'POST',
+                        data: {
+                            coupon: $scope.userInfo.subscription.couponCode,
+                            plan: $scope.userInfo.subscription.planId
+                        }
+                    }).success(function(successfulCharge) {
+                        return callback(successfulCharge);
+                    }).error(function(err) {
+                        handleStCCErr(err);
+                        $scope.processingReg = false;
+                        return callback(false);
+                    });
+                }
+                else {
+                    return callback(false);
+                }
+            });
+        }
+
+        /**
          * Create a gift item.
          * If a user is already registered, then skip customer registration and add the shipping address meta-data.
          * If user is not registered, then follow the recurring plan steps.
          */
         function createRecurringGift(callback) {
             if ($scope.loggedIn) {
-                $scope.userInfo.subscription.metadata = {
-                    full_name: $scope.userInfo.name,
-                    line1: $scope.userInfo.address.line1,
-                    line2: $scope.userInfo.address.line2,
-                    city: $scope.userInfo.address.city,
-                    state: $scope.userInfo.address.state,
-                    postal_code: $scope.userInfo.address.postal_code,
-                    country: $scope.userInfo.address.country
-                };
+                $scope.userInfo.subscription.metadata = $scope.userInfo.address;
+                $scope.userInfo.subscription.metadata.name = $scope.userInfo.name;
 
-                subscribeToStripePlan(function(newSubscription) {
+                subscribeToRecurringPlan(function(newSubscription) {
                     if (newSubscription) {
                         $window.location.href = '/My-Account';
                     }
@@ -884,15 +948,7 @@ angular.module('subscribe', [])
         }
 
         /**
-         * Same as recurring gift above, but account creation can be skipped.
-         * The subscription is instantly deleted after creation charge so user is only charged one time.
-         */
-        function createOnTimeGift() {
-            
-        }
-
-        /**
-         * Register a new customer both internally to maintain their account and on stripe.
+         * Register a new customer both internally to maintain their account and on st.
          * Finally subscribe them to the plan.
          */
         function createRecurringPlan(callback) {
@@ -902,14 +958,14 @@ angular.module('subscribe', [])
                 if (newUser) {
                     $scope.newUser = newUser;
 
-                    createStripeCustomer(newUser.email, function(customer) {
+                    createStCustomer(newUser.email, function(customer) {
 
                         if (customer) {
 
-                            subscribeToStripePlan(function(newSubscription) {
+                            subscribeToRecurringPlan(function(newSubscription) {
 
                                 if (newSubscription) {
-                                    $window.location.href = '/My-Account/';
+                                    $window.location.href = '/My-Account';
                                 }
                                 else {
                                     return callback(false);

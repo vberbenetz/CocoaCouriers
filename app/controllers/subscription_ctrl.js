@@ -4,7 +4,6 @@ var configPriv = require('../configuration/config_priv');
 var log = require('../utils/logger');
 
 var helpers = require('../utils/helpers');
-var invoiceCtrl = require('./invoice_ctrl');
 
 var stripe = require('stripe')(
     configPriv.sKey
@@ -14,10 +13,7 @@ var subscriptionCtrl = function() {};
 
 subscriptionCtrl.prototype = {
 
-    get: function (req, res, callback) {
-
-        var customerId = req.query.customerId;
-        var subscriptionId = req.query.subscriptionId;
+    get: function (customerId, subscriptionId, callback) {
 
         stripe.customers.retrieveSubscription(customerId, subscriptionId, function(err, subscription) {
             if (err) {
@@ -151,7 +147,6 @@ subscriptionCtrl.prototype = {
 
     },
 
-
     update: function (req, res, callback) {
 
         var customerId = req.user.stId;
@@ -215,10 +210,7 @@ subscriptionCtrl.prototype = {
     },
 
 
-    cancel: function (req, res, callback) {
-
-        var customerId = req.user.stId;
-        var subscriptionId = req.query.subscriptionId;
+    cancel: function (customerId, subscriptionId, reqIP, callback) {
 
         stripe.customers.cancelSubscription(customerId, subscriptionId, function(err, confirmation) {
             if (err) {
@@ -233,7 +225,7 @@ subscriptionCtrl.prototype = {
                 }, null);
             }
             else {
-                log.info("Cancelled subscription", {customerId: customerId, subscriptionId: subscriptionId}, req.connection.remoteAddress);
+                log.info("Cancelled subscription", {customerId: customerId, subscriptionId: subscriptionId}, reqIP);
                 return callback(false, confirmation);
             }
         })
