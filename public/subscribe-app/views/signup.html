@@ -10,98 +10,152 @@
     </h1>
 </div>
 
-<div class="row">
+<div class="row" ng-init="activeTab=1">
 
     <!-- Choose a plan -->
     <div ng-if="formPage==1">
-        <div class="col-md-3 col-sm-3">
+        <ul class="nav nav-tabs nav-button-tabs">
+            <li class="btn-lg" ng-class="{ 'active' : activeTab==1 }"><a href="" ng-click="activeTab=1">Subscription</a></li>
+            <li class="btn-lg" ng-class="{ 'active' : activeTab==2 }"><a href="" ng-click="activeTab=2"><i class="glyphicon glyphicon-gift"></i>&nbsp;Gift</a></li>
+        </ul>
 
-            <div class="price-clean">
-                <h1 class="pricing-head">Pay Every 12 Months</h1>
+        <div class="tab-content">
+            <div class="tab-pane" ng-class="{ 'active' : activeTab==1 }">
 
-                <h4>
-                    <sup>$</sup>27.95<em>/month</em>
-                </h4>
+                <div class="col-md-4 col-sm-4">
+                    <div class="price-clean">
+                        <h1 class="pricing-head">Pay Every 12 Months</h1>
+                        <h4>
+                            <sup>$</sup>31.95<em>/month</em>
+                        </h4>
+                        <h5> YEARLY </h5>
+                        <hr />
+                        <p>$383.40 Every Year</p>
+                        <hr />
+                        <p>Cancel Anytime</p>
+                        <hr />
+                        <p>Shipped On the 3rd Week of Each Month</p>
+                        <hr />
 
-                <h5> YEARLY </h5>
-                <hr />
-                <p>$335.40 Every Year</p>
-                <hr />
-                <p>Cancel Anytime</p>
-                <hr />
-                <p>Shipped On the 3rd Week of Each Month</p>
-                <hr />
+                        <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('annual_cad')" class="btn btn-3d btn-success btn-block btn-lg">SELECT</a>
+                    </div>
+                </div>
 
-                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('annual_cad')" class="btn btn-3d btn-success">SELECT</a>
-                <br/>
-                <span class="size-17 hidden-xs">&nbsp; OR &nbsp;</span>
-                <br/>
-                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('annual_cad_gift')" class="btn btn-3d btn-teal"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-3">
+                <div class="col-md-4 col-sm-4">
+                    <div class="price-clean">
+                        <h1 class="pricing-head">Pay Every 3 Months</h1>
+                        <h4>
+                            <sup>$</sup>33.45<em>/month</em>
+                        </h4>
+                        <h5> QUARTERLY </h5>
+                        <hr />
+                        <p>$100.35 Every 3 Months</p>
+                        <hr />
+                        <p>Cancel Anytime</p>
+                        <hr />
+                        <p>Shipped On the 3rd Week of Each Month</p>
+                        <hr />
 
-            <div class="price-clean">
-                <h1 class="pricing-head">Pay Every 3 Months</h1>
+                        <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('quarterly_cad')" class="btn btn-3d btn-success btn-block btn-lg">SELECT</a>
+                    </div>
+                </div>
 
-                <h4>
-                    <sup>$</sup>28.95<em>/month</em>
-                </h4>
+                <div class="col-md-4 col-sm-4">
+                    <div class="price-clean">
+                        <h1 class="pricing-head">Month to Month</h1>
+                        <h4>
+                            <sup>$</sup>34.95<em>/month</em>
+                        </h4>
+                        <h5> Month to Month </h5>
+                        <hr />
+                        <p>$34.95 Every Month</p>
+                        <hr />
+                        <p>Cancel Anytime</p>
+                        <hr />
+                        <p>Shipped On the 3rd Week of Each Month</p>
+                        <hr />
 
-                <h5> QUARTERLY </h5>
-                <hr />
-                <p>$86.85 Every 3 Months</p>
-                <hr />
-                <p>Cancel Anytime</p>
-                <hr />
-                <p>Shipped On the 3rd Week of Each Month</p>
-                <hr />
+                        <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('monthly_cad')" class="btn btn-3d btn-success btn-block btn-lg">SELECT</a>
+                    </div>
+                </div>
 
-                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('quarterly_cad')" class="btn btn-3d btn-success">SELECT</a>
-                <br/>
-                <span class="size-17 hidden-xs">&nbsp; OR &nbsp;</span>
-                <br/>
-                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('quarterly_cad_gift')" class="btn btn-3d btn-teal"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
-            </div>
-
-        </div>
-        <div class="col-md-3 col-sm-3">
-
-            <div class="price-clean">
-                <h1 class="pricing-head">Month to Month</h1>
-                <h4>
-                    <sup>$</sup>29.95<em>/month</em>
-                </h4>
-                <h5> Month to Month </h5>
-                <hr />
-                <p>$29.95 Every Month</p>
-                <hr />
-                <p>Cancel Anytime</p>
-                <hr />
-                <p>Shipped On the 3rd Week of Each Month</p>
-                <hr />
-
-                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('monthly_cad')" class="btn btn-3d btn-success">SELECT</a>
-                <br/>
-                <span class="size-17 hidden-xs">&nbsp; OR &nbsp;</span>
-                <br/>
-                <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('monthly_cad_gift')" class="btn btn-3d btn-teal"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
             </div>
 
-        </div>
-        <div class="col-md-3 col-sm-3">
+            <div class="tab-pane" ng-class="{ 'active' : activeTab==2 }">
 
-            <div class="price-clean">
-                <h1 class="font-cursive">Special Gifts</h1>
+                <div class="col-sm-3 col-sm-3">
+                    <div class="price-clean">
+                        <h1 class="pricing-head">12 Month Gift</h1>
+                        <h4>
+                            <sup>$</sup>31.95<em>/month</em>
+                        </h4>
+                        <h5> YEARLY </h5>
+                        <hr />
+                        <p>$383.40 Every Year</p>
+                        <hr />
+                        <p>Cancel Anytime</p>
+                        <hr />
+                        <p>Shipped On the 3rd Week of Each Month</p>
+                        <hr />
 
-                <hr />
-                <p>Gifts starting at $15</p>
-                <hr />
-                <p>Hand crafted gifts for any occasion. Give the gift of chocolate! </p>
-                <hr />
-                <a href="/blog" class="btn btn-3d btn-teal">Learn More</a>
+                        <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('annual_cad_gift')" class="btn btn-3d btn-success btn-block btn-lg"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-3">
+                    <div class="price-clean">
+                        <h1 class="pricing-head">3 Month Gift</h1>
+                        <h4>
+                            <sup>$</sup>33.45<em>/month</em>
+                        </h4>
+                        <h5> QUARTERLY </h5>
+                        <hr />
+                        <p>$100.35 Every 3 Months</p>
+                        <hr />
+                        <p>Cancel Anytime</p>
+                        <hr />
+                        <p>Shipped On the 3rd Week of Each Month</p>
+                        <hr />
+
+                        <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('quarterly_cad_gift')" class="btn btn-3d btn-success btn-block btn-lg"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-3">
+                    <div class="price-clean">
+                        <h1 class="pricing-head">1 Month Gift</h1>
+                        <h4>
+                            <sup>$</sup>34.95<em>/month</em>
+                        </h4>
+                        <h5> Month to Month </h5>
+                        <hr />
+                        <p>$34.95 Every Month</p>
+                        <hr />
+                        <p>Cancel Anytime</p>
+                        <hr />
+                        <p>Shipped On the 3rd Week of Each Month</p>
+                        <hr />
+
+                        <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('onetime_gift_cad')" class="btn btn-3d btn-success btn-block btn-lg"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-3">
+                    <div class="price-clean">
+                        <h1 class="font-cursive">Holiday Gift Box</h1>
+                        <hr/>
+                        <h4>
+                            <sup>$</sup>49.95
+                        </h4>
+                        <hr/>
+
+                        <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('holidaygiftbox_gift_cad')" class="btn btn-3d btn-success btn-block btn-lg">SELECT</a>
+                    </div>
+                </div>
+
             </div>
         </div>
+
     </div>
 
 
@@ -241,7 +295,7 @@
                         </div>
                     </div>
                 </fieldset>
-                <p class="margin-top-20">We create a simple account for you in case there is an issue with processing your payment, or your package destination address changes. This can be deleted at anytime.</p>
+                <p class="margin-top-20">We create a simple account for you, in case there is an issue with processing your payment, or your package destination address changes.</p>
 
                 <hr class="margin-top-60 margin-bottom-30"/>
 
@@ -274,8 +328,9 @@
                         </div>
 
                         <div class="clearfix">
-                            <h4 class="pull-left">1x {{ chosenPlan.cleanName }}</h4>
-                            <h4 class="pull-right">$ {{ (chosenPlan.amount/100).toFixed(2) }} {{ chosenPlan.id }}</h4>
+                            <h2 class="pull-left" style="margin-top:-10px;"><span class="label label-default">1x</span></h2>
+                            <h4 class="pull-left margin-left-20"> {{ chosenPlan.cleanName }}</h4>
+                            <h4 class="pull-right">$ {{ (chosenPlan.amount/100).toFixed(2) }}</h4>
                         </div>
                         <span class="clearfix">
                             <button type="submit" class="btn btn-xs btn-default margin-bottom-20 pull-right" ng-click="goBack(1)">Change Plan</button>
@@ -285,8 +340,9 @@
                             <span class="pull-left">Coupon Discount:  <em class="text-green" ng-show="misc.discount > 0">{{ userInfo.subscription.id }}</em></span>
                         </span>
                         <span class="clearfix">
-                            <span class="pull-right" ng-show="userInfo.address.country.id!=='CA'">$ {{ misc.shippingCharge.toFixed(2) }}</span>
-                            <span class="pull-right" ng-show="userInfo.address.country.id==='CA'"><strong>FREE!</strong></span>
+                            <!-- <span class="pull-right" ng-show="userInfo.address.country.id!=='CA'">$ {{ misc.shippingCharge.toFixed(2) }}</span> -->
+                            <span class="pull-right" ng-show="userInfo.address.country==''">$ 0.00</span>
+                            <span class="pull-right" ng-hide="userInfo.address.country==''"><strong>FREE !</strong></span>
                             <span class="pull-left">Shipping:</span>
                         </span>
 

@@ -31,7 +31,7 @@ tokenCtrl.prototype = {
         });
     },
 
-    create: function (payload, callback) {
+    create: function (payload, reqIP, callback) {
 
         stripe.tokens.create({card: payload}, function(err, token) {
             if (err) {
@@ -46,7 +46,7 @@ tokenCtrl.prototype = {
                 }, null);
             }
             else {
-                log.info('Created new token', token, req.connection.remoteAddress);
+                log.info('Created new token', token, reqIP);
                 return callback(false, token);
             }
         });

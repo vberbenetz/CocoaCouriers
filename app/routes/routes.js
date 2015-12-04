@@ -107,6 +107,7 @@ module.exports = function(app, passport, dbConnPool) {
     app.get('/api/emailexists', function(req, res) {
         userCtrl.checkEmailExists(req.query.email, dbConnPool, function(err, exists) {
             if (err) {
+                console.log(err);
                 errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
             }
             else {
@@ -186,7 +187,7 @@ module.exports = function(app, passport, dbConnPool) {
             address_zip: req.body.address_zip
         };
 
-        tokenCtrl.create(payload, function(err, result) {
+        tokenCtrl.create(payload, req.connection.remoteAddress, function(err, result) {
             if (err) {
                 errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
             }
@@ -198,15 +199,14 @@ module.exports = function(app, passport, dbConnPool) {
 
 
     // ----------------- Charge Related -------------------- //
-    app.get('/charge', auth, function (req, res, next) {
-        chargeCtrl.get(req, res, function(result) {
-            res.send(result);
-        });
-    });
-
-    app.post('/oneTimeCharge', auth, function (req, res, next) {
-        chargeCtrl.oneTimeCharge(req, res, function(result) {
-            res.send(result);
+    app.post('/api/charge/onetime', auth, function (req, res, next) {
+        chargeCtrl.oneTimeCharge(req.user.stId, req.body.plan, req.body.coupon, req.body.tr, req.connection.remoteAddress, function(err, result) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(result);
+            }
         });
     });
 
@@ -276,14 +276,15 @@ module.exports = function(app, passport, dbConnPool) {
         }
     });
 
-
+/*
     app.post('/api/plan', function (req, res, next) {
         var payload = {
             id: req.body.id,
             amount: req.body.amount,
             currency: req.body.currency,
             interval: req.body.interval,
-            name: req.body.name
+            name: req.body.name,
+            metadata: req.body.metadata
         };
 
         planCtrl.create(payload, req.connection.remoteAddress, function(err, result) {
@@ -295,7 +296,7 @@ module.exports = function(app, passport, dbConnPool) {
             }
         });
     });
-
+*/
 
     // ----------------- Subscription Related ------------------------ //
 

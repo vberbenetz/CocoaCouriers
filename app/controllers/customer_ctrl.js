@@ -33,7 +33,7 @@ customerCtrl.prototype = {
         })
     },
 
-    create: function (req, res, dbConnPool, reqIP, callback) {
+    create: function (req, res, dbConnPool, callback) {
         var shipping = {
             name: req.body.name,
             address: req.body.address

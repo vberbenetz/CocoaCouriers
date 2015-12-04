@@ -19,6 +19,8 @@ var helperTests = require('./app/test/helper_test');
 helperTests.coolDownTest();
 */
 
+var testDB = require('./app/controllers/db_conn_test_ctrl');
+
 var app = express();
 
 app.use(bodyParser.json());
@@ -54,7 +56,12 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-
+// Test DB connection
+testDB.test(pool, function(err, result) {
+    if (err) {
+        console.log(err);
+    }
+});
 
 // REST api routes
 require('./app/routes/routes')(app, passport, pool);

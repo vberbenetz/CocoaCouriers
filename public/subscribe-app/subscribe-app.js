@@ -73,7 +73,6 @@ angular.module('subscribe', [])
             ],
             usStates: [
                 { id: 'AL', name: 'Alabama' },
-                { id: 'AK', name: 'Alaska' },
                 { id: 'AR', name: 'Arkansas' },
                 { id: 'AZ', name: 'Arizona' },
                 { id: 'CA', name: 'California' },
@@ -121,13 +120,7 @@ angular.module('subscribe', [])
                 { id: 'WV', name: 'West Virginia' },
                 { id: 'WI', name: 'Wisconsin' },
                 { id: 'WY', name: 'Wyoming' },
-                { id: 'DC', name: 'District of Columbia' },
-                { id: 'AS', name: 'American Samoa' },
-                { id: 'GU', name: 'Guan' },
-                { id: 'MP', name: 'Nothern Mariana Islands' },
-                { id: 'PR', name: 'Puerto Rico' },
-                { id: 'UM', name: 'United States Minor Outlying Islands' },
-                { id: 'VI', name: 'Virgin Islands, U.S.' }
+                { id: 'DC', name: 'District of Columbia' }
             ]
         };
 
@@ -236,15 +229,11 @@ angular.module('subscribe', [])
 
                             if (result) {
 
-                                createNewUser(function(result) {
-
-                                });
-
                                 // Gift recurring plan OR one-time purchase
-                                if ( (typeof $scope.chosenPlan !== 'undefined') && $scope.chosenPlan.metadata.isGift ) {
+                                if ( (typeof $scope.chosenPlan !== 'undefined') && (typeof $scope.chosenPlan.metadata.is_gift !== 'undefined') && ($scope.chosenPlan.metadata.is_gift) ) {
 
                                     // One time gift
-                                    if ( ($scope.chosenPlan.interval === 'month') && ($scope.chosenPlan.interval_count === 12) ) {
+                                    if ( ($scope.chosenPlan.interval === 'month') && ($scope.chosenPlan.interval_count === 1) ) {
                                         createOneTimeGift(function(result) {
                                             if (!result) {
                                                 prePopulateShippingForm();
@@ -360,10 +349,6 @@ angular.module('subscribe', [])
             }
             else if ( ($scope.userInfo.password.length < 6) || ($scope.userInfo.password.length > 254) ) {
                 $scope.validationErrors.password = 'Please use a password that is 6 to 200 characters';
-                validationFailed = true;
-            }
-            else if ( !passwordRegex.test($scope.userInfo.password) ) {
-                $scope.validationErrors.password = 'Password must contain at least 8 characters long, 1 uppercase letter, 1 lowercase letter and 1 number';
                 validationFailed = true;
             }
 
@@ -801,17 +786,20 @@ angular.module('subscribe', [])
             return null;
         };
 
-        function createUser (callback) {
 
-            registerCustomerLocally( function(newUser) {
+        /**
+         * Create a new user and subscribe them to a plan.
+         */
+        function createRecurringPlan(callback) {
 
-                if (newUser) {
-                    $scope.newUser = newUser;
+            createUser(function(customer) {
 
-                    createStCustomer(newUser.email, function(customer) {
+                if (customer) {
 
-                        if (customer) {
-                            return callback(customer);
+                    subscribeToRecurringPlan(function(newSubscription) {
+
+                        if (newSubscription) {
+                            $window.location.href = '/My-Account';
                         }
                         else {
                             return callback(false);
@@ -823,103 +811,6 @@ angular.module('subscribe', [])
                 }
             });
 
-        }
-
-
-        function registerCustomerLocally (callback) {
-
-            // Create Customer Account Locally
-            $http({
-                url: '/signup',
-                method: 'POST',
-                data: {
-                    email: $scope.userInfo.email,
-                    password: $scope.userInfo.password
-                }
-            }).success(function(newUser) {
-
-                if (typeof newUser !== 'undefined') {
-                    if (typeof newUser.password !== 'undefined') {
-                        delete newUser.password;
-                    }
-                }
-                return callback(newUser);
-
-            }).error(function(error) {
-                $scope.validationErrors.email = 'Email already in use';
-                $scope.processingReg = false;
-                return callback(false);
-            });
-
-        }
-
-        // Create a new Stripe customer
-        function createStCustomer(newUserEmail, callback) {
-            $http({
-                url: '/api/customer',
-                method: 'POST',
-                data: {
-                    email: newUserEmail,
-                    name: $scope.userInfo.name,
-                    address: $scope.userInfo.address,
-                    source: $scope.userInfo.token
-                }
-            }).success(function(newCustomer) {
-                return callback(newCustomer);
-            }).error(function(err) {
-                handleStCCErr(err);
-                $scope.processingReg = false;
-                return callback(false);
-            });
-        }
-
-        // Subscribe user to plan
-        function subscribeToRecurringPlan(callback) {
-            $http({
-                url: '/api/subscription',
-                method: 'POST',
-                data: {
-                    coupon: $scope.userInfo.subscription.couponCode,
-                    plan: $scope.userInfo.subscription.planId
-                }
-            }).success(function(newSubscription) {
-                return callback(newSubscription);
-            }).error(function(err) {
-                handleStCCErr(err);
-                $scope.subErr = true;
-                return callback(false);
-            });
-        }
-
-        /**
-         * Charge user for one-time gift
-         * @param callback
-         */
-        function createOneTimeGift(callback) {
-
-            createStCustomer(newUser.email, function(customer) {
-
-                if (customer) {
-
-                    $http({
-                        url: '/api/charge',
-                        method: 'POST',
-                        data: {
-                            coupon: $scope.userInfo.subscription.couponCode,
-                            plan: $scope.userInfo.subscription.planId
-                        }
-                    }).success(function(successfulCharge) {
-                        return callback(successfulCharge);
-                    }).error(function(err) {
-                        handleStCCErr(err);
-                        $scope.processingReg = false;
-                        return callback(false);
-                    });
-                }
-                else {
-                    return callback(false);
-                }
-            });
         }
 
         /**
@@ -948,10 +839,61 @@ angular.module('subscribe', [])
         }
 
         /**
-         * Register a new customer both internally to maintain their account and on st.
-         * Finally subscribe them to the plan.
+         * Charge user for one-time gift
+         * @param callback
          */
-        function createRecurringPlan(callback) {
+        function createOneTimeGift(callback) {
+
+            createUser(function(customer) {
+
+                if (customer) {
+                    $http({
+                        url: '/api/charge/onetime',
+                        method: 'POST',
+                        data: {
+                            tr: customer.metadata.taxRate,
+                            coupon: $scope.userInfo.subscription.couponCode,
+                            plan: $scope.userInfo.subscription.planId
+                        }
+                    }).success(function(successfulCharge) {
+                        $window.location.href = '/My-Account';
+                    }).error(function(err) {
+                        handleStCCErr(err);
+                        return callback(false);
+                    });
+                }
+                else {
+                    return callback(false);
+                }
+            });
+        }
+
+        /**
+         * Create subscription to recurring plan
+         * @param callback
+         */
+        function subscribeToRecurringPlan(callback) {
+            $http({
+                url: '/api/subscription',
+                method: 'POST',
+                data: {
+                    coupon: $scope.userInfo.subscription.couponCode,
+                    plan: $scope.userInfo.subscription.planId
+                }
+            }).success(function(newSubscription) {
+                return callback(newSubscription);
+            }).error(function(err) {
+                handleStCCErr(err);
+                $scope.subErr = true;
+                return callback(false);
+            });
+        }
+
+        /**
+         * Creates both a local user and st customer
+         * @param callback
+         */
+        function createUser (callback) {
 
             registerCustomerLocally( function(newUser) {
 
@@ -961,16 +903,7 @@ angular.module('subscribe', [])
                     createStCustomer(newUser.email, function(customer) {
 
                         if (customer) {
-
-                            subscribeToRecurringPlan(function(newSubscription) {
-
-                                if (newSubscription) {
-                                    $window.location.href = '/My-Account';
-                                }
-                                else {
-                                    return callback(false);
-                                }
-                            });
+                            return callback(customer);
                         }
                         else {
                             return callback(false);
@@ -982,6 +915,52 @@ angular.module('subscribe', [])
                 }
             });
 
+        }
+
+        function registerCustomerLocally (callback) {
+
+            // Create Customer Account Locally
+            $http({
+                url: '/signup',
+                method: 'POST',
+                data: {
+                    email: $scope.userInfo.email,
+                    password: $scope.userInfo.password
+                }
+            }).success(function(newUser) {
+
+                if (typeof newUser !== 'undefined') {
+                    if (typeof newUser.password !== 'undefined') {
+                        delete newUser.password;
+                    }
+                }
+                return callback(newUser);
+
+            }).error(function(error) {
+                $scope.validationErrors.email = 'Email already in use';
+                $scope.processingReg = false;
+                return callback(false);
+            });
+
+        }
+
+        function createStCustomer(newUserEmail, callback) {
+            $http({
+                url: '/api/customer',
+                method: 'POST',
+                data: {
+                    email: newUserEmail,
+                    name: $scope.userInfo.name,
+                    address: $scope.userInfo.address,
+                    source: $scope.userInfo.token
+                }
+            }).success(function(newCustomer) {
+                return callback(newCustomer);
+            }).error(function(err) {
+                handleStCCErr(err);
+                $scope.processingReg = false;
+                return callback(false);
+            });
         }
 
 
