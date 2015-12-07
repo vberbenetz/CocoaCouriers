@@ -79,6 +79,13 @@ testDB.test(pool, function(err, result) {
 // REST api routes
 require('./app/routes/routes')(app, passport, pool);
 
+// Error Handler
+app.use(function (err, req, res, next) {
+    if (err.code === 'EBADCSRFTOKEN') {
+        res.status(403).send('Invalid CSRF token');
+    }
+});
+
 log.info('================================');
 log.info('====     SERVER STARTED     ====');
 log.info('================================');

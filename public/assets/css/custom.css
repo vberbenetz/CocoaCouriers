@@ -25,3 +25,8 @@
 .color-jcb {
     color: #003A8F;
 }
+
+.box-light-grey {
+    color:#111;
+    background-color:#e0e0e0 !important;
+}
