@@ -200,12 +200,22 @@ module.exports = function(app, passport, dbConnPool) {
 
     // ----------------- Charge Related -------------------- //
     app.post('/api/charge/onetime', auth, function (req, res, next) {
-        chargeCtrl.oneTimeCharge(req.user.stId, req.body.plan, req.body.coupon, req.body.tr, req.connection.remoteAddress, function(err, result) {
+        // Retrieve customer data
+        customerCtrl.get(req.user.stId, function(err, customer) {
             if (err) {
                 errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
             }
             else {
-                res.send(result);
+
+                chargeCtrl.oneTimeCharge(customer, req.body.plan, req.body.coupon, req.connection.remoteAddress, function(err, result) {
+                    if (err) {
+                        errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                    }
+                    else {
+                        res.send(result);
+                    }
+                });
+
             }
         });
     });

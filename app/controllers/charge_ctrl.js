@@ -2,7 +2,6 @@
 
 var configPriv = require('../configuration/config_priv');
 var log = require('../utils/logger');
-var errorHandler = require('../utils/error_handler');
 
 var planCtrl = require('./plan_ctrl');
 var couponCtrl = require('./coupon_ctrl');
@@ -15,9 +14,19 @@ var chargeCtrl = function() {};
 
 chargeCtrl.prototype = {
 
-    oneTimeCharge: function (customerId, planId, couponId, taxRate, reqIP, callback) {
+    oneTimeCharge: function (customer, planId, couponId, reqIP, callback) {
 
 // TODO: ADD SHIPPING RATE FOR FUTURE CUSTOMERS OUTSIDE OF CANADA AND LOWER 48 STATES
+
+        if (customer.sources.data[0].country === 'US') {
+            var splitPlan = planId.split('_');
+            var tempPlan = splitPlan[0];
+            tempPlan += '_usd';
+            for (var i = 2; i < splitPlan.length; i++) {
+                tempPlan += '_' + splitPlan[i];
+            }
+            planId = tempPlan;
+        }
 
         // Retrieve plan to get cost of purchase
         planCtrl.get(planId, function(err, plan) {
@@ -27,10 +36,15 @@ chargeCtrl.prototype = {
             else {
                 var chargePayload = {
                     currency: plan.currency,
-                    customer: customerId,
+                    customer: customer.id,
                     description: plan.name
                 };
                 var chargeAmount = 0;
+
+                var taxRate = 0;
+                if (typeof customer.metadata.taxRate !== 'undefined') {
+                    taxRate = customer.metadata.taxRate;
+                }
 
                 // Retrieve coupon
                 if ( (typeof couponId !== 'undefined') && (couponId !== null) && (couponId.length !== 0) && (couponId !== '') ) {
@@ -46,7 +60,7 @@ chargeCtrl.prototype = {
 
                                 chargePayload.amount = chargeAmount;
 
-                                stripe.charges.create(payload, function(err, charge) {
+                                stripe.charges.create(chargePayload, function(err, charge) {
                                     if (err) {
                                         console.log(err);
                                         return callback({
