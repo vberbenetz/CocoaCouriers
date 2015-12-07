@@ -230,7 +230,7 @@ angular.module('subscribe', [])
                             if (result) {
 
                                 // Gift recurring plan OR one-time purchase
-                                if ( (typeof $scope.chosenPlan !== 'undefined') && (typeof $scope.chosenPlan.metadata.is_gift !== 'undefined') && ($scope.chosenPlan.metadata.is_gift) ) {
+                                if ( (typeof $scope.chosenPlan !== 'undefined') && (typeof $scope.chosenPlan.metadata.is_gift !== 'undefined') && ($scope.chosenPlan.metadata.is_gift === 'true') ) {
 
                                     // One time gift
                                     if ( ($scope.chosenPlan.interval === 'month') && ($scope.chosenPlan.interval_count === 1) ) {

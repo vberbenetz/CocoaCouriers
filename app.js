@@ -1,12 +1,12 @@
 'use strict';
 
 var express = require('express');
-var path = require('path');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var passport = require('passport');
 var session = require('express-session');
+var csurf = require('csurf');
 var redisStore = require('connect-redis')(session);
 
 var config = require('./app/configuration/config');
@@ -23,6 +23,7 @@ var testDB = require('./app/controllers/db_conn_test_ctrl');
 
 var app = express();
 
+app.use(cookieParser(configPriv.cookieSecret, { httpOnly: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -49,10 +50,22 @@ app.use(session({
         host: configPriv.session.redis.host,
         port: configPriv.session.redis.port
     }),
+    cookie: {
+        path: '/',
+        httpOnly: true,
+        secure: false,      // Set to true when using HTTPS
+        maxAge: 3600000
+    },
+    rolling: true,  // Force cookie to be set on every response. Reset expiration of cookie
     resave: configPriv.session.resave,
     saveUninitialized: configPriv.session.saveUninitialized,
     secret: configPriv.session.sessionKey
 }));
+app.use(csurf());
+app.use(function(req, res, next) {
+    res.cookie('XSRF-TOKEN', req.csrfToken());
+    next();
+});
 app.use(passport.initialize());
 app.use(passport.session());
 

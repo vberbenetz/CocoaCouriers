@@ -8,6 +8,7 @@
     "connect-redis": "~3.0.1",
     "express": "~4.13.1",
     "express-session": "~1.12.1",
+    "csurf": "~1.8.3",
     "passport": "~0.3.0",
     "passport-local": "~1.0.0",
     "bunyan": "~1.5.1",
