@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
 cd /www/CocoaCouriers
-git pull https://git@github.com:vberbenetz/CantangoHome.git
+git pull https://git@github.com:vberbenetz/CocoaCouriers.git
 pm2 restart server
