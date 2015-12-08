@@ -25,3 +25,56 @@
 .color-jcb {
     color: #003A8F;
 }
+
+.bg-mainimage {
+    background: url('../images/raaka-bg.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+.btn-flat-green {
+background-color: #27ae60; color: #FFF !important;
+}
+
+.btn-mega {
+    width: 300px;
+    height:60px;
+    font-size: 32px;
+    line-height: 32px;
+
+}
+
+.bg-royal-blue {
+    background-color: #2c3e50;
+}
+
+.bg-emerald-green {
+    background-color: #27ae60;
+}
+
+.color-emerald-green {
+    color: #27ae60;
+}
+.main-sep {
+    height: 80px;
+}
+
+.secondary-sep {
+    height: 60px;
+}
+
+.font-arvo {
+    font-family: 'Arvo', serif;
+}
+
+.font-spin {
+    font-family: 'Spinnaker', sans-serif;
+}
+
+.white-maker {
+    height: 40px;
+    width: 100px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
