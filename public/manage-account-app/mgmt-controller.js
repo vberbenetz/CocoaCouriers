@@ -14,7 +14,7 @@ function mainCtrl($scope, $window, appService, stService) {
         $scope.account.stId = data.stId;
 
         // -----------------------------------------
-        // Retrieve Stripe customer info
+        // Retrieve St customer info
         stService.customer.get(function (data) {
             $scope.customer = data;
         }, function (error) {
@@ -25,10 +25,17 @@ function mainCtrl($scope, $window, appService, stService) {
 
     // Retrieve plans
     stService.plan.get(function(plans) {
-        $scope.plans = plans.data;
+        plans = plans.data;
+        $scope.plans = [];
+        for (var i = 0; i < plans.length; i++) {
+            if ( (typeof plans[i].metadata.is_gift !== 'undefined') && (plans[i].metadata.is_gift === 'false') ) {
+                if (plans[i].currency === 'cad') {
+                    $scope.plans.push(plans[i]);
+                }
+            }
+        }
     }, function(err) {
     });
-
 
     $scope.logout = function() {
         appService.logout.save(function(data, status, headers, config) {
@@ -532,6 +539,62 @@ function updatePaymentCtrl ($scope, stService) {
         }
 
     }
+
+    $scope.identifyCardType = function() {
+        var number = $scope.userInfo.source.number;
+        number = number.toString();
+
+        // Visa 4XXX
+        if ( (number.length >= 1) && (number[0] === '4') ) {
+            return 'visa';
+        }
+
+        // Mastercard 51XX 52XX 53XX 54XX 55XX
+        if ( (number.length >=2) && (number[0] === '5') &&
+            ( (number[1] === '1') || (number[1] === '2') || (number[1] === '3') || (number[1] === '4') || (number[1] === '5') ) ) {
+            return 'mastercard';
+        }
+
+        // AMEX 34XX 37XX
+        if ( (number.length >= 2) && (number[0] === '3') && ( (number[1] === '4') || (number[1] === '7') ) ) {
+            return 'amex';
+        }
+
+        // Diners club 36XX 38XX 39XX
+        if ( (number.length >= 2) && (number[0] === '3') && ( (number[1] === '6') || (number[1] === '8') || (number[1] === '9') ) ) {
+            return 'diners-club';
+        }
+        // 300X 301X 302X 303X 304X 305X 309X
+        else if ( (number.length >=3) && (number[0] === '3') && (number[1] === '0') &&
+            ( (number[2] === '0') || (number[2] === '1') || (number[2] === '2') || (number[2] === '3') || (number[2] === '4') ||
+            (number[2] === '5') || (number[2]) === '9' ) ) {
+            return 'diners-club';
+        }
+
+        // Discover 65XX
+        if ( (number.length >= 6) && (number[0] === '5') ) {
+            return 'discover';
+        }
+        // 644X 645X 646X 647X 648X 649X
+        else if ( (number.length >=3) && (number[0] === '6') && (number[1] === '4') &&
+            ( (number[2] === '4') || (number[2] === '5') || (number[2] === '6') || (number[2] === '7') || (number[2] === '8') ||
+            (number[2] === '9') ) ) {
+            return 'discover';
+        }
+        // 6011
+        else if ( (number.length >= 4) && (number[0] === '6') && (number[1] === '0') && (number[2] === '1') && (number[3] === '1') ) {
+            return 'discover';
+        }
+
+        // JCB 352X 353X 354X 355X 356X 357X 358X
+        if ( (number.length >=3) && (number[0] === '3') && (number[1] === '5') &&
+            ( (number[2] === '2') || (number[2] === '3') || (number[2] === '4') || (number[2] === '5') || (number[2] === '6') ||
+            (number[2] === '7') || (number[2]) === '8' ) ) {
+            return 'jcb';
+        }
+
+        return null;
+    };
 
     // Handle payment cc error codes
     function translateStCCErr(err) {

@@ -26,6 +26,11 @@
     color: #003A8F;
 }
 
+.box-light-grey {
+    color:#414141;
+    background-color:#c6c6c6 !important;
+}
+
 .bg-mainimage {
      background: url('../images/raaka-bg.png');
      background-repeat: no-repeat;
