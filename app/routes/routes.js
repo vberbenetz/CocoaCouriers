@@ -86,12 +86,15 @@ module.exports = function(app, passport, dbConnPool) {
         res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog', 'blog.html') );
     });
 
-    app.get('/Cocoa-Couriers-First-Annual-Tasting-Event', function(req, res) {
+    app.get('/blog/Cocoa-Couriers-First-Annual-Tasting-Event', function(req, res) {
         res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog', 'Cocoa-Couriers-First-Annual-Tasting-Event.html') );
     });
 
-    app.get('/My-Account', auth, function(req, res) {
+    app.get('/My-Account' , auth, function(req, res) {
         res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'user_mgmt.html') );
+    });
+    app.get('/My-Account*' , auth, function(req, res) {
+        res.redirect('/My-Account');
     });
 
 
@@ -454,7 +457,7 @@ module.exports = function(app, passport, dbConnPool) {
     // Send to home page if no route found ============================================================================/
 
     app.get('*', function(req, res) {
-        res.sendFile( path.join(__dirname, '..', '..', 'public', 'index.html') );
+        res.redirect('/');
     });
 
 
