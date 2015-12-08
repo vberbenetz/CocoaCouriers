@@ -16,6 +16,8 @@
 		<!-- WEB FONTS : use %7C instead of | (pipe) -->
 		<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400%7CRaleway:300,400,500,600,700%7CLato:300,400,400italic,600,700" rel="stylesheet" type="text/css" />
         <link href='https://fonts.googleapis.com/css?family=Playball' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Spinnaker' rel='stylesheet' type='text/css'>
+
 
 		<!-- CORE CSS -->
 		<link href="./assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -23,6 +25,8 @@
 		<!-- THEME CSS -->
 		<link href="./assets/css/essentials.css" rel="stylesheet" type="text/css" />
 		<link href="./assets/css/layout.css" rel="stylesheet" type="text/css" />
+        <link href="./assets/css/custom.css" rel="stylesheet" type="text/css" />
+
 
 		<!-- PAGE LEVEL SCRIPTS -->
 		<link href="./assets/css/header-1.css" rel="stylesheet" type="text/css" />
@@ -30,15 +34,14 @@
 
 	</head>
 
-	<body class="smoothscroll enable-animation">
+	<body class="smoothscroll enable-animation font-spin">
 
 		<!-- wrapper -->
 		<div id="wrapper">
 
 			<div id="header" class="sticky clearfix">
-
 				<!-- TOP NAV -->
-				<header id="topNav">
+				<header id="topNav" class="">
 					<div class="container">
 
 						<!-- Mobile Menu Button -->
@@ -54,26 +57,26 @@
 						<div class="navbar-collapse pull-right nav-main-collapse collapse">
 							<nav class="nav-main">
 
-								<ul id="topMain" class="nav nav-pills nav-main nav-onepage">
+								<ul id="topMain" class="nav nav-pills nav-main nav-onepage ">
 
 									<li><!-- FEATURES -->
-										<a href="/partners">
+										<a class="bold" href="/partners">
 											PARTNERS
 										</a>
 									</li>
                                     <li><!-- FEATURES -->
-                                        <a href="/blog">
+                                        <a class="bold" href="/blog">
                                             LEARN
                                         </a>
                                     </li>
 
 									<li><!-- TESTIMONIALS -->
-										<a href="/gift">
+										<a class="bold" href="/gift">
 											GIFT
 										</a>
 									</li>
 									<li><!-- PURCHASE -->
-										<a class="external" href="/My-Account">
+										<a class="external bold" href="/My-Account">
 											MY ACCOUNT
 										</a>
 									</li>
@@ -90,63 +93,80 @@
 
 
 			<!-- HOME -->
-			<section id="home">
-						
-				<div class="container text-center">
-					<h1 class="nomargin size-50 weight-300 wow fadeInUp" data-wow-delay="0.4s">Monthly Box of Artisan Chocolate</h1>
-					<p class="lead font-lato size-30 wow fadeInUp" data-wow-delay="0.7s">The best <span class="theme-color">Fair Trade</span>  <span class="theme-color">Bean to Bar</span> chocolate in the world</p>
+			<div class="bg-mainimage height-600 container-fluid">
+				<div class="container text-center margin-top-60 ">
+					<h1 class="nomargin size-50 wow fadeInUp text-white font-spin" data-wow-delay="0.4s">Monthly Box of Artisan Chocolate</h1>
+					<p class=" size-30 wow fadeInUp text-white" data-wow-delay="0.7s">The best <span class="theme-color">Fair Trade</span>  <span class="theme-color">Bean to Bar</span> chocolate in the world</p>
 					
-					<div class="margin-top-30">
-                        <a href="/subscribe" class="btn btn-3d btn-lg btn-green"><i class="glyphicon glyphicon-user"></i>GET STARTED</a>
-						<span class="size-17 hidden-xs">&nbsp; OR &nbsp;</span>
-                        <a href="/gift" class="btn btn-3d btn-lg btn-teal"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
+					<div class="margin-top-100">
+                        <div class="col-sm-12">
+                            <a href="/subscribe" class="btn btn-3d btn-flat-green btn-mega padding-top-15">Get Started</a>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <a href="/gift" class="btn btn-3d btn-lg btn-teal margin-top-20"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
+                        </div>
 					</div>
 				</div>
 
-			</section>
+			</div>
 			<!-- /HOME -->
 
+
+                <div class="row secondary-sep bg-emerald-green">
+                    <div class="col-sm-2">
+
+                    </div>
+                        <div class="col-sm-12 text-center margin-top-10">
+                            <h3 class="text-white font-spin">Free Shipping Anywhere in North America!</h3>
+                        </div>
+
+                </div>
+            </div>
 
 			<!-- FEATURES -->
 			<section id="features">
 				<div class="container">
 					<header class="text-center margin-bottom-30">
-						<h2 class="font-cursive">How It Works</h2>
-						<p class="lead font-lato">It's Simple!</p>
+						<h2 class="font-spin color-emerald-green">How It Works</h2>
+						<p class="lead font-spin">It's Simple!</p>
 						<hr />
 					</header>
 
 					<!-- FEATURED BOXES 3 -->
-					<div class="row">
+					<div class="row font-spin">
 						<div class="col-md-4 col-xs-12">
 							<div class="text-center">
+
                                 <div class="col-sm-12">
-                                    <img src="assets/images/step1.png" alt="" />
-                                </div>
-                                <div class="col-sm-12">
+                                    <h2 class="font-cursive color-emerald-green">1</h2>
 								    <h4>Sign Up</h4>
                                 </div>
                                 <div class="col-sm-12">
 								    <p>Select a monthly subscription or choose from our wide selection of gifts!</p>
                                 </div>
+
 							</div>
 						</div>
 						<div class="col-md-4 col-xs-12">
 							<div class="text-center">
-                                <img src="assets/images/step2.png" alt="" />
+                                <h2 class="font-cursive color-emerald-green">2</h2>
 								<h4>We Curate</h4>
 								<p>We Taste Hundreds of Makers and Select Our Favorite. All of our makers are artisan chocolatiers and specialize in fair trade cocao beans! </p>
 							</div>
+
 						</div>
 						<div class="col-md-4 col-xs-12">
 							<div class="text-center">
-                                <img src="assets/images/step3.png" alt="" />
+
+                                <h2 class="font-cursive color-emerald-green">3</h2>
 								<h4>Get Excited!</h4>
-								<p>We send you your box!</p>
+								<p>We send you your box! On the 15th of every month we dispatch all of our boxes. Order before the 15th of any month and we will ship your box the closest Monday following the 15th.
+                                Order in the second half of the month and we will ship it right away!</p>
 							</div>
 						</div>
-
 					</div>
+                    <hr/>
 					<!-- /FEATURED BOXES 3 -->
 				</div>
 			</section>
