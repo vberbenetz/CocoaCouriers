@@ -57,7 +57,7 @@ app.use(session({
         path: '/',
         httpOnly: true,
         secure: false,      // Set to true when using HTTPS
-        maxAge: 3600000
+        maxAge: (1000 * 60 * 60 * 12)  // 12 hours in milliseconds
     },
     rolling: true,  // Force cookie to be set on every response. Reset expiration of cookie
     resave: configPriv.session.resave,
