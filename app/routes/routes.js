@@ -406,7 +406,7 @@ module.exports = function(app, passport, dbConnPool) {
             });
         }
     });
-
+/*
     app.post('/api/coupon', function (req, res, next) {
 
         var payload = {
@@ -448,7 +448,7 @@ module.exports = function(app, passport, dbConnPool) {
             }
         });
     });
-
+*/
 
     // ==================================================================================== //
     // ================================== ERROR HANDLING ================================== //

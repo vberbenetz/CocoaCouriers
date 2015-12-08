@@ -36,14 +36,18 @@ chargeCtrl.prototype = {
             else {
                 var chargePayload = {
                     currency: plan.currency,
-                    customer: customer.id,
-                    description: plan.name
+                    customer: customer.id
                 };
                 var chargeAmount = 0;
+                var totalTax = 0;
 
                 var taxRate = 0;
+                var taxDesc = '';
                 if (typeof customer.metadata.taxRate !== 'undefined') {
                     taxRate = customer.metadata.taxRate;
+                }
+                if (typeof customer.metadata.taxDesc !== 'undefined') {
+                    taxDesc = customer.metadata.taxDesc;
                 }
 
                 // Retrieve coupon
@@ -56,9 +60,13 @@ chargeCtrl.prototype = {
                             if (err.detailed.raw.statusCode === 404) {
 
                                 // Plan + (plan * tax) --- Converted to integer (Ex: 19.99 = 1999)
-                                chargeAmount = ( (plan.amount/100) + parseFloat( ((plan.amount * taxRate) / 10000).toFixed(2) ) ) * 100;
+                                totalTax = parseFloat( ((plan.amount * taxRate) / 10000).toFixed(2) );
+                                chargeAmount = ( (plan.amount/100) + totalTax ) * 100;
 
                                 chargePayload.amount = chargeAmount;
+
+                                chargePayload.description = plan.name + ' : $' + (plan.amount/100).toFixed(2) + ' /// ' +
+                                        'Sales Tax ' + taxDesc + ' : $' + totalTax.toFixed(2);
 
                                 stripe.charges.create(chargePayload, function(err, charge) {
                                     if (err) {
@@ -91,19 +99,24 @@ chargeCtrl.prototype = {
 
                             if (coupon.percent_off != null) {
                                 // Plan - (Plan * Coupon_Percentage)
-                                discount = plan.amount - parseFloat((plan.amount * (coupon.percent_off / 100)).toFixed(2));
+                                discount = parseFloat((plan.amount/100 * (coupon.percent_off/100)).toFixed(2));
                             }
                             else {
-                                discount = coupon.amount_off;
+                                discount = coupon.amount_off/100;
                             }
 
                             // Plan - Discount + ( (Plan - Discount) * tax) --- Converted to integer (Ex: 19.99 = 1999)
-                            var revPlanAmt = plan.amount - discount;
-                            chargeAmount = ( (revPlanAmt/100) + parseFloat( ((revPlanAmt * taxRate) / 10000).toFixed(2) ) ) * 100;
+                            var revPlanAmt = parseFloat( ((plan.amount/100) - discount).toFixed(2) );
+                            totalTax = parseFloat( (revPlanAmt * (taxRate/100)).toFixed(2) );
+                            chargeAmount = ( (revPlanAmt) + totalTax ) * 100;
 
                             chargePayload.amount = chargeAmount;
 
-                            stripe.charges.create(payload, function(err, charge) {
+                            chargePayload.description = plan.name + ' : $' + (plan.amount/100).toFixed(2) + ' /// ' +
+                                'Discount : -$' + discount.toFixed(2) + ' /// ' +
+                                'Sales Tax ' + taxDesc + ' : $' + totalTax.toFixed(2);
+
+                            stripe.charges.create(chargePayload, function(err, charge) {
                                 if (err) {
                                     console.log(err);
                                     return callback({
@@ -128,9 +141,13 @@ chargeCtrl.prototype = {
 
                 else {
                     // Plan + (plan * tax) --- Converted to integer (Ex: 19.99 = 1999)
-                    chargeAmount = ( (plan.amount/100) + parseFloat( ((plan.amount * taxRate) / 10000).toFixed(2) ) ) * 100;
+                    totalTax = parseFloat( ((plan.amount * taxRate) / 10000).toFixed(2) );
+                    chargeAmount = ( (plan.amount/100) + totalTax ) * 100;
 
                     chargePayload.amount = chargeAmount;
+
+                    chargePayload.description = plan.name + ' : $' + (plan.amount/100).toFixed(2) + ' /// ' +
+                        'Sales Tax ' + taxDesc + ' : $' + totalTax.toFixed(2);
 
                     stripe.charges.create(chargePayload, function(err, charge) {
                         if (err) {
