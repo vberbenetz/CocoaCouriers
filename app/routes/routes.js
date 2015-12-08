@@ -1,6 +1,6 @@
 'use strict';
 
-var serveStatic = require('serve-static');
+var path = require('path');
 
 var tokenCtrl = require('../controllers/token_ctrl');
 var customerCtrl = require('../controllers/customer_ctrl');
@@ -14,9 +14,6 @@ var errorHandler = require('../utils/error_handler');
 
 
 module.exports = function(app, passport, dbConnPool) {
-
-    // Allow static HTML and CSS pages to be rendered =================================================================/
-    app.use(serveStatic('public'));
 
     // ================================================================================ //
     // ================================= Static Pages ================================= //
@@ -57,7 +54,7 @@ module.exports = function(app, passport, dbConnPool) {
     // ======================== STATIC PAGES ========================= //
 
     app.get('/', function(req, res) {
-        res.sendfile('./public/index.html');
+        res.sendFile( path.join(__dirname, '..', '..', 'public', 'index.html') );
     });
 
     app.get('/signin', function(req, res) {
@@ -65,36 +62,36 @@ module.exports = function(app, passport, dbConnPool) {
             res.redirect('/My-Account');
         }
         else {
-            res.sendfile('./public/pages/signin.html');
+            res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'signin.html') );
         }
     });
 
     app.get('/partners', function(req, res) {
-        res.sendfile('./public/pages/partners.html');
+        res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'partners.html') );
     });
 
     app.get('/gift', function(req, res) {
-        res.sendfile('./public/pages/gift.html');
+        res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'gift.html') );
     });
 
     app.get('/holiday-gift-box', function(req, res) {
-        res.sendfile('./public/pages/holiday-gift-box.html');
+        res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'holiday-gift-box.html') );
     });
 
     app.get('/subscribe', function(req, res) {
-        res.sendfile('./public/pages/subscribe.html');
+        res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'subscribe.html') );
     });
 
     app.get('/blog', function(req, res) {
-        res.sendfile('./public/blog/blog.html');
+        res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog', 'blog.html') );
     });
 
     app.get('/Cocoa-Couriers-First-Annual-Tasting-Event', function(req, res) {
-        res.sendfile('./public/blog/Cocoa-Couriers-First-Annual-Tasting-Event.html');
+        res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog', 'Cocoa-Couriers-First-Annual-Tasting-Event.html') );
     });
 
     app.get('/My-Account', auth, function(req, res) {
-        res.sendfile('./public/pages/user_mgmt.html');
+        res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'user_mgmt.html') );
     });
 
 
@@ -200,12 +197,22 @@ module.exports = function(app, passport, dbConnPool) {
 
     // ----------------- Charge Related -------------------- //
     app.post('/api/charge/onetime', auth, function (req, res, next) {
-        chargeCtrl.oneTimeCharge(req.user.stId, req.body.plan, req.body.coupon, req.body.tr, req.connection.remoteAddress, function(err, result) {
+        // Retrieve customer data
+        customerCtrl.get(req.user.stId, function(err, customer) {
             if (err) {
                 errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
             }
             else {
-                res.send(result);
+
+                chargeCtrl.oneTimeCharge(customer, req.body.plan, req.body.coupon, req.connection.remoteAddress, function(err, result) {
+                    if (err) {
+                        errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                    }
+                    else {
+                        res.send(result);
+                    }
+                });
+
             }
         });
     });
@@ -396,7 +403,7 @@ module.exports = function(app, passport, dbConnPool) {
             });
         }
     });
-
+/*
     app.post('/api/coupon', function (req, res, next) {
 
         var payload = {
@@ -438,7 +445,7 @@ module.exports = function(app, passport, dbConnPool) {
             }
         });
     });
-
+*/
 
     // ==================================================================================== //
     // ================================== ERROR HANDLING ================================== //
@@ -447,7 +454,7 @@ module.exports = function(app, passport, dbConnPool) {
     // Send to home page if no route found ============================================================================/
 
     app.get('*', function(req, res) {
-        res.sendfile('./public/index.html');
+        res.sendFile( path.join(__dirname, '..', '..', 'public', 'index.html') );
     });
 
 

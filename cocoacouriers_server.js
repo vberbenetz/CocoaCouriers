@@ -1,6 +1,7 @@
 'use strict';
 
 var express = require('express');
+var path = require('path');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
@@ -22,6 +23,8 @@ helperTests.coolDownTest();
 var testDB = require('./app/controllers/db_conn_test_ctrl');
 
 var app = express();
+
+app.use(express.static('public'));
 
 app.use(cookieParser(configPriv.cookieSecret, { httpOnly: true }));
 app.use(bodyParser.json());
@@ -78,6 +81,13 @@ testDB.test(pool, function(err, result) {
 
 // REST api routes
 require('./app/routes/routes')(app, passport, pool);
+
+// Error Handler
+app.use(function (err, req, res, next) {
+    if (err.code === 'EBADCSRFTOKEN') {
+        res.status(403).send('Invalid CSRF token');
+    }
+});
 
 log.info('================================');
 log.info('====     SERVER STARTED     ====');

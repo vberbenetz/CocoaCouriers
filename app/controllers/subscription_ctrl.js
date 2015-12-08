@@ -50,9 +50,7 @@ subscriptionCtrl.prototype = {
             }, null);
         }
 
-        var payload = {
-            plan: req.body.plan
-        };
+        var payload = {};
 
         // Attach coupon code if supplied
         if ( (typeof req.body.coupon !== 'undefined') && (req.body.coupon !== null) && (req.body.coupon.length !== 0) && (req.body.coupon !== '') ) {
@@ -72,6 +70,20 @@ subscriptionCtrl.prototype = {
                     }
                 }, null);
             }
+
+            // Switch to US plan if card is registered in US
+            var planId = req.body.plan;
+            if (customer.sources.data[0].country === 'US') {
+                var splitPlan = planId.split('_');
+                var tempPlan = splitPlan[0];
+                tempPlan += '_usd';
+                for (var i = 2; i < splitPlan.length; i++) {
+                    tempPlan += '_' + splitPlan[i];
+                }
+                planId = tempPlan;
+            }
+
+            payload.plan = planId;
 
             var tax = {
                 rate: parseFloat(customer.metadata.taxRate),

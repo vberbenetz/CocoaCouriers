@@ -189,54 +189,54 @@ function calculateTaxPercentage(province) {
     switch(province) {
         case 'AB':
             taxPercentage = 5;
-            taxDesc = 'GST -- (5%)';
+            taxDesc = 'GST (5%)';
             break;
         case 'BC':
             taxPercentage = 12;
-            taxDesc = 'GST / PST -- (5% + 7%)';
+            taxDesc = 'GST / PST (5% + 7%)';
             break;
         case 'MB':
             taxPercentage = 13;
-            taxDesc = 'GST / PST -- (5% + 8%)';
+            taxDesc = 'GST / PST (5% + 8%)';
             break;
         case 'NB':
             taxPercentage = 13;
-            taxDesc = 'HST -- (5% + 8%)';
+            taxDesc = 'HST (5% + 8%)';
             break;
         case 'NL':
-            taxDesc = 'HST -- (5% + 8%)';
+            taxDesc = 'HST (5% + 8%)';
             taxPercentage = 13;
             break;
         case 'NS':
-            taxDesc = 'HST -- (5% + 10%)';
+            taxDesc = 'HST (5% + 10%)';
             taxPercentage = 15;
             break;
         case 'NT':
-            taxDesc = 'GST -- (5%)';
+            taxDesc = 'GST (5%)';
             taxPercentage = 5;
             break;
         case 'NU':
-            taxDesc = 'GST -- (5%)';
+            taxDesc = 'GST (5%)';
             taxPercentage = 5;
             break;
         case 'ON':
-            taxDesc = 'HST -- (5% + 8%)';
+            taxDesc = 'HST (5% + 8%)';
             taxPercentage = 13;
             break;
         case 'PE':
-            taxDesc = 'HST -- (5% + 9%)';
+            taxDesc = 'HST (5% + 9%)';
             taxPercentage = 14;
             break;
         case 'QC':
-            taxDesc = 'GST / QST -- (5% + 9.975%)';
+            taxDesc = 'GST / QST (5% + 9.975%)';
             taxPercentage = 14.98;
             break;
         case 'SK':
-            taxDesc = 'GST + PST -- (5% + 10%)';
+            taxDesc = 'GST + PST (5% + 10%)';
             taxPercentage = 10;
             break;
         case 'YT':
-            taxDesc = 'GST -- (5%)';
+            taxDesc = 'GST (5%)';
             taxPercentage = 5;
             break;
         default:
