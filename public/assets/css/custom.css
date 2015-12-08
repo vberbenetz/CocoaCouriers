@@ -33,6 +33,7 @@
  }
 
 
+
 .btn-flat-green {
  background-color: #27ae60; color: #FFF !important;
  }
@@ -77,4 +78,11 @@
     width: 100px;
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.test-gradient {
+    background: -webkit-radial-gradient(#ecf0f1, #2ecc71, #27ae60); /* For Safari 5.1 to 6.0 */
+    background: -o-radial-gradient(#ecf0f1, #2ecc71, #27ae60); /* For Opera 11.6 to 12.0 */
+    background: -moz-radial-gradient(#ecf0f1, #2ecc71, #27ae60); /* For Fx 3.6 to 15 */
+    background: radial-gradient(#ecf0f1, #2ecc71, #27ae60); /* Standard syntax (must be last) */
 }
