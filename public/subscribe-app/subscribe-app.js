@@ -9,9 +9,24 @@ angular.module('subscribe', [])
             url: '/isloggedin',
             method: 'GET'
         }).success(function(result) {
-                $scope.loggedIn = !!(result);
-        }).error(function(error) {
+            if (result) {
+                $scope.loggedIn = true;
+
+                $http({
+                    url: '/api/customer',
+                    method: 'GET'
+                }).success(function(customer) {
+                    $scope.customer = customer;
+                }).error(function(error) {
+                    $scope.customer = {};
+                });
+            }
+            else {
                 $scope.loggedIn = false;
+                $scope.customer = {};
+            }
+        }).error(function(error) {
+            $scope.loggedIn = false;
         });
 
 
