@@ -70,6 +70,7 @@ module.exports = function(app, passport, dbConnPool) {
         res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'partners.html') );
     });
 
+/*
     app.get('/gift', function(req, res) {
         res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'gift.html') );
     });
@@ -77,17 +78,18 @@ module.exports = function(app, passport, dbConnPool) {
     app.get('/holiday-gift-box', function(req, res) {
         res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'holiday-gift-box.html') );
     });
+*/
 
     app.get('/subscribe', function(req, res) {
         res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'subscribe.html') );
     });
 
     app.get('/blog', function(req, res) {
-        res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog', 'blog.html') );
+        res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'blog.html') );
     });
 
     app.get('/blog/Cocoa-Couriers-First-Annual-Tasting-Event', function(req, res) {
-        res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog', 'Cocoa-Couriers-First-Annual-Tasting-Event.html') );
+        res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog_pages', 'Cocoa-Couriers-First-Annual-Tasting-Event.html') );
     });
 
     app.get('/My-Account' , auth, function(req, res) {
@@ -225,6 +227,11 @@ module.exports = function(app, passport, dbConnPool) {
     app.get('/api/customer', auth, function (req, res, next) {
         var customerId = req.user.stId;
 
+        // Customer has no information associated with them
+        if (customerId === null) {
+            res.status(404).send();
+        }
+
         customerCtrl.get(customerId, function (err, result) {
             if (err) {
                 errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
@@ -286,13 +293,14 @@ module.exports = function(app, passport, dbConnPool) {
         }
     });
 
-/*
+
     app.post('/api/plan', function (req, res, next) {
         var payload = {
             id: req.body.id,
             amount: req.body.amount,
             currency: req.body.currency,
             interval: req.body.interval,
+            interval_count: req.body.interval_count,
             name: req.body.name,
             metadata: req.body.metadata
         };
@@ -306,7 +314,7 @@ module.exports = function(app, passport, dbConnPool) {
             }
         });
     });
-*/
+
 
     // ----------------- Subscription Related ------------------------ //
 

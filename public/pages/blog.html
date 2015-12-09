@@ -2,42 +2,40 @@
 <!--[if IE 8]>			<html class="ie ie8"> <![endif]-->
 <!--[if IE 9]>			<html class="ie ie9"> <![endif]-->
 <!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8" />
-        <title>Coco Couriers | Monthly Artisan Chocolate Club</title>
-        <meta name="keywords" content="Chocolate, Club, Subscription, Artisan, Bean to Bar, Fair Trade" />
-        <meta name="description" content="A Monthly Box of Artisan Chocolate | Fair Trade | Bean to Bar | Sign Up to Get Some of The Best Chocolate This World Has to Offer!" />
-        <meta name="Author" content="Cocoa Couriers" />
+<head>
+    <meta charset="utf-8" />
+    <title>Coco Couriers | Monthly Artisan Chocolate Club</title>
+    <meta name="keywords" content="Chocolate, Club, Subscription, Artisan, Bean to Bar, Fair Trade" />
+    <meta name="description" content="A Monthly Box of Artisan Chocolate | Fair Trade | Bean to Bar | Sign Up to Get Some of The Best Chocolate This World Has to Offer!" />
+    <meta name="Author" content="Cocoa Couriers" />
 
-        <!-- mobile settings -->
-        <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=0" />
-        <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
+    <!-- mobile settings -->
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=0" />
+    <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
 
-        <!-- WEB FONTS : use %7C instead of | (pipe) -->
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400%7CRaleway:300,400,500,600,700%7CLato:300,400,400italic,600,700" rel="stylesheet" type="text/css" />
-        <link href='https://fonts.googleapis.com/css?family=Playball' rel='stylesheet' type='text/css'>
-        <link href='https://fonts.googleapis.com/css?family=Spinnaker' rel='stylesheet' type='text/css'>
+    <!-- WEB FONTS : use %7C instead of | (pipe) -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400%7CRaleway:300,400,500,600,700%7CLato:300,400,400italic,600,700" rel="stylesheet" type="text/css" />
+    <link href='https://fonts.googleapis.com/css?family=Playball' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Spinnaker' rel='stylesheet' type='text/css'>
 
-        <link rel="shortcut icon" type="image/png" href="/favicon.png" />
+    <link rel="shortcut icon" type="image/png" href="/favicon.png" />
 
-        <!-- CORE CSS -->
-        <link href="/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- CORE CSS -->
+    <link href="/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
-        <!-- THEME CSS -->
-        <link href="/assets/css/essentials.css" rel="stylesheet" type="text/css" />
-        <link href="/assets/css/layout.css" rel="stylesheet" type="text/css" />
-        <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
+    <!-- THEME CSS -->
+    <link href="/assets/css/essentials.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/layout.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
 
 
-        <!-- PAGE LEVEL SCRIPTS -->
-        <link href="/assets/css/header-1.css" rel="stylesheet" type="text/css" />
-        <link href="/assets/css/color_scheme/green.css" rel="stylesheet" type="text/css" id="color_scheme" />
+    <!-- PAGE LEVEL SCRIPTS -->
+    <link href="/assets/css/header-1.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/color_scheme/green.css" rel="stylesheet" type="text/css" id="color_scheme" />
 
-        <script type="text/javascript" src="/assets/plugins/jquery/jquery-2.1.4.min.js"></script>
-        <script type="text/javascript" src="/assets/plugins/angular/angular.min.js"></script>
-	</head>
+</head>
 
-	<body class="smoothscroll enable-animation font-spin ng-cloak" ng-app="subscribe" ng-controller="signupCtrl" ng-cloak>
+	<body class="smoothscroll enable-animation font-spin">
 
 		<!-- wrapper -->
 		<div id="wrapper">
@@ -79,13 +77,13 @@
                                     </li>
 
                                     <li><!-- TESTIMONIALS -->
-                                        <a class="bold" href="/gift">
+                                        <a class="bold" href="/subscribe?gift">
                                             GIFT
                                         </a>
                                     </li>
                                     <li><!-- PURCHASE -->
-                                        <a class="bold" href="/My-Account">
-                                            MY ACCOUNT <small ng-show="loggedIn">({{ localUser.email }})</small>
+                                        <a class="external bold" href="/My-Account">
+                                            MY ACCOUNT
                                         </a>
                                     </li>
                                 </ul>
@@ -98,50 +96,53 @@
                 <!-- /Top Nav -->
             </div>
 
-            <div class="container">
+            <!-- -->
+            <section>
+                <div class="container">
 
-                <div ng-include="templateUrl"></div>
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <h1 class="pricing-head font-cursive">
+                                The Blog!
+                            </h1>
+                            <hr/>
+                        </div>
+                        <!-- POST ITEM -->
+                        <div class="blog-post-item col-md-4 col-sm-4">
 
-                <hr class="margin-bottom-100"/>
+                            <!-- OWL SLIDER -->
+                            <div class="owl-carousel buttons-autohide controlls-over" data-plugin-options='{"items": 1, "autoPlay": 3000, "autoHeight": false, "navigation": true, "pagination": true, "transitionStyle":"fadeUp", "progressBar":"false"}'>
+                                <div>
+                                    <img class="img-responsive" src="/assets/images/demo/720x400/1-min.jpg" alt="">
+                                </div>
+                                <div>
+                                    <img class="img-responsive" src="/assets/images/demo/720x400/2-min.jpg" alt="">
+                                </div>
+                            </div>
+                            <!-- /OWL SLIDER -->
 
-                <div class="row">
-                    <div class="col-sm-12 text-center"><h1 class="font-cursive">We Love Our Partners!</h1></div>
-                </div>
-                <div class="text-center margin-top-10 margin-bottom-100">
-                    <div class="owl-carousel nomargin" data-plugin-options='{"singleItem": false, "autoPlay": true}'>
-                        <div>
-                            <img class="img-responsive" src="/assets/images/partners/acalli.png" alt="">
+                            <h2><a href="/blog/Cocoa-Couriers-First-Annual-Tasting-Event">CocoaCouriers 1st Annual..</a></h2>
+
+                            <ul class="blog-post-info list-inline">
+                                <li>
+                                    <i class="fa fa-clock-o"></i>
+                                    <span class="font-lato">December 10, 2015</span>
+                                </li>
+                            </ul>
+
+                            <p>The first annual CocoaCouriers tasting event is put together for our customers as a way to input their feedback on our abr selection over the next year by tasting and rating the newest creations on the market.</p>
+                            <a href="/blog/Cocoa-Couriers-First-Annual-Tasting-Event" class="btn btn-reveal btn-default">
+                                <i class="fa fa-plus"></i>
+                                <span>Read More</span>
+                            </a>
+
                         </div>
-                        <div>
-                            <img class="img-responsive" src="/assets/images/partners/brasstown.png" alt="">
-                        </div>
-                        <div>
-                            <img class="img-responsive" src="/assets/images/partners/habitual.png" alt="">
-                        </div>
-                        <div>
-                            <img class="img-responsive" src="/assets/images/partners/hello_cocoa.png" alt="">
-                        </div>
-                        <div>
-                            <img class="img-responsive" src="/assets/images/partners/kyya.png" alt="">
-                        </div>
-                        <div>
-                            <img class="img-responsive" src="/assets/images/partners/ritual.png" alt="">
-                        </div>
-                        <div>
-                            <img class="img-responsive" src="//images/partners/starchild.png" alt="">
-                        </div>
-                        <div>
-                            <img class="img-responsive" src="/assets/images/partners/pitchdark.png" alt="">
-                        </div>
+                        <!-- /POST ITEM -->
+
                     </div>
-                    <div class="margin-top-30">
-                        <a href="/blog" class="btn btn-3d btn-lg wow fadeInUp btn-primary" data-wow-delay="0.59"><i class="glyphicon glyphicon-user"></i>Learn More</a>
-                    </div>
                 </div>
-
-            </div>
-            <!-- /Container -->
-
+            </section>
+            <!-- / -->
 
             <footer id="footer">
                 <div class="container">
@@ -151,7 +152,7 @@
                         <div class="col-md-8">
 
                             <!-- Footer Logo -->
-                            <img class="footer-logo footer-2" src="/assets/images/logo-cocoa-white.png" alt="" />
+                            <img class="footer-logo footer-2" src="./assets/images/logo-cocoa-white.png" alt="" />
 
                             <!-- Small Description -->
                             <p>Chocolate means different things to different people. Some just enjoy the taste, some appreciate the story right back to the farm it was grown on.
@@ -240,11 +241,10 @@
 		<a href="#" id="toTop"></a>
 
 		<!-- JAVASCRIPT FILES -->
-		<script type="text/javascript">var plugin_path = 'assets/plugins/';</script>
-		<script type="text/javascript" src="/assets/js/scripts.js"></script>
+		<script type="text/javascript">var plugin_path = '/assets/plugins/';</script>
+		<script type="text/javascript" src="/assets/plugins/jquery/jquery-2.1.4.min.js"></script>
 
-        <!-- App -->
-        <script type="text/javascript" src="/subscribe-app/subscribe-app.js"></script>
+		<script type="text/javascript" src="/assets/js/scripts.js"></script>
 
 	</body>
 </html>

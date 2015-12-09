@@ -56,6 +56,16 @@ customerCtrl.prototype = {
         stripe.customers.create(payload, function(stripeErr, customer) {
             if (stripeErr) {
 
+                return callback({
+                    status: 500,
+                    type: 'stripe',
+                    msg: {
+                        simplified: 'server_error',
+                        detailed: stripeErr
+                    }
+                }, null);
+
+/*
                 req.logout();
 
                 req.session.destroy(function(err) {
@@ -79,7 +89,7 @@ customerCtrl.prototype = {
                     }
 
                 });
-
+*/
             }
             else {
 

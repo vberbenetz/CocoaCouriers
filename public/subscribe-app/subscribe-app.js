@@ -2,7 +2,20 @@
 
 angular.module('subscribe', [])
 
-.controller('signupCtrl', function ($scope, $http, $window) {
+.controller('signupCtrl', function ($scope, $http, $window, $location) {
+
+        var param = $location.absUrl().split('?');
+        if (param.length > 1) {
+            if (param[1].indexOf('gift') > -1) {
+                $scope.activeTab = 2;
+            }
+            else {
+                $scope.activeTab = 1;
+            }
+        }
+        else {
+            $scope.activeTab = 1;
+        }
 
         // Check if user is logged in
         $http({
@@ -12,18 +25,29 @@ angular.module('subscribe', [])
             if (result) {
                 $scope.loggedIn = true;
 
+                // Get local user
+                $http({
+                    url: '/api/user',
+                    method: 'GET'
+                }).success(function(user) {
+                    $scope.localUser = user;
+                }).error(function(error) {
+                    $scope.localUser = null;
+                });
+
+                // Get st info
                 $http({
                     url: '/api/customer',
                     method: 'GET'
                 }).success(function(customer) {
                     $scope.customer = customer;
                 }).error(function(error) {
-                    $scope.customer = {};
+                    $scope.customer = null;
                 });
             }
             else {
                 $scope.loggedIn = false;
-                $scope.customer = {};
+                $scope.customer = null;
             }
         }).error(function(error) {
             $scope.loggedIn = false;
@@ -38,13 +62,59 @@ angular.module('subscribe', [])
         $scope.validationErrors = {};
 
         // Get plan list
+        $scope.plans = [];
         $scope.formPlans = [];
         $http({
                 url: '/api/plan',
                 method: 'GET'
-            }).success(function (plans) {
-                $scope.formPlans = plans.data;
-            }).error(function (err) {
+        }).success(function (plans) {
+            plans = plans.data;
+            $scope.formPlans = [];
+            $scope.formGifts = [];
+
+            $scope.plans = plans;
+
+            // Filter out duplicate plan in other currency
+            for (var i = 0; i < plans.length; i++) {
+
+                // Recurring Plans
+                if ( (typeof plans[i].metadata.is_gift !== 'undefined') && (plans[i].metadata.is_gift === 'false') ) {
+                    if (plans[i].currency === 'cad') {
+                        $scope.formPlans.push(plans[i]);
+                    }
+                }
+
+                // Gifts
+                else {
+                    if (plans[i].currency === 'cad') {
+                        $scope.formGifts.push(plans[i]);
+                    }
+                }
+            }
+
+            // Sort recurring plans by ascending monthly price
+            $scope.formPlans.sort(function(a, b) {
+                if ( (a.amount/a.interval_count) > (b.amount/b.interval_count) ) {
+                    return 1;
+                }
+                if ( (a.amount/a.interval_count) < (b.amount/b.interval_count) ) {
+                    return -1;
+                }
+                return 0;
+            });
+
+            // Sort gifts by ascending monthly price
+            $scope.formGifts.sort(function(a, b) {
+                if ( (a.amount/a.interval_count) > (b.amount/b.interval_count) ) {
+                    return 1;
+                }
+                if ( (a.amount/a.interval_count) < (b.amount/b.interval_count) ) {
+                    return -1;
+                }
+                return 0;
+            });
+
+        }).error(function (err) {
         });
 
         $scope.formOptions = {
@@ -211,13 +281,13 @@ angular.module('subscribe', [])
         $scope.selectPlan = function(planId) {
 
             // Check if plans have been loaded yet
-            if ($scope.formPlans.length > 0) {
+            if ($scope.plans.length > 0) {
                 $scope.userInfo.subscription.planId = planId;
                 $scope.formPage = 2;
 
-                for (var i = 0; i < $scope.formPlans.length; i++) {
-                    if ($scope.formPlans[i].id === planId) {
-                        $scope.chosenPlan = $scope.formPlans[i];
+                for (var i = 0; i < $scope.plans.length; i++) {
+                    if ($scope.plans[i].id === planId) {
+                        $scope.chosenPlan = $scope.plans[i];
                         $scope.chosenPlan.cleanName = $scope.chosenPlan.name.split('_')[0];
                     }
                 }
@@ -312,6 +382,10 @@ angular.module('subscribe', [])
 
         // Validate new account creation
         $scope.validateNewAccount = function(callback) {
+
+            if (typeof $scope.localUser !== 'undefined') {
+                return callback(true);
+            }
 
             // Reset validation objects
             var validationFailed = false;
@@ -500,6 +574,10 @@ angular.module('subscribe', [])
             else if ( $scope.userInfo.address.postal_code.length > 1024 ) {
                 $scope.validationErrors.address.postal_code = 'Postal / Zip code is too long. Please enter a valid postal / zip code';
                 validationFailed = true;
+            }
+            // Remove all whitespace from postal code
+            else {
+                $scope.userInfo.address.postal_code = $scope.userInfo.address.postal_code.replace(/\s+/g, '');
             }
 
             return !validationFailed;
@@ -910,25 +988,49 @@ angular.module('subscribe', [])
          */
         function createUser (callback) {
 
-            registerCustomerLocally( function(newUser) {
+            // Need local registration and st registration
+            if (!$scope.isLoggedIn && ($scope.customer === null) ) {
+                registerCustomerLocally( function(newUser) {
 
-                if (newUser) {
-                    $scope.newUser = newUser;
+                    if (newUser) {
+                        $scope.isLoggedIn = true;
+                        $scope.localUser = newUser;
 
-                    createStCustomer(newUser.email, function(customer) {
+                        createStCustomer(newUser.email, function(customer) {
 
-                        if (customer) {
-                            return callback(customer);
-                        }
-                        else {
-                            return callback(false);
-                        }
-                    });
-                }
-                else {
-                    return callback(false);
-                }
-            });
+                            if (customer) {
+                                $scope.customer = customer;
+                                return callback(customer);
+                            }
+                            else {
+                                return callback(false);
+                            }
+                        });
+                    }
+                    else {
+                        return callback(false);
+                    }
+                });
+            }
+
+            // Need st reg
+            else if ($scope.customer === null) {
+                createStCustomer($scope.localUser.email, function (customer) {
+
+                    if (customer) {
+                        $scope.customer = customer;
+                        return callback(customer);
+                    }
+                    else {
+                        return callback(false);
+                    }
+                });
+            }
+
+            // User already created and logged in
+            else {
+                return callback(true);
+            }
 
         }
 
@@ -1007,6 +1109,11 @@ angular.module('subscribe', [])
 
         // Handle payment cc error codes
         function handleStCCErr(errCode) {
+            // Reset validation objects
+            $scope.validationErrors = {
+                source: {}
+            };
+
             switch (errCode) {
                 case 'invalid_number':
                     $scope.validationErrors.source.number = 'Please enter a valid number. You can use dashes or spaces to separate blocks of numbers if you choose';
@@ -1036,7 +1143,7 @@ angular.module('subscribe', [])
                     $scope.validationErrors.source.cvc = 'Please enter a correct CVV';
                     break;
                 case 'incorrect_zip':
-                    $scope.validationErrors.source.address_zip = 'Please enter the postal code / zip relating to your credit card';
+                    $scope.validationErrors.source.address_zip = 'Invalid postal code for this card.';
                     break;
                 default:
                     $scope.validationErrors.source.number = 'There was an issue processing your payment. Please try again or contact our support team';

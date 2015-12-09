@@ -10,72 +10,38 @@
     </h1>
 </div>
 
-<div class="row" ng-init="activeTab=1">
+<div class="row">
 
     <!-- Choose a plan -->
     <div ng-if="formPage==1">
-        <ul class="nav nav-tabs nav-button-tabs">
-            <li class="btn-lg" ng-class="{ 'active' : activeTab==1 }"><a href="" ng-click="activeTab=1">Subscription</a></li>
-            <li class="btn-lg" ng-class="{ 'active' : activeTab==2 }"><a href="" ng-click="activeTab=2"><i class="glyphicon glyphicon-gift"></i>&nbsp;Gift</a></li>
+
+        <ul class="nav nav-tabs nav-top-border">
+            <li ng-class="{ 'active' : activeTab==1 }"><a href="" ng-click="activeTab=1"><h3>Subscription</h3></a></li>
+            <li ng-class="{ 'active' : activeTab==2 }"><a href="" ng-click="activeTab=2"><h3><span class="fa fa-gift"></span>&nbsp;&nbsp;Gift</h3></a></li>
         </ul>
 
         <div class="tab-content">
             <div class="tab-pane" ng-class="{ 'active' : activeTab==1 }">
 
-                <div class="col-md-4 col-sm-4">
+                <div class="col-md-4 col-sm-4" ng-repeat="plan in formPlans">
                     <div class="price-clean">
-                        <h1 class="pricing-head">Pay Every 12 Months</h1>
+                        <h1 class="pricing-head" ng-if="plan.interval_count>1">{{ plan.interval_count }} Month Plan</h1>
+                        <h1 class="pricing-head" ng-if="plan.interval_count===1">Monthly Plan</h1>
                         <h4>
-                            <sup>$</sup>30.99<em>/month</em>
+                            <sup>$</sup>{{ (plan.amount/plan.interval_count/100).toFixed(2) }}<em> / month</em>
                         </h4>
-                        <h5> YEARLY </h5>
+                        <h5 ng-if="plan.interval_count===12"> YEARLY </h5>
+                        <h5 ng-if="plan.interval_count===3"> QUARTERLY </h5>
+                        <h5 ng-if="plan.interval_count===1"> MONTH TO MONTH </h5>
                         <hr />
-                        <p>$371.88 Every Year</p>
+                        <p>${{ (plan.amount/100) }} Every <i ng-if="plan.interval_count>1">{{ plan.interval_count }} </i>Month<i ng-if="plan.interval_count>1">s</i></p>
                         <hr />
                         <p>Cancel Anytime</p>
                         <hr />
                         <p>Shipped On the 3rd Week of Each Month</p>
                         <hr />
 
-                        <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('annual_cad')" class="btn btn-3d btn-success btn-block btn-lg">SELECT</a>
-                    </div>
-                </div>
-
-                <div class="col-md-4 col-sm-4">
-                    <div class="price-clean">
-                        <h1 class="pricing-head">Pay Every 3 Months</h1>
-                        <h4>
-                            <sup>$</sup>32.99<em>/month</em>
-                        </h4>
-                        <h5> QUARTERLY </h5>
-                        <hr />
-                        <p>$98.87 Every 3 Months</p>
-                        <hr />
-                        <p>Cancel Anytime</p>
-                        <hr />
-                        <p>Shipped On the 3rd Week of Each Month</p>
-                        <hr />
-
-                        <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('quarterly_cad')" class="btn btn-3d btn-success btn-block btn-lg">SELECT</a>
-                    </div>
-                </div>
-
-                <div class="col-md-4 col-sm-4">
-                    <div class="price-clean">
-                        <h1 class="pricing-head">Month to Month</h1>
-                        <h4>
-                            <sup>$</sup>34.99<em>/month</em>
-                        </h4>
-                        <h5> Month to Month </h5>
-                        <hr />
-                        <p>$34.99 Every Month</p>
-                        <hr />
-                        <p>Cancel Anytime</p>
-                        <hr />
-                        <p>Shipped On the 3rd Week of Each Month</p>
-                        <hr />
-
-                        <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('monthly_cad')" class="btn btn-3d btn-success btn-block btn-lg">SELECT</a>
+                        <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan(plan.id)" class="btn btn-3d btn-success btn-block btn-lg">SELECT</a>
                     </div>
                 </div>
 
@@ -83,73 +49,30 @@
 
             <div class="tab-pane" ng-class="{ 'active' : activeTab==2 }">
 
-                <div class="col-sm-3 col-sm-3">
-                    <div class="price-clean">
-                        <h1 class="pricing-head">12 Month Gift</h1>
+                <div class="col-sm-4 col-sm-4" ng-repeat="gift in formGifts">
+                    <div class="price-clean" ng-class="{ 'thick-pricing-box' : gift.interval_count===1 }">
+                        <div class="ribbon">
+                            <div class="ribbon-inner"><span class="fa fa-gift"></span>&nbsp;GIFT</div>
+                        </div>
+                        <h1 class="pricing-head" ng-if="gift.interval_count>1">{{ gift.interval_count }} Month Gift</h1>
+                        <h1 class="pricing-head" ng-if="gift.interval_count===1">One-Time Gift</h1>
                         <h4>
-                            <sup>$</sup>30.99<em>/month</em>
+                            <sup>$</sup>{{ (gift.amount/gift.interval_count/100).toFixed(2) }}<em> <i ng-hide="gift.interval_count===1">/ month</i></em>
                         </h4>
-                        <h5> YEARLY </h5>
+                        <h5 ng-if="gift.interval_count===12"> YEARLY </h5>
+                        <h5 ng-if="gift.interval_count===3"> QUARTERLY </h5>
+                        <h5 ng-if="gift.interval_count===1"> ONCE </h5>
                         <hr />
-                        <p>$371.88 Every Year</p>
+                        <p>${{ (gift.amount/100) }} Every <i ng-if="gift.interval_count>1">{{ gift.interval_count }} </i>Month<i ng-if="gift.interval_count>1">s</i></p>
                         <hr />
-                        <p>Cancel Anytime</p>
+                        <p ng-if="gift.interval_count>1">Cancel Anytime</p>
+                        <p ng-if="gift.interval_count===1">Charged Once</p>
                         <hr />
-                        <p>Shipped On the 3rd Week of Each Month</p>
-                        <hr />
-
-                        <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('annual_cad_gift')" class="btn btn-3d btn-success btn-block btn-lg"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-sm-3">
-                    <div class="price-clean">
-                        <h1 class="pricing-head">3 Month Gift</h1>
-                        <h4>
-                            <sup>$</sup>32.99<em>/month</em>
-                        </h4>
-                        <h5> QUARTERLY </h5>
-                        <hr />
-                        <p>$98.87 Every 3 Months</p>
-                        <hr />
-                        <p>Cancel Anytime</p>
-                        <hr />
-                        <p>Shipped On the 3rd Week of Each Month</p>
+                        <p ng-if="gift.interval_count>1">Shipped On the 3rd Week of Each Month</p>
+                        <p ng-if="gift.interval_count===1">Created And Shipped Right Away</p>
                         <hr />
 
-                        <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('quarterly_cad_gift')" class="btn btn-3d btn-success btn-block btn-lg"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-sm-3">
-                    <div class="price-clean">
-                        <h1 class="pricing-head">1 Month Gift</h1>
-                        <h4>
-                            <sup>$</sup>34.99<em>/month</em>
-                        </h4>
-                        <h5> Month to Month </h5>
-                        <hr />
-                        <p>$34.99 Every Month</p>
-                        <hr />
-                        <p>Cancel Anytime</p>
-                        <hr />
-                        <p>Shipped On the 3rd Week of Each Month</p>
-                        <hr />
-
-                        <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('onetime_cad_gift')" class="btn btn-3d btn-success btn-block btn-lg"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-sm-3">
-                    <div class="price-clean">
-                        <h1 class="font-cursive">Holiday Gift Box</h1>
-                        <hr/>
-                        <h4>
-                            <sup>$</sup>49.95
-                        </h4>
-                        <hr/>
-
-                        <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan('holidaygiftbox_cad_gift')" class="btn btn-3d btn-success btn-block btn-lg">SELECT</a>
+                        <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan(gift.id)" class="btn btn-3d btn-success btn-block btn-lg"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
                     </div>
                 </div>
 
@@ -189,16 +112,16 @@
                             <input id="billing_city" name="billing[city]" type="text" class="form-control required" ng-model="userInfo.address.city" />
                             <p class="text-danger" ng-show="validationErrors.address.city">{{ validationErrors.address.city }}</p>
                         </div>
+                        <div class="col-md-6 col-sm-6 form-group" ng-class="{ 'has-error' : validationErrors.address.postal_code }">
+                            <label for="billing_zipcode"><small>Postal/Zip Code *</small></label>
+                            <input id="billing_zipcode" name="billing[zipcode]" type="text" class="form-control required" ng-model="userInfo.address.postal_code" />
+                            <p class="text-danger" ng-show="validationErrors.address.postal_code">{{ validationErrors.address.postal_code }}</p>
+                        </div>
                         <div class="col-md-6 col-sm-6 form-group" ng-class="{ 'has-error' : validationErrors.address.state }">
                             <label for="shipping_state"><small>State/Province *</small></label>
                             <select id="shipping_state" class="form-control input-normal" ng-options="o as o.name for o in formOptions.provinces" ng-model="userInfo.address.state">
                             </select>
                             <p class="text-danger" ng-show="validationErrors.address.state">{{ validationErrors.address.state }}</p>
-                        </div>
-                        <div class="col-md-6 col-sm-6 form-group" ng-class="{ 'has-error' : validationErrors.address.postal_code }">
-                            <label for="billing_zipcode"><small>Postal/Zip Code *</small></label>
-                            <input id="billing_zipcode" name="billing[zipcode]" type="text" class="form-control required" ng-model="userInfo.address.postal_code" />
-                            <p class="text-danger" ng-show="validationErrors.address.postal_code">{{ validationErrors.address.postal_code }}</p>
                         </div>
                         <div class="col-md-6 col-sm-6" ng-class="{ 'has-error' : validationErrors.address.country }">
                             <label><small>Country *</small></label>
@@ -276,7 +199,7 @@
                     <div class="box-title">
                         <h4>Account Setup</h4>
                     </div>
-                    <fieldset class="margin-top-20">
+                    <fieldset class="margin-top-20" ng-show="localUser==null">
                         <div class="col-md-6 col-sm-6" ng-class="{ 'has-error' : validationErrors.email }">
                             <label for="account_email"><small>Email *</small></label>
                             <input id="account_email" name="billing[email]" type="text" class="form-control required" ng-model="userInfo.email" />
@@ -286,6 +209,16 @@
                             <label for="account_password"><small>Password *</small></label>
                             <input id="account_password" name="billing[email]" type="password" class="form-control required" ng-model="userInfo.password" />
                             <p class="text-danger" ng-show="validationErrors.password">{{ validationErrors.password }}</p>
+                        </div>
+                    </fieldset>
+                    <fieldset class="margin-top-20" ng-show="localUser!=null">
+                        <div class="col-md-6 col-sm-6" ng-class="{ 'has-error' : validationErrors.email }">
+                            <label for="account_email"><small>Email *</small></label>
+                            <p class="form-control-static required">{{ localUser.email }}</p>
+                        </div>
+                        <div class="col-md-6 col-sm-6" ng-class="{ 'has-error' : validationErrors.password }">
+                            <label for="account_password"><small>Password *</small></label>
+                            <p class="form-control-static required">********</p>
                         </div>
                     </fieldset>
                     <small>We create a simple account for you, in case there is an issue with processing your payment, or your package destination address changes.</small>
@@ -346,7 +279,7 @@
                         </button>
 
                         <div ng-show="globalValidationFailed" class="alert alert-danger margin-top-30">
-                            <strong>Please resolve the highlighted form errors</strong>
+                            <strong>There were issues with your information</strong>
                         </div>
 
                     </div>
