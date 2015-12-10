@@ -4,6 +4,7 @@ angular.module('subscribe', [])
 
 .controller('signupCtrl', function ($scope, $http, $window, $location) {
 
+        // Set gift tab active if user selects gift
         var param = $location.absUrl().split('?');
         if (param.length > 1) {
             if (param[1].indexOf('gift') > -1) {
@@ -17,56 +18,27 @@ angular.module('subscribe', [])
             $scope.activeTab = 1;
         }
 
-        // Check if user is logged in
-        $http({
-            url: '/isloggedin',
-            method: 'GET'
-        }).success(function(result) {
-            if (result) {
-                $scope.loggedIn = true;
-
-                // Get local user
-                $http({
-                    url: '/api/user',
-                    method: 'GET'
-                }).success(function(user) {
-                    $scope.localUser = user;
-                }).error(function(error) {
-                    $scope.localUser = null;
-                });
-
-                // Get st info
-                $http({
-                    url: '/api/customer',
-                    method: 'GET'
-                }).success(function(customer) {
-                    $scope.customer = customer;
-                }).error(function(error) {
-                    $scope.customer = null;
-                });
-            }
-            else {
-                $scope.loggedIn = false;
-                $scope.customer = null;
-            }
-        }).error(function(error) {
-            $scope.loggedIn = false;
-        });
-
 
         // ------------- DATA INITIALIZATIONS ------------- //
+
         $scope.templateUrl = '/subscribe-app/views/signup.html';
 
-        $scope.formPage = 1;
-
-        $scope.validationErrors = {};
+        $scope.localUser = null;
+        $scope.customer = null;
 
         // Get plan list
         $scope.plans = [];
         $scope.formPlans = [];
+        $scope.doneFormLoad = false;    // Flag to indicate form loading has completed
+
+        // Start on plan selection page
+        $scope.formPage = 1;
+
+
+        // ------------- RETRIEVE PLANS ------------- //
         $http({
-                url: '/api/plan',
-                method: 'GET'
+            url: '/api/plan',
+            method: 'GET'
         }).success(function (plans) {
             plans = plans.data;
             $scope.formPlans = [];
@@ -114,8 +86,13 @@ angular.module('subscribe', [])
                 return 0;
             });
 
+            $scope.doneFormLoad = true;
+
         }).error(function (err) {
         });
+
+
+        // ----------------- FORM SETUP ------------------ //
 
         $scope.formOptions = {
             provinces: [],
@@ -209,17 +186,6 @@ angular.module('subscribe', [])
             ]
         };
 
-        $scope.$watch('userInfo.address.country', function (newVal, oldVal) {
-            if (newVal !== oldVal) {
-                if (newVal.id === 'CA') {
-                    $scope.formOptions.provinces = $scope.provincesAndStates.caProvinces;
-                }
-                else if (newVal.id === 'US') {
-                    $scope.formOptions.provinces = $scope.provincesAndStates.usStates;
-                }
-            }
-        });
-
         // Populate the expiry years for the form
         var currentYear = new Date().getFullYear();
         var expiryYears = [];
@@ -228,25 +194,14 @@ angular.module('subscribe', [])
         }
         $scope.formOptions.ccExp.year = expiryYears;
 
+        $scope.validationErrors = {};
+
         // Global validation flag for alert
         $scope.globalValidationFailed = false;
 
-        // Skip registration option for gift packages
-        $scope.skipRegistration = false;
-
-        $scope.tax = {
-            rate: 0,
-            desc: ''
-        };
-
-        $scope.misc = {
-            discount: 0,
-            shippingCharge: 0,
-            testCouponCode: ''
-        };
-
 
         // -------------- MODELS -------------- //
+
         $scope.userInfo = {
             name: '',
             email: '',
@@ -276,6 +231,109 @@ angular.module('subscribe', [])
             }
         };
 
+        $scope.tax = {
+            rate: 0,
+            desc: ''
+        };
+
+        $scope.misc = {
+            discount: 0,
+            shippingCharge: 0,
+            testCouponCode: ''
+        };
+
+
+        // ---------------- WATCHERS ----------------- //
+
+        // Wait for plans to get loaded
+        $scope.$watch(function() {return $scope.doneFormLoad}, function(newVal, oldVal) {
+            if (newVal !== oldVal) {
+                if ( (typeof oldVal !== 'undefined') && (newVal) ) {
+                    loadUser();
+                }
+            }
+        });
+
+        // Load form provinces or states on country selection
+        $scope.$watch('userInfo.address.country', function (newVal, oldVal) {
+            if (newVal !== oldVal) {
+                if (newVal.id === 'CA') {
+                    $scope.formOptions.provinces = $scope.provincesAndStates.caProvinces;
+                }
+                else if (newVal.id === 'US') {
+                    $scope.formOptions.provinces = $scope.provincesAndStates.usStates;
+                }
+            }
+        });
+
+        // Calculate the user's tax rate for view
+        $scope.$watch('userInfo.address.state', function (newVal, oldVal) {
+            if (newVal !== oldVal) {
+                calculateTaxRate();
+            }
+        });
+
+
+        // --------------------------------------------------------- //
+        // ------------------- SCOPE METHODS ----------------------- //
+
+        // Check if user is logged in. If true, load the local user and st customer
+        function loadUser () {
+
+            // Check if user is logged in
+            $http({
+                url: '/isloggedin',
+                method: 'GET'
+            }).success(function(result) {
+                if (result) {
+                    $scope.loggedIn = true;
+
+                    // Get local user
+                    $http({
+                        url: '/api/user',
+                        method: 'GET'
+                    }).success(function(user) {
+                        $scope.localUser = user;
+                    }).error(function(error) {
+                    });
+
+                    // Get st info
+                    $http({
+                        url: '/api/customer',
+                        method: 'GET'
+                    }).success(function(customer) {
+                        $scope.customer = customer;
+                        markPlanAsSelected(customer.subscriptions.data);
+
+                        // Populate userInfo model with customer obj data
+                        $scope.userInfo.name = customer.shipping.name;
+                        $scope.userInfo.address = customer.shipping.address;
+                        $scope.userInfo.source = customer.sources.data[0];
+
+                    }).error(function(error) {
+                    });
+                }
+                else {
+                    $scope.loggedIn = false;
+                }
+            }).error(function(error) {
+                $scope.loggedIn = false;
+            });
+        }
+
+        // Mark off one the plan which the user has selected as subscribed to
+        function markPlanAsSelected(customerSubscriptions) {
+
+            // Get plan subscription id which the user is subscribed to
+            var recurringPlanId = null;
+            for (var i = 0; i < customerSubscriptions.length; i++) {
+                if ( (typeof customerSubscriptions[i].plan.metadata.is_gift !== 'undefined') && (customerSubscriptions[i].plan.metadata.is_gift === 'false') ) {
+                    recurringPlanId = customerSubscriptions[i].plan.id;
+                    break;
+                }
+            }
+            $scope.cleanActivePlanId = recurringPlanId.split('_')[0];
+        }
 
         // Select a plan
         $scope.selectPlan = function(planId) {
@@ -383,7 +441,7 @@ angular.module('subscribe', [])
         // Validate new account creation
         $scope.validateNewAccount = function(callback) {
 
-            if (typeof $scope.localUser !== 'undefined') {
+            if ($scope.loggedIn) {
                 return callback(true);
             }
 
@@ -415,16 +473,6 @@ angular.module('subscribe', [])
                 $scope.validationErrors.email = 'Please enter a valid email';
                 validationFailed = true;
                 validateEmailFailed = true;
-            }
-
-            // Skip remainder of validation if user is not registering and only wants a one time gift
-            if ($scope.skipRegistration) {
-                if (!validationFailed) {
-                    return callback(true);
-                }
-                else {
-                    return callback(false);
-                }
             }
 
             // Password validation
@@ -474,6 +522,10 @@ angular.module('subscribe', [])
 
         // Validate user's address
         $scope.validateAddressInfo = function() {
+
+            if ($scope.loggedIn) {
+                return true;
+            }
 
             // Reset validation objects
             var validationFailed = false;
@@ -586,6 +638,10 @@ angular.module('subscribe', [])
 
         // Validate payment info
         $scope.validateUserPayment = function(callback) {
+
+            if ($scope.loggedIn) {
+                return callback(true);
+            }
 
             // Reset validation objects
             var validationFailed = false;
@@ -750,11 +806,6 @@ angular.module('subscribe', [])
 
         };
 
-        $scope.$watch('userInfo.address.state', function (newVal, oldVal) {
-            if (newVal !== oldVal) {
-                calculateTaxRate();
-            }
-        });
 
         function calculateTaxRate () {
             var province = $scope.userInfo.address.state.id;
@@ -989,7 +1040,7 @@ angular.module('subscribe', [])
         function createUser (callback) {
 
             // Need local registration and st registration
-            if (!$scope.isLoggedIn && ($scope.customer === null) ) {
+            if (!$scope.loggedIn && ($scope.customer === null) ) {
                 registerCustomerLocally( function(newUser) {
 
                     if (newUser) {
@@ -1151,9 +1202,14 @@ angular.module('subscribe', [])
             }
         }
 
-        // Expose parse float function to scope
+        // Expose parse float function to view
         $scope.parseFloat = function(str) {
             return parseFloat(str);
-        }
+        };
+
+        // Expose indexOf function to view
+        $scope.indexOf = function(str, subStr) {
+            return str.indexOf(subStr);
+        };
 
 });

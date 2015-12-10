@@ -40,7 +40,7 @@
 	<body class="smoothscroll enable-animation font-spin ng-cloak" ng-app="subscribe" ng-controller="signupCtrl" ng-cloak>
 
 		<!-- wrapper -->
-		<div id="wrapper">
+		<div id="wrapper" ng-show="doneFormLoad">
 
             <div id="header" class="sticky clearfix">
                 <!-- TOP NAV -->
@@ -240,11 +240,10 @@
 		<a href="#" id="toTop"></a>
 
 		<!-- JAVASCRIPT FILES -->
-		<script type="text/javascript">var plugin_path = 'assets/plugins/';</script>
+		<script type="text/javascript">var plugin_path = '/assets/plugins/';</script>
 		<script type="text/javascript" src="/assets/js/scripts.js"></script>
 
-        <!-- App -->
+        <!-- NG-App -->
         <script type="text/javascript" src="/subscribe-app/subscribe-app.js"></script>
-
 	</body>
 </html>

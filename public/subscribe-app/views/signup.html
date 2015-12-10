@@ -41,7 +41,10 @@
                         <p>Shipped On the 3rd Week of Each Month</p>
                         <hr />
 
-                        <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan(plan.id)" class="btn btn-3d btn-success btn-block btn-lg">SELECT</a>
+                        <a href="" ng-disabled="formPlans.length==0" ng-hide="loggedIn" ng-click="selectPlan(plan.id)" class="btn btn-3d btn-success btn-block btn-lg">SELECT</a>
+
+                        <a href="" ng-disabled="formPlans.length==0" ng-show="loggedIn" ng-hide="indexOf(plan.id, cleanActivePlanId)>-1" ng-click="selectPlan(plan.id)" class="btn btn-3d btn-success btn-block btn-lg">CHANGE TO THIS</a>
+                        <a href="" ng-show="indexOf(plan.id, cleanActivePlanId)>-1" class="btn btn-3d btn-info btn-block btn-lg">CURRENTLY SUBSCRIBED</a>
                     </div>
                 </div>
 
@@ -89,10 +92,12 @@
 
                 <div class="box-static box-light-grey margin-bottom-40">
                     <div class="box-title">
-                        <h4>Shipping Address</h4>
+                        <h4 ng-show="!loggedIn">Shipping Address</h4>
+                        <h4 ng-show="loggedIn && chosenPlan.metadata.is_gift==='false'">Shipping Address <a href="/My-Account" class="btn btn-xs btn-success pull-right">Edit</a></h4>
+                        <h4 ng-show="loggedIn && chosenPlan.metadata.is_gift==='true'">Gift Recipient Shipping Address</h4>
                     </div>
 
-                    <fieldset class="margin-top-30">
+                    <fieldset class="margin-top-30" ng-show="!loggedIn || (loggedIn && chosenPlan.metadata.is_gift==='true')">
                         <div class="col-lg-12 form-group" ng-class="{ 'has-error' : validationErrors.name }">
                             <label for="billing_firstname"><small>Full Name *</small></label>
                             <input id="billing_firstname" name="billing[firstname]" type="text" class="form-control required" ng-model="userInfo.name" />
@@ -130,14 +135,33 @@
                             <p class="text-danger" ng-show="validationErrors.address.country">{{ validationErrors.address.country }}</p>
                         </div>
                     </fieldset>
+
+                    <fieldset class="margin-top-30" ng-show="loggedIn && chosenPlan.metadata.is_gift==='false'">
+                        <div class="col-lg-12 form-group">
+                            <p class="form-control-static">{{ customer.shipping.name }}</p>
+                        </div>
+                        <div class="col-lg-12 form-group">
+                            <p class="form-control-static">{{ customer.shipping.address.line1 }}</p>
+                            <p ng-hide="customer.shipping.address.line2.length===0" class="form-control-static">{{ customer.shipping.address.line2 }}</p>
+                        </div>
+                        <div class="col-lg-12 form-group">
+                            <p class="form-control-static">{{ customer.shipping.address.city }}, {{ customer.shipping.address.state }}</p>
+                        </div>
+                        <div class="col-lg-12 form-group">
+                            <p class="form-control-static">{{ customer.shipping.address.postal_code }}</p>
+                        </div>
+                        <div class="col-lg-12 form-group">
+                            <p class="form-control-static">{{ customer.shipping.address.country }}</p>
+                        </div>
+                    </fieldset>
                 </div>
 
 
                 <div class="box-static box-light-grey margin-bottom-40">
                     <div class="box-title">
-                        <h4>Billing Information</h4>
+                        <h4>Billing Information <a href="/My-Account" ng-show="loggedIn" class="btn btn-xs btn-success pull-right">Edit</a></h4>
                     </div>
-                    <fieldset class="margin-top-20">
+                    <fieldset class="margin-top-20" ng-show="!loggedIn">
                         <div class="col-xs-12 margin-bottom-10">
                             <span class="fa fa-cc-visa fa-2x" ng-class="{ 'color-visa' : identifyCardType()==='visa', 'text-gray' : identifyCardType()!=='visa' }"></span>
                             <span class="fa fa-cc-mastercard fa-2x" ng-class="{ 'color-mastercard' : identifyCardType()==='mastercard', 'text-gray' : identifyCardType()!=='mastercard' }"></span>
@@ -193,9 +217,23 @@
                             <p class="text-success" ng-show="userInfo.subscription.couponCode.length>0">Successfully applied coupon!</p>
                         </div>
                     </fieldset>
+
+                    <fieldset class="margin-top-30" ng-show="loggedIn">
+                        <div class="col-lg-12 form-group">
+                            <p class="form-control-static">
+                                <span ng-if="customer.sources.data[0].brand=='Visa'" class="fa fa-cc-visa fa-2x color-visa"></span>
+                                <span ng-if="customer.sources.data[0].brand=='Mastercard'" class="fa fa-cc-mastercard fa-2x color-mastercard"></span>
+                                <span ng-if="customer.sources.data[0].brand=='Amex'" class="fa fa-cc-amex fa-2x color-amex"></span>
+                                <span ng-if="customer.sources.data[0].brand=='Discover'" class="fa fa-cc-discover fa-2x color-discover"></span>
+                                <span ng-if="customer.sources.data[0].brand=='Diners-club'" class="fa fa-cc-diners-club fa-2x color-diners-club"></span>
+                                <span ng-if="customer.sources.data[0].brand=='JCB'" class="fa fa-cc-jcb fa-2x color-jcb"></span>
+                                &nbsp;**** **** **** {{ customer.sources.data[0].last4 }}
+                            </p>
+                        </div>
+                    </fieldset>
                 </div>
 
-                <div class="box-static box-light-grey">
+                <div class="box-static box-light-grey" ng-hide="loggedIn">
                     <div class="box-title">
                         <h4>Account Setup</h4>
                     </div>
@@ -224,6 +262,12 @@
                     <small>We create a simple account for you, in case there is an issue with processing your payment, or your package destination address changes.</small>
                 </div>
 
+                <div ng-hide="loggedIn" class="margin-top-30">
+                    <button type="submit" ng-disabled="processingReg" class="btn btn-success btn-lg btn-block" ng-click="completeRegistration()">
+                        Place Order <span class="fa fa-chevron-circle-right"></span>
+                    </button>
+                </div>
+
             </div>
 
             <div class="col-lg-5 col-sm-5">
@@ -240,16 +284,16 @@
                             <h4 class="pull-right">$ {{ (chosenPlan.amount/100).toFixed(2) }}</h4>
                         </div>
                         <span class="clearfix">
-                            <button type="submit" class="btn btn-xs btn-default margin-bottom-20 pull-right" ng-click="goBack(1)">Change Plan</button>
+                            <button type="submit" class="btn btn-sm btn-block btn-info margin-bottom-20" ng-click="goBack(1)">Switch Selected</button>
                         </span>
-                        <span class="clearfix">
+                        <span class="clearfix" ng-hide="loggedIn">
                             <span class="pull-right">- $ {{ misc.discount.toFixed(2) }}</span>
                             <span class="pull-left">Coupon Discount:  <em class="text-green" ng-show="misc.discount > 0">{{ userInfo.subscription.id }}</em></span>
                         </span>
                         <span class="clearfix">
                             <!-- <span class="pull-right" ng-show="userInfo.address.country.id!=='CA'">$ {{ misc.shippingCharge.toFixed(2) }}</span> -->
                             <span class="pull-right" ng-show="userInfo.address.country==''">$ 0.00</span>
-                            <span class="pull-right" ng-hide="userInfo.address.country==''"><strong>FREE !</strong></span>
+                            <h3><span class="pull-right label label-success" ng-hide="userInfo.address.country==''"><strong>FREE !</strong></span></h3>
                             <span class="pull-left">Shipping:</span>
                         </span>
 
@@ -274,8 +318,10 @@
 
                         <hr />
 
-                        <button type="submit" ng-disabled="processingReg" class="btn btn-primary btn-lg btn-block" ng-click="completeRegistration()">
-                            Place Order <span class="fa fa-chevron-circle-right"></span>
+                        <button type="submit" ng-disabled="processingReg" class="btn btn-success btn-lg btn-block" ng-click="completeRegistration()">
+                            <span ng-if="!loggedIn">Place Order <span class="fa fa-chevron-circle-right"></span></span>
+                            <span ng-if="loggedIn && chosenPlan.metadata.is_gift==='true'">Place Order <span class="fa fa-chevron-circle-right"></span></span>
+                            <span ng-if="loggedIn && chosenPlan.metadata.is_gift==='false'">Change Plan <span class="fa fa-refresh"></span></span>
                         </button>
 
                         <div ng-show="globalValidationFailed" class="alert alert-danger margin-top-30">
