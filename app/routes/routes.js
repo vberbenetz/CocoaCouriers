@@ -81,8 +81,7 @@ module.exports = function(app, passport, dbConnPool) {
 */
 
     app.get('/subscribe', function(req, res) {
-        res.redirect('/');
-        //res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'subscribe.html') );
+        res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'subscribe.html') );
     });
 
     app.get('/blog', function(req, res) {
