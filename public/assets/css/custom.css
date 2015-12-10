@@ -70,7 +70,9 @@
      height: 80px;
  }
 
-
+.secondary-sep {
+     line-height: 50px;
+ }
 
 .secondary-sep-100 {
     height: 100px;
