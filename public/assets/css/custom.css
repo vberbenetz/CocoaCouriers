@@ -36,7 +36,7 @@
 }
 
 .bg-mainimage {
-     background: url('../images/raaka-bg.png');
+     background: url('../images/bg.png');
      background-repeat: no-repeat;
      background-size: cover;
  }
@@ -71,7 +71,8 @@
  }
 
 .secondary-sep {
-     height: 60px;
+     line-height: 50px;
+    padding-top:10px;
  }
 
 .secondary-sep-100 {
@@ -102,4 +103,8 @@
 
 .thick-pricing-box {
     border-width: 5px !important;
+}
+
+.blog-image {
+    height:300px;
 }
