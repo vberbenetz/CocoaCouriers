@@ -296,7 +296,7 @@ module.exports = function(app, passport, dbConnPool) {
         }
     });
 
-
+/*
     app.post('/api/plan', function (req, res, next) {
         var payload = {
             id: req.body.id,
@@ -317,7 +317,7 @@ module.exports = function(app, passport, dbConnPool) {
             }
         });
     });
-
+*/
 
     // ----------------- Subscription Related ------------------------ //
 
