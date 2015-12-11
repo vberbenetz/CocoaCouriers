@@ -16,14 +16,6 @@ var config = require('./app/configuration/config');
 var configPriv = require('./app/configuration/config_priv');
 var log = require('./app/utils/logger');
 
-// Tests
-/*
-var helperTests = require('./app/test/helper_test');
-helperTests.coolDownTest();
-*/
-
-var testDB = require('./app/controllers/db_conn_test_ctrl');
-
 var app = express();
 
 app.use(express.static('public'));

@@ -41,7 +41,8 @@
                         <p>Shipped On the 3rd Week of Each Month</p>
                         <hr />
 
-                        <a href="" ng-disabled="formPlans.length==0" ng-hide="loggedIn" ng-click="selectPlan(plan.id)" class="btn btn-3d btn-success btn-block btn-lg">SELECT</a>
+                        <a href="" ng-disabled="formPlans.length==0" ng-hide="loggedIn" class="btn btn-3d btn-success btn-block btn-lg">COMING SOON !</a>
+                        <!--<a href="" ng-disabled="formPlans.length==0" ng-hide="loggedIn" ng-click="selectPlan(plan.id)" class="btn btn-3d btn-success btn-block btn-lg">SELECT</a>-->
 
                         <a href="" ng-disabled="formPlans.length==0" ng-show="loggedIn" ng-hide="indexOf(plan.id, cleanActivePlanId)>-1" ng-click="selectPlan(plan.id)" class="btn btn-3d btn-success btn-block btn-lg">CHANGE TO THIS</a>
                         <a href="" ng-show="indexOf(plan.id, cleanActivePlanId)>-1" class="btn btn-3d btn-info btn-block btn-lg">CURRENTLY SUBSCRIBED</a>
@@ -75,7 +76,8 @@
                         <p ng-if="gift.interval_count===1">Created And Shipped Right Away</p>
                         <hr />
 
-                        <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan(gift.id)" class="btn btn-3d btn-success btn-block btn-lg"><i class="glyphicon glyphicon-gift"></i>Give a Gift</a>
+                        <a href="" ng-disabled="formPlans.length==0" ng-hide="loggedIn" class="btn btn-3d btn-success btn-block btn-lg">COMING SOON !</a>
+                        <!--<a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan(gift.id)" class="btn btn-3d btn-success btn-block btn-lg"><i class="glyphicon glyphicon-gift"></i>Give A Gift</a>-->
                     </div>
                 </div>
 
