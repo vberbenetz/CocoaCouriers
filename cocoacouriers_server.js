@@ -84,6 +84,11 @@ log.info('================================');
 https.createServer({
     key: fs.readFileSync(configPriv.ssl.key),
     cert: fs.readFileSync(configPriv.ssl.cert),
+    ca: [
+        fs.readFileSync(configPriv.ssl.ca.root),
+        fs.readFileSync(configPriv.ssl.ca.int1),
+        fs.readFileSync(configPriv.ssl.ca.int2)
+    ],
     passphrase: configPriv.ssl.passphrase
 }, app).listen(443);
 
