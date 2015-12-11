@@ -1,7 +1,9 @@
 'use strict';
 
 var express = require('express');
-var path = require('path');
+var fs = require('fs');
+var http = require('http');
+var https = require('https');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
@@ -56,7 +58,7 @@ app.use(session({
     cookie: {
         path: '/',
         httpOnly: true,
-        secure: false,      // Set to true when using HTTPS
+        secure: true,      // Set to true when using HTTPS
         maxAge: (1000 * 60 * 60 * 12)  // 12 hours in milliseconds
     },
     rolling: true,  // Force cookie to be set on every response. Reset expiration of cookie
@@ -71,13 +73,6 @@ app.use(function(req, res, next) {
 });
 app.use(passport.initialize());
 app.use(passport.session());
-
-// Test DB connection
-testDB.test(pool, function(err, result) {
-    if (err) {
-        console.log(err);
-    }
-});
 
 // REST api routes
 require('./app/routes/routes')(app, passport, pool);
@@ -94,5 +89,14 @@ log.info('====     SERVER STARTED     ====');
 log.info('================================');
 
 // Launch =============================================================================================================/
-app.listen(config.serverPort);
-console.log('Listening on port ' + config.serverPort);
+https.createServer({
+    key: fs.readFileSync(configPriv.ssl.key),
+    cert: fs.readFileSync(configPriv.ssl.cert),
+    passphrase: configPriv.ssl.passphrase
+}, app).listen(443);
+
+// Needed for redirect to HTTPS
+http.createServer(function (req, res) {
+    res.writeHead(301, {'Location': 'https://' + req.headers['host'] + req.url});
+    res.end();
+}).listen(80);
