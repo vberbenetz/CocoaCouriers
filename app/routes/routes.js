@@ -212,7 +212,7 @@ module.exports = function(app, passport, dbConnPool) {
             }
             else {
 
-                chargeCtrl.oneTimeCharge(customer, req.body.plan, req.body.coupon, req.connection.remoteAddress, function(err, result) {
+                chargeCtrl.oneTimeCharge(customer, req.body.shipping, req.body.plan, req.body.coupon, req.connection.remoteAddress, function(err, result) {
                     if (err) {
                         errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
                     }

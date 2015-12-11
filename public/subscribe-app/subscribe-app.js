@@ -308,6 +308,7 @@ angular.module('subscribe', [])
                         // Populate userInfo model with customer obj data
                         $scope.userInfo.name = customer.shipping.name;
                         $scope.userInfo.address = customer.shipping.address;
+                        preloadUserAddressSelect();
                         $scope.userInfo.source = customer.sources.data[0];
 
                     }).error(function(error) {
@@ -319,6 +320,33 @@ angular.module('subscribe', [])
             }).error(function(error) {
                 $scope.loggedIn = false;
             });
+        }
+
+        function preloadUserAddressSelect() {
+            // Load up country selection
+            var userCountry = $scope.userInfo.address.country;
+            var countryOptions = $scope.formOptions.countries;
+            var i = 0;
+            for (i; i < countryOptions.length; i++) {
+                if (userCountry === countryOptions[i].id) {
+                    $scope.userInfo.address.country = countryOptions[i];
+                }
+            }
+
+            // Load up province/state selection
+            var userState = $scope.userInfo.address.state;
+            var stateOptions = [];
+            if (userCountry === 'CA') {
+                stateOptions = $scope.provincesAndStates.caProvinces;
+            }
+            else if (userCountry === 'US') {
+                stateOptions = $scope.provincesAndStates.usStates;
+            }
+            for (i = 0; i < stateOptions.length; i++) {
+                if (userState === stateOptions[i].id) {
+                    $scope.userInfo.address.state = stateOptions[i];
+                }
+            }
         }
 
         // Mark off one the plan which the user has selected as subscribed to
@@ -364,22 +392,6 @@ angular.module('subscribe', [])
             $scope.processingReg = true;
 
             if ($scope.validateAddressInfo()) {
-
-// ########################################################################
-// ########################################################################
-// ########################################################################
-// ########################################################################
-// ########################################################################
-// ########################################################################
-
-                $window.location.href = '/';
-
-// ########################################################################
-// ########################################################################
-// ########################################################################
-// ########################################################################
-// ########################################################################
-// ########################################################################
 
                 $scope.validateUserPayment(function(result) {
                     if (result) {
@@ -538,10 +550,6 @@ angular.module('subscribe', [])
 
         // Validate user's address
         $scope.validateAddressInfo = function() {
-
-            if ($scope.loggedIn) {
-                return true;
-            }
 
             // Reset validation objects
             var validationFailed = false;
@@ -892,6 +900,11 @@ angular.module('subscribe', [])
 
         $scope.identifyCardType = function() {
             var number = $scope.userInfo.source.number;
+
+            if (typeof number === 'undefined') {
+                return false;
+            }
+
             number = number.toString();
 
             // Visa 4XXX
@@ -959,7 +972,7 @@ angular.module('subscribe', [])
                     subscribeToRecurringPlan(function(newSubscription) {
 
                         if (newSubscription) {
-                            $window.location.href = '/My-Account';
+                            $scope.formPage = 3;
                         }
                         else {
                             return callback(false);
@@ -985,7 +998,7 @@ angular.module('subscribe', [])
 
                 subscribeToRecurringPlan(function(newSubscription) {
                     if (newSubscription) {
-                        $window.location.href = '/My-Account';
+                        $scope.formPage = 3;
                     }
                     else {
                         return callback(false);
@@ -1011,12 +1024,16 @@ angular.module('subscribe', [])
                         url: '/api/charge/onetime',
                         method: 'POST',
                         data: {
-                            tr: customer.metadata.taxRate,
+                            shipping: {
+                                name: $scope.userInfo.name,
+                                address: $scope.userInfo.address
+                            },
+                            tr: $scope.tax.rate,
                             coupon: $scope.userInfo.subscription.couponCode,
                             plan: $scope.userInfo.subscription.planId
                         }
                     }).success(function(successfulCharge) {
-                        $window.location.href = '/My-Account';
+                        $scope.formPage = 3;
                     }).error(function(err) {
                         handleStCCErr(err);
                         return callback(false);

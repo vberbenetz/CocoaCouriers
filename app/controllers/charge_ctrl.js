@@ -14,7 +14,7 @@ var chargeCtrl = function() {};
 
 chargeCtrl.prototype = {
 
-    oneTimeCharge: function (customer, planId, couponId, reqIP, callback) {
+    oneTimeCharge: function (customer, shipping, planId, couponId, reqIP, callback) {
 
 // TODO: ADD SHIPPING RATE FOR FUTURE CUSTOMERS OUTSIDE OF CANADA AND LOWER 48 STATES
 
@@ -36,7 +36,8 @@ chargeCtrl.prototype = {
             else {
                 var chargePayload = {
                     currency: plan.currency,
-                    customer: customer.id
+                    customer: customer.id,
+                    shipping: shipping
                 };
                 var chargeAmount = 0;
                 var totalTax = 0;

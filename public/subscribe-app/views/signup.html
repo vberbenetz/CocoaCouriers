@@ -41,10 +41,9 @@
                         <p>Shipped On the 3rd Week of Each Month</p>
                         <hr />
 
-                        <a href="" ng-disabled="formPlans.length==0" ng-hide="loggedIn" class="btn btn-3d btn-success btn-block btn-lg">COMING SOON !</a>
-                        <!--<a href="" ng-disabled="formPlans.length==0" ng-hide="loggedIn" ng-click="selectPlan(plan.id)" class="btn btn-3d btn-success btn-block btn-lg">SELECT</a>-->
+                        <a href="" ng-disabled="formPlans.length==0" ng-if="!loggedIn" ng-click="selectPlan(plan.id)" class="btn btn-3d btn-success btn-block btn-lg">SELECT</a>
 
-                        <a href="" ng-disabled="formPlans.length==0" ng-show="loggedIn" ng-hide="indexOf(plan.id, cleanActivePlanId)>-1" ng-click="selectPlan(plan.id)" class="btn btn-3d btn-success btn-block btn-lg">CHANGE TO THIS</a>
+                        <a href="" ng-disabled="formPlans.length==0" ng-if="loggedIn" ng-hide="indexOf(plan.id, cleanActivePlanId)>-1" ng-click="selectPlan(plan.id)" class="btn btn-3d btn-success btn-block btn-lg">CHANGE TO THIS</a>
                         <a href="" ng-show="indexOf(plan.id, cleanActivePlanId)>-1" class="btn btn-3d btn-info btn-block btn-lg">CURRENTLY SUBSCRIBED</a>
                     </div>
                 </div>
@@ -76,8 +75,7 @@
                         <p ng-if="gift.interval_count===1">Created And Shipped Right Away</p>
                         <hr />
 
-                        <a href="" ng-disabled="formPlans.length==0" ng-hide="loggedIn" class="btn btn-3d btn-success btn-block btn-lg">COMING SOON !</a>
-                        <!--<a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan(gift.id)" class="btn btn-3d btn-success btn-block btn-lg"><i class="glyphicon glyphicon-gift"></i>Give A Gift</a>-->
+                        <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan(gift.id)" class="btn btn-3d btn-success btn-block btn-lg"><i class="glyphicon glyphicon-gift"></i>Give A Gift</a>
                     </div>
                 </div>
 
@@ -268,6 +266,9 @@
                     <button type="submit" ng-disabled="processingReg" class="btn btn-success btn-lg btn-block" ng-click="completeRegistration()">
                         Place Order <span class="fa fa-chevron-circle-right"></span>
                     </button>
+                    <div ng-show="processingReg" class="margin-top-20 pull-right three-quarters-loader">
+                        Processing Order...
+                    </div>
                 </div>
 
             </div>
@@ -286,16 +287,15 @@
                             <h4 class="pull-right">$ {{ (chosenPlan.amount/100).toFixed(2) }}</h4>
                         </div>
                         <span class="clearfix">
-                            <button type="submit" class="btn btn-sm btn-block btn-info margin-bottom-20" ng-click="goBack(1)">Switch Selected</button>
+                            <button type="submit" class="btn btn-sm btn-block btn-info margin-bottom-20" ng-click="goBack(1)">Switch Selected (Go Back)</button>
                         </span>
                         <span class="clearfix" ng-hide="loggedIn">
                             <span class="pull-right">- $ {{ misc.discount.toFixed(2) }}</span>
                             <span class="pull-left">Coupon Discount:  <em class="text-green" ng-show="misc.discount > 0">{{ userInfo.subscription.id }}</em></span>
                         </span>
                         <span class="clearfix">
-                            <!-- <span class="pull-right" ng-show="userInfo.address.country.id!=='CA'">$ {{ misc.shippingCharge.toFixed(2) }}</span> -->
-                            <span class="pull-right" ng-show="userInfo.address.country==''">$ 0.00</span>
-                            <h3><span class="pull-right label label-success" ng-hide="userInfo.address.country==''"><strong>FREE !</strong></span></h3>
+                            <span class="pull-right" ng-if="userInfo.address.country==''">$ 0.00</span>
+                            <h3><span class="pull-right label label-success" ><strong>FREE !</strong></span></h3>
                             <span class="pull-left">Shipping:</span>
                         </span>
 
@@ -306,8 +306,8 @@
                             <strong class="pull-left">Subtotal:</strong>
                         </span>
                         <span class="clearfix">
-                            <span ng-show="userInfo.address.country.id==='CA'" class="pull-right">$ {{(tax.rate*( (chosenPlan.amount/100) - misc.discount + misc.shippingCharge)).toFixed(2) }}</span>
-                            <span ng-show="userInfo.address.country.id==='CA'" class="pull-left">Tax {{ tax.desc }}:</span>
+                            <span class="pull-right">$ {{(tax.rate*( (chosenPlan.amount/100) - misc.discount + misc.shippingCharge)).toFixed(2) }}</span>
+                            <span class="pull-left">Tax {{ tax.desc }}:</span>
                             <span class="pull-left">&nbsp;</span>
                         </span>
 
@@ -330,6 +330,10 @@
                             <strong>There were issues with your information</strong>
                         </div>
 
+                        <div ng-show="processingReg" class="margin-top-20 pull-right three-quarters-loader">
+                            Processing Order...
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -337,6 +341,36 @@
         </form>
 
         <div ng-show="subErr" class="alert alert-danger">Error completing checkout. Your have not yet been charged. Please go to your <strong><a href="/My-Account">Account Management Page</a></strong> to verify your payment method and subscription.</div>
+
+    </div>
+
+    <!-- Order Confirmation page -->
+    <div ng-if="formPage==3">
+
+        <section>
+            <div class="container">
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h3>Thank you, {{ userInfo.name }}.</h3>
+
+                        <p>
+                            Your order has been successfully placed. <br/>
+                            If you would like to modify your gift, plan, or information, please go to the <a href="/My-Account">management panel</a><br />
+                        </p>
+
+                        <hr />
+
+                        <p>
+                            Enjoy your premium fair trade chocolate,<br />
+                            <strong>Cocoa Couriers</strong>
+                        </p>
+                    </div>
+                </div>
+                <!-- /CHECKOUT FINAL MESSAGE -->
+
+            </div>
+        </section>
 
     </div>
 
