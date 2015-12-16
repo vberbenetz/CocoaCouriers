@@ -13,80 +13,160 @@
 <div class="row">
 
     <!-- Choose a plan -->
-    <div ng-if="formPage==1">
+    <div ng-show="formPage==1">
 
-        <ul class="nav nav-tabs nav-top-border">
-            <li ng-class="{ 'active' : activeTab==1 }"><a href="" ng-click="activeTab=1"><h3>Subscription</h3></a></li>
-            <li ng-class="{ 'active' : activeTab==2 }"><a href="" ng-click="activeTab=2"><h3><span class="fa fa-gift"></span>&nbsp;&nbsp;Gift</h3></a></li>
-        </ul>
-
-        <div class="tab-content">
-            <div class="tab-pane" ng-class="{ 'active' : activeTab==1 }">
-
-                <div class="col-md-4 col-sm-4" ng-repeat="plan in formPlans">
-                    <div class="price-clean">
-                        <h1 class="pricing-head" ng-if="plan.interval_count>1">{{ plan.interval_count }} Month Plan</h1>
-                        <h1 class="pricing-head" ng-if="plan.interval_count===1">Monthly Plan</h1>
-                        <h4>
-                            <sup>$</sup>{{ (plan.amount/plan.interval_count/100).toFixed(2) }}<em> / month</em>
-                        </h4>
-                        <h5 ng-if="plan.interval_count===12"> YEARLY </h5>
-                        <h5 ng-if="plan.interval_count===3"> QUARTERLY </h5>
-                        <h5 ng-if="plan.interval_count===1"> MONTH TO MONTH </h5>
-                        <hr />
-                        <p>${{ (plan.amount/100) }} Every <i ng-if="plan.interval_count>1">{{ plan.interval_count }} </i>Month<i ng-if="plan.interval_count>1">s</i></p>
-                        <hr />
-                        <p>Cancel Anytime</p>
-                        <hr />
-                        <p>Shipped On the 3rd Week of Each Month</p>
-                        <hr />
-
-                        <a href="" ng-disabled="formPlans.length==0" ng-if="!loggedIn" ng-click="selectPlan(plan.id)" class="btn btn-3d btn-success btn-block btn-lg">SELECT</a>
-
-                        <a href="" ng-disabled="formPlans.length==0" ng-if="loggedIn" ng-hide="indexOf(plan.id, cleanActivePlanId)>-1" ng-click="selectPlan(plan.id)" class="btn btn-3d btn-success btn-block btn-lg">CHANGE TO THIS</a>
-                        <a href="" ng-show="indexOf(plan.id, cleanActivePlanId)>-1" class="btn btn-3d btn-info btn-block btn-lg">CURRENTLY SUBSCRIBED</a>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="tab-pane" ng-class="{ 'active' : activeTab==2 }">
-
-                <div class="col-sm-4 col-sm-4" ng-repeat="gift in formGifts">
-                    <div class="price-clean" ng-class="{ 'thick-pricing-box' : gift.interval_count===1 }">
-                        <div class="ribbon">
-                            <div class="ribbon-inner"><span class="fa fa-gift"></span>&nbsp;GIFT</div>
-                        </div>
-                        <h1 class="pricing-head" ng-if="gift.interval_count>1">{{ gift.interval_count }} Month Gift</h1>
-                        <h1 class="pricing-head" ng-if="gift.interval_count===1">One-Time Gift</h1>
-                        <h4>
-                            <sup>$</sup>{{ (gift.amount/gift.interval_count/100).toFixed(2) }}<em> <i ng-hide="gift.interval_count===1">/ month</i></em>
-                        </h4>
-                        <h5 ng-if="gift.interval_count===12"> YEARLY </h5>
-                        <h5 ng-if="gift.interval_count===3"> QUARTERLY </h5>
-                        <h5 ng-if="gift.interval_count===1"> ONCE </h5>
-                        <hr />
-                        <p>${{ (gift.amount/100) }} Every <i ng-if="gift.interval_count>1">{{ gift.interval_count }} </i>Month<i ng-if="gift.interval_count>1">s</i></p>
-                        <hr />
-                        <p ng-if="gift.interval_count>1">Cancel Anytime</p>
-                        <p ng-if="gift.interval_count===1">Charged Once</p>
-                        <hr />
-                        <p ng-if="gift.interval_count>1">Shipped On the 3rd Week of Each Month</p>
-                        <p ng-if="gift.interval_count===1">Created And Shipped Right Away</p>
-                        <hr />
-
-                        <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan(gift.id)" class="btn btn-3d btn-success btn-block btn-lg"><i class="glyphicon glyphicon-gift"></i>Give A Gift</a>
-                    </div>
-                </div>
-
-            </div>
+        <div class="btn-group margin-left-30">
+            <label class="btn btn-success btn-xlg" ng-model="activeTab" uib-btn-radio="'plan'" style="font-size:20px;"><span class="fa fa-calendar"></span>&nbsp;&nbsp;Monthly Subscriptions</label>
+            <label class="btn btn-success btn-xlg" ng-model="activeTab" uib-btn-radio="'gift'" style="font-size:20px;"><span class="fa fa-gift"></span>&nbsp;&nbsp;Gift Boxes</label>
         </div>
+
+        <hr class="margin-bottom-40 margin-top-40" />
+
+        <div ng-show="activeTab=='plan'" class="container" ng-class="{ 'active' : activeTab.subscription }">
+
+            <div class="col-md-4 col-sm-4" ng-repeat="plan in formPlans">
+                <div class="price-clean">
+                    <h1 class="pricing-head" ng-if="plan.interval_count>1">{{ plan.interval_count }} Month Prepaid Plan</h1>
+                    <h1 class="pricing-head" ng-if="plan.interval_count===1">Month To Month <br/> Plan</h1>
+                    <h4>
+                        <sup>$</sup>{{ (plan.amount/plan.interval_count/100).toFixed(2) }}<em> / month</em>
+                    </h4>
+                    <h5 ng-if="plan.interval_count===12"> $371.88 ANNUALY </h5>
+                    <h5 ng-if="plan.interval_count===3"> $98.97 QUARTERLY </h5>
+                    <h5 ng-if="plan.interval_count===1"> $34.99 MONTHLY </h5>
+                    <hr />
+                    <h2>FREE SHIPPING!</h2>
+                    <hr />
+                    <div ng-show="plan.interval_count==1">
+                        <h3 class="text-green">
+                            <br/>
+                            <br/>
+                            <span class="fa fa-gift text-success"></span>
+                        </h3>
+                    </div>
+                    <div ng-show="plan.interval_count==3">
+                        <h3 class="text-green">
+                            <br/>
+                            <span class="fa fa-gift text-success"></span>
+                            <br/>
+                            <span class="fa fa-gift text-success"></span>
+                            <span class="fa fa-gift text-success"></span>
+                        </h3>
+                    </div>
+                    <div ng-show="plan.interval_count==12">
+                        <h3>
+                            <span class="fa fa-gift text-success"></span>
+                            <span class="fa fa-gift text-success"></span>
+                            <span class="fa fa-gift text-success"></span>
+                            <span class="fa fa-gift text-success"></span>
+                            <br/>
+                            <span class="fa fa-gift text-success"></span>
+                            <span class="fa fa-gift text-success"></span>
+                            <span class="fa fa-gift text-success"></span>
+                            <span class="fa fa-gift text-success"></span>
+                            <br/>
+                            <span class="fa fa-gift text-success"></span>
+                            <span class="fa fa-gift text-success"></span>
+                            <span class="fa fa-gift text-success"></span>
+                            <span class="fa fa-gift text-success"></span>
+                        </h3>
+                    </div>
+
+                    <hr />
+
+                    <a href="" ng-disabled="formPlans.length==0" ng-if="!loggedIn" ng-click="selectPlan(plan.id)" class="btn btn-3d btn-success btn-block btn-lg">SELECT</a>
+
+                    <a href="" ng-disabled="formPlans.length==0" ng-if="loggedIn" ng-hide="indexOf(plan.id, cleanActivePlanId)>-1" ng-click="selectPlan(plan.id)" class="btn btn-3d btn-success btn-block btn-lg">CHANGE TO THIS</a>
+                    <a href="" ng-show="indexOf(plan.id, cleanActivePlanId)>-1" class="btn btn-3d btn-info btn-block btn-lg">CURRENTLY SUBSCRIBED</a>
+                </div>
+            </div>
+
+            <h4 class="col-md-12 margin-top-20">Choose a plan for automatic monthly delivery of premium artisan chocolate to your door! Packaged and shipped after the 15th of each month. Cancel at anytime, no strings attached.</h4>
+
+        </div>
+
+        <div ng-show="activeTab=='gift'" class="container" ng-class="{ 'active' : activeTab.gift }">
+
+            <div class="col-sm-3">
+                <div class="price-clean thick-pricing-box">
+                    <h1 class="pricing-head">Starter <br/> Pack</h1>
+                    <h4>
+                        <sup>$</sup>24.99
+                    </h4>
+                    <hr />
+                    <h3>FREE SHIPPING!</h3>
+                    <hr />
+
+
+                    <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan(gift.id)" class="btn btn-3d btn-success btn-block btn-lg"><i class="glyphicon glyphicon-gift"></i>Give A Gift</a>
+                </div>
+            </div>
+
+            <div class="col-sm-3" ng-repeat="gift in formGifts">
+                <div class="price-clean">
+                    <div class="ribbon">
+                        <div class="ribbon-inner"><span class="fa fa-gift"></span>&nbsp;GIFT</div>
+                    </div>
+                    <h1 class="pricing-head" ng-if="gift.interval_count>1">{{ gift.interval_count }} Month <br/> Prepaid Gift</h1>
+                    <h1 class="pricing-head" ng-if="gift.interval_count===1">Gift A <br/> Box </h1>
+                    <h4>
+                        <sup>$</sup>{{ (gift.amount/gift.interval_count/100).toFixed(2) }}<em> <i ng-hide="gift.interval_count===1">/ month</i></em>
+                    </h4>
+                    <h5 ng-if="gift.interval_count===12"> $371.88 </h5>
+                    <h5 ng-if="gift.interval_count===3"> $98.97 </h5>
+                    <h5 ng-if="gift.interval_count===1"> $34.99 </h5>
+                    <hr />
+                    <h2>FREE SHIPPING!</h2>
+                    <hr />
+                    <div ng-show="gift.interval_count==1">
+                        <h3 class="text-green">
+                            <br/>
+                            <br/>
+                            <span class="fa fa-gift text-success"></span>
+                        </h3>
+                    </div>
+                    <div ng-show="gift.interval_count==3">
+                        <h3 class="text-green">
+                            <br/>
+                            <span class="fa fa-gift text-success"></span>
+                            <br/>
+                            <span class="fa fa-gift text-success"></span>
+                            <span class="fa fa-gift text-success"></span>
+                        </h3>
+                    </div>
+                    <div ng-show="gift.interval_count==12">
+                        <h3>
+                            <span class="fa fa-gift text-success"></span>
+                            <span class="fa fa-gift text-success"></span>
+                            <span class="fa fa-gift text-success"></span>
+                            <span class="fa fa-gift text-success"></span>
+                            <br/>
+                            <span class="fa fa-gift text-success"></span>
+                            <span class="fa fa-gift text-success"></span>
+                            <span class="fa fa-gift text-success"></span>
+                            <span class="fa fa-gift text-success"></span>
+                            <br/>
+                            <span class="fa fa-gift text-success"></span>
+                            <span class="fa fa-gift text-success"></span>
+                            <span class="fa fa-gift text-success"></span>
+                            <span class="fa fa-gift text-success"></span>
+                        </h3>
+                    </div>
+
+                    <hr/>
+
+                    <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan(gift.id)" class="btn btn-3d btn-success btn-block btn-lg"><i class="glyphicon glyphicon-gift"></i>Give A Gift</a>
+                </div>
+            </div>
+
+        </div>
+
 
     </div>
 
 
     <!-- Shipping Information -->
-    <div ng-if="formPage==2">
+    <div ng-show="formPage==2">
         <form class="row clearfix" novalidate>
             <div class="col-lg-7 col-sm-7 margin-top-20">
 
@@ -367,7 +447,7 @@
     </div>
 
     <!-- Order Confirmation page -->
-    <div ng-if="formPage==3">
+    <div ng-show="formPage==3">
 
         <section>
             <div class="container">
@@ -395,5 +475,15 @@
         </section>
 
     </div>
+
+    <div class="row secondary-sep">
+        <hr class="margin-top-30"/>
+        <div class="col-sm-12 text-center margin-top-10">
+            <h1 ng-show="activeTab=='plan'" class="font-cursive">New to artisan chocolate? Try our $24.99 Starter Pack! <a ng-click="activeTab='gift'" class="font-spin btn btn-lg btn-success">More Info</a></h1>
+            <h1 ng-show="activeTab=='gift'" class="font-cursive">Love chocolate? Choose a plan, and receive chocolate monthly! <a ng-click="activeTab='plan'" class="font-spin btn btn-lg btn-success">More Info</a></h1>
+        </div>
+    </div>
+
+    <hr class="margin-bottom-100"/>
 
 </div>

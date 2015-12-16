@@ -1,21 +1,23 @@
 'use strict';
 
-angular.module('subscribe', [])
+angular.module('subscribe', ['ui.bootstrap'])
 
 .controller('signupCtrl', function ($scope, $http, $window, $location) {
+
+        $scope.activeTab = 'plan';
 
         // Set gift tab active if user selects gift
         var param = $location.absUrl().split('?');
         if (param.length > 1) {
             if (param[1].indexOf('gift') > -1) {
-                $scope.activeTab = 2;
+                $scope.activeTab = 'gift'
             }
             else {
-                $scope.activeTab = 1;
+                $scope.activeTab = 'plan';
             }
         }
         else {
-            $scope.activeTab = 1;
+            $scope.activeTab = 'plan';
         }
 
 
