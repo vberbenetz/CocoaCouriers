@@ -298,28 +298,35 @@ module.exports = function(app, passport, dbConnPool) {
 
     app.post('/api/plan', function (req, res, next) {
 
-        if (req.user.email !== 'val@cantangosolutions.com') {
+        if ( (typeof req.user !== 'undefined') && (typeof req.user.email !== 'undefined') ) {
+            if (req.user.email !== 'val@cantangosolutions.com') {
+                res.status(403).send('Forbidden');
+            }
+            else {
+                var payload = {
+                    id: req.body.id,
+                    amount: req.body.amount,
+                    currency: req.body.currency,
+                    interval: req.body.interval,
+                    interval_count: req.body.interval_count,
+                    name: req.body.name,
+                    metadata: req.body.metadata
+                };
+
+                planCtrl.create(payload, req.connection.remoteAddress, function(err, result) {
+                    if (err) {
+                        errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                    }
+                    else {
+                        res.send(result);
+                    }
+                });
+            }
+        }
+        else {
             res.status(403).send('Forbidden');
         }
 
-        var payload = {
-            id: req.body.id,
-            amount: req.body.amount,
-            currency: req.body.currency,
-            interval: req.body.interval,
-            interval_count: req.body.interval_count,
-            name: req.body.name,
-            metadata: req.body.metadata
-        };
-
-        planCtrl.create(payload, req.connection.remoteAddress, function(err, result) {
-            if (err) {
-                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-            }
-            else {
-                res.send(result);
-            }
-        });
     });
 
     // ----------------- Subscription Related ------------------------ //
