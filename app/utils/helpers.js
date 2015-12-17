@@ -21,7 +21,6 @@ helpers.prototype = {
             // Generate next month's billing date
             coolDownPeriod.end.setMonth(coolDownPeriod.end.getMonth() + 1);
             coolDownPeriod.endTs = coolDownPeriod.end.getTime();
-            console.log('Next Billing Date CoolDown.endTs: ' + coolDownPeriod.endTs);
             return Math.floor( (coolDownPeriod.endTs / 1000) + 1 );
         }
     },
