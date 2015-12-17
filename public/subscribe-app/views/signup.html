@@ -319,6 +319,19 @@
                                 &nbsp;**** **** **** {{ customer.sources.data[0].last4 }}
                             </p>
                         </div>
+                        <div class="col-md-6 col-sm-6 margin-top-10">
+                            <label><small>Coupon Code</small></label>
+                            <div class="input-group" ng-class="{ 'has-error' : validationErrors.couponCode }">
+                                <input class="form-control" ng-model="misc.testCouponCode" />
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" ng-click="applyCoupon()">
+                                    Apply
+                                </button>
+                            </span>
+                            </div>
+                            <p class="text-danger" ng-show="validationErrors.couponCode">{{ validationErrors.couponCode }}</p>
+                            <p class="text-success" ng-show="misc.discount>0">Successfully applied coupon!</p>
+                        </div>
                     </fieldset>
                 </div>
 
@@ -388,7 +401,7 @@
                         <span class="clearfix">
                             <button type="submit" class="btn btn-sm btn-block btn-info margin-bottom-20" ng-click="goBack(1)">Switch Selected (Go Back)</button>
                         </span>
-                        <span class="clearfix" ng-hide="loggedIn">
+                        <span class="clearfix">
                             <span class="pull-right">- $ {{ misc.discount.toFixed(2) }}</span>
                             <span class="pull-left">Coupon Discount:  <em class="text-green" ng-show="misc.discount > 0">{{ userInfo.subscription.id }}</em></span>
                         </span>
