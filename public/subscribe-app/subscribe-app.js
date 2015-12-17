@@ -211,7 +211,8 @@ angular.module('subscribe', ['ui.bootstrap'])
 
             subscription: {
                 planId: '',
-                couponCode: ''
+                coupon: {},
+                giftQuantity: 1
             },
 
             address: {
@@ -383,9 +384,24 @@ angular.module('subscribe', ['ui.bootstrap'])
         };
 
         $scope.goBack = function(formPage) {
+            $scope.userInfo.subscription.giftQuantity = 1;
             $scope.formPage = formPage;
         };
 
+        $scope.changeGiftQuantity = function(increment) {
+            if (increment) {
+                if ($scope.userInfo.subscription.giftQuantity < 99) {
+                    $scope.userInfo.subscription.giftQuantity++;
+                    $scope.recalculateDiscount();
+                }
+            }
+            else {
+                if ($scope.userInfo.subscription.giftQuantity > 1) {
+                    $scope.userInfo.subscription.giftQuantity--;
+                    $scope.recalculateDiscount();
+                }
+            }
+        };
 
         // After CC token generation, register the user and create the customer in Stripe
         $scope.completeRegistration = function() {
@@ -809,27 +825,35 @@ angular.module('subscribe', ['ui.bootstrap'])
                     }
                 }).success(function(coupon) {
                     if (coupon.amount_off !== null) {
-                        $scope.userInfo.subscription.couponCode = couponCode;
+                        $scope.userInfo.subscription.coupon = coupon;
                         $scope.misc.discount = (coupon.amount_off/100);
                     }
                     else {
-                        $scope.userInfo.subscription.couponCode = couponCode;
-                        $scope.misc.discount = parseFloat( ( ($scope.chosenPlan.amount/100) * (coupon.percent_off/100) ).toFixed(2) );
+                        $scope.userInfo.subscription.coupon = coupon;
+                        $scope.misc.discount = parseFloat( ( $scope.userInfo.subscription.giftQuantity*($scope.chosenPlan.amount/100) * (coupon.percent_off/100) ).toFixed(2) );
                     }
                 }).error(function(err) {
                     $scope.misc.discount = 0;
-                    $scope.userInfo.subscription.couponCode = '';
+                    $scope.userInfo.subscription.coupon = {};
                     $scope.validationErrors.couponCode = 'Coupon code is invalid';
                 });
 
             }
             else {
                 $scope.misc.discount = 0;
-                $scope.userInfo.subscription.couponCode = '';
+                $scope.userInfo.subscription.coupon = {};
                 $scope.validationErrors.couponCode = 'Coupon code is invalid';
             }
 
+        };
 
+        // Recalculate discount if coupon is a percent off
+        $scope.recalculateDiscount = function() {
+            if ( (typeof $scope.userInfo.subscription.coupon !== 'undefined') && (Object.keys($scope.userInfo.subscription.coupon).length > 0) ) {
+                if ($scope.userInfo.subscription.coupon.amount_off === null) {
+                    $scope.misc.discount = parseFloat( ( $scope.userInfo.subscription.giftQuantity*($scope.chosenPlan.amount/100) * ($scope.userInfo.subscription.coupon.percent_off/100) ).toFixed(2) );
+                }
+            }
         };
 
 
@@ -1031,8 +1055,9 @@ angular.module('subscribe', ['ui.bootstrap'])
                                 address: $scope.userInfo.address
                             },
                             tr: $scope.tax.rate,
-                            coupon: $scope.userInfo.subscription.couponCode,
-                            plan: $scope.userInfo.subscription.planId
+                            coupon: $scope.userInfo.subscription.coupon.id,
+                            plan: $scope.userInfo.subscription.planId,
+                            quantity: $scope.userInfo.subscription.giftQuantity
                         }
                     }).success(function(successfulCharge) {
                         $scope.formPage = 3;
@@ -1056,7 +1081,7 @@ angular.module('subscribe', ['ui.bootstrap'])
                 url: '/api/subscription',
                 method: 'POST',
                 data: {
-                    coupon: $scope.userInfo.subscription.couponCode,
+                    coupon: $scope.userInfo.subscription.coupon.id,
                     plan: $scope.userInfo.subscription.planId
                 }
             }).success(function(newSubscription) {

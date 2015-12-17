@@ -82,6 +82,9 @@ log.info('================================');
 
 // Launch =============================================================================================================/
 https.createServer({
+    secureProtocol: 'SSLv23_method',
+    secureOptions: 'SSL_OP_NO_SSLv3'|'SSL_OP_NO_SSLv2',
+
     key: fs.readFileSync(configPriv.ssl.key),
     cert: fs.readFileSync(configPriv.ssl.cert),
     ca: [
@@ -89,7 +92,31 @@ https.createServer({
         fs.readFileSync(configPriv.ssl.ca.int1),
         fs.readFileSync(configPriv.ssl.ca.int2)
     ],
-    passphrase: configPriv.ssl.passphrase
+    passphrase: configPriv.ssl.passphrase,
+    ciphers: [
+        'ECDHE-RSA-AES128-GCM-SHA256',
+        'ECDHE-ECDSA-AES128-GCM-SHA256',
+        'ECDHE-RSA-AES256-GCM-SHA384',
+        'ECDHE-ECDSA-AES256-GCM-SHA384',
+        'DHE-RSA-AES128-GCM-SHA256',
+        'ECDHE-RSA-AES128-SHA256',
+        'DHE-RSA-AES128-SHA256',
+        'ECDHE-RSA-AES256-SHA384',
+        'DHE-RSA-AES256-SHA384',
+        'ECDHE-RSA-AES256-SHA256',
+        'DHE-RSA-AES256-SHA256',
+        'HIGH',
+        '!aNULL',
+        '!eNULL',
+        '!EXPORT',
+        '!DES',
+        '!RC4',
+        '!MD5',
+        '!PSK',
+        '!SRP',
+        '!CAMELLIA'
+    ].join(':'),
+    honorCipherOrder: true
 }, app).listen(443);
 
 // Needed for redirect to HTTPS

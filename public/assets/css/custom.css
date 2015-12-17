@@ -10,6 +10,18 @@
     margin-top: 5px !important;
 }
 
+.margin-left-2 {
+    margin-left: 2px; !important;
+}
+
+.margin-top-neg-50 {
+    margin-top: -50px !important;
+}
+
+.margin-bottom-neg-10 {
+    margin-bottom: -10px !important;
+}
+
 .color-visa {
     color: #0157A2;
 }

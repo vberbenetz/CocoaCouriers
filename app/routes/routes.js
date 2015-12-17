@@ -212,7 +212,7 @@ module.exports = function(app, passport, dbConnPool) {
             }
             else {
 
-                chargeCtrl.oneTimeCharge(customer, req.body.shipping, req.body.plan, req.body.coupon, req.connection.remoteAddress, function(err, result) {
+                chargeCtrl.oneTimeCharge(customer, req.body.shipping, req.body.plan, req.body.quantity, req.body.coupon, req.connection.remoteAddress, function(err, result) {
                     if (err) {
                         errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
                     }
@@ -296,8 +296,12 @@ module.exports = function(app, passport, dbConnPool) {
         }
     });
 
-/*
     app.post('/api/plan', function (req, res, next) {
+
+        if (req.user.email !== 'val@cantangosolutions.com') {
+            res.status(403).send('Forbidden');
+        }
+
         var payload = {
             id: req.body.id,
             amount: req.body.amount,
@@ -317,7 +321,6 @@ module.exports = function(app, passport, dbConnPool) {
             }
         });
     });
-*/
 
     // ----------------- Subscription Related ------------------------ //
 

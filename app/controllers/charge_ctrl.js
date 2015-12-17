@@ -14,7 +14,7 @@ var chargeCtrl = function() {};
 
 chargeCtrl.prototype = {
 
-    oneTimeCharge: function (customer, shipping, planId, couponId, reqIP, callback) {
+    oneTimeCharge: function (customer, shipping, planId, quantity, couponId, reqIP, callback) {
 
 // TODO: ADD SHIPPING RATE FOR FUTURE CUSTOMERS OUTSIDE OF CANADA AND LOWER 48 STATES
 
@@ -61,12 +61,12 @@ chargeCtrl.prototype = {
                             if (err.detailed.raw.statusCode === 404) {
 
                                 // Plan + (plan * tax) --- Converted to integer (Ex: 19.99 = 1999)
-                                totalTax = parseFloat( ((plan.amount * taxRate) / 10000).toFixed(2) );
-                                chargeAmount = ( (plan.amount/100) + totalTax ) * 100;
+                                totalTax = parseFloat( ((quantity * plan.amount * taxRate) / 10000).toFixed(2) );
+                                chargeAmount = ( (quantity * plan.amount/100) + totalTax ) * 100;
 
                                 chargePayload.amount = chargeAmount;
 
-                                chargePayload.description = plan.name + ' : $' + (plan.amount/100).toFixed(2) + ' /// ' +
+                                chargePayload.description = quantity + 'x ' + plan.name + ' : $' + (plan.amount/100).toFixed(2) + ' /// ' +
                                         'Sales Tax ' + taxDesc + ' : $' + totalTax.toFixed(2);
 
                                 stripe.charges.create(chargePayload, function(err, charge) {
@@ -100,20 +100,26 @@ chargeCtrl.prototype = {
 
                             if (coupon.percent_off != null) {
                                 // Plan - (Plan * Coupon_Percentage)
-                                discount = parseFloat((plan.amount/100 * (coupon.percent_off/100)).toFixed(2));
+                                discount = parseFloat((quantity * plan.amount/100 * (coupon.percent_off/100)).toFixed(2));
                             }
                             else {
                                 discount = coupon.amount_off/100;
                             }
 
                             // Plan - Discount + ( (Plan - Discount) * tax) --- Converted to integer (Ex: 19.99 = 1999)
-                            var revPlanAmt = parseFloat( ((plan.amount/100) - discount).toFixed(2) );
+                            var revPlanAmt = parseFloat( ((quantity*plan.amount/100) - discount).toFixed(2) );
+
+                            // Prevent negative totals
+                            if (revPlanAmt < 0) {
+                                revPlanAmt = 0;
+                            }
+
                             totalTax = parseFloat( (revPlanAmt * (taxRate/100)).toFixed(2) );
                             chargeAmount = ( (revPlanAmt) + totalTax ) * 100;
 
                             chargePayload.amount = chargeAmount;
 
-                            chargePayload.description = plan.name + ' : $' + (plan.amount/100).toFixed(2) + ' /// ' +
+                            chargePayload.description = quantity + 'x ' + plan.name + ' : $' + (plan.amount/100).toFixed(2) + ' /// ' +
                                 'Discount : -$' + discount.toFixed(2) + ' /// ' +
                                 'Sales Tax ' + taxDesc + ' : $' + totalTax.toFixed(2);
 
@@ -142,12 +148,12 @@ chargeCtrl.prototype = {
 
                 else {
                     // Plan + (plan * tax) --- Converted to integer (Ex: 19.99 = 1999)
-                    totalTax = parseFloat( ((plan.amount * taxRate) / 10000).toFixed(2) );
-                    chargeAmount = ( (plan.amount/100) + totalTax ) * 100;
+                    totalTax = parseFloat( ((quantity * plan.amount * taxRate) / 10000).toFixed(2) );
+                    chargeAmount = ( (quantity*plan.amount/100) + totalTax ) * 100;
 
                     chargePayload.amount = chargeAmount;
 
-                    chargePayload.description = plan.name + ' : $' + (plan.amount/100).toFixed(2) + ' /// ' +
+                    chargePayload.description = quantity + 'x ' + plan.name + ' : $' + (plan.amount/100).toFixed(2) + ' /// ' +
                         'Sales Tax ' + taxDesc + ' : $' + totalTax.toFixed(2);
 
                     stripe.charges.create(chargePayload, function(err, charge) {
