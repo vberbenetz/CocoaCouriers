@@ -96,7 +96,7 @@ subscriptionCtrl.prototype = {
             // Check if subscription currently falls within cool-down period.
             // Do not bill user until next cycle if currently in cool-down
             if (helpers.isCoolDownPeriod()) {
-                payload.trial_end = helpers.getNextBillingDate();
+                payload.trial_end = helpers.getNextBillingDate(1);
                 payload.metadata = { cool_down: true }
             }
 
@@ -132,7 +132,7 @@ subscriptionCtrl.prototype = {
                     }
                     else {
                         payload = {
-                            trial_end: helpers.getNextBillingDate(),
+                            trial_end: helpers.getNextBillingDate(subscription.plan.interval_count),
                             prorate: false
                         };
 

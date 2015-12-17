@@ -9,7 +9,7 @@ var helpers = function() {};
 
 helpers.prototype = {
 
-    getNextBillingDate: function () {
+    getNextBillingDate: function (plan_interval) {
 
         var coolDownPeriod = this.generateCoolDownDateStamps();
 
@@ -18,8 +18,8 @@ helpers.prototype = {
             return Math.floor( (coolDownPeriod.endTs / 1000) + 1 );
         }
         else {
-            // Generate next month's billing date
-            coolDownPeriod.end.setMonth(coolDownPeriod.end.getMonth() + 1);
+            // Generate next month's billing date (interval needed because user already charged for first block)
+            coolDownPeriod.end.setMonth(coolDownPeriod.end.getMonth() + plan_interval);
             coolDownPeriod.endTs = coolDownPeriod.end.getTime();
             return Math.floor( (coolDownPeriod.endTs / 1000) + 1 );
         }
