@@ -347,7 +347,7 @@ module.exports = function(app, passport, dbConnPool) {
     });
 
     app.post('/api/subscription', auth, function (req, res, next) {
-        subscriptionCtrl.create(req, res, function(err, result) {
+        subscriptionCtrl.create(req.user.stId, req.body.plan, req.body.coupon, req.connection.remoteAddress, function(err, result) {
             if (err) {
                 // Attach card error code to customer
                 if (typeof err.cardErrorCode !== 'undefined') {
@@ -377,7 +377,7 @@ module.exports = function(app, passport, dbConnPool) {
     });
 
     app.put('/api/subscription', auth, function (req, res, next) {
-        subscriptionCtrl.update(req, res, function(err, result) {
+        subscriptionCtrl.update(req.user.stId, req.query.newPlanId, req.connection.remoteAddress, function(err, result) {
             if (err) {
                 errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
             }

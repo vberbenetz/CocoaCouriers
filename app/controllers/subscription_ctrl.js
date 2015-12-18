@@ -33,12 +33,10 @@ subscriptionCtrl.prototype = {
         });
     },
 
-    create: function (req, res, callback) {
-
-        var customerId = req.user.stId;
+    create: function (customerId, planId, couponId, reqIP, callback) {
 
         // Verify plan has been included in request
-        if (typeof req.body.plan === 'undefined') {
+        if (typeof planId === 'undefined') {
             return callback({
                 status: 400,
                 type: 'app',
@@ -53,8 +51,8 @@ subscriptionCtrl.prototype = {
         var payload = {};
 
         // Attach coupon code if supplied
-        if ( (typeof req.body.coupon !== 'undefined') && (req.body.coupon !== null) && (req.body.coupon.length !== 0) && (req.body.coupon !== '') ) {
-            payload.coupon = req.body.coupon;
+        if ( (typeof couponId !== 'undefined') && (couponId !== null) && (couponId.length !== 0) && (couponId !== '') ) {
+            payload.coupon = couponId;
         }
 
         // Get customer data
@@ -71,19 +69,20 @@ subscriptionCtrl.prototype = {
                 }, null);
             }
 
-            // Switch to US plan if card is registered in US
-            var planId = req.body.plan;
-            if (customer.sources.data[0].country === 'US') {
-                var splitPlan = planId.split('_');
-                var tempPlan = splitPlan[0];
-                tempPlan += '_usd';
-                for (var i = 2; i < splitPlan.length; i++) {
-                    tempPlan += '_' + splitPlan[i];
-                }
-                planId = tempPlan;
+            // Check if customer has a valid payment source attached
+            if (typeof customer.sources.data[0].country === 'undefined') {
+                return callback({
+                    status: 402,
+                    type: 'app',
+                    msg: {
+                        simplified: 'no_source',
+                        detailed: 'subscriptionCtrl.create() customer has no source'
+                    }
+                }, null);
             }
 
-            payload.plan = planId;
+            // Switch plan to currency in which card originates from
+            payload.plan = helpers.sourceCountryPlanId(planId, customer.sources.data[0].country);
 
             var tax = {
                 rate: parseFloat(customer.metadata.taxRate),
@@ -97,7 +96,6 @@ subscriptionCtrl.prototype = {
             // Do not bill user until next cycle if currently in cool-down
             if (helpers.isCoolDownPeriod()) {
                 payload.trial_end = helpers.getNextBillingDate(1);
-                payload.metadata = { cool_down: true }
             }
 
             // Create subscription
@@ -122,7 +120,7 @@ subscriptionCtrl.prototype = {
                     }, null);
                 }
                 else {
-                    log.info("Created new subscription", subscription, req.connection.remoteAddress);
+                    log.info("Created new subscription", subscription, reqIP);
 
                     // Adjust billing period to fall on same as within config file
                     // -----------------------------------------------------------
@@ -159,14 +157,10 @@ subscriptionCtrl.prototype = {
 
     },
 
-    update: function (req, res, callback) {
+    update: function (customerId, newPlanId, reqIP, callback) {
 
-        var customerId = req.user.stId;
-        var newPlan = req.body.new_plan;
         var payload = {
-            plan: newPlan,
-            prorate: false,
-            trial_end: helpers.getNextBillingDate()
+            prorate: false
         };
 
         // Get customer which needs to have their subscription updated
@@ -183,39 +177,53 @@ subscriptionCtrl.prototype = {
                 }, null);
             }
             else {
-                if (typeof customer.subscriptions.data[0] !== 'undefined') {
-                    var subscriptionId = customer.subscriptions.data[0].id;
 
-                    // Update the customer's subscription to the new plan
-                    stripe.customers.updateSubscription(customerId, subscriptionId, payload, function(err, subscription) {
-                        if (err) {
-                            console.log(err);
-                            return callback({
-                                status: 500,
-                                type: 'stripe',
-                                msg: {
-                                    simplified: 'server_error',
-                                    detailed: err
-                                }
-                            }, null);
-                        }
-                        else {
-                            log.info("Updated subscription", subscription, req.connection.remoteAddress);
-                            return callback(false, subscription);
-                        }
-                    });
-                }
-                else {
-                    console.log('subscriptionCtrl.update() retrieving customer does not have a subscription.');
+                // Check if customer has a valid payment source attached
+                if (typeof customer.sources.data[0].country === 'undefined') {
                     return callback({
                         status: 500,
                         type: 'app',
                         msg: {
                             simplified: 'server_error',
-                            detailed: 'subscriptionCtrl.update() retrieving customer does not have a subscription.'
+                            detailed: 'subscriptionCtrl.create() customer has no source'
                         }
                     }, null);
                 }
+
+                // Switch plan to currency in which card originates from
+                payload.plan = helpers.sourceCountryPlanId(newPlanId, customer.sources.data[0].country);
+
+                // Check if customer has a recurring subscription.
+                // If not, subscribe them to the chosen plan
+                var recurringSubscription = helpers.filterRecurringSubscriptions(customer.subscriptions);
+                if (recurringSubscription === null) {
+                    this.create(customerId, newPlanId, null, reqIP, function(newSubscription) {
+                        return newSubscription;
+                    });
+                }
+
+                // Switch plan to start after the current plan that is paid for expires
+                payload.trial_end = recurringSubscription.current_period_end;
+
+                // Update the customer's subscription to the new plan
+                stripe.customers.updateSubscription(customerId, recurringSubscription.id, payload, function(err, subscription) {
+                    if (err) {
+                        console.log(err);
+                        return callback({
+                            status: 500,
+                            type: 'stripe',
+                            msg: {
+                                simplified: 'server_error',
+                                detailed: err
+                            }
+                        }, null);
+                    }
+                    else {
+                        log.info("Updated subscription", subscription, reqIP);
+                        return callback(false, subscription);
+                    }
+                });
+
             }
         });
 

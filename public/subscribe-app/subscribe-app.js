@@ -484,6 +484,22 @@ angular.module('subscribe', ['ui.bootstrap'])
             }
         };
 
+        $scope.updateRecurringPlan = function(newPlanId) {
+            $scope.updatingPlan = true;
+            $http({
+                url: '/api/subscription',
+                method: 'PUT',
+                params: {
+                    newPlanId: newPlanId
+                }
+            }).success(function(subscription) {
+                $scope.updatingPlan = false;
+                $scope.cleanActivePlanId = subscription.plan.id.split('_')[0];
+            }).error(function(err) {
+                $scope.updatingPlan = false;
+            });
+        };
+
         // Validate new account creation
         $scope.validateNewAccount = function(callback) {
 

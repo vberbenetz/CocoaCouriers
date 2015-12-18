@@ -56,6 +56,39 @@ helpers.prototype = {
 
     hashPasswordSync: function (rawPassword) {
         return bcrypt.hashSync(rawPassword, 11);
+    },
+
+    sourceCountryPlanId: function(planId, isoCountry) {
+        var splitPlanId = planId.split('_');
+        var newPlanId = splitPlanId[0];
+
+        switch(isoCountry) {
+            case 'CA':
+                newPlanId += '_cad';
+                break;
+            case 'US':
+                newPlanId += '_usd';
+                break;
+            default:
+                newPlanId += '_cad';
+                break;
+        }
+
+        for (var i = 2; i < splitPlanId.length; i++) {
+            newPlanId += '_' + splitPlanId[i];
+        }
+
+        return newPlanId;
+    },
+
+    filterRecurringSubscriptions: function (subscriptions) {
+        for (var i = 0; i < subscriptions.data.length; i++) {
+            if (subscriptions.data[i].plan.metadata.is_gift === 'false') {
+                return subscriptions.data[i];
+            }
+        }
+
+        return null;
     }
 
 };
