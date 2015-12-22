@@ -42,7 +42,7 @@
                     <h5 ng-if="plan.interval_count===12"> ${{ plan.amount/100 }} ANNUALLY </h5>
                     <h5 ng-if="plan.interval_count===3"> ${{ plan.amount/100 }} QUARTERLY </h5>
                     <h5 ng-if="plan.interval_count===1"> ${{ plan.amount/100 }} MONTHLY </h5>
-                    <p ng-show="indexOf(plan.id, 'starter')>-1" class="text-gray">2 - 3 Premium Artisan Bars</p>
+                    <p ng-show="indexOf(plan.id, 'starter')>-1" class="text-gray">3 Premium Artisan Bars</p>
                     <p ng-show="indexOf(plan.id, 'starter')<0" class="text-gray">4 Premium Artisan Bars</p>
                     <hr />
                     <div ng-show="plan.interval_count==1">
@@ -119,7 +119,7 @@
                     <h5 ng-if="gift.interval_count===12"> ${{ gift.amount/100 }} </h5>
                     <h5 ng-if="gift.interval_count===3"> ${{ gift.amount/100 }} </h5>
                     <h5 ng-if="gift.interval_count===1"> ${{ gift.amount/100 }} </h5>
-                    <p ng-show="indexOf(gift.id, 'starter')>-1" class="text-gray">2 - 3 Premium Artisan Bars</p>
+                    <p ng-show="indexOf(gift.id, 'starter')>-1" class="text-gray">3 Premium Artisan Bars</p>
                     <p ng-show="indexOf(gift.id, 'starter')<0" class="text-gray">4 Premium Artisan Bars</p>
                     <hr />
                     <div ng-show="gift.interval_count==1">
