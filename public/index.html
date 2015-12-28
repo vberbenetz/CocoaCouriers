@@ -46,75 +46,163 @@
 </script>
 	<body class="smoothscroll enable-animation font-spin">
 
-		<!-- wrapper -->
-		<div id="wrapper">
-            <!-- Top Bar -->
-            <div id="topBar" class="text-center padding-20">
+    <!-- wrapper -->
+    <div id="wrapper">
 
-                <!-- Logo -->
-                <a class="logo" href="index.html">
-                    <img src="/assets/images/logo-cocoa-white.png" alt="" />
-                </a>
+        <!-- Top Bar -->
+        <div id="topBar" class="text-center padding-20">
 
-            </div>
-            <!-- /Top Bar -->
+            <!-- Logo -->
+            <a class="logo" href="index.html">
+                <img src="/assets/images/Logo-cocoa.png" alt="" />
+            </a>
 
-			<div id="header" class="clearfix transparent header-md">
-				<!-- TOP NAV -->
-				<header id="topNav" class="">
-					<div class="container">
+        </div>
+        <!-- /Top Bar -->
 
-						<!-- Mobile Menu Button -->
-						<button class="btn btn-mobile" data-toggle="collapse" data-target=".nav-main-collapse">
-							<i class="glyphicon glyphicon-menu-hamburger"></i>
-						</button>
 
-						<!-- Logo -->
-						<a class="logo pull-left" href="/">
-							<img src="/assets/images/Logo-cocoa.png" alt="" />
-						</a>
+        <!--
+            AVAILABLE HEADER CLASSES
 
-						<div class="navbar-collapse pull-right nav-main-collapse collapse">
-							<nav class="nav-main">
+            Default nav height: 96px
+            .header-md 		= 70px nav height
+            .header-sm 		= 60px nav height
 
-								<ul id="topMain" class="nav nav-pills nav-main nav-onepage ">
+            .noborder 		= remove bottom border (only with transparent use)
+            .transparent	= transparent header
+            .translucent	= translucent header
+            .sticky			= sticky header
+            .static			= static header
+            .dark			= dark header
+            .bottom			= header on bottom
 
-                                    <li><!-- FEATURES -->
-                                        <a class="bold" href="/subscribe">
-                                            SUBSCRIBE
-                                        </a>
-                                    </li>
-									<li><!-- FEATURES -->
-										<a class="bold" href="/partners">
-											PARTNERS
-										</a>
-									</li>
-                                    <li><!-- FEATURES -->
-                                        <a class="bold" href="/blog">
-                                            LEARN
-                                        </a>
-                                    </li>
+            shadow-before-1 = shadow 1 header top
+            shadow-after-1 	= shadow 1 header bottom
+            shadow-before-2 = shadow 2 header top
+            shadow-after-2 	= shadow 2 header bottom
+            shadow-before-3 = shadow 3 header top
+            shadow-after-3 	= shadow 3 header bottom
 
-									<li><!-- TESTIMONIALS -->
-										<a class="bold" href="/subscribe?gift">
-											GIFT
-										</a>
-									</li>
-									<li><!-- PURCHASE -->
-										<a class="external bold" href="/My-Account">
-											MY ACCOUNT
-										</a>
-									</li>
-								</ul>
+            .clearfix		= required for mobile menu, do not remove!
 
-							</nav>
-						</div>
+            Example Usage:  class="clearfix sticky header-sm transparent noborder"
+        -->
+        <div id="header" class="sticky header-sm clearfix">
 
-					</div>
-				</header>
-				<!-- /Top Nav -->
+            <!-- TOP NAV -->
+            <header id="topNav">
+                <div class="container">
 
-			</div>
+                    <!-- Mobile Menu Button -->
+                    <button class="btn btn-mobile" data-toggle="collapse" data-target=".nav-main-collapse">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <!-- BUTTONS -->
+                    <ul class="pull-right nav nav-pills nav-second-main">
+
+
+                        <!-- QUICK SHOP CART -->
+                        <li class="quick-cart">
+                            <a href="#">
+                                <span class="badge badge-aqua btn-xs badge-corner">2</span>
+                                <i class="fa fa-shopping-cart"></i>
+                            </a>
+                            <div class="quick-cart-box">
+                                <h4>Shop Cart</h4>
+
+                                <div class="quick-cart-wrapper">
+
+                                    <a href="#"><!-- cart item -->
+                                        <img src="assets/images/demo/people/300x300/4-min.jpg" width="45" height="45" alt="" />
+                                        <h6><span>2x</span> RED BAG WITH HUGE POCKETS</h6>
+                                        <small>$37.21</small>
+                                    </a><!-- /cart item -->
+
+                                    <a href="#"><!-- cart item -->
+                                        <img src="assets/images/demo/people/300x300/5-min.jpg" width="45" height="45" alt="" />
+                                        <h6><span>2x</span> THIS IS A VERY LONG TEXT AND WILL BE TRUNCATED</h6>
+                                        <small>$17.18</small>
+                                    </a><!-- /cart item -->
+
+                                    <!-- cart no items example -->
+                                    <!--
+                                    <a class="text-center" href="#">
+                                        <h6>0 ITEMS ON YOUR CART</h6>
+                                    </a>
+                                    -->
+
+                                </div>
+
+                                <!-- quick cart footer -->
+                                <div class="quick-cart-footer clearfix">
+                                    <a href="shop-cart.html" class="btn btn-primary btn-xs pull-right">VIEW CART</a>
+                                    <span class="pull-left"><strong>TOTAL:</strong> $54.39</span>
+                                </div>
+                                <!-- /quick cart footer -->
+
+                            </div>
+                        </li>
+                        <!-- /QUICK SHOP CART -->
+
+                    </ul>
+                    <!-- /BUTTONS -->
+
+                    <!--
+                        Top Nav
+
+                        AVAILABLE CLASSES:
+                        submenu-dark = dark sub menu
+                    -->
+                    <div class="navbar-collapse pull-left nav-main-collapse collapse">
+                        <nav class="nav-main">
+
+                            <!--
+                                NOTE
+
+                                For a regular link, remove "dropdown" class from LI tag and "dropdown-toggle" class from the href.
+                                Direct Link Example:
+
+                                <li>
+                                    <a href="#">HOME</a>
+                                </li>
+                            -->
+                            <ul id="topMain" class="nav nav-pills nav-main">
+                                <li class="dropdown"><!-- HOME -->
+                                    <a class="dropdown-toggle" href="/">
+                                        HOME
+                                    </a>
+                                </li>
+                                <li class="dropdown"><!-- HOME -->
+                                    <a class="dropdown-toggle" href="/">
+                                        SUBSCRIBE
+                                    </a>
+                                </li>
+                                <li class="dropdown"><!-- HOME -->
+                                    <a class="dropdown-toggle" href="/">
+                                        LEARN
+                                    </a>
+                                </li>
+                                <li class="dropdown"><!-- HOME -->
+                                    <a class="dropdown-toggle" href="/">
+                                        PARTNERS
+                                    </a>
+                                </li>
+                                <li class="dropdown"><!-- HOME -->
+                                    <a class="dropdown-toggle" href="/">
+                                        MY ACCOUNT
+                                    </a>
+                                </li>
+
+                            </ul>
+
+                        </nav>
+                    </div>
+
+                </div>
+            </header>
+            <!-- /Top Nav -->
+        </div>
 
 
 			<!-- HOME -->
