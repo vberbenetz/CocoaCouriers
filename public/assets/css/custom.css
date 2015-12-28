@@ -125,3 +125,15 @@
 .blog-image {
     height:300px;
 }
+
+.semi-trans {
+    -moz-border-radius:30px;
+    -webkit-border-radius:30px;
+    border-radius:30px;
+    border: #solid 10px #000;
+    background-color: rgba(105,100,100,0.8);
+    width:80%;
+    margin-left: auto ;
+    margin-right: auto ;
+
+}
