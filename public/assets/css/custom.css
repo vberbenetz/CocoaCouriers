@@ -127,9 +127,9 @@
 }
 
 .semi-trans {
-    -moz-border-radius:30px;
-    -webkit-border-radius:30px;
-    border-radius:30px;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    border-radius:10px;
     border: solid 1px #fff;
     background-color: rgba(0,0,0,0.55);
     margin-left: auto ;
