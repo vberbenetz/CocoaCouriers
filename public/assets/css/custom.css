@@ -136,3 +136,9 @@
     margin-right: auto ;
 
 }
+
+.felt-bg {
+    background: url('../images/felt.png');
+    background-repeat: repeat;
+    background-size: cover;
+}
