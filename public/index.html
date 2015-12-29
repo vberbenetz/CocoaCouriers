@@ -32,9 +32,21 @@
 		<!-- PAGE LEVEL SCRIPTS -->
 		<link href="assets/css/header-1.css" rel="stylesheet" type="text/css" />
 		<link href="assets/css/color_scheme/green.css" rel="stylesheet" type="text/css" id="color_scheme" />
-        <link href="assets/plugins/text-rotator/simpletextrotator.css" rel="stylesheet" type="text/css" />
-        <script type="text/javascript" src="assets/plugins/text-rotator/jquery.simple-text-rotator.min.js"></script>
-
+        <link rel="stylesheet" href="assets/plugins/Morphext-2.4.4/dist/morphext.css">
+        <script src="assets/plugins/Morphext-2.4.4/dist/morphext.min.js"></script>
+<script>
+        $("#js-rotating").Morphext({
+        // The [in] animation type. Refer to Animate.css for a list of available animations.
+        animation: "bounceIn",
+        // An array of phrases to rotate are created based on this separator. Change it if you wish to separate the phrases differently (e.g. So Simple | Very Doge | Much Wow | Such Cool).
+        separator: ",",
+        // The delay between the changing of each phrase in milliseconds.
+        speed: 2000,
+        complete: function () {
+        // Called after the entrance animation is executed.
+        }
+        });
+</script>
 
 	</head>
 <script>
@@ -161,14 +173,7 @@
 
                     <div class="container text-center">
 
-                        <h1 class="nomargin" data-wow-delay="0.4s">
-                            WE ARE
-                            <!--
-                                TEXT ROTATOR
-                                data-animation="fade|flip|flipCube|flipUp|spin"
-                            -->
-                            Super <span class="rotate">Simple, Customizable, Light Weight, Easy</span> Text Rotator with Style
-                        </h1>
+                        I am a <span id="js-rotating">So Simple, Very Doge, Much Wow, Such Cool</span> Text Rotator
 
 
                         <p class="lead font-spin size-30 wow fadeInUp" data-wow-delay="0.7s">
