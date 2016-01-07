@@ -26,7 +26,7 @@
 
             <div class="col-md-3 col-sm-3" ng-repeat="plan in formPlans">
                 <div class="price-clean">
-                    <h1 class="pricing-head" ng-if="plan.interval_count>1">{{ plan.interval_count }} Month Prepaid Plan</h1>
+                    <h3 class="pricing-head" ng-if="plan.interval_count>1">{{ plan.interval_count }} Month Prepaid Plan</h3>
                     <h3 class="pricing-head" ng-if="plan.interval_count===1">
                         Monthly<br/>
                         <span class="text-black" ng-if="indexOf(plan.id, 'starter')>-1">
