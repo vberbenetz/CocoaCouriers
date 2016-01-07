@@ -76,7 +76,7 @@
                         </span>
                     </h1>
                     <h4>
-                        <sup>$</sup>{{ (gift.amount/gift.interval_count/100).toFixed(2) }}<em> <i ng-hide="gift.interval_count===1">/ month</i></em>
+                        <sup>$</sup>{{ (gift.amount/gift.interval_count/100).toFixed(2) }}<em> <i ng-hide="gift.interval_count===1">/ box</i></em>
                     </h4>
                     <h5 ng-if="gift.interval_count===12"> ${{ gift.amount/100 }} </h5>
                     <h5 ng-if="gift.interval_count===3"> ${{ gift.amount/100 }} </h5>
