@@ -46,9 +46,6 @@
                     <p ng-show="indexOf(plan.id, 'starter')<0" class="text-gray">4 Premium Artisan Bars</p>
                     <hr />
 
-                    <h2>FREE SHIPPING!</h2>
-
-                    <hr />
 
                     <a href="" ng-disabled="formPlans.length==0" ng-if="!loggedIn" ng-click="selectPlan(plan.id)" class="btn btn-3d btn-success btn-block btn-lg">CHOOSE PLAN</a>
 
@@ -86,9 +83,6 @@
                     <h5 ng-if="gift.interval_count===1"> ${{ gift.amount/100 }} </h5>
                     <p ng-show="indexOf(gift.id, 'starter')>-1" class="text-gray">3 Premium Artisan Bars</p>
                     <p ng-show="indexOf(gift.id, 'starter')<0" class="text-gray">4 Premium Artisan Bars</p>
-                    <hr />
-
-                    <h2>FREE SHIPPING!</h2>
 
                     <hr/>
 
