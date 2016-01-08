@@ -37,7 +37,7 @@
                         </span>
                     </h3>
                     <h4>
-                        <sup>$</sup>{{ (plan.amount/plan.interval_count/100).toFixed(2) }}<em> / month</em>
+                        <sup>$</sup>{{ (plan.amount/plan.interval_count/100).toFixed(2) }}<em> / Box</em>
                     </h4>
                     <h5 ng-if="plan.interval_count===12"> ${{ plan.amount/100 }} ANNUALLY </h5>
                     <h5 ng-if="plan.interval_count===3"> ${{ plan.amount/100 }} QUARTERLY </h5>
@@ -65,7 +65,7 @@
                     <div class="ribbon color-blue">
                         <div class="ribbon-inner"><span class="fa fa-gift"></span>&nbsp;GIFT</div>
                     </div>
-                    <h1 class="pricing-head" ng-if="gift.interval_count>1">{{ gift.interval_count }} Month <br/> Prepaid Gift</h1>
+                    <h4 class="pricing-head" ng-if="gift.interval_count>1">{{ gift.interval_count }} Month <br/> Prepaid Gift</h4>
                     <h1 class="pricing-head" ng-if="gift.interval_count===1">
                         Gift A <br/>
                         <span class="text-black" ng-if="indexOf(gift.id, 'starter')>-1">
