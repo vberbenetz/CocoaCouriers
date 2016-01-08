@@ -62,74 +62,209 @@
 	-->
 	<body class="smoothscroll enable-animation">
 
-		<!-- wrapper -->
-		<div id="wrapper">
+    <!-- wrapper -->
+    <div id="wrapper">
 
+        <!-- Top Bar -->
+        <div id="topBar" class="dark">
+            <div class="container">
 
-            <div id="header" class="sticky clearfix">
+                <ul class="top-links list-inline">
+                    <li><a href="/">HOME</a></li>
+                    <li><a href="/signin">ACCOUNT</a></li>
+                </ul>
 
-                <!-- TOP NAV -->
-                <header id="topNav">
-                    <div class="container">
-
-                        <!-- Mobile Menu Button -->
-                        <button class="btn btn-mobile" data-toggle="collapse" data-target=".nav-main-collapse">
-                            <i class="fa fa-bars"></i>
-                        </button>
-
-                        <!-- Logo -->
-                        <a class="logo pull-left" href="#">
-                            <img src="/assets/images/Logo-cocoa.png" alt="" />
-                        </a>
-
-                        <!--
-                            Top Nav
-
-                            AVAILABLE CLASSES:
-                            submenu-dark = dark sub menu
-                        -->
-                        <div class="navbar-collapse pull-right nav-main-collapse collapse">
-                            <nav class="nav-main">
-
-                                <!--
-                                    .nav-onepage
-                                    Required for onepage navigation links
-
-                                    Add .external for an external link!
-                                -->
-                                <ul id="topMain" class="nav nav-pills nav-main nav-onepage">
-
-                                    <li><!-- FEATURES -->
-                                        <a href="">
-                                            PARTNERS
-                                        </a>
-                                    </li>
-                                    <li><!-- FEATURES -->
-                                        <a href="">
-                                            LEARN
-                                        </a>
-                                    </li>
-
-                                    <li><!-- TESTIMONIALS -->
-                                        <a href="">
-                                            GIFT
-                                        </a>
-                                    </li>
-                                    <li><!-- PURCHASE -->
-                                        <a class="external" href="">
-                                            MY ACCOUNT
-                                        </a>
-                                    </li>
-                                </ul>
-
-                            </nav>
-                        </div>
-
-                    </div>
-                </header>
-                <!-- /Top Nav -->
-
+                <div class="social-icons pull-right hidden-xs">
+                    <a href="https://www.facebook.com/cocoacouriers" class="social-icon social-icon-sm social-icon-transparent social-facebook" data-toggle="tooltip" data-placement="bottom" title="Facebook">
+                        <i class="icon-facebook"></i>
+                        <i class="icon-facebook"></i>
+                    </a>
+                    <a href="https://twitter.com/CocoaCouriers" class="social-icon social-icon-sm social-icon-transparent social-twitter" data-toggle="tooltip" data-placement="bottom" title="Twitter">
+                        <i class="icon-twitter"></i>
+                        <i class="icon-twitter"></i>
+                    </a>
+                    <a href="https://instagram.com/cocoacouriers" class="social-icon social-icon-sm social-icon-transparent social-gplus" data-toggle="tooltip" data-placement="bottom" title="Instagram">
+                        <i class="icon-instagram"></i>
+                        <i class="icon-instagram"></i>
+                    </a>
+                    <a href="https://www.pinterest.com/c_couriers/" class="social-icon social-icon-sm social-icon-transparent social-linkedin" data-toggle="tooltip" data-placement="bottom" title="Pintrest">
+                        <i class="icon-pinterest"></i>
+                        <i class="icon-pinterest"></i>
+                    </a>
+                </div>
             </div>
+        </div>
+        <!-- /Top Bar -->
+
+
+        <!--
+            AVAILABLE HEADER CLASSES
+
+            Default nav height: 96px
+            .header-md 		= 70px nav height
+            .header-sm 		= 60px nav height
+
+            .noborder 		= remove bottom border (only with transparent use)
+            .transparent	= transparent header
+            .translucent	= translucent header
+            .sticky			= sticky header
+            .static			= static header
+            .dark			= dark header
+            .bottom			= header on bottom
+
+            shadow-before-1 = shadow 1 header top
+            shadow-after-1 	= shadow 1 header bottom
+            shadow-before-2 = shadow 2 header top
+            shadow-after-2 	= shadow 2 header bottom
+            shadow-before-3 = shadow 3 header top
+            shadow-after-3 	= shadow 3 header bottom
+
+            .clearfix		= required for mobile menu, do not remove!
+
+            Example Usage:  class="clearfix sticky header-sm transparent noborder"
+        -->
+        <div id="header" class="sticky clearfix dark">
+
+            <!-- TOP NAV -->
+            <header id="topNav">
+                <div class="container">
+
+                    <!-- Mobile Menu Button -->
+                    <button class="btn btn-mobile" data-toggle="collapse" data-target=".nav-main-collapse">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <!-- BUTTONS -->
+                    <!-- <ul class="pull-right nav nav-pills nav-second-main">
+
+                    <!--     <!-- SEARCH -->
+                    <!--    <li class="search">
+                            <a href="javascript:;">
+                                <i class="fa fa-search"></i>
+                            </a>
+                            <div class="search-box">
+                                <form action="page-search-result-1.html" method="get">
+                                    <div class="input-group">
+                                        <input type="text" name="src" placeholder="Search" class="form-control" />
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-primary" type="submit">Search</button>
+                                                </span>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+                        <!-- /SEARCH -->
+
+                    <!-- QUICK SHOP CART -->
+                    <!--  <li class="quick-cart">
+                          <a href="#">
+                              <span class="badge badge-aqua btn-xs badge-corner">2</span>
+                              <i class="fa fa-shopping-cart"></i>
+                          </a>
+                          <div class="quick-cart-box">
+                              <h4>Shop Cart</h4>
+
+                              <div class="quick-cart-wrapper">
+
+                         <!--         <a href="#"><!-- cart item -->
+                    <!--         <img src="assets/images/demo/people/300x300/4-min.jpg" width="45" height="45" alt="" />
+                             <h6><span>2x</span> RED BAG WITH HUGE POCKETS</h6>
+                             <small>$37.21</small>
+                         </a><!-- /cart item -->
+
+                    <!--      <a href="#"><!-- cart item -->
+                    <!--           <img src="assets/images/demo/people/300x300/5-min.jpg" width="45" height="45" alt="" />
+                               <h6><span>2x</span> THIS IS A VERY LONG TEXT AND WILL BE TRUNCATED</h6>
+                               <small>$17.18</small>
+                           </a><!-- /cart item -->
+
+                    <!-- cart no items example -->
+                    <!--
+                    <a class="text-center" href="#">
+                        <h6>0 ITEMS ON YOUR CART</h6>
+                    </a>
+                    -->
+
+                    <!--      </div>
+
+                    <!--      <!-- quick cart footer -->
+                    <!--   <div class="quick-cart-footer clearfix">
+                           <a href="shop-cart.html" class="btn btn-primary btn-xs pull-right">VIEW CART</a>
+                           <span class="pull-left"><strong>TOTAL:</strong> $54.39</span>
+                       </div>
+                       <!-- /quick cart footer -->
+
+                    <!--  </div>
+                  </li>
+                  <!-- /QUICK SHOP CART -->
+
+                    <!-- </ul>
+                     <!-- /BUTTONS -->
+
+
+                    <!-- Logo -->
+                    <a class="logo pull-left" href="index.html">
+                        <img src="assets/images/Logo-full.png" alt="" />
+                    </a>
+
+
+                    <!--
+                        Top Nav
+
+                        AVAILABLE CLASSES:
+                        submenu-dark = dark sub menu
+                    -->
+                    <div class="navbar-collapse pull-right nav-main-collapse collapse">
+                        <nav class="nav-main">
+
+                            <!--
+                                NOTE
+
+                                For a regular link, remove "dropdown" class from LI tag and "dropdown-toggle" class from the href.
+                                Direct Link Example:
+
+                                <li>
+                                    <a href="#">HOME</a>
+                                </li>
+                            -->
+                            <ul id="topMain" class="nav nav-pills nav-main">
+                                <li class=""><!-- HOME -->
+                                    <a class="" href="/">
+                                        HOME
+                                    </a>
+                                </li>
+                                <li class=""><!-- HOME -->
+                                    <a class="" href="/blog">
+                                        LEARN
+                                    </a>
+                                </li>
+                                <li class=""><!-- HOME -->
+                                    <a class="" href="subscribe">
+                                        SUBSCRIBE
+                                    </a>
+                                </li>
+                                <li class=""><!-- HOME -->
+                                    <a class="" href="/partners">
+                                        OUR PARTNERS
+                                    </a>
+                                </li>
+                                <li class=""><!-- HOME -->
+                                    <a class="" href="/gift">
+                                        GIFTS
+                                    </a>
+                                </li>
+
+
+                            </ul>
+
+                        </nav>
+                    </div>
+
+                </div>
+            </header>
+            <!-- /Top Nav -->
+
+        </div>
 
             <!-- -->
             <section>
