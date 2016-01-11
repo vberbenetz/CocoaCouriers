@@ -1035,8 +1035,10 @@ angular.module('subscribe', ['ui.bootstrap'])
          */
         function createRecurringGift(callback) {
             if ($scope.loggedIn) {
-                $scope.userInfo.subscription.metadata = $scope.userInfo.address;
-                $scope.userInfo.subscription.metadata.name = $scope.userInfo.name;
+                $scope.userInfo.subscription.metadata = {
+                    address: $scope.userInfo.address,
+                    name: $scope.userInfo.name
+                };
 
                 subscribeToRecurringPlan(function(newSubscription) {
                     if (newSubscription) {
@@ -1093,13 +1095,30 @@ angular.module('subscribe', ['ui.bootstrap'])
          * @param callback
          */
         function subscribeToRecurringPlan(callback) {
+
+            var data = {
+                coupon: $scope.userInfo.subscription.coupon.id,
+                plan: $scope.userInfo.subscription.planId
+            };
+
+            // If shipping address is different
+            var metadata = $scope.userInfo.subscription.metadata;
+            if ( (typeof metadata !== 'undefined') && (typeof metadata.address !== 'undefined') ) {
+                data.metadata = {
+                    name: metadata.name,
+                    line1: metadata.address.line1,
+                    line2: metadata.address.line2,
+                    city: metadata.address.city,
+                    state: metadata.address.state,
+                    postal_code: metadata.address.postal_code,
+                    country: metadata.address.country
+                }
+            }
+
             $http({
                 url: '/api/subscription',
                 method: 'POST',
-                data: {
-                    coupon: $scope.userInfo.subscription.coupon.id,
-                    plan: $scope.userInfo.subscription.planId
-                }
+                data: data
             }).success(function(newSubscription) {
                 return callback(newSubscription);
             }).error(function(err) {

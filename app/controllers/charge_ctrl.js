@@ -37,7 +37,10 @@ chargeCtrl.prototype = {
                 var chargePayload = {
                     currency: plan.currency,
                     customer: customer.id,
-                    shipping: shipping
+                    shipping: shipping,
+                    metadata: {
+                        plan_id: planId
+                    }
                 };
                 var chargeAmount = 0;
                 var totalTax = 0;
