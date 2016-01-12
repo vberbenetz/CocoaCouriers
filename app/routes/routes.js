@@ -94,6 +94,9 @@ module.exports = function(app, passport, dbConnPool) {
     app.get('/blog/Why-Does-Chocolate-Cost-So-Much', function(req, res) {
         res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog_pages', 'why-does-chocolate-cost-so-much.html') );
     });
+    app.get('/blog/what-is-fair-trade', function(req, res) {
+        res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog_pages', 'what-is-fair-trade.html') );
+    });
     app.get('/blog/month-1-box', function(req, res) {
         res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog_pages', 'month-1-box.html') );
     });
