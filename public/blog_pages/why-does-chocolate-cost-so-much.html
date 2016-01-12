@@ -21,17 +21,17 @@
     <link rel="shortcut icon" type="image/png" href="/favicon.png" />
 
     <!-- CORE CSS -->
-    <link href="/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
     <!-- THEME CSS -->
-    <link href="/assets/css/essentials.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/css/layout.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/css/essentials.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/css/layout.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/css/custom.css" rel="stylesheet" type="text/css" />
 
 
     <!-- PAGE LEVEL SCRIPTS -->
-    <link href="/assets/css/header-1.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/css/color_scheme/green.css" rel="stylesheet" type="text/css" id="color_scheme" />
+    <link href="../assets/css/header-1.css" rel="stylesheet" type="text/css" />
+    <link href="../assets/css/color_scheme/green.css" rel="stylesheet" type="text/css" id="color_scheme" />
 
 </head>
 <script>
@@ -46,64 +46,206 @@
 </script>
 	<body class="smoothscroll enable-animation font-spin">
 
-		<!-- wrapper -->
-		<div id="wrapper">
+    <!-- Top Bar -->
+    <div id="topBar" class="dark">
+        <div class="container">
 
-            <div id="header" class="sticky clearfix">
-                <!-- TOP NAV -->
-                <header id="topNav" class="">
-                    <div class="container">
+            <ul class="top-links list-inline">
+                <li><a href="/">HOME</a></li>
+                <li><a href="/My-Account">ACCOUNT</a></li>
+            </ul>
 
-                        <!-- Mobile Menu Button -->
-                        <button class="btn btn-mobile" data-toggle="collapse" data-target=".nav-main-collapse">
-                            <i class="glyphicon glyphicon-menu-hamburger"></i>
-                        </button>
-
-                        <!-- Logo -->
-                        <a class="logo pull-left" href="/">
-                            <img src="/assets/images/Logo-cocoa.png" alt="" />
-                        </a>
-
-                        <div class="navbar-collapse pull-right nav-main-collapse collapse">
-                            <nav class="nav-main">
-
-                                <ul id="topMain" class="nav nav-pills nav-main nav-onepage ">
-
-                                    <li><!-- FEATURES -->
-                                        <a class="bold" href="/subscribe">
-                                            SUBSCRIBE
-                                        </a>
-                                    </li>
-                                    <li><!-- FEATURES -->
-                                        <a class="bold" href="/partners">
-                                            PARTNERS
-                                        </a>
-                                    </li>
-                                    <li><!-- FEATURES -->
-                                        <a class="bold" href="/blog">
-                                            LEARN
-                                        </a>
-                                    </li>
-
-                                    <li><!-- TESTIMONIALS -->
-                                        <a class="bold" href="/subscribe?gift">
-                                            GIFT
-                                        </a>
-                                    </li>
-                                    <li><!-- PURCHASE -->
-                                        <a class="external bold" href="/My-Account">
-                                            MY ACCOUNT
-                                        </a>
-                                    </li>
-                                </ul>
-
-                            </nav>
-                        </div>
-
-                    </div>
-                </header>
-                <!-- /Top Nav -->
+            <div class="social-icons pull-right hidden-xs">
+                <a href="https://www.facebook.com/cocoacouriers" class="social-icon social-icon-sm social-icon-transparent social-facebook" data-toggle="tooltip" data-placement="bottom" title="Facebook">
+                    <i class="icon-facebook"></i>
+                    <i class="icon-facebook"></i>
+                </a>
+                <a href="https://twitter.com/CocoaCouriers" class="social-icon social-icon-sm social-icon-transparent social-twitter" data-toggle="tooltip" data-placement="bottom" title="Twitter">
+                    <i class="icon-twitter"></i>
+                    <i class="icon-twitter"></i>
+                </a>
+                <a href="https://instagram.com/cocoacouriers" class="social-icon social-icon-sm social-icon-transparent social-gplus" data-toggle="tooltip" data-placement="bottom" title="Instagram">
+                    <i class="icon-instagram"></i>
+                    <i class="icon-instagram"></i>
+                </a>
+                <a href="https://www.pinterest.com/c_couriers/" class="social-icon social-icon-sm social-icon-transparent social-linkedin" data-toggle="tooltip" data-placement="bottom" title="Pintrest">
+                    <i class="icon-pinterest"></i>
+                    <i class="icon-pinterest"></i>
+                </a>
             </div>
+        </div>
+    </div>
+    <!-- /Top Bar -->
+
+
+    <!--
+        AVAILABLE HEADER CLASSES
+
+        Default nav height: 96px
+        .header-md 		= 70px nav height
+        .header-sm 		= 60px nav height
+
+        .noborder 		= remove bottom border (only with transparent use)
+        .transparent	= transparent header
+        .translucent	= translucent header
+        .sticky			= sticky header
+        .static			= static header
+        .dark			= dark header
+        .bottom			= header on bottom
+
+        shadow-before-1 = shadow 1 header top
+        shadow-after-1 	= shadow 1 header bottom
+        shadow-before-2 = shadow 2 header top
+        shadow-after-2 	= shadow 2 header bottom
+        shadow-before-3 = shadow 3 header top
+        shadow-after-3 	= shadow 3 header bottom
+
+        .clearfix		= required for mobile menu, do not remove!
+
+        Example Usage:  class="clearfix sticky header-sm transparent noborder"
+    -->
+    <div id="header" class="sticky clearfix dark">
+
+        <!-- TOP NAV -->
+        <header id="topNav">
+            <div class="container">
+
+                <!-- Mobile Menu Button -->
+                <button class="btn btn-mobile" data-toggle="collapse" data-target=".nav-main-collapse">
+                    <i class="fa fa-bars"></i>
+                </button>
+
+                <!-- BUTTONS -->
+                <!-- <ul class="pull-right nav nav-pills nav-second-main">
+
+                <!--     <!-- SEARCH -->
+                <!--    <li class="search">
+                        <a href="javascript:;">
+                            <i class="fa fa-search"></i>
+                        </a>
+                        <div class="search-box">
+                            <form action="page-search-result-1.html" method="get">
+                                <div class="input-group">
+                                    <input type="text" name="src" placeholder="Search" class="form-control" />
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-primary" type="submit">Search</button>
+                                            </span>
+                                </div>
+                            </form>
+                        </div>
+                    </li>
+                    <!-- /SEARCH -->
+
+                <!-- QUICK SHOP CART -->
+                <!--  <li class="quick-cart">
+                      <a href="#">
+                          <span class="badge badge-aqua btn-xs badge-corner">2</span>
+                          <i class="fa fa-shopping-cart"></i>
+                      </a>
+                      <div class="quick-cart-box">
+                          <h4>Shop Cart</h4>
+
+                          <div class="quick-cart-wrapper">
+
+                     <!--         <a href="#"><!-- cart item -->
+                <!--         <img src="assets/images/demo/people/300x300/4-min.jpg" width="45" height="45" alt="" />
+                         <h6><span>2x</span> RED BAG WITH HUGE POCKETS</h6>
+                         <small>$37.21</small>
+                     </a><!-- /cart item -->
+
+                <!--      <a href="#"><!-- cart item -->
+                <!--           <img src="assets/images/demo/people/300x300/5-min.jpg" width="45" height="45" alt="" />
+                           <h6><span>2x</span> THIS IS A VERY LONG TEXT AND WILL BE TRUNCATED</h6>
+                           <small>$17.18</small>
+                       </a><!-- /cart item -->
+
+                <!-- cart no items example -->
+                <!--
+                <a class="text-center" href="#">
+                    <h6>0 ITEMS ON YOUR CART</h6>
+                </a>
+                -->
+
+                <!--      </div>
+
+                <!--      <!-- quick cart footer -->
+                <!--   <div class="quick-cart-footer clearfix">
+                       <a href="shop-cart.html" class="btn btn-primary btn-xs pull-right">VIEW CART</a>
+                       <span class="pull-left"><strong>TOTAL:</strong> $54.39</span>
+                   </div>
+                   <!-- /quick cart footer -->
+
+                <!--  </div>
+              </li>
+              <!-- /QUICK SHOP CART -->
+
+                <!-- </ul>
+                 <!-- /BUTTONS -->
+
+
+                <!-- Logo -->
+                <a class="logo pull-left" href="index.html">
+                    <img src="../assets/images/Logo-full.png" alt="" />
+                </a>
+
+
+                <!--
+                    Top Nav
+
+                    AVAILABLE CLASSES:
+                    submenu-dark = dark sub menu
+                -->
+                <div class="navbar-collapse pull-right nav-main-collapse collapse submenu-dark">
+                    <nav class="nav-main">
+
+                        <!--
+                            NOTE
+
+                            For a regular link, remove "dropdown" class from LI tag and "dropdown-toggle" class from the href.
+                            Direct Link Example:
+
+                            <li>
+                                <a href="#">HOME</a>
+                            </li>
+                        -->
+                        <ul id="topMain" class="nav nav-pills nav-main">
+                            <li class=""><!-- HOME -->
+                                <a class="" href="/">
+                                    HOME
+                                </a>
+                            </li>
+                            <li class=""><!-- HOME -->
+                                <a class="" href="/blog">
+                                    LEARN
+                                </a>
+                            </li>
+                            <li class=""><!-- HOME -->
+                                <a class="" href="subscribe">
+                                    SUBSCRIBE
+                                </a>
+                            </li>
+                            <li class=""><!-- HOME -->
+                                <a class="" href="/partners">
+                                    OUR PARTNERS
+                                </a>
+                            </li>
+                            <li class=""><!-- HOME -->
+                                <a class="" href="/subscribe?gift">
+                                    GIFTS
+                                </a>
+                            </li>
+
+
+                        </ul>
+
+                    </nav>
+                </div>
+
+            </div>
+        </header>
+        <!-- /Top Nav -->
+
+    </div>
 
 			<!-- -->
 			<section>
@@ -173,95 +315,62 @@
 			</section>
 			<!-- / -->
 
-            <footer id="footer">
-                <div class="container">
+            <
+    <!--paralax section-->
+    <section class="parallax parallax-2" style="background-image: url('../assets/images/bg.png');">
+        <div class="overlay dark-8"><!-- dark overlay [1 to 9 opacity] --></div>
 
-                    <div class="row">
+        <div class="container center-block">
 
-                        <div class="col-md-8">
-
-                            <!-- Footer Logo -->
-                            <img class="footer-logo footer-2" src="/assets/images/logo-cocoa-white.png" alt="" />
-
-                            <!-- Small Description -->
-                            <p>Chocolate means different things to different people. Some just enjoy the taste, some appreciate the story right back to the farm it was grown on.
-                                With every box of gift purchased from Cocoa Couriers you are helping support the farmers who grew the fabulous beans and the small artisan crafters who
-                                pour their passion into every bar.</p>
-
-                            <hr />
-
-                            <div class="row">
-                                <div class="col-md-4 col-sm-12">
-                                    <!-- Newsletter Form -->
-                                    <p class="margin-bottom-10">Subscribe to Our <strong>Newsletter</strong></p>
-                                    <div class="input-group">
-                                        <!-- Begin MailChimp Signup Form -->
-                                        <div id="mc_embed_signup">
-                                            <form action="//cantangosolutions.us11.list-manage.com/subscribe/post?u=a042a04bae8cf062c8ee3f447&amp;id=6c231aad4e" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-                                                <div id="mc_embed_signup_scroll">
-                                                    <div class="mc-field-group">
-                                                        <label for="mce-EMAIL">
-                                                        </label>
-                                                        <input type="email" value="" placeholder=" Enter An Email " name="EMAIL" class="required email" id="mce-EMAIL">
-                                                    </div>
-
-                                                    <div id="mce-responses" class="clear">
-                                                        <div class="response" id="mce-error-response" style="display:none"></div>
-                                                        <div class="response" id="mce-success-response" style="display:none"></div>
-                                                    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-                                                    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_a042a04bae8cf062c8ee3f447_6c231aad4e" tabindex="-1" value=""></div>
-                                                    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="btn btn-success"></div>
-                                                </div>
-                                            </form>
-                                        </div>
-
-                                        <!--End mc_embed_signup-->
-
-                                    </div>
-                                    <!-- /Newsletter Form -->
-                                </div>
-
-                                <div class="col-md-4 col-sm-12">
-                                    <!-- Social Icons -->
-                                    <div class="margin-left-50 clearfix pull-left">
-                                        <h4 class="margin-bottom-10 font-spin">Follow Us</h4>
-                                        <a href="https://www.facebook.com/cocoacouriers" class="social-icon social-icon-sm social-icon-transparent social-facebook pull-left" data-toggle="tooltip" data-placement="top" title="Facebook">
-                                            <i class="icon-facebook"></i>
-                                            <i class="icon-facebook"></i>
-                                        </a>
-                                        <a href="https://twitter.com/CocoaCouriers" class="social-icon social-icon-sm social-icon-transparent social-twitter pull-left" data-toggle="tooltip" data-placement="top" title="Twitter">
-                                            <i class="icon-twitter"></i>
-                                            <i class="icon-twitter"></i>
-                                        </a>
-                                        <a href="https://instagram.com/cocoacouriers" class="social-icon social-icon-sm social-icon-transparent social-linkedin pull-left" data-toggle="tooltip" data-placement="top" title="Instagram">
-                                            <i class="icon-instagram"></i>
-                                            <i class="icon-instagram"></i>
-                                        </a>
-                                    </div>
-                                    <!-- /Social Icons -->
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <h3 class="letter-spacing-1">Instagram Photos!</h3>
-                            <!-- INSTANSIVE WIDGET --><script src="//instansive.com/widget/js/instansive.js"></script><iframe src="//instansive.com/widgets/6f7d16825aa28a488bdef2ebe62af4b98bc0eff1.html" id="instansive_6f7d16825a" name="instansive_6f7d16825a"  scrolling="no" allowtransparency="true" class="instansive-widget" style="width: 100%; border: 0; overflow: hidden;"></iframe>
-                        </div>
-
-                    </div>
+            <div class="text-center">
+                <h3 class="nomargin">Share Us With Friends, Follow Us on Social Media!</h3>
+            </div>
+            <div class="col-sm-10 col-sm-offset-2">
+                <ul class="margin-top-80 social-icons list-unstyled">
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/cocoacouriers">
+                            <i class="fa fa-facebook"></i>
+                            <h4>Facebook</h4>
+                            <span>Be Our Friend</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a target="_blank" href="https://twitter.com/CocoaCouriers">
+                            <i class="fa fa-twitter"></i>
+                            <h4>Twitter</h4>
+                            <span>Follow Us</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a target="_blank" href="https://instagram.com/cocoacouriers">
+                            <i class="fa fa-instagram"></i>
+                            <h4>Instagram</h4>
+                            <span>See Our Images</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a target="_blank" href="https://www.pinterest.com/c_couriers/">
+                            <i class="fa fa-pinterest"></i>
+                            <h4>Pinterest</h4>
+                            <span>Visual Discovery</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-sm-12">
+                <div class="divider divider-circle divider-center color-emerald-green"><!-- divider -->
+                    <i class="fa fa-info"></i>
                 </div>
-
-                <div class="copyright">
-                    <div class="container">
-                        <ul class="pull-right nomargin list-inline mobile-block">
-                            <li><a href="#">Terms & Conditions</a></li>
-                            <li>&bull;</li>
-                            <li><a href="#">Privacy</a></li>
-                        </ul>
-                        <span id="copyrightDate"></span>
-                    </div>
+                <div class="col-sm-8 col-sm-offset-2 font-cursive text-center">
+                    <a><div class="col-sm-4"><p class="size-20">Terms and Conditions</p></div></a>
+                    <a><div class="col-sm-4"> <p class="size-20">Privacy Policy</p></div></a>
+                    <a><div class="col-sm-4"><p class="size-20">Contact Us</p></div></a>
                 </div>
-            </footer>
+            </div>
+        </div>
+    </section>
+
+    <!--paralax section-->
 			<!-- /FOOTER -->
 
 		</div>
