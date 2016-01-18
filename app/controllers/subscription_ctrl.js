@@ -159,6 +159,8 @@ subscriptionCtrl.prototype = {
 
     update: function (customerId, newPlanId, reqIP, callback) {
 
+        var subscriptionCtrlObj = this;
+
         var payload = {
             prorate: false
         };
@@ -197,32 +199,34 @@ subscriptionCtrl.prototype = {
                 // If not, subscribe them to the chosen plan
                 var recurringSubscription = helpers.filterRecurringSubscriptions(customer.subscriptions);
                 if (recurringSubscription === null) {
-                    this.create(customerId, newPlanId, null, reqIP, function(newSubscription) {
-                        return newSubscription;
+                    subscriptionCtrlObj.create(customerId, newPlanId, null, reqIP, function(err, newSubscription) {
+                        return callback(err, newSubscription);
                     });
                 }
 
                 // Switch plan to start after the current plan that is paid for expires
-                payload.trial_end = recurringSubscription.current_period_end;
+                else {
+                    payload.trial_end = recurringSubscription.current_period_end;
 
-                // Update the customer's subscription to the new plan
-                stripe.customers.updateSubscription(customerId, recurringSubscription.id, payload, function(err, subscription) {
-                    if (err) {
-                        console.log(err);
-                        return callback({
-                            status: 500,
-                            type: 'stripe',
-                            msg: {
-                                simplified: 'server_error',
-                                detailed: err
-                            }
-                        }, null);
-                    }
-                    else {
-                        log.info("Updated subscription", subscription, reqIP);
-                        return callback(false, subscription);
-                    }
-                });
+                    // Update the customer's subscription to the new plan
+                    stripe.customers.updateSubscription(customerId, recurringSubscription.id, payload, function(err, subscription) {
+                        if (err) {
+                            console.log(err);
+                            return callback({
+                                status: 500,
+                                type: 'stripe',
+                                msg: {
+                                    simplified: 'server_error',
+                                    detailed: err
+                                }
+                            }, null);
+                        }
+                        else {
+                            log.info("Updated subscription", subscription, reqIP);
+                            return callback(false, subscription);
+                        }
+                    });
+                }
 
             }
         });

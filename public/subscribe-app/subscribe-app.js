@@ -363,7 +363,13 @@ angular.module('subscribe', ['ui.bootstrap'])
                     break;
                 }
             }
-            $scope.cleanActivePlanId = recurringPlanId.split('_')[0];
+            if (recurringPlanId !== null) {
+                $scope.cleanActivePlanId = recurringPlanId.split('_')[0];
+            }
+            else {
+                $scope.cleanActivePlanId = null;
+            }
+
         }
 
         // Select a plan
