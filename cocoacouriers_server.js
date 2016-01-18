@@ -1,6 +1,7 @@
 'use strict';
 
 var express = require('express');
+var compression = require('compression');
 var fs = require('fs');
 var http = require('http');
 var https = require('https');
@@ -18,6 +19,7 @@ var log = require('./app/utils/logger');
 
 var app = express();
 
+app.use(compression());
 app.use(express.static('public'));
 
 app.use(cookieParser(configPriv.cookieSecret, { httpOnly: true }));
