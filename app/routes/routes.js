@@ -70,18 +70,16 @@ module.exports = function(app, passport, dbConnPool) {
         res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'partners.html') );
     });
 
-/*
-    app.get('/gift', function(req, res) {
-        res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'gift.html') );
-    });
-
-    app.get('/holiday-gift-box', function(req, res) {
-        res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'holiday-gift-box.html') );
-    });
-*/
-
     app.get('/subscribe', function(req, res) {
         res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'subscribe.html') );
+    });
+
+    app.get('/store', function(req, res) {
+        res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'store_index.html') );
+    });
+
+    app.get('/store/:productId', function(req, res) {
+        res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'store_index.html') );
     });
 
     app.get('/blog', function(req, res) {

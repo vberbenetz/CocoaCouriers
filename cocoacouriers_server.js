@@ -119,10 +119,10 @@ https.createServer({
         '!CAMELLIA'
     ].join(':'),
     honorCipherOrder: true
-}, app).listen(443);
+}, app).listen(8443);
 
 // Needed for redirect to HTTPS
 http.createServer(function (req, res) {
     res.writeHead(301, {'Location': 'https://' + req.headers['host'] + req.url});
     res.end();
-}).listen(80);
+}).listen(8080);
