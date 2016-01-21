@@ -1,14 +1,14 @@
-<div>
+<div ng-show="uncloak">
     <section class="page-header page-header-xs">
         <div class="container">
 
-            <h1>{{ productId }}</h1>
+            <h1>{{ product.name }}</h1>
 
             <!-- breadcrumbs -->
             <ol class="breadcrumb">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Shop</a></li>
-                <li class="active">Single</li>
+                <li><a href="/">Home</a></li>
+                <li><a ui-sref="home">Store</a></li>
+                <li class="active">{{ product.name }}</li>
             </ol><!-- /breadcrumbs -->
 
         </div>

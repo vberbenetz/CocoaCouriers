@@ -4,6 +4,7 @@ var path = require('path');
 
 var tokenCtrl = require('../controllers/token_ctrl');
 var customerCtrl = require('../controllers/customer_ctrl');
+var productCtrl = require('../controllers/product_ctrl');
 var couponCtrl = require('../controllers/coupon_ctrl');
 var planCtrl = require('../controllers/plan_ctrl');
 var subscriptionCtrl = require('../controllers/subscription_ctrl');
@@ -272,6 +273,41 @@ module.exports = function(app, passport, dbConnPool) {
                 res.send(result);
             }
         });
+    });
+
+
+    // ----------------- Product Related ---------------------- //
+    app.get('/api/product', function (req, res, next) {
+        productCtrl.getById(req.query.productId, dbConnPool, function(err, product) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(product);
+            }
+        })
+    });
+
+    app.get('/api/product/list', function (req, res, next) {
+        productCtrl.list(dbConnPool, function(err, products) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(products);
+            }
+        })
+    });
+
+    app.get('/api/product/list/byType', function (req, res, next) {
+        productCtrl.listByProductType(req.query.productTypeId, dbConnPool, function(err, products) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(products);
+            }
+        })
     });
 
 

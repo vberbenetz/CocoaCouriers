@@ -28,9 +28,6 @@
                                 <option value="price_asc">Price ASC</option>
                                 <option value="price_desc">Price DESC</option>
                             </select>
-
-                            <a class="btn active fa fa-th" href="shop-4col-left.html"><!-- grid --></a>
-                            <a class="btn fa fa-list" href="shop-1col-left.html"><!-- list --></a>
                         </div>
 
                     </div>
@@ -40,62 +37,26 @@
                     <ul class="shop-item-list row list-inline nomargin">
 
                         <!-- ITEM -->
-                        <li class="col-lg-3 col-sm-3">
+                        <li class="col-lg-3 col-sm-3" ng-repeat="p in $parent.products">
 
                             <div class="shop-item">
 
                                 <div class="thumbnail">
                                     <!-- product image(s) -->
-                                    <a class="shop-item-image" href="/store">
-                                        <img class="img-responsive" src="/assets/images/blog_images/box1-image-1.png" alt="Product 1" />
-                                        <img class="img-responsive" src="/assets/images/blog_images/box1-image-2.png" alt="Product 1" />
+                                    <a class="shop-item-image" ng-click="goToProduct(p)">
+                                        <img class="img-responsive" data-ng-src="data:image/png;base64,{{product.image1}}" src="/assets/images/blog_images/box1-image-1.png" alt="Picture 1" />
+                                        <img class="img-responsive" data-ng-src="data:image/png;base64,{{product.image2}}" src="/assets/images/blog_images/box1-image-2.png" alt="Picture 2" />
                                     </a>
                                     <!-- /product image(s) -->
 
                                 </div>
 
                                 <div class="shop-item-summary text-center">
-                                    <h2>Holiday Box</h2>
+                                    <h2>{{ p.name }}</h2>
 
                                     <!-- price -->
                                     <div class="shop-item-price">
-                                        <span class="line-through">$98.00</span>
-                                        $78.00
-                                    </div>
-                                    <!-- /price -->
-                                </div>
-
-                                    <!-- buttons -->
-                                    <div class="shop-item-buttons text-center">
-                                        <a class="btn btn-default" href="/shop-cart"><i class="fa fa-cart-plus"></i> Add to Cart</a>
-                                    </div>
-                                    <!-- /buttons -->
-                            </div>
-
-                        </li>
-                        <!-- /ITEM -->
-
-                        <!-- ITEM -->
-                        <li class="col-lg-3 col-sm-3">
-
-                            <div class="shop-item">
-
-                                <div class="thumbnail">
-                                    <!-- product image(s) -->
-                                    <a class="shop-item-image" href="/store">
-                                        <img class="img-responsive" src="/assets/images/blog_images/box1-image-2.png" alt="Product 1" />
-                                        <img class="img-responsive" src="/assets/images/blog_images/box1-image-1.png" alt="Product 1" />
-                                    </a>
-                                    <!-- /product image(s) -->
-
-                                </div>
-
-                                <div class="shop-item-summary text-center">
-                                    <h2>December Box</h2>
-
-                                    <!-- price -->
-                                    <div class="shop-item-price">
-                                        34.99
+                                        {{ p.cadPrice }}
                                     </div>
                                     <!-- /price -->
                                 </div>
