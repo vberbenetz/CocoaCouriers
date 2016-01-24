@@ -150,3 +150,8 @@
 .bg-brown {
  background-color: #252525; !important;
 }
+
+img.resize-shop-item-thumbnail {
+    height: 50px;
+    width: auto;
+}

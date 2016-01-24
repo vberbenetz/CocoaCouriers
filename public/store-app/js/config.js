@@ -15,11 +15,7 @@ function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProv
         .state('product', {
             templateUrl: '../store-app/views/product.html',
             controller: productCtrl,
-            url: '/:productUrl',
-            params: {
-                productUrl: null,
-                id: null
-            }
+            url: '/:productId'
         });
 
     $locationProvider.html5Mode(true);

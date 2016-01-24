@@ -7,33 +7,6 @@
                 <!-- RIGHT -->
                 <div class="col-lg-9 col-md-9 col-sm-9 col-lg-push-3 col-md-push-3 col-sm-push-3">
 
-                    <!-- LIST OPTIONS -->
-                    <div class="clearfix shop-list-options margin-bottom-20">
-
-                        <ul class="pagination nomargin pull-right">
-                            <li><a href="#">&laquo;</a></li>
-                            <li class="active"><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                            <li><a href="#">&raquo;</a></li>
-                        </ul>
-
-                        <div class="options-left">
-                            <select>
-                                <option value="pos_asc">Position ASC</option>
-                                <option value="pos_desc">Position DESC</option>
-                                <option value="name_asc">Name ASC</option>
-                                <option value="name_desc">Name DESC</option>
-                                <option value="price_asc">Price ASC</option>
-                                <option value="price_desc">Price DESC</option>
-                            </select>
-                        </div>
-
-                    </div>
-                    <!-- /LIST OPTIONS -->
-
-
                     <ul class="shop-item-list row list-inline nomargin">
 
                         <!-- ITEM -->
@@ -44,8 +17,8 @@
                                 <div class="thumbnail">
                                     <!-- product image(s) -->
                                     <a class="shop-item-image" ng-click="goToProduct(p)">
-                                        <img class="img-responsive" data-ng-src="data:image/png;base64,{{product.image1}}" src="/assets/images/blog_images/box1-image-1.png" alt="Picture 1" />
-                                        <img class="img-responsive" data-ng-src="data:image/png;base64,{{product.image2}}" src="/assets/images/blog_images/box1-image-2.png" alt="Picture 2" />
+                                        <img ng-src="{{ $parent.basePath + '/' + p.id + '-' + '1.png' }}" alt="Picture 1" />
+                                        <img ng-src="{{ $parent.basePath + '/' + p.id + '-' + '2.png' }}" alt="Picture 2" />
                                     </a>
                                     <!-- /product image(s) -->
 
@@ -75,22 +48,7 @@
 
                     <hr />
 
-                    <!-- Pagination Default -->
-                    <div class="text-center">
-                        <ul class="pagination">
-                            <li><a href="#">&laquo;</a></li>
-                            <li class="active"><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                            <li><a href="#">5</a></li>
-                            <li><a href="#">&raquo;</a></li>
-                        </ul>
-                    </div>
-                    <!-- /Pagination Default -->
-
                 </div>
-
 
                 <!-- LEFT -->
                 <div class="col-lg-3 col-md-3 col-sm-3 col-lg-pull-9 col-md-pull-9 col-sm-pull-9">
@@ -100,48 +58,41 @@
 
                         <div class="side-nav-head">
                             <button class="fa fa-bars"></button>
-                            <h4>CATEGORIES</h4>
+                            <h2>FILTER</h2>
                         </div>
 
-                        <ul class="list-group list-group-bordered list-group-noicon uppercase">
-                            <li class="list-group-item active">
-                                <a class="dropdown-toggle" href="">Bean-To-Bar Producer</a>
+                        <uib-accordion close-others="false">
+                            <uib-accordion-group heading="Bean-To-Bar Chocolatier">
                                 <ul>
                                     <li ng-repeat="p in metadata.producers"><a href="">{{ p }}</a></li>
                                 </ul>
-                            </li>
-                            <li class="list-group-item">
-                                <a class="dropdown-toggle" href="">Producer Origin</a>
+                            </uib-accordion-group>
+                            <uib-accordion-group heading="Chocolatier Location">
                                 <ul>
                                     <li ng-repeat="po in metadata.producer_origins"><a href="">{{ po }}</a></li>
                                 </ul>
-                            </li>
-                            <li class="list-group-item">
-                                <a class="dropdown-toggle" href="">Cocoa Bean Origin</a>
+                            </uib-accordion-group>
+                            <uib-accordion-group heading="Cocoa Bean Origin">
                                 <ul>
                                     <li ng-repeat="co in metadata.cocoa_origins"><a href="">{{ co }}</a></li>
                                 </ul>
-                            </li>
-                            <li class="list-group-item">
-                                <a class="dropdown-toggle" href="#">Flavor Profiles</a>
+                            </uib-accordion-group>
+                            <uib-accordion-group heading="Flavor Profiles">
                                 <ul>
-                                    <li ng-repeat="fp in metadata.flavor_profiles"><a href="">{{ fp }}</a></li>
+                                    <li ng-repeat="p in metadata.flavor_profiles"><a href="">{{ p }}</a></li>
                                 </ul>
-                            </li>
-                            <li class="list-group-item">
-                                <a class="dropdown-toggle" href="#">Dietary Preference</a>
+                            </uib-accordion-group>
+                            <uib-accordion-group heading="Dietary Preferences">
                                 <ul>
-                                    <li ng-repeat="dp in metadata.dietary_preferences"><a href="">{{ dp }}</a></li>
+                                    <li ng-repeat="p in metadata.dietary_preferences"><a href="">{{ p }}</a></li>
                                 </ul>
-                            </li>
-                            <li class="list-group-item">
-                                <a class="dropdown-toggle" href="#">Product Type</a>
+                            </uib-accordion-group>
+                            <uib-accordion-group heading="Product Type">
                                 <ul>
-                                    <li ng-repeat="pt in metadata.product_type"><a href="">{{ pt }}</a></li>
+                                    <li ng-repeat="p in metadata.product_type"><a href="">{{ p }}</a></li>
                                 </ul>
-                            </li>
-
-                        </ul>
+                            </uib-accordion-group>
+                        </uib-accordion>
 
                     </div>
                     <!-- /CATEGORIES -->

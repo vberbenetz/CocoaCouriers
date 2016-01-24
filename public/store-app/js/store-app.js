@@ -2,7 +2,9 @@
 
 (function () {
     angular.module('storeapp', [
+        'ngAnimate',
+        'ngResource',
         'ui.router',                // Routing
-        'ngResource'
+        'ui.bootstrap'
     ])
 })();
