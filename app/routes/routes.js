@@ -97,6 +97,9 @@ module.exports = function(app, passport, dbConnPool) {
     app.get('/blog/what-is-fair-trade', function(req, res) {
         res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog_pages', 'what-is-fair-trade.html') );
     });
+    app.get('/blog/whats-the-deal-with-chocolate-infusions', function(req, res) {
+        res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog_pages', 'whats-the-deal-with-chocolate-infusions.html') );
+    });
     app.get('/blog/month-1-box', function(req, res) {
         res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog_pages', 'month-1-box.html') );
     });
