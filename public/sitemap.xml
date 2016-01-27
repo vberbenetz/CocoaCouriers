@@ -4,7 +4,7 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
 
 <url>
   <loc>https://cocoacouriers.com/</loc>
@@ -16,7 +16,7 @@
 </url>
 <url>
   <loc>https://cocoacouriers.com/blog</loc>
-  <lastmod>2016-01-20T16:25:51+00:00</lastmod>
+  <lastmod>2016-01-27T14:13:56+00:00</lastmod>
 </url>
 <url>
   <loc>https://cocoacouriers.com/subscribe</loc>
@@ -29,6 +29,10 @@
 <url>
   <loc>https://cocoacouriers.com/subscribe?gift</loc>
   <lastmod>2016-01-20T16:25:51+00:00</lastmod>
+</url>
+<url>
+  <loc>https://cocoacouriers.com/blog/whats-the-deal-with-chocolate-infusions</loc>
+  <lastmod>2016-01-27T14:19:30+00:00</lastmod>
 </url>
 <url>
   <loc>https://cocoacouriers.com/blog/what-is-fair-trade</loc>
