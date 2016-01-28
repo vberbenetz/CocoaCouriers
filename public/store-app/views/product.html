@@ -4,7 +4,6 @@
 
             <!-- breadcrumbs -->
             <ol class="breadcrumb">
-                <li><a href="/">Home</a></li>
                 <li><a ui-sref="home">Store</a></li>
                 <li class="active">{{ product.name }}</li>
             </ol><!-- /breadcrumbs -->
@@ -72,7 +71,7 @@
                             </ul>
                         </div><!-- /btn-group -->
 
-                        <button class="btn btn-lg btn-green pull-right noradius"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;&nbsp;ADD TO CART</button>
+                        <button ng-click="addToCart(product)" class="btn btn-lg btn-green pull-right noradius"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;&nbsp;ADD TO CART</button>
                     </div>
 
                     <hr class="margin-top-40 margin-bottom-40"/>

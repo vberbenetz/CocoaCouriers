@@ -15,7 +15,18 @@ function appService($resource) {
             }
         ),
 
-        productList: $resource('/api/product/list'),
+        productList: $resource('/api/product/list',
+            {},
+            {
+                queryByIds: {
+                    method: 'GET',
+                    params: {
+                        productIds: '@productIds'
+                    },
+                    isArray: true
+                }
+            }
+        ),
 
         productListByType: $resource('/api/product/list/byType',
             {},

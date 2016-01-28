@@ -15,7 +15,17 @@ function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProv
         .state('product', {
             templateUrl: '../store-app/views/product.html',
             controller: productCtrl,
-            url: '/:productId'
+            url: '/item/:productId'
+        })
+        .state('cart', {
+            templateUrl: '../store-app/views/cart.html',
+            controller: cartCtrl,
+            url: '/cart'
+        })
+        .state('checkout', {
+            templateUrl: '../store-app/views/checkout.html',
+            controller: checkoutCtrl,
+            url: '/checkout'
         });
 
     $locationProvider.html5Mode(true);
