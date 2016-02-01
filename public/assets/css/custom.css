@@ -150,3 +150,7 @@
 .bg-brown {
  background-color: #252525; !important;
 }
+
+.customStroke {
+    border: red solid 1px;
+}
