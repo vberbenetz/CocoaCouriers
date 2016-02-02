@@ -109,21 +109,9 @@ customerCtrl.prototype = {
                            }
                        }, null);
                     }
-                    else if (rows.length == 0) {
-                        return callback({
-                            status: 500,
-                            type: 'app',
-                            msg: {
-                                simplified: 'server_error',
-                                detailed: 'Insert DefaultShippingAddress returned 0 rows in CustomerCtrl.create'
-                            }
-                        }, null);
-                    }
                     else {
-                        var defaultShippingAddress = rows[0];
-
                         log.info('Added DefaultShippingAddress on internal DB', {
-                            defaultShippingAddress: defaultShippingAddress
+                            defaultShippingAddress: defaultShippingInsertQuery.params
                         }, req.connection.remoteAddress);
 
                         var customerInsertQuery = {
@@ -139,7 +127,7 @@ customerCtrl.prototype = {
                                 email: payload.email,
                                 taxRate: payload.metadata.taxRate,
                                 taxDesc: payload.metadata.taxDesc,
-                                defaultShippingAddress: defaultShippingAddress.stripeId
+                                defaultShippingAddress: stripeCustomer.id
                             }
                         };
 
@@ -155,19 +143,7 @@ customerCtrl.prototype = {
                                     }
                                 }, null);
                             }
-                            else if (rows.length == 0) {
-                                return callback({
-                                    status: 500,
-                                    type: 'app',
-                                    msg: {
-                                        simplified: 'server_error',
-                                        detailed: 'Insert Customer returned 0 rows in CustomerCtrl.create'
-                                    }
-                                }, null);
-                            }
                             else {
-                                var localCustomer = rows[0];
-
                                 log.info('Added customer on internal DB', {
                                     stripeId: stripeCustomer.id,
                                     localId: req.user.id
@@ -179,7 +155,9 @@ customerCtrl.prototype = {
                                         return callback(err, null);
                                     }
                                     else {
-                                        return callback(false, localCustomer);
+                                        var user = req.user;
+                                        user.stId = stripeCustomer.id;
+                                        return callback(false, user);
                                     }
                                 });
                             }

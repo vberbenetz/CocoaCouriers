@@ -3,6 +3,7 @@
 var LocalStrategy = require('passport-local').Strategy;
 
 var bcrypt = require('bcrypt');
+var crypto = require('crypto');
 
 module.exports = function(passport, dbConnPool) {
 
@@ -36,6 +37,14 @@ module.exports = function(passport, dbConnPool) {
     },
     function(req, email, password, done) {
 
+        var newPass = password;
+
+        // Generate a new random password
+        crypto.randomBytes(8, function(ex, buf) {
+            var str = buf.toString('base64');
+            str.substr(0, str.length-2);
+        });
+
         // Check if email is already taken and in use
         dbConnPool.getConnection(function(err, connection) {
             connection.query("select * from users where email = ?", [email], function(err, rows) {
@@ -49,11 +58,12 @@ module.exports = function(passport, dbConnPool) {
                 }
                 else {
                     // Hash password
-                    password = bcrypt.hashSync(password, 11);
+                    password = bcrypt.hashSync(newPass, 11);
 
                     var newUser = {
                         email: email,
-                        password: password
+                        password: password,
+                        rawPass: newPass
                     };
 
                     connection.query("INSERT INTO users (email, password) values (?, ?)", [email, password], function(err, rows) {

@@ -3,6 +3,8 @@
 var log = require('../utils/logger');
 var helpers = require('../utils/helpers');
 
+var dbUtils = require('../utils/db_utils');
+
 var userCtrl = function() {};
 
 userCtrl.prototype = {
@@ -264,7 +266,15 @@ userCtrl.prototype = {
     // Update existing customer with customerId created within Stripe
     updateCustomerId: function (email, customerId, dbConnPool, callback) {
 
-        dbConnPool.getConnection(function (err, connection) {
+        var query = {
+            statement: 'UPDATE users SET stId = ? WHERE email = ?',
+            params: [
+                customerId,
+                email
+            ]
+        };
+
+        dbUtils.query(dbConnPool, query, function(err, result) {
             if (err) {
                 return callback({
                     status: 500,
@@ -275,25 +285,10 @@ userCtrl.prototype = {
                     }
                 }, null);
             }
-
-            connection.query("UPDATE users SET stId = ? WHERE email = ?", [customerId, email], function (err, rows) {
-                connection.release();
-
-                if (err) {
-                    return callback({
-                        status: 500,
-                        type: 'app',
-                        msg: {
-                            simplified: 'server_error',
-                            detailed: err
-                        }
-                    }, null);
-                }
-                else {
-                    return callback(false, rows[0]);
-                }
-            });
-        })
+            else {
+                return callback(false, true);
+            }
+        });
     },
 
     // Delete user. This is only called when the Stripe CC verification fails and the user needs to resubmit a registration form.

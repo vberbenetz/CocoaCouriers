@@ -35,6 +35,12 @@
                                    type="text" ng-model="billing.name" placeholder="Name As Appears On Credit Card" required autocomplete="cc-name" />
                             <p class="text-danger" ng-show="validationErrors.name">{{ validationErrors.name }}</p>
                         </div>
+                        <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.email }">
+                            <label for="billing_email"><small>* Email Address</small></label>
+                            <input class="form-control required" id="billing_email" name="email"
+                                   type="email" ng-model="billing.email" placeholder="Email Address" autocomplete="email" />
+                            <p class="text-danger" ng-show="validationErrors.email">{{ validationErrors.email }}</p>
+                        </div>
                         <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.organization }">
                             <label for="billing_organization"><small>Company / Org</small></label>
                             <input class="form-control" id="billing_organization" name="organization"
@@ -78,18 +84,6 @@
                             <input class="form-control required" id="billing_postal" name="postal"
                                    type="text" ng-model="billing.address.postal_code" required autocomplete="postal-code" />
                             <p class="text-danger" ng-show="validationErrors.address.postal_code">{{ validationErrors.address.postal_code }}</p>
-                        </div>
-                        <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.email }">
-                            <label for="billing_email"><small>* Email Address</small></label>
-                            <input class="form-control required" id="billing_email" name="email"
-                                   type="email" ng-model="billing.email" placeholder="Email Address" autocomplete="email" />
-                            <p class="text-danger" ng-show="validationErrors.email">{{ validationErrors.email }}</p>
-                        </div>
-                        <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.password }">
-                            <label for="billing_password"><small>* Password</small></label>
-                            <input class="form-control" id="billing_password" name="password"
-                                   type="password" ng-model="billing.password" placeholder="New Password" autocomplete="new-password" />
-                            <p class="text-danger" ng-show="validationErrors.organization">{{ validationErrors.organization }}</p>
                         </div>
                     </fieldset>
 

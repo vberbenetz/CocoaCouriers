@@ -31,8 +31,10 @@ function mainCtrl ($scope, $cookies, $http, appService) {
     // Retrieve user object (check if logged in)
     appService.user.get(function(user) {
         $scope.user = user;
+        $scope.loggedIn = true;
     }, function(err) {
         $scope.user = null;
+        $scope.loggedIn = false;
     });
 
     $scope.updateCartCookie = function() {
@@ -345,13 +347,27 @@ function checkoutCtrl ($scope, $http) {
 
     $scope.placeOrder = function() {
 
+        var chargeMetadata = stringifyCartMetadata($scope.$parent.cart);
+
+        if (!$scope.loggedIn) {
+            chargeAsNewCustomer();
+        }
+        else {
+
+        }
+
+    };
+
+    // New user (Not logged in)
+    function chargeAsNewCustomer () {
+
         var resultBilling = validateAddress($scope.billing);
         var resultShipping = {
             valid: true,
             validationErrors: null
         };
         if ($scope.altShippingReq) {
-            resultShipping = validateAddressInfo($scope.shipping);
+            resultShipping = validateAddress($scope.shipping);
         }
 
         // Validate billing and shipping address if applies
@@ -363,26 +379,21 @@ function checkoutCtrl ($scope, $http) {
                     validateUserPayment(function(result) {
                         if (result) {
 
-                            createCustomer(function(customerPkg) {
-                                $scope.user
+                            createCustomer(function(updatedUser) {
+                                $scope.user = updatedUser;
+
+
                             });
-
-                            // CREATE CHARGE
-
                         }
                     });
-
-                    var chargeMetadata = stringifyCartMetadata($scope.$parent.cart);
                 }
             });
-
         }
         else {
             $scope.validationErrors = resultBilling;
             $scope.validationErrors.shipping = resultShipping;
         }
-
-    };
+    }
 
     /**
      * Creates customer related items
@@ -396,10 +407,10 @@ function checkoutCtrl ($scope, $http) {
 
             registerCustomerLocally(function(localUser) {
                 if (localUser) {
+                    $scope.user = localUser;
 
-                    createStCustomer(localUser.email, function(newUser) {
-
-                        return callback(newUser);
+                    createStCustomer(localUser.email, function(updatedUser) {
+                        return callback(updatedUser);
                     });
                 }
             });
@@ -422,20 +433,18 @@ function checkoutCtrl ($scope, $http) {
             method: 'POST',
             data: {
                 email: $scope.billing.email,
-                password: $scope.billing.password
+                password: ''
             }
         }).success(function(newUser) {
-            $scope.user = newUser;
             return callback(newUser);
 
         }).error(function(error) {
             $scope.validationErrors.email = 'Email already in use';
-            $scope.processingReg = false;
             return callback(false);
         });
     }
 
-    function createCustomer(newUserEmail, callback) {
+    function createStCustomer(newUserEmail, callback) {
         $http({
             url: '/api/customer',
             method: 'POST',
@@ -445,8 +454,8 @@ function checkoutCtrl ($scope, $http) {
                 address: $scope.billing.address,
                 source: $scope.billing.token
             }
-        }).success(function(newCustomer) {
-            return callback(newCustomer);
+        }).success(function(user) {
+            return callback(user);
         }).error(function(err) {
             handleStCCErr(err);
             $scope.processingReg = false;
@@ -489,20 +498,6 @@ function checkoutCtrl ($scope, $http) {
             $scope.validationErrors.email = 'Please enter a valid email';
             validationFailed = true;
             validateEmailFailed = true;
-        }
-
-        // Password validation
-        if (typeof $scope.userInfo.password === 'undefined') {
-            $scope.validationErrors.password = 'Please enter a password';
-            validationFailed = true;
-        }
-        else if ( ($scope.userInfo.password.length == 0) || ($scope.userInfo.password === '') ) {
-            $scope.validationErrors.password = 'Please enter a password';
-            validationFailed = true;
-        }
-        else if ( ($scope.userInfo.password.length < 6) || ($scope.userInfo.password.length > 254) ) {
-            $scope.validationErrors.password = 'Please use a password that is at least 6 characters long';
-            validationFailed = true;
         }
 
         // Check if email exists
