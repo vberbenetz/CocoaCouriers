@@ -5,6 +5,8 @@ var log = require('../utils/logger');
 
 var userCtrl = require('./user_ctrl');
 
+var dbUtils = require('../utils/db_utils');
+
 var stripe = require('stripe')(
     configPriv.sKey
 );
@@ -13,24 +15,33 @@ var customerCtrl = function() {};
 
 customerCtrl.prototype = {
 
-    get: function (customerId, callback) {
+    get: function (stId, dbConnPool, callback) {
 
-        stripe.customers.retrieve(customerId, function(err, customer) {
-            if(err) {
-                console.log(err);
+        var query = {
+            statement: 'SELECT * FROM Customer WHERE ?',
+            params: {
+                stripeId: stId
+            }
+        };
+
+        dbUtils.query(dbConnPool, query, function(err, rows) {
+            if (err) {
                 return callback({
                     status: 500,
-                    type: 'stripe',
+                    type: 'app',
                     msg: {
                         simplified: 'server_error',
                         detailed: err
                     }
                 }, null);
             }
-            else {
-                return callback(false, customer);
+            else if (rows.length == 0) {
+                return callback(false, null);
             }
-        })
+            else {
+                return callback(false, rows[0]);
+            }
+        });
     },
 
     create: function (req, res, dbConnPool, callback) {
@@ -53,7 +64,21 @@ customerCtrl.prototype = {
             }
         };
 
-        stripe.customers.create(payload, function(stripeErr, customer) {
+        var defaultShippingInsertQuery = {
+            statement: 'INSERT INTO DefaultShippingAddress SET ?',
+            params: {
+                name: payload.shipping.name,
+                street1: payload.shipping.address.line1,
+                street2: payload.shipping.address.line2,
+                street3: null,
+                city: payload.shipping.address.city,
+                state: payload.shipping.address.state,
+                postalCode: payload.shipping.address.postal_code,
+                country: payload.shipping.address.country
+            }
+        };
+
+        stripe.customers.create(payload, function(stripeErr, stripeCustomer) {
             if (stripeErr) {
 
                 return callback({
@@ -65,46 +90,102 @@ customerCtrl.prototype = {
                     }
                 }, null);
 
-/*
-                req.logout();
-
-                req.session.destroy(function(err) {
-
-                    if (!err) {
-                        // Delete newly created user for user to retry request
-                        userCtrl.removeUser(email, dbConnPool, function(err, result) {
-                            if (err) {
-                                log.error(err);
-                            }
-
-                            return callback({
-                                status: 500,
-                                type: 'stripe',
-                                msg: {
-                                    simplified: 'server_error',
-                                    detailed: stripeErr
-                                }
-                            }, null);
-                        });
-                    }
-
-                });
-*/
             }
             else {
+                log.info('Created customer on stripe', {customer: stripeCustomer}, req.connection.remoteAddress);
 
-                // Update user with stripe customer Id
-                userCtrl.updateCustomerId(email, customer.id, dbConnPool, function (err, result) {
+                // Append stripe customer Id
+                defaultShippingInsertQuery.params.stripeId = stripeCustomer.id;
+
+                // Insert DefaultShippingAddress
+                dbUtils.query(dbConnPool, defaultShippingInsertQuery, function(err, rows) {
                     if (err) {
-                        return callback(err, null);
+                       return callback({
+                           status: 500,
+                           type: 'app',
+                           msg: {
+                               simplified: 'server_error',
+                               detailed: err
+                           }
+                       }, null);
+                    }
+                    else if (rows.length == 0) {
+                        return callback({
+                            status: 500,
+                            type: 'app',
+                            msg: {
+                                simplified: 'server_error',
+                                detailed: 'Insert DefaultShippingAddress returned 0 rows in CustomerCtrl.create'
+                            }
+                        }, null);
                     }
                     else {
-                        log.info('Created customer', {customer: customer}, req.connection.remoteAddress);
-                        return callback(false, customer);
+                        var defaultShippingAddress = rows[0];
+
+                        log.info('Added DefaultShippingAddress on internal DB', {
+                            defaultShippingAddress: defaultShippingAddress
+                        }, req.connection.remoteAddress);
+
+                        var customerInsertQuery = {
+                            statement: 'INSERT INTO Customer SET ?',
+                            params: {
+                                stripeId: stripeCustomer.id,
+                                localId: req.user.id,
+                                status: 'active',
+                                created: stripeCustomer.created,
+                                currency: stripeCustomer.currency,
+                                defaultSource: stripeCustomer.default_source,
+                                delinquent: stripeCustomer.delinquent,
+                                email: payload.email,
+                                taxRate: payload.metadata.taxRate,
+                                taxDesc: payload.metadata.taxDesc,
+                                defaultShippingAddress: defaultShippingAddress.stripeId
+                            }
+                        };
+
+                        // Insert Customer
+                        dbUtils.query(dbConnPool, customerInsertQuery, function (err, rows) {
+                            if (err) {
+                                return callback({
+                                    status: 500,
+                                    type: 'app',
+                                    msg: {
+                                        simplified: 'server_error',
+                                        detailed: err
+                                    }
+                                }, null);
+                            }
+                            else if (rows.length == 0) {
+                                return callback({
+                                    status: 500,
+                                    type: 'app',
+                                    msg: {
+                                        simplified: 'server_error',
+                                        detailed: 'Insert Customer returned 0 rows in CustomerCtrl.create'
+                                    }
+                                }, null);
+                            }
+                            else {
+                                var localCustomer = rows[0];
+
+                                log.info('Added customer on internal DB', {
+                                    stripeId: stripeCustomer.id,
+                                    localId: req.user.id
+                                }, req.connection.remoteAddress);
+
+                                // Update user with stripe customer Id
+                                userCtrl.updateCustomerId(email, stripeCustomer.id, dbConnPool, function (err, result) {
+                                    if (err) {
+                                        return callback(err, null);
+                                    }
+                                    else {
+                                        return callback(false, localCustomer);
+                                    }
+                                });
+                            }
+                        });
                     }
-
                 });
-
             }
         })
     },

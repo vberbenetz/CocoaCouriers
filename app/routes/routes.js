@@ -129,11 +129,11 @@ module.exports = function(app, passport, dbConnPool) {
         });
     });
 
-    app.get('/api/user', function(req, res, next) {
+    app.get('/api/user', auth, function(req, res, next) {
         res.send( userCtrl.getUserDetails(req, res) );
     });
 
-    app.put('/api/user', function(req, res, next) {
+    app.put('/api/user', auth, function(req, res, next) {
         if (req.query.item === 'email') {
             userCtrl.updateEmail(req, dbConnPool, function(err, updatedCustomer) {
                 if (err) {
@@ -236,14 +236,14 @@ module.exports = function(app, passport, dbConnPool) {
 
     // ----------------- Customer Related -------------------- //
     app.get('/api/customer', auth, function (req, res, next) {
-        var customerId = req.user.stId;
+        var stId = req.user.stId;
 
         // Customer has no information associated with them
-        if (customerId === null) {
+        if (stId === null) {
             res.status(404).send();
         }
 
-        customerCtrl.get(customerId, function (err, result) {
+        customerCtrl.get(stId, function (err, result) {
             if (err) {
                 errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
             }

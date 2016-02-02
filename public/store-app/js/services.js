@@ -2,6 +2,8 @@
 
 function appService($resource) {
     return {
+        user: $resource('/api/user'),
+
         product: $resource('/api/product',
             {},
             {
