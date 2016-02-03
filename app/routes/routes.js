@@ -24,7 +24,12 @@ module.exports = function(app, passport, dbConnPool) {
 
     var auth = function (req, res, next) {
         if (!req.isAuthenticated()) {
-            res.redirect('/signin');
+            if (req.path.substring(0, 4) === '/api') {
+                res.status(401).send('Unauthorized');
+            }
+            else {
+                res.redirect('/signin');
+            }
         }
         else {
             next();
@@ -120,7 +125,6 @@ module.exports = function(app, passport, dbConnPool) {
     app.get('/api/emailexists', function(req, res) {
         userCtrl.checkEmailExists(req.query.email, dbConnPool, function(err, exists) {
             if (err) {
-                console.log(err);
                 errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
             }
             else {
@@ -212,25 +216,32 @@ module.exports = function(app, passport, dbConnPool) {
 
 
     // ----------------- Charge Related -------------------- //
-    app.post('/api/charge/onetime', auth, function (req, res, next) {
-        // Retrieve customer data
-        customerCtrl.get(req.user.stId, function(err, customer) {
-            if (err) {
-                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-            }
-            else {
+    app.post('/api/charge', auth, function (req, res, next) {
 
-                chargeCtrl.oneTimeCharge(customer, req.body.shipping, req.body.plan, req.body.quantity, req.body.coupon, req.connection.remoteAddress, function(err, result) {
-                    if (err) {
-                        errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-                    }
-                    else {
-                        res.send(result);
-                    }
-                });
+        // Verify request body correct
+        if ( (!req.body.cart) || (!req.body.metadata) ) {
+            res.status(400).send('Missing payload params');
+        }
+        else {
+            // Retrieve customer data
+            customerCtrl.get(dbConnPool, req.user.stId, function(err, customer) {
+                if (err) {
+                    errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                }
+                else {
 
-            }
-        });
+                    chargeCtrl.oneTimeCharge(dbConnPool, customer, req.body.altShipping, req.body.cart, req.body.metadata, req.connection.remoteAddress, function(err, result) {
+                        if (err) {
+                            errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                        }
+                        else {
+                            res.send(result);
+                        }
+                    });
+
+                }
+            });
+        }
     });
 
 
@@ -258,6 +269,7 @@ module.exports = function(app, passport, dbConnPool) {
         // Create customer within Stripe
         customerCtrl.create(req, res, dbConnPool, function (err, newCustomer) {
             if (err) {
+                console.log(err.msg.detailed);
                 errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
             }
             else {

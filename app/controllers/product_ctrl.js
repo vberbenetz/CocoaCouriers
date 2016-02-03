@@ -2,6 +2,8 @@
 
 var log = require('../utils/logger');
 
+var dbUtils = require('../utils/db_utils');
+
 var productCtrl = function() {};
 
 productCtrl.prototype = {
@@ -42,6 +44,30 @@ productCtrl.prototype = {
 
             });
         })
+    },
+
+    getByIdList: function (dbConnPool, productIds, callback) {
+
+        var query = {
+            statement: 'SELECT * FROM Product WHERE id IN ?',
+            params: [productIds]
+        };
+
+        dbUtils.query(dbConnPool, query, function(err, rows) {
+            if (err) {
+                return callback({
+                    status: 500,
+                    type: 'app',
+                    msg: {
+                        simplified: 'server_error',
+                        detailed: err
+                    }
+                }, null);
+            }
+            else {
+                return callback(false, rows);
+            }
+        });
     },
 
     listByProductType: function (productTypeId, dbConnPool, callback) {

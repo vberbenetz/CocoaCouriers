@@ -15,7 +15,6 @@ tokenCtrl.prototype = {
 
         stripe.tokens.retrieve(tokenId, function(err, token) {
             if (err) {
-                console.log(err);
                 return callback({
                     status: 500,
                     type: 'stripe',
@@ -35,7 +34,6 @@ tokenCtrl.prototype = {
 
         stripe.tokens.create({card: payload}, function(err, token) {
             if (err) {
-                console.log(err);
                 return callback({
                     status: 500,
                     type: 'stripe',

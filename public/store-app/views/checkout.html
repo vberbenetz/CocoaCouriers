@@ -75,7 +75,7 @@
                         <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.address.state }">
                             <label for="billing_state"><small>* State / Province</small></label>
                             <select class="form-control input-normal" id="billing_state" name="state"
-                                    ng-options="o as o.name for o in activeProvinceSelect track by o.id" ng-model="billing.address.state" required>
+                                    ng-options="o.id as o.name for o in activeProvinceSelect" ng-model="billing.address.state" required>
                             </select>
                             <p class="text-danger" ng-show="validationErrors.address.state">{{ validationErrors.address.state }}</p>
                         </div>

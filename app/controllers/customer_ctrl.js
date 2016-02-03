@@ -15,13 +15,11 @@ var customerCtrl = function() {};
 
 customerCtrl.prototype = {
 
-    get: function (stId, dbConnPool, callback) {
+    get: function (dbConnPool, stId, callback) {
 
         var query = {
-            statement: 'SELECT * FROM Customer WHERE ?',
-            params: {
-                stripeId: stId
-            }
+            statement: 'SELECT c.*, d.* FROM Customer c INNER JOIN BillingAddress d ON c.billingAddress_stripeId=d.stripeId WHERE c.stripeId = ?',
+            params: [stId]
         };
 
         dbUtils.query(dbConnPool, query, function(err, rows) {
@@ -45,18 +43,14 @@ customerCtrl.prototype = {
     },
 
     create: function (req, res, dbConnPool, callback) {
-        var shipping = {
-            name: req.body.name,
-            address: req.body.address
-        };
-
+        var billing = req.body.billing;
         var email = req.user.email;
         var source = req.body.source;
-        var tax = calculateTaxPercentage(shipping.address.state);
+        var tax = calculateTaxPercentage(billing.address.state);
 
         var payload = {
             email: email,
-            shipping: shipping,
+            shipping: billing,
             source: source,
             metadata: {
                 taxRate: tax.rate,
@@ -64,23 +58,22 @@ customerCtrl.prototype = {
             }
         };
 
-        var defaultShippingInsertQuery = {
-            statement: 'INSERT INTO DefaultShippingAddress SET ?',
+        var billingInsertQuery = {
+            statement: 'INSERT INTO BillingAddress SET ?',
             params: {
-                name: payload.shipping.name,
-                street1: payload.shipping.address.line1,
-                street2: payload.shipping.address.line2,
+                name: billing.name,
+                street1: billing.address.line1,
+                street2: billing.address.line2,
                 street3: null,
-                city: payload.shipping.address.city,
-                state: payload.shipping.address.state,
-                postalCode: payload.shipping.address.postal_code,
-                country: payload.shipping.address.country
+                city: billing.address.city,
+                state: billing.address.state,
+                postalCode: billing.address.postal_code,
+                country: billing.address.country
             }
         };
 
         stripe.customers.create(payload, function(stripeErr, stripeCustomer) {
             if (stripeErr) {
-
                 return callback({
                     status: 500,
                     type: 'stripe',
@@ -95,10 +88,10 @@ customerCtrl.prototype = {
                 log.info('Created customer on stripe', {customer: stripeCustomer}, req.connection.remoteAddress);
 
                 // Append stripe customer Id
-                defaultShippingInsertQuery.params.stripeId = stripeCustomer.id;
+                billingInsertQuery.params.stripeId = stripeCustomer.id;
 
                 // Insert DefaultShippingAddress
-                dbUtils.query(dbConnPool, defaultShippingInsertQuery, function(err, rows) {
+                dbUtils.query(dbConnPool, billingInsertQuery, function(err, rows) {
                     if (err) {
                        return callback({
                            status: 500,
@@ -110,8 +103,8 @@ customerCtrl.prototype = {
                        }, null);
                     }
                     else {
-                        log.info('Added DefaultShippingAddress on internal DB', {
-                            defaultShippingAddress: defaultShippingInsertQuery.params
+                        log.info('Added BillingAddress on internal DB', {
+                            billingAddress: billingInsertQuery.params
                         }, req.connection.remoteAddress);
 
                         var customerInsertQuery = {
@@ -120,14 +113,14 @@ customerCtrl.prototype = {
                                 stripeId: stripeCustomer.id,
                                 localId: req.user.id,
                                 status: 'active',
-                                created: stripeCustomer.created,
+                                created: (new Date(stripeCustomer.created * 1000)).getUTCDate(),
                                 currency: stripeCustomer.currency,
                                 defaultSource: stripeCustomer.default_source,
                                 delinquent: stripeCustomer.delinquent,
                                 email: payload.email,
                                 taxRate: payload.metadata.taxRate,
                                 taxDesc: payload.metadata.taxDesc,
-                                defaultShippingAddress: stripeCustomer.id
+                                billingAddress_stripeId: stripeCustomer.id
                             }
                         };
 

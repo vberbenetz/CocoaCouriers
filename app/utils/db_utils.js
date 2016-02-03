@@ -18,10 +18,10 @@ dbUtils.prototype = {
                 }, null);
             }
             else {
-                connection.query(query.statement, query.params, function(err, rows) {
+                connection.query(queryObj.statement, queryObj.params, function(err, rows) {
                     connection.release();
-
                     if (err) {
+                        console.log(err);
                         return callback({
                             status: 500,
                             type: 'app',

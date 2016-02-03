@@ -41,8 +41,9 @@ function appService($resource) {
                     isArray: true
                 }
             }
-        )
+        ),
 
+        charge: $resource('/api/charge')
     }
 }
 

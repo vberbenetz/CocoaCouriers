@@ -3,8 +3,12 @@
 var configPriv = require('../configuration/config_priv');
 var log = require('../utils/logger');
 
+var dbUtils = require('../utils/db_utils');
+
 var planCtrl = require('./plan_ctrl');
 var couponCtrl = require('./coupon_ctrl');
+
+var productCtrl = require('./product_ctrl');
 
 var stripe = require('stripe')(
     configPriv.sKey
@@ -14,19 +18,201 @@ var chargeCtrl = function() {};
 
 chargeCtrl.prototype = {
 
-    oneTimeCharge: function (customer, shipping, planId, quantity, couponId, reqIP, callback) {
+    oneTimeCharge: function (dbConnPool, customer, altShipping, cart, metadata, reqIP, callback) {
 
 // TODO: ADD SHIPPING RATE FOR FUTURE CUSTOMERS OUTSIDE OF CANADA AND LOWER 48 STATES
+        var shippingCost = 0;
 
-        if (customer.sources.data[0].country === 'US') {
-            var splitPlan = planId.split('_');
-            var tempPlan = splitPlan[0];
-            tempPlan += '_usd';
-            for (var i = 2; i < splitPlan.length; i++) {
-                tempPlan += '_' + splitPlan[i];
-            }
-            planId = tempPlan;
+        var chargeCurrency = 'CAD';
+        if (customer.country === 'US') {
+            chargeCurrency = 'USD';
         }
+
+        var taxRate = 0;
+        var taxDesc = '';
+
+        if (customer.taxRate !== null) {
+            taxRate = customer.taxRate;
+        }
+        if (customer.taxDesc !== null) {
+            taxDesc = customer.taxDesc;
+        }
+
+        var shipping = null;
+        if (altShipping) {
+            shipping = altShipping;
+        }
+        else {
+            shipping = {
+                name: customer.name,
+                address: {
+                    line1: customer.street1,
+                    line2: customer.street2,
+                    city: customer.city,
+                    state: customer.state,
+                    postal_code: customer.postalCode,
+                    country: customer.country
+                }
+            }
+        }
+
+        var chargePayload = {
+            customer: customer.stripeId,
+            shipping: shipping,
+            currency: chargeCurrency,
+            metadata: metadata
+        };
+
+        // Link all charge metadata into single string (separation was required to accomodate Stripe restrictions)
+        var metadataString = '';
+        for (var property in metadata) {
+            if (metadata.hasOwnProperty(property)) {
+                metadataString += metadata[property];
+            }
+        }
+
+        var productIds = [];
+
+        for (var i = 0; i < cart.length; i++) {
+            productIds.push(cart[i].id);
+        }
+
+        productCtrl.getByIdList(dbConnPool, [productIds], function(err, products) {
+            if (products) {
+
+                var amount = 0.0;
+
+                var shipmentItems = [];
+
+                // Tabulate subtotal of products and add to ShipmentItems
+                for (var i = 0; i < products.length; i++) {
+                    for (var j = 0; j < cart.length; j++) {
+                        if (products[i].id === cart[j].id) {
+
+                            var price = 0;
+                            if (chargeCurrency === 'USD') {
+                                price = products[i].usPrice;
+                            }
+                            else {
+                                price = products[i].cadPrice;
+                            }
+
+                            amount += price * cart[j].quantity;
+
+                            shipmentItems.push({
+                                product_id: products[i].id,
+                                quantity: cart[j].quantity,
+                                pricePaid: price
+                            });
+
+                        }
+                    }
+                }
+
+                amount += shippingCost;
+
+                amount += taxRate * (amount);
+
+                chargePayload.amount = amount;
+
+                var now = new Date();
+
+                // Create Shipment Obj
+                var shipmentQuery = {
+                    statement: 'INSERT INTO Shipment SET ?',
+                    params: {
+                        stripeCustomerId: customer.id,
+                        status: 'pending_charge',
+                        isSubscriptionBox: false,
+                        creationDate: now.getUTCDate(),
+                        pkgWeight: 0,
+                        pkgLength: 0,
+                        pkgWidth: 0,
+                        pkgHeight: 0,
+                        shippingRequired: true
+                    }
+                };
+
+                dbUtils.query(dbConnPool, shipmentQuery, function(err, rows) {
+                    var shipmentId = rows.insertId;
+
+                    // Append shipmentId
+                    for (var i = 0; i < shipmentItems.length; i++) {
+                        shipmentItems[i].shipmentId = shipmentId;
+                    }
+
+                    var shipmentItemsQuery = {
+                        statement: 'INSERT INTO ShipmentItem SET ?',
+                        params: shipmentItems
+                    };
+
+                    // Async insert ShipmentItems relating to this Shipment
+                    dbUtils.query(dbConnPool, shipmentItemsQuery, function(err, result) {});
+
+                    // Charge the customer and update the shipment
+                    stripe.charges.create(chargePayload, function(err, charge) {
+                        if (err) {
+                            console.log(err);
+                            return callback({
+                                status: 500,
+                                type: 'stripe',
+                                msg: {
+                                    simplified: 'server_error',
+                                    detailed: err
+                                }
+                            }, null);
+                        }
+                        else {
+                            log.info("Created new charge", charge, reqIP);
+
+                            var shipmentUpdateQuery = {
+                                statement: 'UPDATE Shipment SET chargeId = ?, WHERE id = ?',
+                                params: [charge.id, shipmentId]
+                            };
+
+                            var chargeInsertQuery = {
+                                statement: 'INSERT INTO Charge SET = ?',
+                                params: {
+                                    id: charge.id,
+                                    created: (new Date(charge.created * 1000)).getUTCDate(),
+                                    amount: charge.amount,
+                                    currency: charge.currency,
+                                    customerId: charge.customer,
+                                    failureCode: charge.failureCode,
+                                    failureMessage: charge.failureMessage,
+                                    invoiceId: charge.invoice,
+                                    paid: charge.paid,
+                                    serializedChargeData: metadataString
+                                }
+                            };
+
+                            // Update Shipment with chargeId
+                            dbUtils.query(dbConnPool, shipmentUpdateQuery, function(err, result) {});
+
+                            // Save charge information
+                            dbUtils.query(dbConnPool, chargeInsertQuery, function(err, result) {});
+
+                            return callback(charge);
+                        }
+                    });
+
+                });
+
+            }
+            else {
+                return callback({
+                    status: 400,
+                    type: 'app',
+                    msg: {
+                        simplified: 'bad_request',
+                        detailed: 'No products returned in Charge.create'
+                    }
+                }, null);
+            }
+
+        });
+
+        /*
 
         // Retrieve plan to get cost of purchase
         planCtrl.get(planId, function(err, plan) {
@@ -181,6 +367,7 @@ chargeCtrl.prototype = {
             }
         });
 
+        */
     }
 
 };

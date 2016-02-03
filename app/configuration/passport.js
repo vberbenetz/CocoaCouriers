@@ -42,40 +42,42 @@ module.exports = function(passport, dbConnPool) {
         // Generate a new random password
         crypto.randomBytes(8, function(ex, buf) {
             var str = buf.toString('base64');
-            str.substr(0, str.length-2);
-        });
+            newPass = str.substr(0, str.length-2);
 
-        // Check if email is already taken and in use
-        dbConnPool.getConnection(function(err, connection) {
-            connection.query("select * from users where email = ?", [email], function(err, rows) {
-                if (err) {
-                    return done(err);
-                }
-
-                if (rows.length) {
-                    connection.release();
-                    return done(null, false);
-                }
-                else {
-                    // Hash password
-                    password = bcrypt.hashSync(newPass, 11);
-
-                    var newUser = {
-                        email: email,
-                        password: password,
-                        rawPass: newPass
-                    };
-
-                    connection.query("INSERT INTO users (email, password) values (?, ?)", [email, password], function(err, rows) {
+            // Check if email is already taken and in use
+            dbConnPool.getConnection(function(err, connection) {
+                connection.query("SELECT * FROM users WHERE email = ?", [email], function(err, rows) {
+                    if (err) {
                         connection.release();
+                        return done(err);
+                    }
+                    else if (rows.length) {
+                        connection.release();
+                        return done(null, false);
+                    }
+                    else {
+                        // Hash password
+                        password = bcrypt.hashSync(newPass, 11);
 
-                        newUser.id = rows.insertId;
-                        return done(null, newUser);
-                    });
-                }
+                        connection.query("INSERT INTO users (email, password) values (?, ?)", [email, password], function(err, rows) {
+                            connection.release();
+
+                            if (err) {
+                                return done(err);
+                            }
+                            else {
+                                return done(null, {
+                                    id: rows.insertId,
+                                    email: email,
+                                    password: password,
+                                    rawPass: newPass
+                                });
+                            }
+                        });
+                    }
+                });
             });
         });
-
     }));
 
     // Local Login

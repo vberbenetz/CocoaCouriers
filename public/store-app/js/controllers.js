@@ -31,10 +31,11 @@ function mainCtrl ($scope, $cookies, $http, appService) {
     // Retrieve user object (check if logged in)
     appService.user.get(function(user) {
         $scope.user = user;
-        $scope.loggedIn = true;
+        $scope.blankStId = (user.stId === null);
+
     }, function(err) {
         $scope.user = null;
-        $scope.loggedIn = false;
+        $scope.blankStId = true;
     });
 
     $scope.updateCartCookie = function() {
@@ -197,9 +198,7 @@ function cartCtrl ($scope) {
 
 }
 
-function checkoutCtrl ($scope, $http) {
-    $scope.user = $scope.$parent.user;
-
+function checkoutCtrl ($scope, $http, appService) {
     $scope.altShippingReq = false;
     $scope.discount = 0;
     $scope.subtotal = 0;
@@ -347,52 +346,77 @@ function checkoutCtrl ($scope, $http) {
 
     $scope.placeOrder = function() {
 
-        var chargeMetadata = stringifyCartMetadata($scope.$parent.cart);
-
-        if (!$scope.loggedIn) {
-            chargeAsNewCustomer();
-        }
-        else {
-
-        }
-
-    };
-
-    // New user (Not logged in)
-    function chargeAsNewCustomer () {
-
+        // Validate billing and shipping address if applies
         var resultBilling = validateAddress($scope.billing);
         var resultShipping = {
-            valid: true,
-            validationErrors: null
+            valid: true
         };
         if ($scope.altShippingReq) {
             resultShipping = validateAddress($scope.shipping);
         }
 
-        // Validate billing and shipping address if applies
         if (resultBilling.valid && resultShipping.valid) {
 
-            validateNewAccount(function(result) {
+            validateAccount(function(result) {
                 if (result) {
 
-                    validateUserPayment(function(result) {
-                        if (result) {
+                    var chargeMetadata = stringifyCartMetadata($scope.$parent.cart);
 
-                            createCustomer(function(updatedUser) {
-                                $scope.user = updatedUser;
+                    // Case where customer is not yet registered on St or locally
+                    if ( (!$scope.$parent.user) || (!$scope.$parent.user.stId) ) {
 
+                        createNewCustomer(function(updatedUser) {
+                            if (updatedUser) {
 
-                            });
-                        }
-                    });
+                                $scope.$parent.user = updatedUser;
+
+                                chargeCustomer(chargeMetadata, function(charge) {
+
+                                });
+                            }
+                        });
+                    }
+
+                    // Customer already logged in
+                    else {
+                        chargeCustomer(chargeMetadata, function(charge) {
+
+                        });
+                    }
                 }
             });
         }
         else {
-            $scope.validationErrors = resultBilling;
-            $scope.validationErrors.shipping = resultShipping;
+            $scope.validationErrors = resultBilling.errors;
+            $scope.validationErrors.shipping = resultShipping.errors;
         }
+
+    };
+
+    /**
+     * Execute the charge
+     * @param chargeMetadata
+     * @param callback
+     */
+    function chargeCustomer (chargeMetadata, callback) {
+        var payload = {
+            cart: [],
+            metadata: chargeMetadata
+        };
+
+        var detailedCart = $scope.$parent.cart;
+        for (var i = 0; i < detailedCart.length; i++) {
+            payload.cart.push({
+                id: detailedCart[i].product.id,
+                quantity: detailedCart[i].quantity
+            });
+        }
+
+        appService.charge.save(payload, function(charge) {
+            return callback(charge);
+        }, function(err) {
+            return callback(false);
+        });
     }
 
     /**
@@ -402,27 +426,38 @@ function checkoutCtrl ($scope, $http) {
      * 3) All already created (return user)
      * @param callback
      */
-    function createCustomer (callback) {
-        if (!$scope.user) {
+    function createNewCustomer (callback) {
 
-            registerCustomerLocally(function(localUser) {
-                if (localUser) {
-                    $scope.user = localUser;
+        validateUserPayment(function(result) {
+            if (result) {
 
-                    createStCustomer(localUser.email, function(updatedUser) {
+                if (!$scope.$parent.user) {
+                    registerCustomerLocally(function (localUser) {
+                        if (localUser) {
+                            $scope.$parent.user = localUser;
+
+                            createStCustomer(function (updatedUser) {
+                                if (!updatedUser) {
+                                    return callback(false);
+                                }
+                                else {
+                                    return callback(updatedUser);
+                                }
+                            });
+                        }
+                    });
+                }
+                else if (!$scope.$parent.user.stId) {
+                    createStCustomer(function (updatedUser) {
                         return callback(updatedUser);
                     });
                 }
-            });
-        }
-        else if ($scope.user.stId === null) {
-            createStCustomer($scope.user.email, function(updatedUser) {
-                return callback(updatedUser);
-            });
-        }
-        else {
-            return callback($scope.user);
-        }
+                else {
+                    return callback($scope.$parent.user);
+                }
+            }
+        });
+
     }
 
     function registerCustomerLocally (callback) {
@@ -433,7 +468,7 @@ function checkoutCtrl ($scope, $http) {
             method: 'POST',
             data: {
                 email: $scope.billing.email,
-                password: ''
+                password: 'a'
             }
         }).success(function(newUser) {
             return callback(newUser);
@@ -444,29 +479,29 @@ function checkoutCtrl ($scope, $http) {
         });
     }
 
-    function createStCustomer(newUserEmail, callback) {
+    function createStCustomer (callback) {
         $http({
             url: '/api/customer',
             method: 'POST',
             data: {
-                email: newUserEmail,
-                name: $scope.billing.name,
-                address: $scope.billing.address,
+                billing: {
+                    name: $scope.billing.name,
+                    address: $scope.billing.address
+                },
                 source: $scope.billing.token
             }
         }).success(function(user) {
             return callback(user);
         }).error(function(err) {
             handleStCCErr(err);
-            $scope.processingReg = false;
             return callback(false);
         });
     }
 
     // Validate new account creation
-    function validateNewAccount(callback) {
+    function validateAccount(callback) {
 
-        if ($scope.user) {
+        if ( ($scope.$parent.user) && ($scope.$parent.user.email) && ($scope.$parent.user.email === $scope.billing.email) ) {
             return callback(true);
         }
 
@@ -479,22 +514,17 @@ function checkoutCtrl ($scope, $http) {
         var emailRegex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
 
         // Check if email is valid
-        if (typeof $scope.userInfo.email === 'undefined') {
+        if (!$scope.billing.email) {
             $scope.validationErrors.email = 'Please enter your email';
             validationFailed = true;
             validateEmailFailed = true;
         }
-        else if ( ($scope.userInfo.email.length == 0) || ($scope.userInfo.email === '') ) {
-            $scope.validationErrors.email = 'Please enter your email';
-            validationFailed = true;
-            validateEmailFailed = true;
-        }
-        else if ( $scope.userInfo.email.length > 254 ) {
+        else if ( $scope.billing.email.length > 254 ) {
             $scope.validationErrors.email = 'Email is invalid because it is too long';
             validationFailed = true;
             validateEmailFailed = true;
         }
-        else if ( !emailRegex.test($scope.userInfo.email) ) {
+        else if ( !emailRegex.test($scope.billing.email) ) {
             $scope.validationErrors.email = 'Please enter a valid email';
             validationFailed = true;
             validateEmailFailed = true;
@@ -506,7 +536,7 @@ function checkoutCtrl ($scope, $http) {
                 url: '/api/emailexists',
                 method: 'GET',
                 params: {
-                    email: $scope.userInfo.email
+                    email: $scope.billing.email
                 }
             }).success(function(result) {
 
@@ -544,11 +574,7 @@ function checkoutCtrl ($scope, $http) {
         var canadianPostalRegex = /^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i;
 
         // Name validation
-        if (typeof addressInfo.name === 'undefined') {
-            validationErrors.name = 'Please enter your full name';
-            validationFailed = true;
-        }
-        else if ( (addressInfo.name.length == 0) || (addressInfo.name === '') ) {
+        if (!addressInfo.name) {
             validationErrors.name = 'Please enter your full name';
             validationFailed = true;
         }
@@ -558,11 +584,7 @@ function checkoutCtrl ($scope, $http) {
         }
 
         // Address validation
-        if (typeof addressInfo.address.line1 === 'undefined') {
-            validationErrors.address.line1 = 'Please enter your address';
-            validationFailed = true;
-        }
-        else if ( (addressInfo.address.line1.length == 0) || (addressInfo.address.line1 === '') ) {
+        if (!addressInfo.address.line1) {
             validationErrors.address.line1 = 'Please enter your address';
             validationFailed = true;
         }
@@ -570,17 +592,15 @@ function checkoutCtrl ($scope, $http) {
             validationErrors.address.line1 = 'Address is too long. Please enter a valid address';
             validationFailed = true;
         }
-        if (addressInfo.address.line2.length > 1024) {
-            validationErrors.address.line2 = 'Address line 2 is too long. Please enter a valid address for line 2';
-            validationFailed = true;
+        if (addressInfo.address.line2) {
+            if (addressInfo.address.line2.length > 1024) {
+                validationErrors.address.line2 = 'Address line 2 is too long. Please enter a valid address for line 2';
+                validationFailed = true;
+            }
         }
 
         // City validation
-        if (typeof addressInfo.address.city === 'undefined') {
-            validationErrors.address.city = 'Please enter your city';
-            validationFailed = true;
-        }
-        else if ( (addressInfo.address.city.length == 0) || (addressInfo.address.city === '') ) {
+        if (!addressInfo.address.city) {
             validationErrors.address.city = 'Please enter your city';
             validationFailed = true;
         }
@@ -590,31 +610,19 @@ function checkoutCtrl ($scope, $http) {
         }
 
         // State validation
-        if (typeof addressInfo.address.state === 'undefined') {
-            validationErrors.address.state = 'Please select a province/state';
-            validationFailed = true;
-        }
-        else if ( (addressInfo.address.state.length == 0) || (addressInfo.address.state === '') ) {
+        if (!addressInfo.address.state) {
             validationErrors.address.state = 'Please select a province/state';
             validationFailed = true;
         }
 
         // Country validation
-        if (typeof addressInfo.address.country === 'undefined') {
-            validationErrors.address.country = 'Please select a country';
-            validationFailed = true;
-        }
-        else if ( (addressInfo.address.country.length == 0) || (addressInfo.address.country === '') ) {
+        if (!addressInfo.address.country) {
             validationErrors.address.country = 'Please select a country';
             validationFailed = true;
         }
 
         // Postal Code validation
-        if (typeof addressInfo.address.postal_code === 'undefined') {
-            validationErrors.address.postal_code = 'Please enter your postal / zip code';
-            validationFailed = true;
-        }
-        else if ( (addressInfo.address.postal_code.length == 0) || (addressInfo.address.postal_code === '') ) {
+        if (!addressInfo.address.postal_code) {
             validationErrors.address.postal_code = 'Please enter your postal / zip code';
             validationFailed = true;
         }
@@ -631,7 +639,7 @@ function checkoutCtrl ($scope, $http) {
             // Strip spaces
             addressInfo.address.postal_code = addressInfo.address.postal_code.replace(/\s+/g, '');
 
-            if (!canadianPostalRegex(addressInfo.address.postal_code)) {
+            if (!canadianPostalRegex.test(addressInfo.address.postal_code)) {
                 validationErrors.address.postal_code = 'Postal code is invalid. Please enter in the form of: A1B 2C3';
             }
             else if (addressInfo.address.postal_code.length > 6) {
@@ -645,10 +653,6 @@ function checkoutCtrl ($scope, $http) {
     // Validate payment info
     function validateUserPayment(callback) {
 
-        if ($scope.user) {
-            return callback(true);
-        }
-
         // Reset validation objects
         var validationFailed = false;
         $scope.validationErrors = {
@@ -657,15 +661,12 @@ function checkoutCtrl ($scope, $http) {
 
         // CC Number basic validation
         var numSpaceDashRegex = /^[0-9 -]+$/i;
-        var creditCardRegex = /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/;
+        //var creditCardRegex = /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/;
+        var creditCardRegex = /^\d{12,19}$/;
         var cvvRegex = /^[0-9]{3,6}$/;
 
         // Basic Card Number Validation
-        if (typeof $scope.billing.source.number === 'undefined') {
-            $scope.validationErrors.source.number = 'Please enter your credit card number';
-            validationFailed = true;
-        }
-        else if ( ($scope.billing.source.number.length == 0) || ($scope.userInfo.source.number === '') ) {
+        if (!$scope.billing.source.number) {
             $scope.validationErrors.source.number = 'Please enter your credit card number';
             validationFailed = true;
         }
@@ -679,34 +680,18 @@ function checkoutCtrl ($scope, $http) {
         }
 
         // Expiry Validation
-        if (typeof $scope.billing.source.exp_month === 'undefined') {
-            $scope.validationErrors.source.exp_month = 'Please select an expiration month';
-            validationFailed = true;
-        }
-        else if ( ($scope.billing.source.exp_month.length == 0) || ($scope.billing.source.exp_month === '') ) {
-            $scope.validationErrors.source.exp_month = 'Please select an expiration month';
-            validationFailed = true;
-        }
-        else if (typeof $scope.billing.source.exp_month.id === 'undefined') {
+        if (!$scope.billing.source.exp_month) {
             $scope.validationErrors.source.exp_month = 'Please select an expiration month';
             validationFailed = true;
         }
 
-        if (typeof $scope.billing.source.exp_year === 'undefined') {
-            $scope.validationErrors.source.exp_year = 'Please select an expiration year';
-            validationFailed = true;
-        }
-        else if ( ($scope.billing.source.exp_year.length == 0) || ($scope.billing.source.exp_year === '') ) {
+        if (!$scope.billing.source.exp_year) {
             $scope.validationErrors.source.exp_year = 'Please select an expiration year';
             validationFailed = true;
         }
 
         // CVV validation
-        if (typeof $scope.billing.source.cvc === 'undefined') {
-            $scope.validationErrors.source.cvc = 'Please enter the verification number on the back of your card';
-            validationFailed = true;
-        }
-        else if ( ($scope.billing.source.cvc == 0) || ($scope.billing.source.cvc === '') ) {
+        if (!$scope.billing.source.cvc) {
             $scope.validationErrors.source.cvc = 'Please enter the verification number on the back of your card';
             validationFailed = true;
         }
@@ -827,10 +812,13 @@ function stringifyCartMetadata(cart) {
     }
 
     var cartMetaStr = JSON.stringify(cartMeta);
-    var chargeMeta = cartMetaStr;
+    var chargeMeta = null;
 
     switch ( Math.ceil(cartMetaStr.length / 500) ) {
         case (1):
+            chargeMeta = {
+                cartItems1: cartMetaStr
+            };
             break;
         case (2) :
             chargeMeta = {
