@@ -21,7 +21,6 @@ dbUtils.prototype = {
                 connection.query(queryObj.statement, queryObj.params, function(err, rows) {
                     connection.release();
                     if (err) {
-                        console.log(err);
                         return callback({
                             status: 500,
                             type: 'app',

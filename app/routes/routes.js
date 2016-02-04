@@ -245,17 +245,39 @@ module.exports = function(app, passport, dbConnPool) {
     app.get('/api/customer', auth, function (req, res, next) {
         var stId = req.user.stId;
 
-        // Customer has no information associated with them
-        if (!stId) {
-            res.status(404).send();
-        }
-
-        customerCtrl.get(stId, function (err, result) {
+        customerCtrl.get(stId, dbConnPool, function (err, result) {
             if (err) {
                 errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
             }
             else {
                 res.send(result);
+            }
+        });
+    });
+
+    app.get('/api/customer/source', auth, function (req, res, next) {
+        var stId = req.user.stId;
+
+        customerCtrl.getSources(stId, dbConnPool, function (err, result) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(result);
+            }
+        });
+    });
+
+    app.get('/api/customer/altShippingAddr', auth, function (req, res, next) {
+        var stId = req.user.stId;
+
+        customerCtrl.getAltShippingAddresses(stId, dbConnPool, function(err, altShippingAddrs) {
+            if (err) {
+                console.log(err.msg.detailed);
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(altShippingAddrs);
             }
         });
     });

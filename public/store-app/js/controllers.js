@@ -12,6 +12,8 @@ function mainCtrl ($scope, $cookies, appService) {
     $scope.altShippingAddresses = [];
     $scope.sources = [];
 
+    $scope.fullyLoggedIn = false;
+
     // Retrieve cart from cookie
     var cartPidQs = $cookies.getObject('cartPidQs');
     if ( (typeof cartPidQs !== 'undefined') && (cartPidQs.length > 0) ) {
@@ -34,16 +36,31 @@ function mainCtrl ($scope, $cookies, appService) {
 
     // Retrieve user object (check if logged in)
     appService.user.get(function(user) {
+
         $scope.user = user;
-        $scope.blankStId = (user.stId === null);
 
-        // Retrieve customer, billing address, alternate shipping addresses, sources
-        
+        // Retrieve customer and billing address
+        appService.customer.get(function(customer) {
+            $scope.customer = customer;
+            $scope.fullyLoggedIn = true;
+        });
 
+        // Retrieve sources
+        appService.source.query(function(sources) {
+            if (sources) {
+                $scope.sources = sources;
+            }
+        });
+
+        // Retrieve alt shipping addrs
+        appService.altShippingAddress.query(function(altShippingAddrs) {
+            if (altShippingAddrs) {
+                $scope.altShippingAddresses = altShippingAddrs;
+            }
+        });
 
     }, function(err) {
         $scope.user = null;
-        $scope.blankStId = true;
     });
 
     $scope.updateCartCookie = function() {

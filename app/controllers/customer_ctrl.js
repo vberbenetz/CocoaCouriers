@@ -15,11 +15,11 @@ var customerCtrl = function() {};
 
 customerCtrl.prototype = {
 
-    get: function (dbConnPool, stId, callback) {
+    get: function (stId, dbConnPool, callback) {
 
         var query = {
             statement: 'SELECT c.*, d.* FROM Customer c INNER JOIN BillingAddress d ON c.billingAddress_stripeId=d.stripeId WHERE c.stripeId = ?',
-            params: [stId]
+            params: stId
         };
 
         dbUtils.query(dbConnPool, query, function(err, rows) {
@@ -33,11 +33,60 @@ customerCtrl.prototype = {
                     }
                 }, null);
             }
-            else if (rows.length == 0) {
-                return callback(false, null);
-            }
             else {
                 return callback(false, rows[0]);
+            }
+        });
+    },
+
+    getSources: function (stId, dbConnPool, callback) {
+
+        var query = {
+            statement: 'SELECT * FROM Source WHERE ?',
+            params: {
+                stripeId: stId
+            }
+        };
+
+        dbUtils.query(dbConnPool, query, function(err, sources) {
+            if (err) {
+                return callback({
+                    status: 500,
+                    type: 'app',
+                    msg: {
+                        simplified: 'server_error',
+                        detailed: err
+                    }
+                }, null);
+            }
+            else {
+                return callback(false, sources);
+            }
+        });
+    },
+
+    getAltShippingAddresses: function (stId, dbConnPool, callback) {
+
+        var query = {
+            statement: 'SELECT * FROM AltShippingAddress WHERE ?',
+            params: {
+                stripeId: stId
+            }
+        };
+
+        dbUtils.query(dbConnPool, query, function(err, altShippingAddrs) {
+            if (err) {
+                return callback({
+                    status: 500,
+                    type: 'app',
+                    msg: {
+                        simplified: 'server_error',
+                        detailed: err
+                    }
+                }, null);
+            }
+            else {
+                return callback(false, altShippingAddrs);
             }
         });
     },

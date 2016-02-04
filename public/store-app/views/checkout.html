@@ -28,7 +28,23 @@
 
                     <hr />
 
-                    <fieldset class="margin-top-30">
+                    <div class="callout alert alert-default noborder" ng-show="fullyLoggedIn">
+                        <div class="text-center">
+                            <h4>
+                                <span>{{ $parent.customer.name }} <br/></span>
+                                <span ng-if="$parent.customer.company">{{ $parent.customer.company }}<br/></span>
+                                <span>{{ $parent.customer.street1 }} <br/></span>
+                                <span>{{ $parent.customer.street2 }} <br/></span>
+                                <span ng-if="$parent.customer.street3">{{ $parent.customer.street3 }}<br/></span>
+                                <span>{{ $parent.customer.city }}, {{ $parent.customer.state }} <br/></span>
+                                <span ng-if="$parent.customer.country==='CA'">Canada</span>
+                                <span ng-if="$parent.customer.country==='US'">United States</span>
+                            </h4>
+                            <a class="btn btn-green margin-top-20" href="/My-Account">Update Billing</a>
+                        </div>
+                    </div>
+
+                    <fieldset class="margin-top-30" ng-hide="fullyLoggedIn">
                         <div class="col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.name }">
                             <label for="billing_name"><small>* Full Name</small></label>
                             <input class="form-control required" id="billing_name" name="ccname"
@@ -163,7 +179,7 @@
                                 <h4>Payment Method</h4>
                             </div>
                             <div class="panel-body">
-                                <fieldset>
+                                <fieldset ng-hide="fullyLoggedIn">
                                     <div class="col-xs-12">
                                         <div class="pull-right">
                                             <span class="fa fa-cc-visa fa-2x color-visa"></span>

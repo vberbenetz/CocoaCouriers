@@ -6,6 +6,8 @@ function appService($resource) {
 
         customer: $resource('/api/customer'),
 
+        source: $resource('/api/customer/source'),
+
         altShippingAddress: $resource('/api/customer/altShippingAddr'),
 
         product: $resource('/api/product',
