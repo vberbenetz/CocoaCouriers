@@ -15,7 +15,12 @@ errorHandler.prototype = {
         }
 
         if (typeof err.no_logging === 'undefined') {
-            log.error(err.msg.detailed, user, requestorIP);
+            if ( (err.msg) && (err.msg.detailed) ) {
+                log.error(err.msg.detailed, user, requestorIP);
+            }
+            else {
+                log.error(err, user, requestorIP);
+            }
         }
 
         switch (err.type) {

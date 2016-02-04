@@ -221,13 +221,13 @@
                             <div class="panel-body">
                                 <div class="clearfix" ng-repeat="i in $parent.cart">
                                     <p class="pull-left">{{ i.product.name }}</p>
-                                    <p class="pull-right"><input style="width:50px;" type="number" ng-model="$parent.cart[$index].quantity" maxlength="2" max="50" min="1" /> &times; ${{ i.product.cadPrice }}</p>
+                                    <p class="pull-right"><input style="width:50px;" type="number" ng-model="$parent.cart[$index].quantity" maxlength="2" max="50" min="1" /> &times; ${{ (i.product.cadPrice / 100).toFixed(2) }}</p>
                                 </div>
 
                                 <div class="divider double-line margin-top-10 margin-bottom-10"></div>
 
                                 <span class="clearfix" ng-show="discount>0">
-                                    <span class="pull-right">- $ {{ discount.toFixed(2) }}</span>
+                                    <span class="pull-right">- $ {{ (discount/100).toFixed(2) }}</span>
                                     <span class="pull-left">Coupon Discount:  <em class="text-green">Discount Applied</em></span>
                                 </span>
                                 <span class="clearfix">
@@ -250,7 +250,7 @@
                                 <hr />
 
                                 <span class="clearfix">
-                                    <span class="pull-right size-20">$ {{ (Math.round( (subtotal - discount)*100 )/100).toFixed(2) }}</span>
+                                    <span class="pull-right size-20">$ {{ ((subtotal - discount) / 100).toFixed(2) }}</span>
                                     <strong class="pull-left">TOTAL:</strong>
                                 </span>
                             </div>

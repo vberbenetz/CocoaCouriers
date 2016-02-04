@@ -63,8 +63,8 @@
                                     <small></small>
                                 </a>
                                 <a ng-click="removeFromCart(i.product.id)" class="remove_item"><i class="fa fa-times"></i></a>
-                                <div class="total_price">$<span>{{ (Math.round(i.product.cadPrice * i.quantity * 100)/100).toFixed(2) }}</span></div>
-                                <div class="qty"><input type="number" ng-model="$parent.cart[$index].quantity" maxlength="2" max="50" min="1" /> &times; ${{ i.product.cadPrice }}</div>
+                                <div class="total_price">$<span>{{ ( (i.product.cadPrice * i.quantity) / 100 ).toFixed(2) }}</span></div>
+                                <div class="qty"><input type="number" ng-model="$parent.cart[$index].quantity" maxlength="2" max="50" min="1" /> &times; ${{ i.product.cadPrice / 100 }}</div>
                                 <div class="clearfix"></div>
                             </div>
                             <!-- /cart item -->
@@ -88,14 +88,14 @@
                             <strong class="pull-left">Subtotal:</strong>
                         </span>
                         <span class="clearfix">
-                            <span class="pull-right">${{ discount }}</span>
+                            <span class="pull-right">${{ discount / 100 }}</span>
                             <span class="pull-left">Discount:</span>
                         </span>
 
                         <hr />
 
                         <span class="clearfix">
-                            <span class="pull-right size-20">${{ (Math.round( (subtotal - discount)*100 )/100).toFixed(2) }}</span>
+                            <span class="pull-right size-20">${{ ( (subtotal - discount) / 100).toFixed(2) }}</span>
                             <strong class="pull-left">TOTAL:</strong>
                         </span>
 

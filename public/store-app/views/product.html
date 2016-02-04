@@ -34,7 +34,7 @@
                     <div class="row margin-bottom-30">
                         <div class="col-md-3 col-sm-4 col-xs-6">
                             <div class="shop-item-price">
-                                {{ product.cadPrice }}
+                                {{ (product.cadPrice / 100).toFixed(2) }}
                             </div>
                             <br/>
                             <div class="clearfix">

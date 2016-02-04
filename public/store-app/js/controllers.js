@@ -182,14 +182,14 @@ function cartCtrl ($scope) {
                 priceOfItem = cart[s].product.usPrice;
             }
 
-            subtotal += parseFloat( (Math.round(cart[s].quantity * priceOfItem *100) / 100).toFixed(2) );
+            subtotal += cart[s].quantity * priceOfItem;
         }
 
-        $scope.subtotal = Math.round(subtotal*100)/100;
+        $scope.subtotal = subtotal;
 
         $scope.updateCartCookie();
 
-        return subtotal.toFixed(2);
+        return (subtotal / 100).toFixed(2);
     };
 
     $scope.applyDiscount = function() {
@@ -215,14 +215,14 @@ function checkoutCtrl ($scope, $http, appService) {
                 priceOfItem = cart[s].product.usPrice;
             }
 
-            subtotal += parseFloat( (Math.round(cart[s].quantity * priceOfItem *100) / 100).toFixed(2) );
+            subtotal += (cart[s].quantity * priceOfItem);
         }
 
-        $scope.subtotal = Math.round(subtotal*100)/100;
+        $scope.subtotal = subtotal;
 
         $scope.updateCartCookie();
 
-        return subtotal.toFixed(2);
+        return (subtotal / 100).toFixed(2);
     };
 
     $scope.billing = {

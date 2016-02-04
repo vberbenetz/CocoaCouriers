@@ -192,7 +192,7 @@ chargeCtrl.prototype = {
                             // Save charge information
                             dbUtils.query(dbConnPool, chargeInsertQuery, function(err, result) {});
 
-                            return callback(charge);
+                            return callback(null, charge);
                         }
                     });
 

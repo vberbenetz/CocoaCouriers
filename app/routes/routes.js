@@ -80,11 +80,7 @@ module.exports = function(app, passport, dbConnPool) {
         res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'subscribe.html') );
     });
 
-    app.get('/store', function(req, res) {
-        res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'store_index.html') );
-    });
-
-    app.get('/store/:productId', function(req, res) {
+    app.get('/store*', function(req, res) {
         res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'store_index.html') );
     });
 
