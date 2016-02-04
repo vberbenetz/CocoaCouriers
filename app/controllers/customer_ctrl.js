@@ -43,10 +43,17 @@ customerCtrl.prototype = {
     },
 
     create: function (req, res, dbConnPool, callback) {
-        var billing = req.body.billing;
         var email = req.user.email;
         var source = req.body.source;
         var tax = calculateTaxPercentage(billing.address.state);
+        var billing = req.body.billing;
+
+        // Move company to metadata from billing for stripe payload
+        var company = null;
+        if (billing.company) {
+            company = billing.company;
+            delete billing.company;
+        }
 
         var payload = {
             email: email,
@@ -54,7 +61,8 @@ customerCtrl.prototype = {
             source: source,
             metadata: {
                 taxRate: tax.rate,
-                taxDesc: tax.desc
+                taxDesc: tax.desc,
+                company: company
             }
         };
 
@@ -62,6 +70,7 @@ customerCtrl.prototype = {
             statement: 'INSERT INTO BillingAddress SET ?',
             params: {
                 name: billing.name,
+                company: company,
                 street1: billing.address.line1,
                 street2: billing.address.line2,
                 street3: null,
@@ -86,6 +95,31 @@ customerCtrl.prototype = {
             }
             else {
                 log.info('Created customer on stripe', {customer: stripeCustomer}, req.connection.remoteAddress);
+
+                var formattedSources = [];
+                var sources = stripeCustomer.sources.data;
+                for (var s = 0; s < sources.length; s++) {
+                    formattedSources.push([
+                        stripeCustomer.id,
+                        sources[s].id,
+                        sources[s].brand,
+                        sources[s].country,
+                        sources[s].last4
+                    ]);
+                }
+
+                // Get list of customer sources and save
+                var sourceInsertQuery = {
+                    statement: 'INSERT INTO Source (stripeId, sourceId, brand, country, lastFour)',
+                    params: [formattedSources]
+                };
+
+                // Async add sources
+                dbUtils.query(dbConnPool, sourceInsertQuery, function(err, rows) {
+                    if (err) {
+                        log.error(err, null, null);
+                    }
+                });
 
                 // Append stripe customer Id
                 billingInsertQuery.params.stripeId = stripeCustomer.id;
@@ -159,6 +193,68 @@ customerCtrl.prototype = {
                 });
             }
         })
+    },
+
+    addAltShippingAddress: function (shipping, stripeId, dbConnPool, reqIP, callback) {
+
+        if (!shipping || !shipping.address) {
+            return callback({
+                status: 400,
+                type: 'app',
+                msg: {
+                    simplified: 'bad_request',
+                    detailed: 'AltShipping parameters are undefined in CustomerCtrl.addAltShippingAddress'
+                }
+            }, null);
+        }
+        else if (!stripeId) {
+            return callback({
+                status: 500,
+                type: 'app',
+                msg: {
+                    simplified: 'server_error',
+                    detailed: 'StripeId (stId) does not exist in CustomerCtrl.addAltShippingAddress'
+                }
+            }, null);
+        }
+        else {
+            var altShippingQuery = {
+                statement: 'INSERT INTO AltShippingAddress SET ?',
+                params: {
+                    stripeId: stripeId,
+                    name: shipping.name,
+                    company: shipping.company,
+                    street1: shipping.address.line1,
+                    street2: shipping.address.line2,
+                    street3: null,
+                    city: shipping.address.city,
+                    state: shipping.address.state,
+                    postalCode: shipping.address.postal_code,
+                    country: shipping.address.country
+                }
+            };
+
+            dbUtils.query(dbConnPool, altShippingQuery, function(err, result) {
+                if (err) {
+                    return callback({
+                        status: 500,
+                        type: 'app',
+                        msg: {
+                            simplified: 'server_error',
+                            detailed: err
+                        }
+                    }, null);
+                }
+                else {
+                    var newAltShippingAddr = altShippingQuery.params;
+                    newAltShippingAddr.id = result.insertId;
+
+                    log.info('Added AltShippingAddress', newAltShippingAddr, reqIP);
+
+                    return callback (null, newAltShippingAddr);
+                }
+            });
+        }
     },
 
     update: function (req, res, callback) {

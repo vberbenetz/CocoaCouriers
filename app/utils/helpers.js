@@ -89,8 +89,21 @@ helpers.prototype = {
         }
 
         return null;
-    }
+    },
 
+    formatStripeShipping: function (obj) {
+        return {
+            name: obj.name,
+            address: {
+                line1: obj.street1,
+                line2: obj.street2,
+                city: obj.city,
+                state: obj.state,
+                postal_code: obj.postalCode,
+                country: obj.country
+            }
+        }
+    }
 };
 
 module.exports = new helpers();

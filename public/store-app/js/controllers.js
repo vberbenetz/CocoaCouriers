@@ -1,12 +1,16 @@
 'use strict';
 
-function mainCtrl ($scope, $cookies, $http, appService) {
+function mainCtrl ($scope, $cookies, appService) {
 
     $scope.basePath = '/assets/media';
 
     $scope.userCountry = 'CA';
 
     $scope.cart = [];
+
+    $scope.customer = null;
+    $scope.altShippingAddresses = [];
+    $scope.sources = [];
 
     // Retrieve cart from cookie
     var cartPidQs = $cookies.getObject('cartPidQs');
@@ -32,6 +36,10 @@ function mainCtrl ($scope, $cookies, $http, appService) {
     appService.user.get(function(user) {
         $scope.user = user;
         $scope.blankStId = (user.stId === null);
+
+        // Retrieve customer, billing address, alternate shipping addresses, sources
+        
+
 
     }, function(err) {
         $scope.user = null;
@@ -199,11 +207,15 @@ function cartCtrl ($scope) {
 }
 
 function checkoutCtrl ($scope, $http, appService) {
-    $scope.altShippingReq = false;
     $scope.discount = 0;
     $scope.subtotal = 0;
 
     $scope.Math = window.Math;
+
+    $scope.processingOrder = false;
+
+    $scope.newAltShipping = false;
+    $scope.selectedAltShippingAddr = false;
 
     $scope.calcSubtotal = function() {
         var cart = $scope.$parent.cart;
@@ -346,12 +358,14 @@ function checkoutCtrl ($scope, $http, appService) {
 
     $scope.placeOrder = function() {
 
+        $scope.processingOrder = true;
+
         // Validate billing and shipping address if applies
         var resultBilling = validateAddress($scope.billing);
         var resultShipping = {
             valid: true
         };
-        if ($scope.altShippingReq) {
+        if ($scope.newAltShipping) {
             resultShipping = validateAddress($scope.shipping);
         }
 
@@ -371,7 +385,9 @@ function checkoutCtrl ($scope, $http, appService) {
                                 $scope.$parent.user = updatedUser;
 
                                 chargeCustomer(chargeMetadata, function(charge) {
-
+                                    if (!charge) {
+                                        $scope.validationErrors.source.number = 'There was an issue processing your payment. Please try again or contact our support team';
+                                    }
                                 });
                             }
                         });
@@ -380,9 +396,14 @@ function checkoutCtrl ($scope, $http, appService) {
                     // Customer already logged in
                     else {
                         chargeCustomer(chargeMetadata, function(charge) {
-
+                            if (!charge) {
+                                $scope.validationErrors.source.number = 'There was an issue processing your payment. Please try again or contact our support team';
+                            }
                         });
                     }
+                }
+                else {
+
                 }
             });
         }
@@ -394,7 +415,17 @@ function checkoutCtrl ($scope, $http, appService) {
     };
 
     /**
-     * Execute the charge
+     * Create charge payload.
+     * Determine if an alternate shipping address is required.
+     *
+     * If required:
+     *  - Create a new alternate shipping address and add it to the customer
+     *  - Use alternate shipping address that the user has pre-selected
+     *
+     * Not reuqired:
+     *  - Use billing address for shipping (null for altShipping param)
+     *
+     *
      * @param chargeMetadata
      * @param callback
      */
@@ -412,11 +443,44 @@ function checkoutCtrl ($scope, $http, appService) {
             });
         }
 
-        appService.charge.save(payload, function(charge) {
-            return callback(charge);
-        }, function(err) {
-            return callback(false);
-        });
+        // Alternate shipping address which the user has not yet used before
+        if ($scope.newAltShipping) {
+
+            // Create new altShippingAddress for customer
+            appService.altShippingAddress.save($scope.shipping, function(newAltAddr) {
+                $scope.$parent.altShippingAddresses.push(newAltAddr);
+                $scope.selectedAltShippingAddr = newAltAddr;
+
+                payload.altShipping = newAltAddr;
+
+                // Create charge
+                appService.charge.save(payload, function(charge) {
+                    return callback(charge);
+                }, function(err) {
+                    return callback(false);
+                });
+
+            }, function(err) {
+                return callback(false);
+            });
+        }
+
+        // Use one of the pre-saved addresses
+        else {
+
+            // Use pre-selected saved alternate address
+            if ($scope.selectedAltShippingAddr) {
+                payload.altShipping = $scope.selectedAltShippingAddr;
+            }
+
+            // Create charge
+            appService.charge.save(payload, function(charge) {
+                return callback(charge);
+            }, function(err) {
+                return callback(false);
+            });
+        }
+
     }
 
     /**
@@ -581,6 +645,13 @@ function checkoutCtrl ($scope, $http, appService) {
         else if ( addressInfo.name.length > 254 ) {
             validationErrors.name = 'Name is too long. Please enter a valid name';
             validationFailed = true;
+        }
+
+        if (addressInfo.company) {
+            if (addressInfo.company.length > 254) {
+                validationErrors.company = 'Company name is too long. Please limit to 250 characters';
+                validationFailed = true;
+            }
         }
 
         // Address validation

@@ -32,7 +32,7 @@
                         <div class="col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.name }">
                             <label for="billing_name"><small>* Full Name</small></label>
                             <input class="form-control required" id="billing_name" name="ccname"
-                                   type="text" ng-model="billing.name" placeholder="Name As Appears On Credit Card" required autocomplete="cc-name" />
+                                   type="text" ng-model="billing.name" required autocomplete="name" />
                             <p class="text-danger" ng-show="validationErrors.name">{{ validationErrors.name }}</p>
                         </div>
                         <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.email }">
@@ -41,11 +41,11 @@
                                    type="email" ng-model="billing.email" placeholder="Email Address" autocomplete="email" />
                             <p class="text-danger" ng-show="validationErrors.email">{{ validationErrors.email }}</p>
                         </div>
-                        <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.organization }">
+                        <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.company }">
                             <label for="billing_organization"><small>Company / Org</small></label>
                             <input class="form-control" id="billing_organization" name="organization"
-                                   type="text" ng-model="billing.organization" placeholder="(Optional)" autocomplete="organization" />
-                            <p class="text-danger" ng-show="validationErrors.organization">{{ validationErrors.organization }}</p>
+                                   type="text" ng-model="billing.company" placeholder="(Optional)" autocomplete="organization" />
+                            <p class="text-danger" ng-show="validationErrors.company">{{ validationErrors.company }}</p>
                         </div>
                         <div class="col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.address.line1 }">
                             <label for="billing_address1"><small>* Address</small></label>
@@ -88,11 +88,11 @@
                     </fieldset>
 
                     <p class="margin-bottom-40">
-                        <input type="checkbox" ng-model="altShippingReq" />
+                        <input type="checkbox" ng-model="newAltShipping" />
                         Shipping address is different from billing address
                     </p>
 
-                    <div ng-show="altShippingReq">
+                    <div ng-show="newAltShipping">
 
                         <div class="heading-title text-center margin-top-40">
                             <h4>Shipping Address</h4>
@@ -107,11 +107,11 @@
                                        type="text" ng-model="shipping.name" placeholder="Name Of Recipient" autocomplete="off" />
                                 <p class="text-danger" ng-show="validationErrors.shipping.name">{{ validationErrors.shipping.name }}</p>
                             </div>
-                            <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.shipping.organization }">
-                                <label for="shipping_organization"><small>Company / Org</small></label>
-                                <input class="form-control" id="shipping_organization" name="shipping-organization"
-                                       type="text" ng-model="shipping.organization" placeholder="(Optional)" autocomplete="off" />
-                                <p class="text-danger" ng-show="validationErrors.shipping.organization">{{ validationErrors.shipping.organization }}</p>
+                            <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.shipping.company }">
+                                <label for="shipping_company"><small>Company / Org</small></label>
+                                <input class="form-control" id="shipping_company" name="shipping-organization"
+                                       type="text" ng-model="shipping.company" placeholder="(Optional)" autocomplete="off" />
+                                <p class="text-danger" ng-show="validationErrors.shipping.company">{{ validationErrors.shipping.company }}</p>
                             </div>
                             <div class="col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.shipping.address.line1 }">
                                 <label for="shipping_address1"><small>* Address</small></label>

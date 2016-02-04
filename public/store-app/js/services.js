@@ -4,6 +4,10 @@ function appService($resource) {
     return {
         user: $resource('/api/user'),
 
+        customer: $resource('/api/customer'),
+
+        altShippingAddress: $resource('/api/customer/altShippingAddr'),
+
         product: $resource('/api/product',
             {},
             {

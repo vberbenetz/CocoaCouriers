@@ -10,6 +10,8 @@ var couponCtrl = require('./coupon_ctrl');
 
 var productCtrl = require('./product_ctrl');
 
+var helpers = require('../utils/helpers');
+
 var stripe = require('stripe')(
     configPriv.sKey
 );
@@ -39,21 +41,16 @@ chargeCtrl.prototype = {
         }
 
         var shipping = null;
+        var shippingCompany = null;
+        var altShippingAddressId = null;
         if (altShipping) {
-            shipping = altShipping;
+            shipping = helpers.formatStripeShipping(altShipping);
+            shippingCompany = altShipping.company;
+            altShippingAddressId = altShipping.id;
         }
         else {
-            shipping = {
-                name: customer.name,
-                address: {
-                    line1: customer.street1,
-                    line2: customer.street2,
-                    city: customer.city,
-                    state: customer.state,
-                    postal_code: customer.postalCode,
-                    country: customer.country
-                }
-            }
+            shipping = helpers.formatStripeShipping(customer);
+            shippingCompany = customer.company;
         }
 
         var chargePayload = {
@@ -63,7 +60,10 @@ chargeCtrl.prototype = {
             metadata: metadata
         };
 
-        // Link all charge metadata into single string (separation was required to accomodate Stripe restrictions)
+        // Add shipping company name to metadata
+        chargePayload.metadata.shipping_company = shippingCompany;
+
+        // Link all charge metadata into single string (separation was required to accommodate Stripe restrictions)
         var metadataString = '';
         for (var property in metadata) {
             if (metadata.hasOwnProperty(property)) {
@@ -80,7 +80,7 @@ chargeCtrl.prototype = {
         productCtrl.getByIdList(dbConnPool, [productIds], function(err, products) {
             if (products) {
 
-                var amount = 0.0;
+                var amount = 0;
 
                 var shipmentItems = [];
 
@@ -97,13 +97,13 @@ chargeCtrl.prototype = {
                                 price = products[i].cadPrice;
                             }
 
-                            amount += price * cart[j].quantity;
+                            amount += (price * cart[j].quantity);
 
-                            shipmentItems.push({
-                                product_id: products[i].id,
-                                quantity: cart[j].quantity,
-                                pricePaid: price
-                            });
+                            shipmentItems.push([
+                                products[i].id,
+                                cart[j].quantity,
+                                price
+                            ]);
 
                         }
                     }
@@ -111,7 +111,19 @@ chargeCtrl.prototype = {
 
                 amount += shippingCost;
 
-                amount += taxRate * (amount);
+                /**
+                 * Amount + Amount*Tax
+                 *
+                 * Example:
+                 * All whole numbers (tax rate percentage is a whole number, amounts in cents)
+                 *
+                 * 1399 + Round( (13 * 1399) / 100 )
+                 * 1399 + Round( (181.87) )
+                 * 1399 + 182
+                 * 1581
+                 * $15.81
+                 */
+                amount += Math.round((taxRate * (amount)) / 100);
 
                 chargePayload.amount = amount;
 
@@ -122,9 +134,10 @@ chargeCtrl.prototype = {
                     statement: 'INSERT INTO Shipment SET ?',
                     params: {
                         stripeCustomerId: customer.id,
+                        altShippingAddressId: altShippingAddressId,
                         status: 'pending_charge',
                         isSubscriptionBox: false,
-                        creationDate: now.getUTCDate(),
+                        creationDate: now,
                         pkgWeight: 0,
                         pkgLength: 0,
                         pkgWidth: 0,
@@ -138,13 +151,16 @@ chargeCtrl.prototype = {
 
                     // Append shipmentId
                     for (var i = 0; i < shipmentItems.length; i++) {
-                        shipmentItems[i].shipmentId = shipmentId;
+                        shipmentItems[i].push(shipmentId);
                     }
 
                     var shipmentItemsQuery = {
-                        statement: 'INSERT INTO ShipmentItem SET ?',
-                        params: shipmentItems
+                        statement: 'INSERT INTO ShipmentItem (product_id, quantity, pricePaid, shipmentId) VALUES ?',
+                        params: [shipmentItems]
                     };
+
+                    // Add shipmentId (orderId to charge)
+                    chargePayload.metadata.shipmentId = shipmentId;
 
                     // Async insert ShipmentItems relating to this Shipment
                     dbUtils.query(dbConnPool, shipmentItemsQuery, function(err, result) {});
@@ -152,7 +168,6 @@ chargeCtrl.prototype = {
                     // Charge the customer and update the shipment
                     stripe.charges.create(chargePayload, function(err, charge) {
                         if (err) {
-                            console.log(err);
                             return callback({
                                 status: 500,
                                 type: 'stripe',
@@ -166,15 +181,15 @@ chargeCtrl.prototype = {
                             log.info("Created new charge", charge, reqIP);
 
                             var shipmentUpdateQuery = {
-                                statement: 'UPDATE Shipment SET chargeId = ?, WHERE id = ?',
-                                params: [charge.id, shipmentId]
+                                statement: 'UPDATE Shipment SET chargeId = ?, status = ? WHERE id = ?',
+                                params: [charge.id, 'new', shipmentId]
                             };
 
                             var chargeInsertQuery = {
-                                statement: 'INSERT INTO Charge SET = ?',
+                                statement: 'INSERT INTO Charge SET ?',
                                 params: {
                                     id: charge.id,
-                                    created: (new Date(charge.created * 1000)).getUTCDate(),
+                                    created: new Date(charge.created * 1000),
                                     amount: charge.amount,
                                     currency: charge.currency,
                                     customerId: charge.customer,

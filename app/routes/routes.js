@@ -216,7 +216,7 @@ module.exports = function(app, passport, dbConnPool) {
 
         // Verify request body correct
         if ( (!req.body.cart) || (!req.body.metadata) ) {
-            res.status(400).send('Missing payload params');
+            res.status(400).send('Bad request');
         }
         else {
             // Retrieve customer data
@@ -246,7 +246,7 @@ module.exports = function(app, passport, dbConnPool) {
         var stId = req.user.stId;
 
         // Customer has no information associated with them
-        if (stId === null) {
+        if (!stId) {
             res.status(404).send();
         }
 
@@ -273,6 +273,18 @@ module.exports = function(app, passport, dbConnPool) {
             }
         });
 
+    });
+
+    app.post('/api/customer/altShippingAddr', auth, function (req, res, next) {
+
+        customerCtrl.addAltShippingAddress (req.body.shipping, req.user.stId, dbConnPool, req.connection.remoteAddress, function(err, result) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(result);
+            }
+        });
     });
 
     app.put('/api/customer', auth, function (req, res, next) {
@@ -347,7 +359,7 @@ module.exports = function(app, passport, dbConnPool) {
         }
     });
 
-    app.post('/api/plan', function (req, res, next) {
+    app.post('/api/plan', auth, function (req, res, next) {
 
         if ( (typeof req.user !== 'undefined') && (typeof req.user.email !== 'undefined') ) {
             if (req.user.email !== 'val@cantangosolutions.com') {
