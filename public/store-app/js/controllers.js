@@ -14,6 +14,8 @@ function mainCtrl ($scope, $cookies, appService) {
 
     $scope.fullyLoggedIn = false;
 
+    $scope.loaded = {};
+
     // Retrieve cart from cookie
     var cartPidQs = $cookies.getObject('cartPidQs');
     if ( (typeof cartPidQs !== 'undefined') && (cartPidQs.length > 0) ) {
@@ -43,24 +45,39 @@ function mainCtrl ($scope, $cookies, appService) {
         appService.customer.get(function(customer) {
             $scope.customer = customer;
             $scope.fullyLoggedIn = true;
+            $scope.loaded.customer = true;
+            $scope.loaded.billingAddr = true;
+        }, function (err) {
+            $scope.loaded.customer = true;
+            $scope.loaded.billingAddr = true;
         });
 
         // Retrieve sources
         appService.source.query(function(sources) {
             if (sources) {
                 $scope.sources = sources;
+                $scope.loaded.sources = true;
             }
+        }, function (err) {
+            $scope.loaded.sources = true;
         });
 
         // Retrieve alt shipping addrs
         appService.altShippingAddress.query(function(altShippingAddrs) {
             if (altShippingAddrs) {
                 $scope.altShippingAddresses = altShippingAddrs;
+                $scope.loaded.altShippingAddrs = true;
             }
+        }, function (err) {
+            $scope.loaded.altShippingAddrs = true;
         });
 
     }, function(err) {
         $scope.user = null;
+        $scope.loaded.customer = true;
+        $scope.loaded.billingAddr = true;
+        $scope.loaded.sources = true;
+        $scope.loaded.altShippingAddrs = true;
     });
 
     $scope.updateCartCookie = function() {
@@ -378,10 +395,16 @@ function checkoutCtrl ($scope, $http, appService) {
         $scope.processingOrder = true;
 
         // Validate billing and shipping address if applies
-        var resultBilling = validateAddress($scope.billing);
+        var resultBilling = {
+            valid: true
+        };
         var resultShipping = {
             valid: true
         };
+        // Validate billing if not logged in
+        if (!$scope.fullyLoggedIn) {
+            validateAddress($scope.billing);
+        }
         if ($scope.newAltShipping) {
             resultShipping = validateAddress($scope.shipping);
         }

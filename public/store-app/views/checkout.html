@@ -28,7 +28,7 @@
 
                     <hr />
 
-                    <div class="callout alert alert-default noborder" ng-show="fullyLoggedIn">
+                    <div class="callout alert alert-default noborder" ng-show="fullyLoggedIn && $parent.loaded.billingAddr">
                         <div class="text-center">
                             <h4>
                                 <span>{{ $parent.customer.name }} <br/></span>
@@ -44,7 +44,7 @@
                         </div>
                     </div>
 
-                    <fieldset class="margin-top-30" ng-hide="fullyLoggedIn">
+                    <fieldset class="margin-top-30" ng-hide="fullyLoggedIn" ng-show="$parent.loaded.billingAddr">
                         <div class="col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.name }">
                             <label for="billing_name"><small>* Full Name</small></label>
                             <input class="form-control required" id="billing_name" name="ccname"
@@ -103,12 +103,12 @@
                         </div>
                     </fieldset>
 
-                    <p class="margin-bottom-40">
+                    <p class="margin-bottom-40" ng-show="$parent.loaded.altShippingAddrs">
                         <input type="checkbox" ng-model="newAltShipping" />
                         Shipping address is different from billing address
                     </p>
 
-                    <div ng-show="newAltShipping">
+                    <div ng-show="newAltShipping && $parent.loaded.altShippingAddrs">
 
                         <div class="heading-title text-center margin-top-40">
                             <h4>Shipping Address</h4>
@@ -179,7 +179,7 @@
                                 <h4>Payment Method</h4>
                             </div>
                             <div class="panel-body">
-                                <fieldset ng-hide="fullyLoggedIn">
+                                <fieldset ng-show="!fullyLoggedIn && $parent.loaded.sources">
                                     <div class="col-xs-12">
                                         <div class="pull-right">
                                             <span class="fa fa-cc-visa fa-2x color-visa"></span>
