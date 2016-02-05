@@ -26,6 +26,11 @@ function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProv
             templateUrl: '../store-app/views/checkout.html',
             controller: checkoutCtrl,
             url: '/checkout'
+        })
+        .state('orderFilled', {
+            templateUrl: '../store-app/views/post_checkout.html',
+            controller: postCheckoutCtrl,
+            url: '/order-filled'
         });
 
     $locationProvider.html5Mode(true);

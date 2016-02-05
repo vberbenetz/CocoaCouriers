@@ -39,11 +39,11 @@ userCtrl.prototype = {
 
                 // Email already exists
                 if (rows[0]['COUNT(*)'] > 0) {
-                    return callback(false, true);
+                    return callback(false, {exists: true});
                 }
                 // Free to use the email
                 else {
-                    return callback(false, false);
+                    return callback(false, {exists: false});
                 }
             });
         });

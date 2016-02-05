@@ -36,6 +36,10 @@ function mainCtrl ($scope, $cookies, appService) {
         });
     }
 
+    // Retrieve recent order from cookie
+    $scope.recentShipmentId = $cookies.getObject('recentShipmentId');
+
+
     // Retrieve user object (check if logged in)
     appService.user.get(function(user) {
 
@@ -89,7 +93,7 @@ function mainCtrl ($scope, $cookies, appService) {
                 quantity: cart[z].quantity
             });
         }
-        $cookies.putObject('cartPidQs', pidQs);
+        $cookies.putObject('cartPidQs', pidQs, [{secure:true}]);
     };
 
     $scope.updateCart = function(product) {
@@ -240,9 +244,14 @@ function cartCtrl ($scope) {
 
 }
 
-function checkoutCtrl ($scope, $http, appService) {
+function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
     $scope.discount = 0;
     $scope.subtotal = 0;
+    $scope.tax = {
+        rate: 0,
+        desc: '',
+        amount: 0
+    };
 
     $scope.Math = window.Math;
 
@@ -265,6 +274,9 @@ function checkoutCtrl ($scope, $http, appService) {
         }
 
         $scope.subtotal = subtotal;
+
+        // Update tax
+        $scope.tax.amount = Math.ceil(($scope.tax.rate * ($scope.subtotal)) / 100);
 
         $scope.updateCartCookie();
 
@@ -390,8 +402,21 @@ function checkoutCtrl ($scope, $http, appService) {
         }
     });
 
+    // Update sales tax
+    $scope.$watch('billing.address.state', function(newVal, oldVal) {
+        if (newVal != oldVal) {
+            if (newVal) {
+                var tax = calculateTaxPercentage(newVal);
+                $scope.tax.rate = tax.rate;
+                $scope.tax.desc = tax.desc;
+                $scope.tax.amount = Math.ceil(($scope.tax.rate * ($scope.subtotal)) / 100);
+            }
+        }
+    });
+
     $scope.placeOrder = function() {
 
+        $scope.globalError = false;
         $scope.processingOrder = true;
 
         // Validate billing and shipping address if applies
@@ -403,7 +428,7 @@ function checkoutCtrl ($scope, $http, appService) {
         };
         // Validate billing if not logged in
         if (!$scope.fullyLoggedIn) {
-            validateAddress($scope.billing);
+            resultBilling = validateAddress($scope.billing);
         }
         if ($scope.newAltShipping) {
             resultShipping = validateAddress($scope.shipping);
@@ -427,6 +452,16 @@ function checkoutCtrl ($scope, $http, appService) {
                                 chargeCustomer(chargeMetadata, function(charge) {
                                     if (!charge) {
                                         $scope.validationErrors.source.number = 'There was an issue processing your payment. Please try again or contact our support team';
+                                        $scope.globalError = true;
+                                        $scope.processingOrder = false;
+                                    }
+                                    else {
+                                        $scope.$parent.recentShipmentId = charge.metadata.shipmentId;
+                                        $cookies.put('recentShipmentId', charge.metadata.shipmentId, [{secure:true}]);
+                                        $cookies.remove('cartPidQs', [{secure:true}]);
+                                        $scope.$parent.cart.length = 0;
+                                        $state.go('orderFilled');
+                                        $scope.processingOrder = false;
                                     }
                                 });
                             }
@@ -438,18 +473,31 @@ function checkoutCtrl ($scope, $http, appService) {
                         chargeCustomer(chargeMetadata, function(charge) {
                             if (!charge) {
                                 $scope.validationErrors.source.number = 'There was an issue processing your payment. Please try again or contact our support team';
+                                $scope.globalError = true;
+                                $scope.processingOrder = false;
+                            }
+                            else {
+                                $scope.$parent.recentShipmentId = charge.metadata.shipmentId;
+                                $cookies.put('recentShipmentId', charge.metadata.shipmentId, [{secure:true}]);
+                                $cookies.remove('cartPidQs', [{secure:true}]);
+                                $scope.$parent.cart.length = 0;
+                                $state.go('orderFilled');
+                                $scope.processingOrder = false;
                             }
                         });
                     }
                 }
                 else {
-
+                    $scope.processingOrder = false;
+                    $scope.globalError = true;
                 }
             });
         }
         else {
+            $scope.processingOrder = false;
             $scope.validationErrors = resultBilling.errors;
             $scope.validationErrors.shipping = resultShipping.errors;
+            $scope.globalError = true;
         }
 
     };
@@ -487,9 +535,10 @@ function checkoutCtrl ($scope, $http, appService) {
         if ($scope.newAltShipping) {
 
             // Create new altShippingAddress for customer
-            appService.altShippingAddress.save($scope.shipping, function(newAltAddr) {
+            appService.altShippingAddress.save({shipping: $scope.shipping}, function(newAltAddr) {
                 $scope.$parent.altShippingAddresses.push(newAltAddr);
                 $scope.selectedAltShippingAddr = newAltAddr;
+                $scope.newAltShipping = false;
 
                 payload.altShipping = newAltAddr;
 
@@ -533,20 +582,21 @@ function checkoutCtrl ($scope, $http, appService) {
     function createNewCustomer (callback) {
 
         validateUserPayment(function(result) {
-            if (result) {
+            if (!result) {
 
+                return callback(false);
+            }
+            else {
                 if (!$scope.$parent.user) {
                     registerCustomerLocally(function (localUser) {
-                        if (localUser) {
+                        if (!localUser) {
+                            return callback(false);
+                        }
+                        else {
                             $scope.$parent.user = localUser;
 
                             createStCustomer(function (updatedUser) {
-                                if (!updatedUser) {
-                                    return callback(false);
-                                }
-                                else {
-                                    return callback(updatedUser);
-                                }
+                                return callback(updatedUser);
                             });
                         }
                     });
@@ -878,6 +928,8 @@ function checkoutCtrl ($scope, $http, appService) {
     }
 }
 
+function postCheckoutCtrl ($scope) {
+}
 
 /* ----------------- UTILS -------------------- */
 
@@ -910,6 +962,71 @@ function generateListOfProductImgLinks(basePath, productId, numImgs) {
     }
 
     return imageLinks;
+}
+
+function calculateTaxPercentage(province) {
+    var taxPercentage = 0;
+    var taxDesc = '';
+    switch(province) {
+        case 'AB':
+            taxPercentage = 5;
+            taxDesc = 'GST (5%)';
+            break;
+        case 'BC':
+            taxPercentage = 12;
+            taxDesc = 'GST + PST (5% + 7%)';
+            break;
+        case 'MB':
+            taxPercentage = 13;
+            taxDesc = 'GST + PST (5% + 8%)';
+            break;
+        case 'NB':
+            taxPercentage = 13;
+            taxDesc = 'HST 13%';
+            break;
+        case 'NL':
+            taxDesc = 'HST 13%';
+            taxPercentage = 13;
+            break;
+        case 'NS':
+            taxDesc = 'HST 15%';
+            taxPercentage = 15;
+            break;
+        case 'NT':
+            taxDesc = 'GST 5%';
+            taxPercentage = 5;
+            break;
+        case 'NU':
+            taxDesc = 'GST 5%';
+            taxPercentage = 5;
+            break;
+        case 'ON':
+            taxDesc = 'HST 13%';
+            taxPercentage = 13;
+            break;
+        case 'PE':
+            taxDesc = 'HST 14%';
+            taxPercentage = 14;
+            break;
+        case 'QC':
+            taxDesc = 'GST + QST (5% + 9.975%)';
+            taxPercentage = 14.98;
+            break;
+        case 'SK':
+            taxDesc = 'GST + PST (5% + 10%)';
+            taxPercentage = 10;
+            break;
+        case 'YT':
+            taxDesc = 'GST 5%';
+            taxPercentage = 5;
+            break;
+        default:
+            taxDesc = '';
+            taxPercentage = 0;
+            break;
+    }
+
+    return {rate: taxPercentage, desc: taxDesc};
 }
 
 // Create charge details metadata (safety net to verify customer order)
@@ -1005,4 +1122,5 @@ angular
     .controller('storeCtrl', storeCtrl)
     .controller('productCtrl', productCtrl)
     .controller('cartCtrl', cartCtrl)
-    .controller('checkoutCtrl', checkoutCtrl);
+    .controller('checkoutCtrl', checkoutCtrl)
+    .controller('postCheckoutCtrl', postCheckoutCtrl);

@@ -122,12 +122,12 @@ module.exports = function(app, passport, dbConnPool) {
     // ==================== APP ROUTES ========================== //
 
     app.get('/api/emailexists', function(req, res) {
-        userCtrl.checkEmailExists(req.query.email, dbConnPool, function(err, exists) {
+        userCtrl.checkEmailExists(req.query.email, dbConnPool, function(err, result) {
             if (err) {
                 errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
             }
             else {
-                res.send({exists: exists})
+                res.send(result);
             }
         });
     });
@@ -219,16 +219,15 @@ module.exports = function(app, passport, dbConnPool) {
 
         // Verify request body correct
         if ( (!req.body.cart) || (!req.body.metadata) ) {
-            res.status(400).send('Bad request');
+            res.status(400).send('bad_request');
         }
         else {
             // Retrieve customer data
-            customerCtrl.get(dbConnPool, req.user.stId, function(err, customer) {
+            customerCtrl.get(req.user.stId, dbConnPool, function(err, customer) {
                 if (err) {
                     errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
                 }
                 else {
-
                     chargeCtrl.oneTimeCharge(dbConnPool, customer, req.body.altShipping, req.body.cart, req.body.metadata, req.connection.remoteAddress, function(err, result) {
                         if (err) {
                             errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
@@ -276,7 +275,6 @@ module.exports = function(app, passport, dbConnPool) {
 
         customerCtrl.getAltShippingAddresses(stId, dbConnPool, function(err, altShippingAddrs) {
             if (err) {
-                console.log(err.msg.detailed);
                 errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
             }
             else {
@@ -290,7 +288,6 @@ module.exports = function(app, passport, dbConnPool) {
         // Create customer within Stripe
         customerCtrl.create(req, res, dbConnPool, function (err, newCustomer) {
             if (err) {
-                console.log(err.msg.detailed);
                 errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
             }
             else {

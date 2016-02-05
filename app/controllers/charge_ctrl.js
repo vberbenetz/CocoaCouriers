@@ -60,9 +60,6 @@ chargeCtrl.prototype = {
             metadata: metadata
         };
 
-        // Add shipping company name to metadata
-        chargePayload.metadata.shipping_company = shippingCompany;
-
         // Link all charge metadata into single string (separation was required to accommodate Stripe restrictions)
         var metadataString = '';
         for (var property in metadata) {
@@ -70,6 +67,11 @@ chargeCtrl.prototype = {
                 metadataString += metadata[property];
             }
         }
+
+        // Add shipping company name to metadata
+        chargePayload.metadata.shipping_company = shippingCompany;
+        chargePayload.metadata.taxRate = taxRate;
+        chargePayload.metadata.taxDesc = taxDesc;
 
         var productIds = [];
 
@@ -117,13 +119,13 @@ chargeCtrl.prototype = {
                  * Example:
                  * All whole numbers (tax rate percentage is a whole number, amounts in cents)
                  *
-                 * 1399 + Round( (13 * 1399) / 100 )
-                 * 1399 + Round( (181.87) )
+                 * 1399 + Ceiling( (13 * 1399) / 100 )
+                 * 1399 + Ceiling( (181.87) )
                  * 1399 + 182
                  * 1581
                  * $15.81
                  */
-                amount += Math.round((taxRate * (amount)) / 100);
+                amount += Math.ceil((taxRate * (amount)) / 100);
 
                 chargePayload.amount = amount;
 

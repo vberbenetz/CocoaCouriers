@@ -94,8 +94,8 @@ customerCtrl.prototype = {
     create: function (req, res, dbConnPool, callback) {
         var email = req.user.email;
         var source = req.body.source;
-        var tax = calculateTaxPercentage(billing.address.state);
         var billing = req.body.billing;
+        var tax = calculateTaxPercentage(billing.address.state);
 
         // Move company to metadata from billing for stripe payload
         var company = null;
@@ -159,13 +159,14 @@ customerCtrl.prototype = {
 
                 // Get list of customer sources and save
                 var sourceInsertQuery = {
-                    statement: 'INSERT INTO Source (stripeId, sourceId, brand, country, lastFour)',
+                    statement: 'INSERT INTO Source (stripeId, sourceId, brand, country, lastFour) VALUES ?',
                     params: [formattedSources]
                 };
 
                 // Async add sources
                 dbUtils.query(dbConnPool, sourceInsertQuery, function(err, rows) {
                     if (err) {
+                        console.log(err);
                         log.error(err, null, null);
                     }
                 });
@@ -196,7 +197,7 @@ customerCtrl.prototype = {
                                 stripeId: stripeCustomer.id,
                                 localId: req.user.id,
                                 status: 'active',
-                                created: (new Date(stripeCustomer.created * 1000)).getUTCDate(),
+                                created: new Date(stripeCustomer.created * 1000),
                                 currency: stripeCustomer.currency,
                                 defaultSource: stripeCustomer.default_source,
                                 delinquent: stripeCustomer.delinquent,
@@ -396,46 +397,46 @@ function calculateTaxPercentage(province) {
     switch(province) {
         case 'AB':
             taxPercentage = 5;
-            taxDesc = 'GST (5%)';
+            taxDesc = 'GST 5%';
             break;
         case 'BC':
             taxPercentage = 12;
-            taxDesc = 'GST / PST (5% + 7%)';
+            taxDesc = 'GST + PST (5% + 7%)';
             break;
         case 'MB':
             taxPercentage = 13;
-            taxDesc = 'GST / PST (5% + 8%)';
+            taxDesc = 'GST + PST (5% + 8%)';
             break;
         case 'NB':
             taxPercentage = 13;
-            taxDesc = 'HST (5% + 8%)';
+            taxDesc = 'HST 13%';
             break;
         case 'NL':
-            taxDesc = 'HST (5% + 8%)';
+            taxDesc = 'HST 13%';
             taxPercentage = 13;
             break;
         case 'NS':
-            taxDesc = 'HST (5% + 10%)';
+            taxDesc = 'HST 15%';
             taxPercentage = 15;
             break;
         case 'NT':
-            taxDesc = 'GST (5%)';
+            taxDesc = 'GST 5%';
             taxPercentage = 5;
             break;
         case 'NU':
-            taxDesc = 'GST (5%)';
+            taxDesc = 'GST 5%';
             taxPercentage = 5;
             break;
         case 'ON':
-            taxDesc = 'HST (5% + 8%)';
+            taxDesc = 'HST 13%';
             taxPercentage = 13;
             break;
         case 'PE':
-            taxDesc = 'HST (5% + 9%)';
+            taxDesc = 'HST 14%';
             taxPercentage = 14;
             break;
         case 'QC':
-            taxDesc = 'GST / QST (5% + 9.975%)';
+            taxDesc = 'GST + QST (5% + 9.975%)';
             taxPercentage = 14.98;
             break;
         case 'SK':
@@ -443,7 +444,7 @@ function calculateTaxPercentage(province) {
             taxPercentage = 10;
             break;
         case 'YT':
-            taxDesc = 'GST (5%)';
+            taxDesc = 'GST 5%';
             taxPercentage = 5;
             break;
         default:

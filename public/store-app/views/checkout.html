@@ -28,19 +28,28 @@
 
                     <hr />
 
-                    <div class="callout alert alert-default noborder" ng-show="fullyLoggedIn && $parent.loaded.billingAddr">
-                        <div class="text-center">
-                            <h4>
-                                <span>{{ $parent.customer.name }} <br/></span>
-                                <span ng-if="$parent.customer.company">{{ $parent.customer.company }}<br/></span>
-                                <span>{{ $parent.customer.street1 }} <br/></span>
-                                <span>{{ $parent.customer.street2 }} <br/></span>
-                                <span ng-if="$parent.customer.street3">{{ $parent.customer.street3 }}<br/></span>
-                                <span>{{ $parent.customer.city }}, {{ $parent.customer.state }} <br/></span>
-                                <span ng-if="$parent.customer.country==='CA'">Canada</span>
-                                <span ng-if="$parent.customer.country==='US'">United States</span>
-                            </h4>
-                            <a class="btn btn-green margin-top-20" href="/My-Account">Update Billing</a>
+                    <div class="address-box" ng-show="fullyLoggedIn && $parent.loaded.billingAddr">
+                        <div class="bg-emerald-green opacity-9 radius-8 padding-top-15 padding-bottom-15">
+                            <div class="row margin-left-15 margin-right-15">
+                                <div class="col-xs-8">
+                                    <span class="text-white">{{ $parent.customer.name }} <br/></span>
+                                    <span ng-if="$parent.customer.company" class="text-white">{{ $parent.customer.company }}<br/></span>
+                                    <span class="text-white">{{ $parent.customer.street1 }} <br/></span>
+                                    <span class="text-white">{{ $parent.customer.street2 }} <br/></span>
+                                    <span ng-if="$parent.customer.street3" class="text-white">{{ $parent.customer.street3 }}<br/></span>
+                                    <span class="text-white">{{ $parent.customer.city }}, {{ $parent.customer.state }} <br/></span>
+                                    <span ng-if="$parent.customer.country==='CA'" class="text-white">Canada</span>
+                                    <span ng-if="$parent.customer.country==='US'" class="text-white">United States</span>
+                                </div>
+                                <div class="col-xs-4 text-right">
+                                    <div class="row margin-left-15">
+                                        <span class="fa fa-credit-card fa-3x text-white"></span>
+                                    </div>
+                                    <div class="row margin-left-15">
+                                        <a class="btn btn-sm btn-default" href="/My-Account">Update Billing</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -157,7 +166,7 @@
                             <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.shipping.address.state }">
                                 <label for="shipping_state"><small>* State / Province</small></label>
                                 <select class="form-control input-normal" id="shipping_state" name="shipping-state"
-                                        ng-options="o as o.name for o in activeShippingProvinceSelect track by o.id" ng-model="shipping.address.state" required>
+                                        ng-options="o.id as o.name for o in activeShippingProvinceSelect" ng-model="shipping.address.state" required>
                                 </select>
                                 <p class="text-danger" ng-show="validationErrors.shippingaddress.state">{{ validationErrors.shipping.address.state }}</p>
                             </div>
@@ -179,6 +188,30 @@
                                 <h4>Payment Method</h4>
                             </div>
                             <div class="panel-body">
+                                <div ng-show="fullyLoggedIn && $parent.loaded.sources && $parent.sources.length > 0">
+
+                                    <div class="row margin-left-15 margin-right-15">
+                                        <div class="col-xs-6 col-xs-offset-3 col-md-12 col-md-offset-0 padding-top-15 padding-bottom-15 payment-method-border radius-8 text-center">
+                                            <div>
+                                                <span class="size-20">**** **** **** {{ $parent.sources[0].lastFour }}</span><br/>
+                                                <div class="margin-left-150 margin-top-20">
+                                                    <span ng-if="sources[0].brand==='Visa'" class="fa fa-cc-visa fa-3x color-visa"></span>
+                                                    <span ng-if="sources[0].brand==='MasterCard'" class="fa fa-cc-mastercard fa-3x color-mastercard"></span>
+                                                    <span ng-if="sources[0].brand==='American Express'" class="fa fa-cc-amex fa-3x color-amex"></span>
+                                                    <span ng-if="sources[0].brand==='Discover'" class="fa fa-cc-discover fa-3x color-discover"></span>
+                                                    <span ng-if="sources[0].brand==='Diners Club'" class="fa fa-cc-diners-club fa-3x color-diners-club"></span>
+                                                    <span ng-if="sources[0].brand==='JCB'" class="fa fa-cc-jcb fa-3x color-jcb"></span>
+                                                    <span ng-if="sources[0].brand==='Unknown'" class="fa fa-credit-card fa-3x text-gray"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row margin-top-20 margin-right-15">
+                                        <a class="btn btn-sm btn-default pull-right" href="/My-Account">Update Billing</a>
+                                    </div>
+                                </div>
+
                                 <fieldset ng-show="!fullyLoggedIn && $parent.loaded.sources">
                                     <div class="col-xs-12">
                                         <div class="pull-right">
@@ -246,48 +279,51 @@
                                     <span class="pull-right">- $ {{ (discount/100).toFixed(2) }}</span>
                                     <span class="pull-left">Coupon Discount:  <em class="text-green">Discount Applied</em></span>
                                 </span>
-                                <span class="clearfix">
-                                    <h3><span class="pull-right label label-success" ><strong>FREE !</strong></span></h3>
-                                    <span class="pull-left">Shipping:</span>
-                                </span>
-
-                                <hr />
 
                                 <span class="clearfix">
                                     <span class="pull-right">$ {{ calcSubtotal() }}</span>
                                     <strong class="pull-left">Subtotal:</strong>
                                 </span>
                                 <span class="clearfix">
-                                    <span class="pull-right">$ 0.00</span>
-                                    <span class="pull-left">Tax {{ tax.desc }}:</span>
+                                    <h3><span class="pull-right label label-success" ><strong>FREE !</strong></span></h3>
+                                    <span class="pull-left">Shipping:</span>
+                                </span>
+
+                                <hr ng-show="tax.rate > 0" />
+
+                                <span class="clearfix" ng-show="tax.rate > 0">
+                                    <span class="pull-right">$ {{ (tax.amount / 100).toFixed(2) }}</span>
+                                    <span class="pull-left">{{ tax.desc }}:</span>
                                     <span class="pull-left">&nbsp;</span>
                                 </span>
 
                                 <hr />
 
                                 <span class="clearfix">
-                                    <span class="pull-right size-20">$ {{ ((subtotal - discount) / 100).toFixed(2) }}</span>
+                                    <span class="pull-right size-20">$ {{ ((subtotal + tax.amount) / 100).toFixed(2) }}</span>
                                     <strong class="pull-left">TOTAL:</strong>
                                 </span>
                             </div>
                         </div>
 
-                        <button type="submit" ng-disabled="processingReg" class="btn btn-success btn-lg btn-block" ng-click="placeOrder()">
-                            <span ng-if="!loggedIn">Place Order <span class="fa fa-chevron-circle-right"></span></span>
+                        <button type="submit" ng-disabled="processingOrder" class="btn btn-green btn-xlg btn-featured" ng-click="placeOrder()">
+                            <span class="size-25 margin-top-20">Place Order </span>
+                            <i ng-show="processingOrder" class="three-quarters-loader margin-top-20"></i>
+                            <i ng-show="!processingOrder" class="fa fa-chevron-circle-right"></i>
                         </button>
 
-                        <div class="pull-right margin-top-20">
-                            <a href="https://stripe.com/help/security" target="_blank">
-                                <img src="/assets/images/security_seals/powered_by_stripe.png" />
-                            </a>
+                        <div class="row">
+                            <div class="pull-right margin-top-20 margin-right-15">
+                                <a href="https://stripe.com/help/security" target="_blank">
+                                    <img src="/assets/images/security_seals/powered_by_stripe.png" />
+                                </a>
+                            </div>
                         </div>
 
-                        <div ng-show="globalValidationFailed" class="alert alert-danger margin-top-30">
-                            <strong>There were issues with your information</strong>
-                        </div>
-
-                        <div ng-show="processingReg" class="margin-top-20 pull-right three-quarters-loader">
-                            Processing Order...
+                        <div class="row">
+                            <div ng-show="globalError" class="alert alert-danger margin-top-30">
+                                <strong>Please correct the highlighted errors in the form</strong>
+                            </div>
                         </div>
 
                     </div>
