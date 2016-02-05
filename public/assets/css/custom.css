@@ -159,6 +159,10 @@
  background-color: #252525; !important;
 }
 
+.customStroke {
+    border: red solid 1px;
+}
+
 img.resize-shop-item-thumbnail {
     height: 50px;
     width: auto;
