@@ -31,4 +31,16 @@ config.coolDownPeriod = {
     end: 15
 };
 
+config.mailTemplate = {
+
+    subject: '{{subject}}',
+    text: '{{rawMsg}}',
+    html: '<div><div style="background-color:#3B2314;height:100%;width=100%;text-align:center;margin-bottom:30px;"><img src="cid:cocoa_email_logo" /></div><br /><div style="text-align:center;"><div style="width:500px;text-align:left;display:inline-block;overflow:auto;word-wrap:normal">{{htmlMsg}}</div></div></div>',
+    attachments: [{
+        filename: 'email-logo-white.png',
+        path: '../../public/assets/images',
+        cid: 'cocoa_email_logo'
+    }]
+};
+
 module.exports = config;

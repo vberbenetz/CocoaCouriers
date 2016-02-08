@@ -12,6 +12,7 @@ var passport = require('passport');
 var session = require('express-session');
 var csurf = require('csurf');
 var redisStore = require('connect-redis')(session);
+var nodemailer = require('nodemailer');
 
 var config = require('./app/configuration/config');
 var configPriv = require('./app/configuration/config_priv');
@@ -39,6 +40,10 @@ var pool = mysql.createPool({
     database: configPriv.mysqlConfig.database
 });
 
+// ------------------------------------
+// Mailer Setup
+// ------------------------------------
+var mailTransporter = nodemailer.createTransport(configPriv.mailConfig);
 
 // ------------------------------------
 // Passport auth
@@ -69,7 +74,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // REST api routes
-require('./app/routes/routes')(app, passport, pool);
+require('./app/routes/routes')(app, passport, pool, mailTransporter);
 
 // Error Handler
 app.use(function (err, req, res, next) {

@@ -2,6 +2,7 @@
 
 var path = require('path');
 
+var mailerCtrl = require('../controllers/mailer_ctrl');
 var tokenCtrl = require('../controllers/token_ctrl');
 var customerCtrl = require('../controllers/customer_ctrl');
 var productCtrl = require('../controllers/product_ctrl');
@@ -14,7 +15,7 @@ var chargeCtrl = require('../controllers/charge_ctrl');
 var errorHandler = require('../utils/error_handler');
 
 
-module.exports = function(app, passport, dbConnPool) {
+module.exports = function(app, passport, dbConnPool, mailTransporter) {
 
     // ================================================================================ //
     // ================================= Static Pages ================================= //
@@ -53,7 +54,25 @@ module.exports = function(app, passport, dbConnPool) {
     });
 
     app.post('/signup', passport.authenticate('local-signup'), function(req, res) {
-        res.send(req.user);
+
+        var newUser = req.user;
+
+        // Send user their new temp password
+        mailerCtrl.sendNewAccount(mailTransporter, req.user, function(err, result) {
+            if (err) {
+                var newUser = req.user;
+                if (newUser.rawPass) {
+                    delete newUser.rawPass;
+                }
+                errorHandler.handle(res, err, newUser, req.connection.remoteAddress);
+            }
+        });
+
+        // Remove non-hashed password (this is sent to user via email)
+        if (newUser.rawPass) {
+            delete newUser.rawPass;
+        }
+        res.send(newUser);
     });
 
 
