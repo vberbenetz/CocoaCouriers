@@ -183,15 +183,19 @@
                             <span class="fa fa-cc-diners-club fa-2x" ng-class="{ 'color-diners-club' : identifyCardType()==='diners-club', 'text-gray' : identifyCardType()!=='diners-club' }"></span>
                             <span class="fa fa-cc-jcb fa-2x" ng-class="{ 'color-jcb' : identifyCardType()==='jcb', 'text-gray' : identifyCardType()!=='jcb' }"></span>
                         </div>
-                        <div class="col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.source.name }">
-                            <label><small>Name On Card *</small></label>
-                            <input type="text" class="form-control input-normal" id="chn" ng-model="userInfo.source.name">
-                            <p class="text-danger" ng-show="validationErrors.source.name">{{ validationErrors.source.name }}</p>
+                        <div class="row margin-bottom-neg-10">
+                            <div class="margin-right-15 margin-left-15 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.source.name }">
+                                <label><small>Name On Card *</small></label>
+                                <input type="text" class="form-control input-normal" id="chn" ng-model="userInfo.source.name">
+                                <p class="text-danger" ng-show="validationErrors.source.name">{{ validationErrors.source.name }}</p>
+                            </div>
                         </div>
-                        <div class="col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.source.number }">
-                            <label><small>Card Number *</small></label>
-                            <input type="text" class="form-control input-normal" id="chn" ng-model="userInfo.source.number">
-                            <p class="text-danger" ng-show="validationErrors.source.number">{{ validationErrors.source.number }}</p>
+                        <div class="row margin-bottom-neg-10">
+                            <div class="col-xs-12 form-group margin-right-15 margin-left-15" ng-class="{ 'has-error' : validationErrors.source.number }">
+                                <label><small>Card Number *</small></label>
+                                <input type="text" class="form-control input-normal" id="chn" ng-model="userInfo.source.number">
+                                <p class="text-danger" ng-show="validationErrors.source.number">{{ validationErrors.source.number }}</p>
+                            </div>
                         </div>
                         <div class="col-md-6 col-sm-6 form-group" ng-class="{ 'has-error' : validationErrors.source.exp_month }">
                             <label><small>Expiry Month *</small></label>
@@ -386,9 +390,7 @@
                                     <img src="/assets/images/security_seals/powered_by_stripe.png" />
                                 </a>
                             </div>
-                            <div class="pull-right">
-                                <img class="pull-right" src="/assets/images/security_seals/comodo_secure_100x85_white.png" />
-                            </div>
+                          
                         </div>
 
                     </div>
