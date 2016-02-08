@@ -94,6 +94,9 @@ module.exports = function(app, passport, dbConnPool) {
     app.get('/blog/valentines-day-gift', function(req, res) {
         res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog_pages', 'valentines-day-gift-box.html') );
     });
+    app.get('/blog/free-chocolate-givaway', function(req, res) {
+        res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog_pages', 'free-chocolate-givaway-contest.html') );
+    });
     app.get('/blog/Why-Does-Chocolate-Cost-So-Much', function(req, res) {
         res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog_pages', 'why-does-chocolate-cost-so-much.html') );
     });
