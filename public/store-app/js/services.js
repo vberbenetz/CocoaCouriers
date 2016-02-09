@@ -4,9 +4,28 @@ function appService($resource) {
     return {
         user: $resource('/api/user'),
 
-        customer: $resource('/api/customer'),
+        customer: $resource('/api/customer',
+            {},
+            {
+                update: {
+                    method: 'PUT',
+                    isArray: false
+                }
+            }
+        ),
 
-        source: $resource('/api/customer/source'),
+        source: $resource('/api/customer/source',
+            {},
+            {
+                getSourceById: {
+                    method: 'GET',
+                    params: {
+                        sourceId: '@sourceId'
+                    },
+                    isArray: false
+                }
+            }
+        ),
 
         altShippingAddress: $resource('/api/customer/altShippingAddr'),
 

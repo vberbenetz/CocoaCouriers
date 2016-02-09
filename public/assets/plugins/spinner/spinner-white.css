@@ -32,6 +32,9 @@
         transform: rotate(360deg);
     }
 }
+
+.three-quarters-loader.ng-hide { display: none !important; }
+
 /* :not(:required) hides this rule from IE9 and below */
 .three-quarters-loader:not(:required) {
     -moz-animation: three-quarters-loader 1250ms infinite linear;

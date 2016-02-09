@@ -24,14 +24,7 @@ customerCtrl.prototype = {
 
         dbUtils.query(dbConnPool, query, function(err, rows) {
             if (err) {
-                return callback({
-                    status: 500,
-                    type: 'app',
-                    msg: {
-                        simplified: 'server_error',
-                        detailed: err
-                    }
-                }, null);
+                return callback(err, null);
             }
             else {
                 return callback(false, rows[0]);
@@ -50,14 +43,7 @@ customerCtrl.prototype = {
 
         dbUtils.query(dbConnPool, query, function(err, sources) {
             if (err) {
-                return callback({
-                    status: 500,
-                    type: 'app',
-                    msg: {
-                        simplified: 'server_error',
-                        detailed: err
-                    }
-                }, null);
+                return callback(err, null);
             }
             else {
                 return callback(false, sources);
@@ -65,28 +51,46 @@ customerCtrl.prototype = {
         });
     },
 
-    getAltShippingAddresses: function (stId, dbConnPool, callback) {
+    getSourceById: function (stId, sourceId, dbConnPool, callback) {
 
         var query = {
-            statement: 'SELECT * FROM AltShippingAddress WHERE ?',
+            statement: 'SELECT * FROM Source WHERE stripeId=? AND sourceId=?',
+            params: [
+                stId,
+                sourceId
+            ]
+        };
+
+        dbUtils.query(dbConnPool, query, function(err, source) {
+            if (err) {
+                return callback(err, null);
+            }
+            else {
+                return callback(false, source[0]);
+            }
+        });
+    },
+
+    getAltShippingAddress: function (stId, dbConnPool, callback) {
+
+        var query = {
+            statement: 'SELECT * FROM AltShippingAddress WHERE ? ORDER BY id DESC LIMIT 1',
             params: {
                 stripeId: stId
             }
         };
 
-        dbUtils.query(dbConnPool, query, function(err, altShippingAddrs) {
+        dbUtils.query(dbConnPool, query, function(err, altShippingAddr) {
             if (err) {
-                return callback({
-                    status: 500,
-                    type: 'app',
-                    msg: {
-                        simplified: 'server_error',
-                        detailed: err
-                    }
-                }, null);
+                return callback(err, null);
             }
             else {
-                return callback(false, altShippingAddrs);
+                if (!altShippingAddr[0]) {
+                    return callback(false, {});
+                }
+                else {
+                    return callback(false, altShippingAddr[0]);
+                }
             }
         });
     },
@@ -166,7 +170,6 @@ customerCtrl.prototype = {
                 // Async add sources
                 dbUtils.query(dbConnPool, sourceInsertQuery, function(err, rows) {
                     if (err) {
-                        console.log(err);
                         log.error(err, null, null);
                     }
                 });
@@ -177,14 +180,7 @@ customerCtrl.prototype = {
                 // Insert DefaultShippingAddress
                 dbUtils.query(dbConnPool, billingInsertQuery, function(err, rows) {
                     if (err) {
-                       return callback({
-                           status: 500,
-                           type: 'app',
-                           msg: {
-                               simplified: 'server_error',
-                               detailed: err
-                           }
-                       }, null);
+                       return callback(err, null);
                     }
                     else {
                         log.info('Added BillingAddress on internal DB', {
@@ -211,14 +207,7 @@ customerCtrl.prototype = {
                         // Insert Customer
                         dbUtils.query(dbConnPool, customerInsertQuery, function (err, rows) {
                             if (err) {
-                                return callback({
-                                    status: 500,
-                                    type: 'app',
-                                    msg: {
-                                        simplified: 'server_error',
-                                        detailed: err
-                                    }
-                                }, null);
+                                return callback(err, null);
                             }
                             else {
                                 log.info('Added customer on internal DB', {
@@ -286,20 +275,13 @@ customerCtrl.prototype = {
 
             dbUtils.query(dbConnPool, altShippingQuery, function(err, result) {
                 if (err) {
-                    return callback({
-                        status: 500,
-                        type: 'app',
-                        msg: {
-                            simplified: 'server_error',
-                            detailed: err
-                        }
-                    }, null);
+                    return callback(err, null);
                 }
                 else {
                     var newAltShippingAddr = altShippingQuery.params;
                     newAltShippingAddr.id = result.insertId;
 
-                    log.info('Added AltShippingAddress', newAltShippingAddr, reqIP);
+                    log.info('Added/Updated AltShippingAddress', newAltShippingAddr, reqIP);
 
                     return callback (null, newAltShippingAddr);
                 }
@@ -307,7 +289,7 @@ customerCtrl.prototype = {
         }
     },
 
-    update: function (req, res, callback) {
+    update: function (req, res, dbConnPool, callback) {
         var item = req.body.item;
         var data = req.body.data;
         var customerId = req.user.stId;
@@ -381,6 +363,42 @@ customerCtrl.prototype = {
                                 }
                         });
                     }
+                }
+                else if ( (item === 'source') && (customer.sources.data.length > 0) ) {
+                    var sourceInsertQuery = {
+                        statement: 'INSERT INTO Source SET ?',
+                        params: {
+                            stripeId: customer.id,
+                            sourceId: customer.sources.data[0].id,
+                            brand: customer.sources.data[0].brand,
+                            country: customer.sources.data[0].country,
+                            lastFour: customer.sources.data[0].last4
+                        }
+                    };
+
+                    var updateCustomerQuery = {
+                        statement: 'UPDATE Customer SET defaultSource=? WHERE stripeId=?',
+                        params: [
+                            customer.default_source,
+                            customer.id
+                        ]
+                    };
+
+                    // Update internal Source table
+                    dbUtils.query(dbConnPool, sourceInsertQuery, function (err, rows) {
+                        if (err) {
+                            return callback(err, null);
+                        }
+                        else {
+                            log.info('Added source on internal DB', sourceInsertQuery.params, req.connection.remoteAddress);
+                        }
+                    });
+
+                    // Update internal Customer table
+                    dbUtils.query(dbConnPool, updateCustomerQuery, function(err, rows) {
+                    });
+
+                    return callback(false, customer);
                 }
                 else {
                     return callback(false, customer);

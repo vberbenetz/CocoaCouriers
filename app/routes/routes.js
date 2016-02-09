@@ -247,7 +247,7 @@ module.exports = function(app, passport, dbConnPool, mailTransporter) {
                     errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
                 }
                 else {
-                    chargeCtrl.oneTimeCharge(dbConnPool, customer, req.body.altShipping, req.body.cart, req.body.metadata, req.connection.remoteAddress, function(err, result) {
+                    chargeCtrl.oneTimeCharge(dbConnPool, customer, req.body.source, req.body.altShipping, req.body.cart, req.body.metadata, req.connection.remoteAddress, function(err, result) {
                         if (err) {
                             errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
                         }
@@ -279,25 +279,38 @@ module.exports = function(app, passport, dbConnPool, mailTransporter) {
     app.get('/api/customer/source', auth, function (req, res, next) {
         var stId = req.user.stId;
 
-        customerCtrl.getSources(stId, dbConnPool, function (err, result) {
-            if (err) {
-                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-            }
-            else {
-                res.send(result);
-            }
-        });
+        if (req.query.sourceId) {
+            customerCtrl.getSourceById(stId, req.query.sourceId, dbConnPool, function (err, result) {
+                if (err) {
+                    errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                }
+                else {
+                    res.send(result);
+                }
+            });
+        }
+        else {
+            customerCtrl.getSources(stId, dbConnPool, function (err, result) {
+                if (err) {
+                    errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                }
+                else {
+                    res.send(result);
+                }
+            });
+        }
+
     });
 
     app.get('/api/customer/altShippingAddr', auth, function (req, res, next) {
         var stId = req.user.stId;
 
-        customerCtrl.getAltShippingAddresses(stId, dbConnPool, function(err, altShippingAddrs) {
+        customerCtrl.getAltShippingAddress(stId, dbConnPool, function(err, altShippingAddr) {
             if (err) {
                 errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
             }
             else {
-                res.send(altShippingAddrs);
+                res.send(altShippingAddr);
             }
         });
     });
@@ -329,7 +342,7 @@ module.exports = function(app, passport, dbConnPool, mailTransporter) {
     });
 
     app.put('/api/customer', auth, function (req, res, next) {
-        customerCtrl.update(req, res, function (err, result) {
+        customerCtrl.update(req, res, dbConnPool, function (err, result) {
             if (err) {
                 errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
             }

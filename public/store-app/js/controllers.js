@@ -9,8 +9,8 @@ function mainCtrl ($scope, $cookies, appService) {
     $scope.cart = [];
 
     $scope.customer = null;
-    $scope.altShippingAddresses = [];
-    $scope.sources = [];
+    $scope.altShippingAddr = null;
+    $scope.source = null;
 
     $scope.fullyLoggedIn = false;
 
@@ -51,37 +51,41 @@ function mainCtrl ($scope, $cookies, appService) {
             $scope.fullyLoggedIn = true;
             $scope.loaded.customer = true;
             $scope.loaded.billingAddr = true;
+
+            // Retrieve sources and filter out default source
+            appService.source.getSourceById({sourceId: customer.defaultSource}, function(source) {
+                if (source) {
+                    $scope.source = source;
+                }
+
+                $scope.loaded.source = true;
+            });
+
         }, function (err) {
             $scope.loaded.customer = true;
             $scope.loaded.billingAddr = true;
-        });
-
-        // Retrieve sources
-        appService.source.query(function(sources) {
-            if (sources) {
-                $scope.sources = sources;
-                $scope.loaded.sources = true;
-            }
-        }, function (err) {
-            $scope.loaded.sources = true;
+            $scope.loaded.source = true;
         });
 
         // Retrieve alt shipping addrs
-        appService.altShippingAddress.query(function(altShippingAddrs) {
-            if (altShippingAddrs) {
-                $scope.altShippingAddresses = altShippingAddrs;
-                $scope.loaded.altShippingAddrs = true;
+        appService.altShippingAddress.get(function(altShippingAddr) {
+
+            // If and alternate address exists
+            if (altShippingAddr.hasOwnProperty('name')) {
+                $scope.altShippingAddr = altShippingAddr;
             }
+            $scope.loaded.altShippingAddr = true;
+
         }, function (err) {
-            $scope.loaded.altShippingAddrs = true;
+            $scope.loaded.altShippingAddr = true;
         });
 
     }, function(err) {
         $scope.user = null;
         $scope.loaded.customer = true;
         $scope.loaded.billingAddr = true;
-        $scope.loaded.sources = true;
-        $scope.loaded.altShippingAddrs = true;
+        $scope.loaded.source = true;
+        $scope.loaded.altShippingAddr = true;
     });
 
     $scope.updateCartCookie = function() {
@@ -253,12 +257,14 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
         amount: 0
     };
 
+    $scope.chargeErr = null;
+
     $scope.Math = window.Math;
 
     $scope.processingOrder = false;
 
+    $scope.altShippingReq = false;
     $scope.newAltShipping = false;
-    $scope.selectedAltShippingAddr = false;
 
     $scope.calcSubtotal = function() {
         var cart = $scope.$parent.cart;
@@ -282,6 +288,18 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
 
         return (subtotal / 100).toFixed(2);
     };
+
+    // Add initial tax if customer is logged in and loaded
+    $scope.$watch('$parent.loaded.customer', function(newVal, oldVal) {
+        if (newVal !== oldVal) {
+            if (newVal) {
+                $scope.tax.rate = $scope.$parent.customer.taxRate;
+                $scope.tax.desc = $scope.$parent.customer.taxDesc;
+                $scope.calcSubtotal();
+                $scope.tax.amount = Math.ceil(($scope.tax.rate * ($scope.subtotal)) / 100);
+            }
+        }
+    });
 
     $scope.billing = {
         address: {},
@@ -363,14 +381,11 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
         ]
     };
 
-    if ($scope.userCountry === 'US') {
-        $scope.activeProvinceSelect = $scope.formProvinces.us;
-        $scope.billing.address.country = 'US';
-    }
-    else {
-        $scope.activeProvinceSelect = $scope.formProvinces.canada;
-        $scope.billing.address.country = 'CA';
-    }
+    // Set Default to Canada until region loaded
+    $scope.billing.address.country = 'CA';
+    $scope.shipping.address.country = 'CA';
+    $scope.activeProvinceSelect = $scope.formProvinces.canada;
+    $scope.activeShippingProvinceSelect = $scope.formProvinces.canada;
 
     // Populate the expiry years for the form
     var currentYear = new Date().getFullYear();
@@ -379,6 +394,18 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
         expiryYears.push(currentYear + i);
     }
     $scope.ccExpYear = expiryYears;
+
+    // Update on load user region
+    $scope.$watch('$parent.userCountry', function(newVal, oldVal) {
+        if (newVal !== oldVal) {
+            if ( (newVal) && (newVal === 'US') ) {
+                $scope.billing.address.country = 'US';
+                $scope.shipping.address.country = 'US';
+                $scope.activeProvinceSelect = $scope.formProvinces.us;
+                $scope.activeShippingProvinceSelect = $scope.formProvinces.us;
+            }
+        }
+    });
 
     $scope.$watch('billing.address.country', function(newVal, oldVal) {
         if (newVal !== oldVal) {
@@ -417,6 +444,7 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
     $scope.placeOrder = function() {
 
         $scope.globalError = false;
+        $scope.validationErrors = {};
         $scope.processingOrder = true;
 
         // Validate billing and shipping address if applies
@@ -451,7 +479,6 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
 
                                 chargeCustomer(chargeMetadata, function(charge) {
                                     if (!charge) {
-                                        $scope.validationErrors.source.number = 'There was an issue processing your payment. Please try again or contact our support team';
                                         $scope.globalError = true;
                                         $scope.processingOrder = false;
                                     }
@@ -465,6 +492,10 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
                                     }
                                 });
                             }
+                            else {
+                                $scope.globalError = true;
+                                $scope.processingOrder = false;
+                            }
                         });
                     }
 
@@ -472,7 +503,6 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
                     else {
                         chargeCustomer(chargeMetadata, function(charge) {
                             if (!charge) {
-                                $scope.validationErrors.source.number = 'There was an issue processing your payment. Please try again or contact our support team';
                                 $scope.globalError = true;
                                 $scope.processingOrder = false;
                             }
@@ -488,14 +518,14 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
                     }
                 }
                 else {
-                    $scope.processingOrder = false;
                     $scope.globalError = true;
+                    $scope.processingOrder = false;
                 }
             });
         }
         else {
             $scope.processingOrder = false;
-            $scope.validationErrors = resultBilling.errors;
+            $scope.validationErrors.billing = resultBilling.errors;
             $scope.validationErrors.shipping = resultShipping.errors;
             $scope.globalError = true;
         }
@@ -510,7 +540,7 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
      *  - Create a new alternate shipping address and add it to the customer
      *  - Use alternate shipping address that the user has pre-selected
      *
-     * Not reuqired:
+     * Not required:
      *  - Use billing address for shipping (null for altShipping param)
      *
      *
@@ -536,18 +566,46 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
 
             // Create new altShippingAddress for customer
             appService.altShippingAddress.save({shipping: $scope.shipping}, function(newAltAddr) {
-                $scope.$parent.altShippingAddresses.push(newAltAddr);
-                $scope.selectedAltShippingAddr = newAltAddr;
+                $scope.$parent.altShippingAddr = newAltAddr;
                 $scope.newAltShipping = false;
 
                 payload.altShipping = newAltAddr;
 
-                // Create charge
-                appService.charge.save(payload, function(charge) {
-                    return callback(charge);
-                }, function(err) {
-                    return callback(false);
-                });
+                // If charge failed new token is required (user may have changed their card)
+                // Option to modify card in the form is only available on first ever checkout
+                if ( ($scope.billing.source.number) && ($scope.chargeErr) ) {
+                    validateUserPayment(function(result) {
+                        if (result) {
+
+                            // Update customer with new card
+                            appService.customer.update({item: 'source', data: $scope.billing.token}, function(customer) {
+
+                                payload.source = customer.default_source;
+
+                                // Create charge
+                                appService.charge.save(payload, function(charge) {
+                                    return callback(charge);
+                                }, function(err) {
+                                    handleStCCErr(err);
+                                    return callback(false);
+                                });
+
+                            }, function(err) {
+                                handleStCCErr(err);
+                                return callback(false);
+                            });
+                        }
+                    });
+                }
+                else {
+                    // Create charge
+                    appService.charge.save(payload, function(charge) {
+                        return callback(charge);
+                    }, function(err) {
+                        handleStCCErr(err);
+                        return callback(false);
+                    });
+                }
 
             }, function(err) {
                 return callback(false);
@@ -558,16 +616,46 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
         else {
 
             // Use pre-selected saved alternate address
-            if ($scope.selectedAltShippingAddr) {
-                payload.altShipping = $scope.selectedAltShippingAddr;
+            if ($scope.altShippingReq) {
+                payload.altShipping = $scope.altShippingAddr;
             }
 
-            // Create charge
-            appService.charge.save(payload, function(charge) {
-                return callback(charge);
-            }, function(err) {
-                return callback(false);
-            });
+            // If charge failed new token is required (user may have changed their card)
+            // Option to modify card in the form is only available on first ever checkout
+            if ( ($scope.billing.source.number) && ($scope.chargeErr) ) {
+                validateUserPayment(function(result) {
+                    if (result) {
+
+                        // Update customer with new card
+                        appService.customer.update({item: 'source', data: $scope.billing.token}, function(customer) {
+
+                            payload.source = customer.default_source;
+
+                            // Create charge
+                            appService.charge.save(payload, function(charge) {
+                                return callback(charge);
+                            }, function(err) {
+                                handleStCCErr(err);
+                                return callback(false);
+                            });
+
+                        }, function(err) {
+                            handleStCCErr(err);
+                            return callback(false);
+                        });
+                    }
+                });
+            }
+            else {
+                // Create charge
+                appService.charge.save(payload, function(charge) {
+                    return callback(charge);
+                }, function(err) {
+                    handleStCCErr(err);
+                    return callback(false);
+                });
+            }
+
         }
 
     }
@@ -640,7 +728,8 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
             data: {
                 billing: {
                     name: $scope.billing.name,
-                    address: $scope.billing.address
+                    address: $scope.billing.address,
+                    company: $scope.billing.company
                 },
                 source: $scope.billing.token
             }
@@ -655,31 +744,33 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
     // Validate new account creation
     function validateAccount(callback) {
 
-        if ( ($scope.$parent.user) && ($scope.$parent.user.email) && ($scope.$parent.user.email === $scope.billing.email) ) {
+        if ( ($scope.$parent.user) && ($scope.$parent.user.email) ) {
             return callback(true);
         }
 
         // Reset validation objects
         var validationFailed = false;
         var validateEmailFailed = false;
-        $scope.validationErrors = {};
+        $scope.validationErrors = {
+            billing: {}
+        };
 
         // Email format
         var emailRegex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
 
         // Check if email is valid
         if (!$scope.billing.email) {
-            $scope.validationErrors.email = 'Please enter your email';
+            $scope.validationErrors.billing.email = 'Please enter your email';
             validationFailed = true;
             validateEmailFailed = true;
         }
         else if ( $scope.billing.email.length > 254 ) {
-            $scope.validationErrors.email = 'Email is invalid because it is too long';
+            $scope.validationErrors.billing.email = 'Email is invalid because it is too long';
             validationFailed = true;
             validateEmailFailed = true;
         }
         else if ( !emailRegex.test($scope.billing.email) ) {
-            $scope.validationErrors.email = 'Please enter a valid email';
+            $scope.validationErrors.billing.email = 'Please enter a valid email';
             validationFailed = true;
             validateEmailFailed = true;
         }
@@ -696,7 +787,7 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
 
                 // Email exists validation
                 if (result.exists) {
-                    $scope.validationErrors.email = 'Email already in use. If this is your email, please login to your account.';
+                    $scope.validationErrors.billing.email = 'Email already in use. If this is your email, please login to your account.';
                     validationFailed = true;
                     return callback(false);
                 }
@@ -705,7 +796,7 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
                 }
 
             }).error(function(error) {
-                $scope.validationErrors.email = 'Email already in use. If this is your email, please login to your account.';
+                $scope.validationErrors.billing.email = 'Email already in use. If this is your email, please login to your account.';
                 return callback(false);
             });
         }
@@ -790,9 +881,11 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
         else if (addressInfo.address.country === 'US') {
             if (!numRegex.test(addressInfo.address.postal_code.toString())) {
                 validationErrors.address.postal_code = 'Zip code is invalid. Please enter in the form of: 10001';
+                validationFailed = true;
             }
             else if (addressInfo.address.postal_code.length > 5) {
                 validationErrors.address.postal_code = 'Zip code is invalid (more than 5 digits). Please enter in the form of: 10001';
+                validationFailed = true;
             }
         }
         else if (addressInfo.address.country === 'CA') {
@@ -802,9 +895,11 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
 
             if (!canadianPostalRegex.test(addressInfo.address.postal_code)) {
                 validationErrors.address.postal_code = 'Postal code is invalid. Please enter in the form of: A1B 2C3';
+                validationFailed = true;
             }
             else if (addressInfo.address.postal_code.length > 6) {
                 validationErrors.address.postal_code = 'Postal code is invalid (more than 6 characters). Please enter in the form of: A1B 2C3';
+                validationFailed = true;
             }
         }
 
@@ -863,12 +958,18 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
 
         // Attempt to generate token
         if (!validationFailed) {
+
+            // Append postal code for additional CC verification
+            // (Address line 1 check is currently not used)
+            $scope.billing.source.address_zip = $scope.billing.address.postal_code;
+
             $http({
                 url: '/api/token',
                 method: 'POST',
                 data: $scope.billing.source
             }).success(function(token) {
                 $scope.billing.token = token.id;
+                $scope.chargeErr = false;
                 return callback(true);
 
             }).error(function(err) {
@@ -884,11 +985,32 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
     }
 
     // Handle payment cc error codes
-    function handleStCCErr(errCode) {
+    function handleStCCErr(err) {
         // Reset validation objects
-        $scope.validationErrors = {
-            source: {}
-        };
+        if (!$scope.validationErrors) {
+            $scope.validationErrors = {
+                source: {},
+                billing: {
+                    address: {}
+                }
+            }
+        }
+        else if (!$scope.validationErrors.source) {
+            $scope.validationErrors.source = {};
+        }
+        else if (!$scope.validationErrors.billing) {
+            $scope.validationErrors.billing = {
+                address: {}
+            };
+        }
+
+        // Pick correct error code to switch on
+        var errCode = err;
+        if (err.data) {
+            errCode = err.data;
+        }
+
+        $scope.chargeErr = errCode;
 
         switch (errCode) {
             case 'invalid_number':
@@ -913,13 +1035,14 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
                 $scope.validationErrors.source.exp_month = 'Please enter a valid expiry year';
                 break;
             case 'invalid_cvc':
-                $scope.validationErrors.source.cvc = 'Please enter a valid CVV';
+                $scope.validationErrors.source.cvc = 'Please enter a valid CVC';
                 break;
             case 'incorrect_cvc':
-                $scope.validationErrors.source.cvc = 'Please enter a correct CVV';
+                $scope.validationErrors.source.cvc = 'Please enter a correct CVC';
                 break;
             case 'incorrect_zip':
-                $scope.validationErrors.source.address_zip = 'Invalid postal code for this card.';
+                $scope.validationErrors.billing.address.postal_code = 'Please make sure postal code matches credit card billing address';
+                $scope.validationErrors.source.number = 'Please make sure postal code matches credit card billing address';
                 break;
             default:
                 $scope.validationErrors.source.number = 'There was an issue processing your payment. Please try again or contact our support team';

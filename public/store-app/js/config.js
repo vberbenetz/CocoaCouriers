@@ -39,12 +39,17 @@ function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProv
 angular
     .module('storeapp')
     .config(config)
-    .run(function($rootScope, $state) {
+    .run(function($rootScope, $document, $state) {
         $rootScope.$on('$stateChangeStart', function(evt, to, params) {
             if (to.redirectTo) {
                 evt.preventDefault();
                 $state.go(to.redirectTo, params);
             }
+        });
+        $rootScope.$on('$stateChangeSuccess', function() {
+
+            // Scroll to top of page on state change
+            $document[0].documentElement.scrollTop = 0;
         });
         //$rootScope.state = $state;
     });

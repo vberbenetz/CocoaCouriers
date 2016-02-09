@@ -20,7 +20,7 @@ var chargeCtrl = function() {};
 
 chargeCtrl.prototype = {
 
-    oneTimeCharge: function (dbConnPool, customer, altShipping, cart, metadata, reqIP, callback) {
+    oneTimeCharge: function (dbConnPool, customer, source, altShipping, cart, metadata, reqIP, callback) {
 
 // TODO: ADD SHIPPING RATE FOR FUTURE CUSTOMERS OUTSIDE OF CANADA AND LOWER 48 STATES
         var shippingCost = 0;
@@ -55,6 +55,7 @@ chargeCtrl.prototype = {
 
         var chargePayload = {
             customer: customer.stripeId,
+            source: source,
             shipping: shipping,
             currency: chargeCurrency,
             metadata: metadata
@@ -191,6 +192,7 @@ chargeCtrl.prototype = {
                                 statement: 'INSERT INTO Charge SET ?',
                                 params: {
                                     id: charge.id,
+                                    altShippingAddressId: altShippingAddressId,
                                     created: new Date(charge.created * 1000),
                                     amount: charge.amount,
                                     currency: charge.currency,

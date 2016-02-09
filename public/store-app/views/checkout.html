@@ -19,317 +19,375 @@
     <section>
         <div class="container">
 
-            <form class="row clearfix" novalidate>
-                <div class="col-md-7 col-xs-12">
-
-                    <div class="heading-title text-center">
-                        <h4>Billing Address</h4>
+            <!-- EMPTY CART -->
+            <div class="panel panel-default" ng-show="$parent.cart.length==0">
+                <div class="panel-body">
+                    <div class="text-center">
+                        <h4>Shopping cart is empty!</h4>
+                        You have no items in your shopping cart.<br />
                     </div>
+                </div>
+                <div class="text-center margin-bottom-30">
+                    <button ui-sref="home" class="btn btn-green btn-lg"><span class="fa fa-reply"></span> Please Visit The Store</button>
+                </div>
+            </div>
+            <!-- /EMPTY CART -->
 
-                    <hr />
+            <div ng-show="$parent.cart.length > 0">
+                <form class="row clearfix" novalidate>
+                    <div class="col-md-7 col-xs-12">
 
-                    <div class="address-box" ng-show="fullyLoggedIn && $parent.loaded.billingAddr">
-                        <div class="bg-emerald-green opacity-9 radius-8 padding-top-15 padding-bottom-15">
-                            <div class="row margin-left-15 margin-right-15">
-                                <div class="col-xs-8">
-                                    <span class="text-white">{{ $parent.customer.name }} <br/></span>
-                                    <span ng-if="$parent.customer.company" class="text-white">{{ $parent.customer.company }}<br/></span>
-                                    <span class="text-white">{{ $parent.customer.street1 }} <br/></span>
-                                    <span class="text-white">{{ $parent.customer.street2 }} <br/></span>
-                                    <span ng-if="$parent.customer.street3" class="text-white">{{ $parent.customer.street3 }}<br/></span>
-                                    <span class="text-white">{{ $parent.customer.city }}, {{ $parent.customer.state }} <br/></span>
-                                    <span ng-if="$parent.customer.country==='CA'" class="text-white">Canada</span>
-                                    <span ng-if="$parent.customer.country==='US'" class="text-white">United States</span>
-                                </div>
-                                <div class="col-xs-4 text-right">
-                                    <div class="row margin-left-15">
-                                        <span class="fa fa-credit-card fa-3x text-white"></span>
-                                    </div>
-                                    <div class="row margin-left-15">
-                                        <a class="btn btn-sm btn-default" href="/My-Account">Update Billing</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <fieldset class="margin-top-30" ng-hide="fullyLoggedIn" ng-show="$parent.loaded.billingAddr">
-                        <div class="col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.name }">
-                            <label for="billing_name"><small>* Full Name</small></label>
-                            <input class="form-control required" id="billing_name" name="ccname"
-                                   type="text" ng-model="billing.name" required autocomplete="name" />
-                            <p class="text-danger" ng-show="validationErrors.name">{{ validationErrors.name }}</p>
-                        </div>
-                        <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.email }">
-                            <label for="billing_email"><small>* Email Address</small></label>
-                            <input class="form-control required" id="billing_email" name="email"
-                                   type="email" ng-model="billing.email" placeholder="Email Address" autocomplete="email" />
-                            <p class="text-danger" ng-show="validationErrors.email">{{ validationErrors.email }}</p>
-                        </div>
-                        <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.company }">
-                            <label for="billing_organization"><small>Company / Org</small></label>
-                            <input class="form-control" id="billing_organization" name="organization"
-                                   type="text" ng-model="billing.company" placeholder="(Optional)" autocomplete="organization" />
-                            <p class="text-danger" ng-show="validationErrors.company">{{ validationErrors.company }}</p>
-                        </div>
-                        <div class="col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.address.line1 }">
-                            <label for="billing_address1"><small>* Address</small></label>
-                            <input class="form-control required" id="billing_address1" name="address-line1"
-                                   type="text" ng-model="billing.address.line1" required autocomplete="address-line1" />
-                            <p class="text-danger" ng-show="validationErrors.address.line1">{{ validationErrors.address.line1 }}</p>
-
-                            <label for="billing_address2"><small>Apartment, Suite, Floor, etc...</small></label>
-                            <input class="form-control" id="billing_address2" name="address-line2"
-                                   type="text" ng-model="billing.address.line2" placeholder="(Optional) Ex: Apt 123" autocomplete="address-line2" />
-                            <p class="text-danger" ng-show="validationErrors.address.line2">{{ validationErrors.address.line2 }}</p>
-                        </div>
-                        <div class="col-md-6 col-xs-12" ng-class="{ 'has-error' : validationErrors.address.country }">
-                            <label for="billing_country"><small>* Country</small></label>
-                            <select id="billing_country" name="country" class="form-control input-normal" ng-model="billing.address.country">
-                                <option value="CA">Canada</option>
-                                <option value="US">United States</option>
-                            </select>
-                            <p class="text-danger" ng-show="validationErrors.address.country">{{ validationErrors.address.country }}</p>
-                        </div>
-                        <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.address.city }">
-                            <label for="billing_city"><small>* City / Town</small></label>
-                            <input class="form-control required" id="billing_city" name="city"
-                                   type="text" ng-model="billing.address.city" required autocomplete="address-level2" />
-                            <p class="text-danger" ng-show="validationErrors.address.city">{{ validationErrors.address.city }}</p>
-                        </div>
-                        <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.address.state }">
-                            <label for="billing_state"><small>* State / Province</small></label>
-                            <select class="form-control input-normal" id="billing_state" name="state"
-                                    ng-options="o.id as o.name for o in activeProvinceSelect" ng-model="billing.address.state" required>
-                            </select>
-                            <p class="text-danger" ng-show="validationErrors.address.state">{{ validationErrors.address.state }}</p>
-                        </div>
-                        <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.address.postal_code }">
-                            <label for="billing_postal"><small>* Postal/Zip Code</small></label>
-                            <input class="form-control required" id="billing_postal" name="postal"
-                                   type="text" ng-model="billing.address.postal_code" required autocomplete="postal-code" />
-                            <p class="text-danger" ng-show="validationErrors.address.postal_code">{{ validationErrors.address.postal_code }}</p>
-                        </div>
-                    </fieldset>
-
-                    <p class="margin-bottom-40" ng-show="$parent.loaded.altShippingAddrs">
-                        <input type="checkbox" ng-model="newAltShipping" />
-                        Shipping address is different from billing address
-                    </p>
-
-                    <div ng-show="newAltShipping && $parent.loaded.altShippingAddrs">
-
-                        <div class="heading-title text-center margin-top-40">
-                            <h4>Shipping Address</h4>
+                        <div class="heading-title text-center">
+                            <h4>Billing Address</h4>
                         </div>
 
                         <hr />
 
-                        <fieldset class="margin-top-30">
-                            <div class="col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.shipping.name }">
-                                <label for="shipping_name"><small>* Full Name</small></label>
-                                <input class="form-control required" id="shipping_name" name="name"
-                                       type="text" ng-model="shipping.name" placeholder="Name Of Recipient" autocomplete="off" />
-                                <p class="text-danger" ng-show="validationErrors.shipping.name">{{ validationErrors.shipping.name }}</p>
+                        <div class="address-box" ng-show="fullyLoggedIn && $parent.loaded.billingAddr">
+                            <div class="bg-emerald-green opacity-9 radius-8 padding-top-15 padding-bottom-15">
+                                <div class="row margin-left-15 margin-right-15">
+                                    <div class="col-xs-8">
+                                        <span class="text-white">{{ $parent.customer.name }} <br/></span>
+                                        <span ng-if="$parent.customer.company" class="text-white">{{ $parent.customer.company }}<br/></span>
+                                        <span class="text-white">{{ $parent.customer.street1 }} <br/></span>
+                                        <span ng-if="$parent.customer.street2" class="text-white">{{ $parent.customer.street2 }} <br/></span>
+                                        <span ng-if="$parent.customer.street3" class="text-white">{{ $parent.customer.street3 }}<br/></span>
+                                        <span class="text-white">{{ $parent.customer.city }}, {{ $parent.customer.state }} <br/></span>
+                                        <span ng-if="$parent.customer.country==='CA'" class="text-white">Canada</span>
+                                        <span ng-if="$parent.customer.country==='US'" class="text-white">United States</span>
+                                    </div>
+                                    <div class="col-xs-4 text-right">
+                                        <div class="row margin-left-15">
+                                            <span class="fa fa-credit-card fa-3x text-white"></span>
+                                        </div>
+                                        <div class="row margin-left-15">
+                                            <a class="btn btn-sm btn-default" href="/My-Account">Update Billing Info</a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.shipping.company }">
-                                <label for="shipping_company"><small>Company / Org</small></label>
-                                <input class="form-control" id="shipping_company" name="shipping-organization"
-                                       type="text" ng-model="shipping.company" placeholder="(Optional)" autocomplete="off" />
-                                <p class="text-danger" ng-show="validationErrors.shipping.company">{{ validationErrors.shipping.company }}</p>
-                            </div>
-                            <div class="col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.shipping.address.line1 }">
-                                <label for="shipping_address1"><small>* Address</small></label>
-                                <input class="form-control required" id="shipping_address1" name="shipping-address-line1"
-                                       type="text" ng-model="shipping.address.line1" autocomplete="off" />
-                                <p class="text-danger" ng-show="validationErrors.address.line1">{{ validationErrors.shipping.address.line1 }}</p>
+                        </div>
 
-                                <label for="shipping_address2"><small>Apartment, Suite, Floor, etc...</small></label>
-                                <input class="form-control" id="shipping_address2" name="shipping-address-line2"
-                                       type="text" ng-model="shipping.address.line2" placeholder="(Optional) Ex: Apt 123" autocomplete="off" />
-                                <p class="text-danger" ng-show="validationErrors.shipping.address.line2">{{ validationErrors.shipping.address.line2 }}</p>
+                        <fieldset class="margin-top-30" ng-hide="fullyLoggedIn" ng-show="$parent.loaded.billingAddr">
+                            <div class="col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.billing.name }">
+                                <label for="billing_name"><small>* Full Name</small></label>
+                                <input class="form-control required" id="billing_name" name="ccname"
+                                       type="text" ng-model="billing.name" required autocomplete="name" />
+                                <p class="text-danger" ng-show="validationErrors.billing.name">{{ validationErrors.billing.name }}</p>
                             </div>
-                            <div class="col-md-6 col-xs-12" ng-class="{ 'has-error' : validationErrors.shipping.address.country }">
-                                <label for="shipping_country"><small>* Country</small></label>
-                                <select id="shipping_country" name="shipping-country" class="form-control input-normal" ng-model="shipping.address.country">
+                            <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.billing.email }">
+                                <label for="billing_email"><small>* Email Address</small></label>
+                                <input class="form-control required" id="billing_email" name="email"
+                                       type="email" ng-model="billing.email" placeholder="Email Address" autocomplete="email" />
+                                <p class="text-danger" ng-show="validationErrors.billing.email">{{ validationErrors.billing.email }}</p>
+                            </div>
+                            <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.billing.company }">
+                                <label for="billing_organization"><small>Company / Org</small></label>
+                                <input class="form-control" id="billing_organization" name="organization"
+                                       type="text" ng-model="billing.company" placeholder="(Optional)" autocomplete="organization" />
+                                <p class="text-danger" ng-show="validationErrors.billing.company">{{ validationErrors.billing.company }}</p>
+                            </div>
+                            <div class="col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.billing.address.line1 }">
+                                <label for="billing_address1"><small>* Address</small></label>
+                                <input class="form-control required" id="billing_address1" name="address-line1"
+                                       type="text" ng-model="billing.address.line1" required autocomplete="address-line1" />
+                                <p class="text-danger" ng-show="validationErrors.billing.address.line1">{{ validationErrors.billing.address.line1 }}</p>
+
+                                <label for="billing_address2"><small>Apartment, Suite, Floor, etc...</small></label>
+                                <input class="form-control" id="billing_address2" name="address-line2"
+                                       type="text" ng-model="billing.address.line2" placeholder="(Optional) Ex: Apt 123" autocomplete="address-line2" />
+                                <p class="text-danger" ng-show="validationErrors.billing.address.line2">{{ validationErrors.billing.address.line2 }}</p>
+                            </div>
+                            <div class="col-md-6 col-xs-12" ng-class="{ 'has-error' : validationErrors.billing.address.country }">
+                                <label for="billing_country"><small>* Country</small></label>
+                                <select id="billing_country" name="country" class="form-control input-normal" ng-model="billing.address.country">
                                     <option value="CA">Canada</option>
                                     <option value="US">United States</option>
                                 </select>
-                                <p class="text-danger" ng-show="validationErrors.shipping.address.country">{{ validationErrors.shipping.address.country }}</p>
+                                <p class="text-danger" ng-show="validationErrors.billing.address.country">{{ validationErrors.billing.address.country }}</p>
                             </div>
-                            <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.shipping.address.city }">
-                                <label for="shipping_city"><small>* City / Town</small></label>
-                                <input class="form-control required" id="shipping_city" name="shipping-city"
-                                       type="text" ng-model="shipping.address.city" autocomplete="off" />
-                                <p class="text-danger" ng-show="validationErrors.shipping.address.city">{{ validationErrors.shipping.address.city }}</p>
+                            <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.billing.address.city }">
+                                <label for="billing_city"><small>* City / Town</small></label>
+                                <input class="form-control required" id="billing_city" name="city"
+                                       type="text" ng-model="billing.address.city" required autocomplete="address-level2" />
+                                <p class="text-danger" ng-show="validationErrors.billing.address.city">{{ validationErrors.billing.address.city }}</p>
                             </div>
-                            <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.shipping.address.state }">
-                                <label for="shipping_state"><small>* State / Province</small></label>
-                                <select class="form-control input-normal" id="shipping_state" name="shipping-state"
-                                        ng-options="o.id as o.name for o in activeShippingProvinceSelect" ng-model="shipping.address.state" required>
+                            <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.billing.address.state }">
+                                <label for="billing_state"><small>* State / Province</small></label>
+                                <select class="form-control input-normal" id="billing_state" name="state"
+                                        ng-options="o.id as o.name for o in activeProvinceSelect" ng-model="billing.address.state" required>
                                 </select>
-                                <p class="text-danger" ng-show="validationErrors.shippingaddress.state">{{ validationErrors.shipping.address.state }}</p>
+                                <p class="text-danger" ng-show="validationErrors.billing.address.state">{{ validationErrors.billing.address.state }}</p>
                             </div>
-                            <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.shipping.address.postal_code }">
-                                <label for="shipping_postal"><small>* Postal/Zip Code</small></label>
-                                <input class="form-control required" id="shipping_postal" name="shipping-postal"
-                                       type="text" ng-model="shipping.address.postal_code" autocomplete="off" />
-                                <p class="text-danger" ng-show="validationErrors.shipping.address.postal_code">{{ validationErrors.shipping.address.postal_code }}</p>
+                            <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.billing.address.postal_code }">
+                                <label for="billing_postal"><small>* Postal/Zip Code</small></label>
+                                <input class="form-control required" id="billing_postal" name="postal"
+                                       type="text" ng-model="billing.address.postal_code" required autocomplete="postal-code" />
+                                <p class="text-danger" ng-show="validationErrors.billing.address.postal_code">{{ validationErrors.billing.address.postal_code }}</p>
                             </div>
                         </fieldset>
-                    </div>
-                </div>
 
-                <div class="col-md-5 col-xs-12">
-                    <div class="clearfix">
+                        <p class="margin-bottom-40 margin-top-30" ng-show="$parent.loaded.altShippingAddr && !$parent.altShippingAddr">
+                            <input type="checkbox" ng-model="newAltShipping" />
+                            Shipping address is different from billing address
+                        </p>
+                        <p class="margin-bottom-40 margin-top-30" ng-show="$parent.loaded.altShippingAddr && $parent.altShippingAddr">
+                            <input type="checkbox" ng-model="altShippingReq" />
+                            Shipping address is different from billing address
+                        </p>
 
-                        <div class="panel panel-default">
-                            <div class="panel-heading text-center">
-                                <h4>Payment Method</h4>
+                        <div class="margin-top-40" ng-show="altShippingReq || newAltShipping">
+                            <div class="heading-title text-center">
+                                <h4>Shipping Address</h4>
                             </div>
-                            <div class="panel-body">
-                                <div ng-show="fullyLoggedIn && $parent.loaded.sources && $parent.sources.length > 0">
 
-                                    <div class="row margin-left-15 margin-right-15">
-                                        <div class="col-xs-6 col-xs-offset-3 col-md-12 col-md-offset-0 padding-top-15 padding-bottom-15 payment-method-border radius-8 text-center">
-                                            <div>
-                                                <span class="size-20">**** **** **** {{ $parent.sources[0].lastFour }}</span><br/>
-                                                <div class="margin-left-150 margin-top-20">
-                                                    <span ng-if="sources[0].brand==='Visa'" class="fa fa-cc-visa fa-3x color-visa"></span>
-                                                    <span ng-if="sources[0].brand==='MasterCard'" class="fa fa-cc-mastercard fa-3x color-mastercard"></span>
-                                                    <span ng-if="sources[0].brand==='American Express'" class="fa fa-cc-amex fa-3x color-amex"></span>
-                                                    <span ng-if="sources[0].brand==='Discover'" class="fa fa-cc-discover fa-3x color-discover"></span>
-                                                    <span ng-if="sources[0].brand==='Diners Club'" class="fa fa-cc-diners-club fa-3x color-diners-club"></span>
-                                                    <span ng-if="sources[0].brand==='JCB'" class="fa fa-cc-jcb fa-3x color-jcb"></span>
-                                                    <span ng-if="sources[0].brand==='Unknown'" class="fa fa-credit-card fa-3x text-gray"></span>
+                            <hr />
+
+                            <div ng-show="$parent.altShippingAddr">
+                                <div class="address-box margin-top-20">
+                                    <div class="bg-emerald-green opacity-9 radius-8 padding-top-15 padding-bottom-15">
+                                        <div class="row margin-left-15 margin-right-15">
+                                            <div class="col-xs-8">
+                                                <span class="text-white">{{ altShippingAddr.name }} <br/></span>
+                                                <span ng-if="altShippingAddr.company" class="text-white">{{ altShippingAddr.company }}<br/></span>
+                                                <span class="text-white">{{ altShippingAddr.street1 }} <br/></span>
+                                                <span ng-if="altShippingAddr.street2" class="text-white">{{ altShippingAddr.street2 }} <br/></span>
+                                                <span ng-if="altShippingAddr.street3" class="text-white">{{ altShippingAddr.street3 }}<br/></span>
+                                                <span class="text-white">{{ altShippingAddr.city }}, {{ altShippingAddr.state }} <br/></span>
+                                                <span ng-if="altShippingAddr.country==='CA'" class="text-white">Canada</span>
+                                                <span ng-if="altShippingAddr.country==='US'" class="text-white">United States</span>
+                                            </div>
+                                            <div class="col-xs-4 text-right">
+                                                <div class="row margin-left-15">
+                                                    <span class="fa fa-truck fa-3x text-white"></span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="row margin-top-20 margin-right-15">
-                                        <a class="btn btn-sm btn-default pull-right" href="/My-Account">Update Billing</a>
-                                    </div>
                                 </div>
+                            </div>
 
-                                <fieldset ng-show="!fullyLoggedIn && $parent.loaded.sources">
-                                    <div class="col-xs-12">
-                                        <div class="pull-right">
-                                            <span class="fa fa-cc-visa fa-2x color-visa"></span>
-                                            <span class="fa fa-cc-mastercard fa-2x color-mastercard"></span>
-                                            <span class="fa fa-cc-amex fa-2x color-amex"></span>
-                                            <span class="fa fa-cc-discover fa-2x color-discover"></span>
-                                            <span class="fa fa-cc-diners-club fa-2x color-diners-club"></span>
-                                            <span class="fa fa-cc-jcb fa-2x color-jcb"></span>
-                                        </div>
+                            <p class="margin-bottom-40 margin-top-30" ng-show="$parent.altShippingAddr">
+                                <input type="checkbox" ng-model="newAltShipping" />
+                                Different Shipping Address
+                            </p>
+
+                            <div ng-show="newAltShipping">
+
+                                <fieldset class="margin-top-30">
+                                    <div class="col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.shipping.name }">
+                                        <label for="shipping_name"><small>* Full Name</small></label>
+                                        <input class="form-control required" id="shipping_name" name="name"
+                                               type="text" ng-model="shipping.name" placeholder="Name Of Recipient" autocomplete="off" />
+                                        <p class="text-danger" ng-show="validationErrors.shipping.name">{{ validationErrors.shipping.name }}</p>
                                     </div>
-                                    <div class="col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.source.number }">
-                                        <label for="card_number"><small>* Card Number</small></label>
-                                        <input class="form-control input-normal" id="card_number" name="cardnumber"
-                                               type="text" ng-model="billing.source.number" required autocomplete="cc-number">
-                                        <p class="text-danger" ng-show="validationErrors.source.number">{{ validationErrors.source.number }}</p>
+                                    <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.shipping.company }">
+                                        <label for="shipping_company"><small>Company / Org</small></label>
+                                        <input class="form-control" id="shipping_company" name="shipping-organization"
+                                               type="text" ng-model="shipping.company" placeholder="(Optional)" autocomplete="off" />
+                                        <p class="text-danger" ng-show="validationErrors.shipping.company">{{ validationErrors.shipping.company }}</p>
                                     </div>
-                                    <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.source.exp_month }">
-                                        <label for="cc_exp_mon"><small>* Expiry Month</small></label>
-                                        <select id="cc_exp_mon" class="form-control input-normal" name="ccmonth" ng-model="billing.source.exp_month" required>
-                                            <option value="1">01 - January</option>
-                                            <option value="2">02 - February</option>
-                                            <option value="3">03 - March</option>
-                                            <option value="4">04 - April</option>
-                                            <option value="5">05 - May</option>
-                                            <option value="6">06 - June</option>
-                                            <option value="7">07 - July</option>
-                                            <option value="8">08 - August</option>
-                                            <option value="9">09 - September</option>
-                                            <option value="10">10 - October</option>
-                                            <option value="11">11 - November</option>
-                                            <option value="12">12 - December</option>
+                                    <div class="col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.shipping.address.line1 }">
+                                        <label for="shipping_address1"><small>* Address</small></label>
+                                        <input class="form-control required" id="shipping_address1" name="shipping-address-line1"
+                                               type="text" ng-model="shipping.address.line1" autocomplete="off" />
+                                        <p class="text-danger" ng-show="validationErrors.shipping.address.line1">{{ validationErrors.shipping.address.line1 }}</p>
+
+                                        <label for="shipping_address2"><small>Apartment, Suite, Floor, etc...</small></label>
+                                        <input class="form-control" id="shipping_address2" name="shipping-address-line2"
+                                               type="text" ng-model="shipping.address.line2" placeholder="(Optional) Ex: Apt 123" autocomplete="off" />
+                                        <p class="text-danger" ng-show="validationErrors.shipping.address.line2">{{ validationErrors.shipping.address.line2 }}</p>
+                                    </div>
+                                    <div class="col-md-6 col-xs-12" ng-class="{ 'has-error' : validationErrors.shipping.address.country }">
+                                        <label for="shipping_country"><small>* Country</small></label>
+                                        <select id="shipping_country" name="shipping-country" class="form-control input-normal" ng-model="shipping.address.country">
+                                            <option value="CA">Canada</option>
+                                            <option value="US">United States</option>
                                         </select>
-                                        <p class="text-danger" ng-show="validationErrors.source.exp_month">{{ validationErrors.source.exp_month }}</p>
+                                        <p class="text-danger" ng-show="validationErrors.shipping.address.country">{{ validationErrors.shipping.address.country }}</p>
                                     </div>
-                                    <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.source.exp_year }">
-                                        <label for="cc_exp_year"><small>* Expiry Year</small></label>
-                                        <select class="form-control input-normal" id="cc_exp_year" name="ccyear" ng-options="year for year in ccExpYear" ng-model="billing.source.exp_year" required>
+                                    <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.shipping.address.city }">
+                                        <label for="shipping_city"><small>* City / Town</small></label>
+                                        <input class="form-control required" id="shipping_city" name="shipping-city"
+                                               type="text" ng-model="shipping.address.city" autocomplete="off" />
+                                        <p class="text-danger" ng-show="validationErrors.shipping.address.city">{{ validationErrors.shipping.address.city }}</p>
+                                    </div>
+                                    <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.shipping.address.state }">
+                                        <label for="shipping_state"><small>* State / Province</small></label>
+                                        <select class="form-control input-normal" id="shipping_state" name="shipping-state"
+                                                ng-options="o.id as o.name for o in activeShippingProvinceSelect" ng-model="shipping.address.state" required>
                                         </select>
-                                        <p class="text-danger" ng-show="validationErrors.source.exp_year">{{ validationErrors.source.exp_year }}</p>
+                                        <p class="text-danger" ng-show="validationErrors.shipping.address.state">{{ validationErrors.shipping.address.state }}</p>
                                     </div>
-                                    <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.source.cvc }">
-                                        <label for="cc_cvc"><small>* CVC</small></label>
-                                        <input id="cc_cvc" type="text" name="cvc" class="form-control required" ng-model="billing.source.cvc" required />
-                                        <p class="text-danger" ng-show="validationErrors.source.cvc">{{ validationErrors.source.cvc }}</p>
+                                    <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.shipping.address.postal_code }">
+                                        <label for="shipping_postal"><small>* Postal/Zip Code</small></label>
+                                        <input class="form-control required" id="shipping_postal" name="shipping-postal"
+                                               type="text" ng-model="shipping.address.postal_code" autocomplete="off" />
+                                        <p class="text-danger" ng-show="validationErrors.shipping.address.postal_code">{{ validationErrors.shipping.address.postal_code }}</p>
                                     </div>
                                 </fieldset>
                             </div>
                         </div>
 
-                        <div class="panel panel-default">
-                            <div class="panel-heading text-center">
-                                <h4>Order Details</h4>
+                    </div>
+
+                    <div class="col-md-5 col-xs-12">
+                        <div class="clearfix">
+
+                            <div class="panel" ng-class="chargeErr ? 'panel-danger' : 'panel-default'">
+                                <div class="panel-heading text-center">
+                                    <h4>Payment Method</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <div ng-show="$parent.loaded.source && $parent.source">
+
+                                        <div class="row margin-bottom-15">
+                                            <div ng-show="globalError" class="alert alert-danger margin-top-30">
+                                                <strong>Error processing card. Please update your billing, or contact support.</strong>
+                                            </div>
+                                        </div>
+
+                                        <div class="row margin-left-15 margin-right-15">
+                                            <div class="col-xs-6 col-xs-offset-3 col-md-12 col-md-offset-0 padding-top-15 padding-bottom-15 radius-8 text-center" ng-class="chargeErr ? 'payment-method-border-error' : 'payment-method-border-default'">
+                                                <div>
+                                                    <span class="size-20">**** **** **** {{ $parent.source.lastFour }}</span><br/>
+                                                    <div class="margin-left-150 margin-top-20">
+                                                        <span ng-if="$parent.source.brand==='Visa'" class="fa fa-cc-visa fa-3x color-visa"></span>
+                                                        <span ng-if="$parent.source.brand==='MasterCard'" class="fa fa-cc-mastercard fa-3x color-mastercard"></span>
+                                                        <span ng-if="$parent.sources.brand==='American Express'" class="fa fa-cc-amex fa-3x color-amex"></span>
+                                                        <span ng-if="$parent.sources.brand==='Discover'" class="fa fa-cc-discover fa-3x color-discover"></span>
+                                                        <span ng-if="$parent.sources.brand==='Diners Club'" class="fa fa-cc-diners-club fa-3x color-diners-club"></span>
+                                                        <span ng-if="$parent.sources.brand==='JCB'" class="fa fa-cc-jcb fa-3x color-jcb"></span>
+                                                        <span ng-if="$parent.sources.brand==='Unknown'" class="fa fa-credit-card fa-3x text-gray"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row margin-top-20 margin-right-15">
+                                            <a href="/My-Account" class="btn btn-sm pull-right" ng-class="chargeErr ? 'btn-danger' : 'btn-default'">Add / Edit Card</a>
+                                        </div>
+                                    </div>
+
+                                    <fieldset ng-show="$parent.loaded.source && !$parent.source">
+                                        <div class="col-xs-12">
+                                            <div class="pull-right">
+                                                <span class="fa fa-cc-visa fa-2x color-visa"></span>
+                                                <span class="fa fa-cc-mastercard fa-2x color-mastercard"></span>
+                                                <span class="fa fa-cc-amex fa-2x color-amex"></span>
+                                                <span class="fa fa-cc-discover fa-2x color-discover"></span>
+                                                <span class="fa fa-cc-diners-club fa-2x color-diners-club"></span>
+                                                <span class="fa fa-cc-jcb fa-2x color-jcb"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.source.number }">
+                                            <label for="card_number"><small>* Card Number</small></label>
+                                            <input class="form-control input-normal" id="card_number" name="cardnumber"
+                                                   type="text" ng-model="billing.source.number" required autocomplete="cc-number">
+                                            <p class="text-danger" ng-show="validationErrors.source.number">{{ validationErrors.source.number }}</p>
+                                        </div>
+                                        <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.source.exp_month }">
+                                            <label for="cc_exp_mon"><small>* Expiry Month</small></label>
+                                            <select id="cc_exp_mon" class="form-control input-normal" name="ccmonth" ng-model="billing.source.exp_month" required>
+                                                <option value="1">01 - January</option>
+                                                <option value="2">02 - February</option>
+                                                <option value="3">03 - March</option>
+                                                <option value="4">04 - April</option>
+                                                <option value="5">05 - May</option>
+                                                <option value="6">06 - June</option>
+                                                <option value="7">07 - July</option>
+                                                <option value="8">08 - August</option>
+                                                <option value="9">09 - September</option>
+                                                <option value="10">10 - October</option>
+                                                <option value="11">11 - November</option>
+                                                <option value="12">12 - December</option>
+                                            </select>
+                                            <p class="text-danger" ng-show="validationErrors.source.exp_month">{{ validationErrors.source.exp_month }}</p>
+                                        </div>
+                                        <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.source.exp_year }">
+                                            <label for="cc_exp_year"><small>* Expiry Year</small></label>
+                                            <select class="form-control input-normal" id="cc_exp_year" name="ccyear" ng-options="year for year in ccExpYear" ng-model="billing.source.exp_year" required>
+                                            </select>
+                                            <p class="text-danger" ng-show="validationErrors.source.exp_year">{{ validationErrors.source.exp_year }}</p>
+                                        </div>
+                                        <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.source.cvc }">
+                                            <label for="cc_cvc"><small>* CVC</small></label>
+                                            <input id="cc_cvc" type="text" name="cvc" class="form-control required" ng-model="billing.source.cvc" required />
+                                            <p class="text-danger" ng-show="validationErrors.source.cvc">{{ validationErrors.source.cvc }}</p>
+                                        </div>
+                                    </fieldset>
+                                </div>
                             </div>
 
-                            <div class="panel-body">
-                                <div class="clearfix" ng-repeat="i in $parent.cart">
-                                    <p class="pull-left">{{ i.product.name }}</p>
-                                    <p class="pull-right"><input style="width:50px;" type="number" ng-model="$parent.cart[$index].quantity" maxlength="2" max="50" min="1" /> &times; ${{ (i.product.cadPrice / 100).toFixed(2) }}</p>
+                            <div class="panel panel-default">
+                                <div class="panel-heading text-center">
+                                    <h4>Order Details</h4>
                                 </div>
 
-                                <div class="divider double-line margin-top-10 margin-bottom-10"></div>
+                                <div class="panel-body">
+                                    <div class="clearfix" ng-repeat="i in $parent.cart">
+                                        <p class="pull-left">{{ i.product.name }}</p>
+                                        <p class="pull-right"><input style="width:50px;" type="number" ng-model="$parent.cart[$index].quantity" maxlength="2" max="50" min="1" /> &times; ${{ (i.product.cadPrice / 100).toFixed(2) }}</p>
+                                    </div>
 
-                                <span class="clearfix" ng-show="discount>0">
-                                    <span class="pull-right">- $ {{ (discount/100).toFixed(2) }}</span>
-                                    <span class="pull-left">Coupon Discount:  <em class="text-green">Discount Applied</em></span>
-                                </span>
+                                    <div class="divider double-line margin-top-10 margin-bottom-10"></div>
 
-                                <span class="clearfix">
-                                    <span class="pull-right">$ {{ calcSubtotal() }}</span>
-                                    <strong class="pull-left">Subtotal:</strong>
-                                </span>
-                                <span class="clearfix">
-                                    <h3><span class="pull-right label label-success" ><strong>FREE !</strong></span></h3>
-                                    <span class="pull-left">Shipping:</span>
-                                </span>
+                                    <span class="clearfix" ng-show="discount>0">
+                                        <span class="pull-right">- $ {{ (discount/100).toFixed(2) }}</span>
+                                        <span class="pull-left">Coupon Discount:  <em class="text-green">Discount Applied</em></span>
+                                    </span>
 
-                                <hr ng-show="tax.rate > 0" />
+                                    <span class="clearfix">
+                                        <span class="pull-right">$ {{ calcSubtotal() }}</span>
+                                        <strong class="pull-left">Subtotal:</strong>
+                                    </span>
+                                    <span class="clearfix">
+                                        <h3><span class="pull-right label label-success" ><strong>FREE !</strong></span></h3>
+                                        <span class="pull-left">Shipping:</span>
+                                    </span>
 
-                                <span class="clearfix" ng-show="tax.rate > 0">
-                                    <span class="pull-right">$ {{ (tax.amount / 100).toFixed(2) }}</span>
-                                    <span class="pull-left">{{ tax.desc }}:</span>
-                                    <span class="pull-left">&nbsp;</span>
-                                </span>
+                                    <hr ng-show="tax.rate > 0" />
 
-                                <hr />
+                                    <span class="clearfix" ng-show="tax.rate > 0">
+                                        <span class="pull-right">$ {{ (tax.amount / 100).toFixed(2) }}</span>
+                                        <span class="pull-left">{{ tax.desc }}:</span>
+                                        <span class="pull-left">&nbsp;</span>
+                                    </span>
 
-                                <span class="clearfix">
-                                    <span class="pull-right size-20">$ {{ ((subtotal + tax.amount) / 100).toFixed(2) }}</span>
-                                    <strong class="pull-left">TOTAL:</strong>
-                                </span>
+                                    <hr />
+
+                                    <span class="clearfix">
+                                        <span class="pull-right size-20">$ {{ ((subtotal + tax.amount) / 100).toFixed(2) }}</span>
+                                        <strong class="pull-left">TOTAL:</strong>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
 
-                        <button type="submit" ng-disabled="processingOrder" class="btn btn-green btn-xlg btn-featured" ng-click="placeOrder()">
-                            <span class="size-25 margin-top-20">Place Order </span>
-                            <i ng-show="processingOrder" class="three-quarters-loader margin-top-20"></i>
-                            <i ng-show="!processingOrder" class="fa fa-chevron-circle-right"></i>
-                        </button>
+                            <button type="submit" ng-disabled="processingOrder" class="btn btn-green btn-xlg btn-featured" ng-click="placeOrder()">
+                                <span class="size-25 margin-top-20">Place Order </span>
+                                <i ng-show="processingOrder" class="three-quarters-loader margin-top-20"></i>
+                                <i ng-hide="processingOrder" class="fa fa-chevron-circle-right"></i>
+                            </button>
 
-                        <div class="row">
-                            <div class="pull-right margin-top-20 margin-right-15">
-                                <a href="https://stripe.com/help/security" target="_blank">
-                                    <img src="/assets/images/security_seals/powered_by_stripe.png" />
-                                </a>
+                            <div class="row">
+                                <div class="pull-right margin-top-20 margin-right-15">
+                                    <a href="https://stripe.com/help/security" target="_blank">
+                                        <img src="/assets/images/security_seals/powered_by_stripe.png" />
+                                    </a>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="row">
-                            <div ng-show="globalError" class="alert alert-danger margin-top-30">
-                                <strong>Please correct the highlighted errors in the form</strong>
+                            <div class="row">
+                                <div ng-show="globalError" class="alert alert-danger margin-top-30">
+                                    <strong>Please correct the highlighted errors in the form</strong>
+                                </div>
                             </div>
-                        </div>
 
+                        </div>
                     </div>
-                </div>
 
-            </form>
+                </form>
+            </div>
 
         </div>
     </section>
