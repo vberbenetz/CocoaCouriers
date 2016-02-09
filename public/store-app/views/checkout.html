@@ -53,6 +53,7 @@
                                         <span ng-if="$parent.customer.street2" class="text-white">{{ $parent.customer.street2 }} <br/></span>
                                         <span ng-if="$parent.customer.street3" class="text-white">{{ $parent.customer.street3 }}<br/></span>
                                         <span class="text-white">{{ $parent.customer.city }}, {{ $parent.customer.state }} <br/></span>
+                                        <span class="text-white">{{ $parent.customer.postalCode }}<br/></span>
                                         <span ng-if="$parent.customer.country==='CA'" class="text-white">Canada</span>
                                         <span ng-if="$parent.customer.country==='US'" class="text-white">United States</span>
                                     </div>
@@ -154,6 +155,7 @@
                                                 <span ng-if="altShippingAddr.street2" class="text-white">{{ altShippingAddr.street2 }} <br/></span>
                                                 <span ng-if="altShippingAddr.street3" class="text-white">{{ altShippingAddr.street3 }}<br/></span>
                                                 <span class="text-white">{{ altShippingAddr.city }}, {{ altShippingAddr.state }} <br/></span>
+                                                <span class="text-white">{{ altShippingAddr.postalCode }}<br/></span>
                                                 <span ng-if="altShippingAddr.country==='CA'" class="text-white">Canada</span>
                                                 <span ng-if="altShippingAddr.country==='US'" class="text-white">United States</span>
                                             </div>
