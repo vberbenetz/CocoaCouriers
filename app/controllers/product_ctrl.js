@@ -10,40 +10,23 @@ productCtrl.prototype = {
 
     getById: function (productId, dbConnPool, callback) {
 
-        dbConnPool.getConnection(function (err, connection) {
+        var query = {
+            statement: 'SELECT p.*, m.name as m_name, m.description as m_description, m.origin as m_origin, m.website as m_website FROM Product p INNER JOIN Manufacturer m ON p.manufacturer_id=m.id WHERE p.id = ?',
+            params: [productId]
+        };
+
+        dbUtils.query(dbConnPool, query, function(err, rows) {
             if (err) {
-                return callback({
-                    status: 500,
-                    type: 'app',
-                    msg: {
-                        simplified: 'server_error',
-                        detailed: err
-                    }
-                }, null);
+                return callback(err, false);
             }
+            else if (rows.length < 1) {
+                return callback(err, {});
+            }
+            else {
+                return callback(err, rows[0]);
+            }
+        });
 
-            connection.query("SELECT * FROM Product WHERE id = ?", [productId], function (err, rows) {
-                connection.release();
-
-                if (err) {
-                    return callback({
-                        status: 500,
-                        type: 'app',
-                        msg: {
-                            simplified: 'server_error',
-                            detailed: err
-                        }
-                    }, null);
-                }
-                else if (rows.length < 1) {
-                    return callback(err, {});
-                }
-                else {
-                    return callback(err, rows[0]);
-                }
-
-            });
-        })
     },
 
     getByIdList: function (dbConnPool, productIds, callback) {
@@ -108,38 +91,18 @@ productCtrl.prototype = {
 
     list: function (dbConnPool, callback) {
 
-        dbConnPool.getConnection(function (err, connection) {
+        var query = {
+            statement: 'SELECT p.*, m.name as m_name, m.description as m_description, m.origin as m_origin, m.website as m_website FROM Product p INNER JOIN Manufacturer m ON p.manufacturer_id=m.id',
+            params: []
+        };
+
+        dbUtils.query(dbConnPool, query, function(err, rows) {
             if (err) {
-
-                return callback({
-                    status: 500,
-                    type: 'app',
-                    msg: {
-                        simplified: 'server_error',
-                        detailed: err
-                    }
-                }, null);
+                return callback(err, null);
             }
-
-            connection.query("SELECT * FROM Product", [], function (err, rows) {
-
-                connection.release();
-
-                if (err) {
-                    return callback({
-                        status: 500,
-                        type: 'app',
-                        msg: {
-                            simplified: 'server_error',
-                            detailed: err
-                        }
-                    }, null);
-                }
-                else {
-                    return callback(false, rows);
-                }
-
-            });
+            else {
+                return callback(false, rows);
+            }
         });
 
     }

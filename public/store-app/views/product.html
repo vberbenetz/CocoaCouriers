@@ -16,25 +16,35 @@
     <section>
         <div class="container">
 
+            <div class="row text-center">
+                <h1>{{ product.name }}</h1>
+                <h4 class="margin-top-neg-30 font-style-italic"><span class="font-cursive text-black">&lt;</span> {{ product.m_name }} <span class="font-cursive text-black">&gt;</span></h4>
+            </div>
+
+            <hr/>
+
             <div class="row">
 
                 <!-- IMAGE -->
-                <div class="col-sm-4">
-                    <img class="img-responsive" ng-src="{{ productImages[activeImageIndex] }}" alt="Image Not Found" />
-                    <img ng-repeat="pi in productImages" class="resize-shop-item-thumbnail" ng-src="{{ productImages[$index] }}"  alt="Image Thumbnail Not Found" />
+                <div class="col-sm-5 col-xs-12">
+                    <img class="resize-shop-product" ng-src="{{ productImages[activeImageIndex] }}" alt="Image Not Found" />
+                    <div class="row">
+                        <a ng-repeat="pi in productImages" href="" ng-click="$parent.activeImageIndex=$index">
+                            <img class="resize-shop-item-thumbnail" ng-src="{{ productImages[$index] }}"  alt="Image Thumbnail Not Found" />
+                        </a>
+                    </div>
                 </div>
                 <!-- /IMAGE -->
 
                 <!-- ITEM DESC -->
-                <div class="col-sm-8">
-
-                    <h1>{{ product.name }}</h1>
+                <div class="col-sm-7 col-xs-12">
 
                     <!-- price -->
                     <div class="row margin-bottom-30">
                         <div class="col-md-3 col-sm-4 col-xs-6">
                             <div class="shop-item-price">
-                                {{ (product.cadPrice / 100).toFixed(2) }}
+                                <div ng-show="$parent.userCountry==='CA'">$ {{ (product.cadPrice / 100).toFixed(2) }} CAD</div>
+                                <div ng-show="$parent.userCountry==='US'">$ {{ (product.usPrice / 100).toFixed(2) }} USD</div>
                             </div>
                             <br/>
                             <div class="clearfix">

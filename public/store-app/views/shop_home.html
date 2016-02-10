@@ -17,26 +17,30 @@
                                 <div class="thumbnail">
                                     <!-- product image(s) -->
                                     <a class="shop-item-image" ng-click="goToProduct(p)">
-                                        <img ng-src="{{ $parent.basePath + '/' + p.id + '-' + '1.png' }}" alt="Picture 1" />
-                                        <img ng-src="{{ $parent.basePath + '/' + p.id + '-' + '2.png' }}" alt="Picture 2" />
+                                        <img ng-src="{{ $parent.basePath + '/' + 'thumbnails' + '/' + p.id + '-' + 'T' + '-' + '1.png' }}" alt="Picture 1" />
+                                        <img ng-src="{{ $parent.basePath + '/' + 'thumbnails' + '/' + p.id + '-' + 'T' + '-' + '2.png' }}" alt="Picture 2" />
                                     </a>
                                     <!-- /product image(s) -->
 
                                 </div>
 
-                                <div class="shop-item-summary text-center">
-                                    <h2>{{ p.name }}</h2>
+                                <a href="" ng-click="goToProduct(p)">
+                                    <div class="shop-item-summary text-center">
 
-                                    <!-- price -->
-                                    <div class="shop-item-price">
-                                        {{ (p.cadPrice / 100).toFixed(2) }}
+                                        <h2 class="text-black size-15">{{ p.name }}</h2>
+
+                                        <!-- price -->
+                                        <div class="shop-item-price">
+                                            <div class="text-black" ng-show="$parent.userCountry==='CA'">$ {{ (p.cadPrice / 100).toFixed(2) }} CAD</div>
+                                            <div class="text-black" ng-show="$parent.userCountry==='US'">$ {{ (p.usPrice / 100).toFixed(2) }} USD</div>
+                                        </div>
+                                        <!-- /price -->
                                     </div>
-                                    <!-- /price -->
-                                </div>
+                                </a>
 
                                 <!-- buttons -->
                                 <div class="shop-item-buttons text-center">
-                                    <a class="btn btn-default" ng-click="addToCart(p)"><i class="fa fa-cart-plus"></i> Add to Cart</a>
+                                    <a class="btn btn-flat-green" ng-click="addToCart(p)"><i class="fa fa-cart-plus"></i> Add to Cart</a>
                                 </div>
                                 <!-- /buttons -->
                             </div>

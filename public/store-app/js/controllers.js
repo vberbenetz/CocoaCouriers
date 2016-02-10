@@ -168,7 +168,7 @@ function productCtrl ($scope, $state, $stateParams, appService) {
 // --------------- INITIAL LOAD UP OF PRODUCT --------------- //
 
     // Load product if parent list was not populated
-    if (typeof $scope.$parent.products === 'undefined') {
+    if (!$scope.$parent.products) {
         appService.product.get({productId: $stateParams.productId}, function(product) {
             $scope.product = product;
 
@@ -576,11 +576,10 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
                 if ( ($scope.billing.source.number) && ($scope.chargeErr) ) {
                     validateUserPayment(function(result) {
                         if (result) {
+                            payload.source = $scope.billing.token;
 
                             // Update customer with new card
-                            appService.customer.update({item: 'source', data: $scope.billing.token}, function(customer) {
-
-                                payload.source = customer.default_source;
+                            appService.customer.update({item: 'source', data: payload.source}, function(customer) {
 
                                 // Create charge
                                 appService.charge.save(payload, function(charge) {
@@ -628,8 +627,6 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
 
                         // Update customer with new card
                         appService.customer.update({item: 'source', data: $scope.billing.token}, function(customer) {
-
-                            payload.source = customer.default_source;
 
                             // Create charge
                             appService.charge.save(payload, function(charge) {
