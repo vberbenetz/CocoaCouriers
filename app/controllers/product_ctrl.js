@@ -105,6 +105,23 @@ productCtrl.prototype = {
             }
         });
 
+    },
+
+    listProfiles: function (dbConnPool, callback) {
+
+        var query = {
+            statement: 'SELECT * FROM ProductProfile',
+            params: []
+        };
+
+        dbUtils.query(dbConnPool, query, function(err, rows) {
+            if (err) {
+                return callback(err, null);
+            }
+            else {
+                return callback(false, rows);
+            }
+        });
     }
 
 };

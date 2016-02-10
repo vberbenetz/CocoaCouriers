@@ -1,24 +1,30 @@
 <div>
+    <section class="page-header page-header-xs">
+        <div class="container">
+            <h1>STORE</h1>
+        </div>
+    </section>
+
     <section>
         <div class="container">
 
             <div class="row">
 
                 <!-- RIGHT -->
-                <div class="col-lg-9 col-md-9 col-sm-9 col-lg-push-3 col-md-push-3 col-sm-push-3">
+                <div class="col-md-9 col-xs-12 col-md-push-3">
 
                     <ul class="shop-item-list row list-inline nomargin">
 
                         <!-- ITEM -->
-                        <li class="col-lg-3 col-sm-3" ng-repeat="p in $parent.products">
+                        <li class="col-md-3 col-sm-4 col-xs-6" ng-repeat="p in $parent.products" ng-init="activeThumbnail[$index]=1">
 
                             <div class="shop-item">
 
-                                <div class="thumbnail">
+                                <div class="thumbnail shop-thumbnail-fixed-size" ng-mouseover="activeThumbnail[$index]=2" ng-mouseleave="activeThumbnail[$index]=1">
                                     <!-- product image(s) -->
-                                    <a class="shop-item-image" ng-click="goToProduct(p)">
-                                        <img ng-src="{{ $parent.basePath + '/' + 'thumbnails' + '/' + p.id + '-' + 'T' + '-' + '1.png' }}" alt="Picture 1" />
-                                        <img ng-src="{{ $parent.basePath + '/' + 'thumbnails' + '/' + p.id + '-' + 'T' + '-' + '2.png' }}" alt="Picture 2" />
+                                    <a ng-click="goToProduct(p)">
+                                        <img ng-show="activeThumbnail[$index]==1" ng-src="{{ $parent.basePath + '/' + 'thumbnails' + '/' + p.id + '-' + 'T' + '-' + '1.png' }}" alt="Picture 1" />
+                                        <img ng-hide="activeThumbnail[$index]==1" ng-src="{{ $parent.basePath + '/' + 'thumbnails' + '/' + p.id + '-' + 'T' + '-' + '2.png' }}" alt="Picture 2" />
                                     </a>
                                     <!-- /product image(s) -->
 
@@ -55,43 +61,68 @@
                 </div>
 
                 <!-- LEFT -->
-                <div class="col-lg-3 col-md-3 col-sm-3 col-lg-pull-9 col-md-pull-9 col-sm-pull-9">
+                <div class="col-md-3 col-xs-12 col-md-pull-9 col-xs-pull-9">
 
                     <!-- CATEGORIES -->
                     <div class="side-nav margin-bottom-60">
 
-                        <div class="side-nav-head">
-                            <button class="fa fa-bars"></button>
-                            <h2>FILTER</h2>
-                        </div>
-
                         <uib-accordion close-others="false">
-                            <uib-accordion-group heading="Bean-To-Bar Chocolatier">
+                            <uib-accordion-group class="no-border" is-open="filterMenu.g1">
+                                <uib-accordion-heading>
+                                    Manufacturers
+                                    <span ng-show="!filterMenu.g1" class="fa fa-plus shop-filter-side-button pull-right"></span>
+                                    <span ng-show="filterMenu.g1" class="fa fa-minus shop-filter-side-button pull-right"></span>
+                                </uib-accordion-heading>
                                 <ul>
-                                    <li ng-repeat="p in metadata.producers"><a href="">{{ p }}</a></li>
+                                    <li ng-repeat="m in manufacturers"><a href="">{{ m.name }}</a></li>
                                 </ul>
                             </uib-accordion-group>
-                            <uib-accordion-group heading="Chocolatier Location">
+                            <uib-accordion-group class="no-border" is-open="filterMenu.g2">
+                                <uib-accordion-heading>
+                                    Chocolatier Location
+                                    <span ng-show="!filterMenu.g2" class="fa fa-plus shop-filter-side-button pull-right"></span>
+                                    <span ng-show="filterMenu.g2" class="fa fa-minus shop-filter-side-button pull-right"></span>
+                                </uib-accordion-heading>
                                 <ul>
                                     <li ng-repeat="po in metadata.producer_origins"><a href="">{{ po }}</a></li>
                                 </ul>
                             </uib-accordion-group>
-                            <uib-accordion-group heading="Cocoa Bean Origin">
+                            <uib-accordion-group class="no-border" is-open="filterMenu.g3">
+                                <uib-accordion-heading>
+                                    Cocoa Bean Origin
+                                    <span ng-show="!filterMenu.g3" class="fa fa-plus shop-filter-side-button pull-right"></span>
+                                    <span ng-show="filterMenu.g3" class="fa fa-minus shop-filter-side-button pull-right"></span>
+                                </uib-accordion-heading>
                                 <ul>
                                     <li ng-repeat="co in metadata.cocoa_origins"><a href="">{{ co }}</a></li>
                                 </ul>
                             </uib-accordion-group>
-                            <uib-accordion-group heading="Flavor Profiles">
+                            <uib-accordion-group class="no-border" is-open="filterMenu.g4">
+                                <uib-accordion-heading>
+                                    Flavor Profiles
+                                    <span ng-show="!filterMenu.g4" class="fa fa-plus shop-filter-side-button pull-right"></span>
+                                    <span ng-show="filterMenu.g4" class="fa fa-minus shop-filter-side-button pull-right"></span>
+                                </uib-accordion-heading>
                                 <ul>
-                                    <li ng-repeat="p in metadata.flavor_profiles"><a href="">{{ p }}</a></li>
+                                    <li ng-repeat="f in productProfiles.flavor"><a href="">{{ f.name }}</a></li>
                                 </ul>
                             </uib-accordion-group>
-                            <uib-accordion-group heading="Dietary Preferences">
+                            <uib-accordion-group class="no-border" is-open="filterMenu.g5">
+                                <uib-accordion-heading>
+                                    Dietary Preferences
+                                    <span ng-show="!filterMenu.g5" class="fa fa-plus shop-filter-side-button pull-right"></span>
+                                    <span ng-show="filterMenu.g5" class="fa fa-minus shop-filter-side-button pull-right"></span>
+                                </uib-accordion-heading>
                                 <ul>
-                                    <li ng-repeat="p in metadata.dietary_preferences"><a href="">{{ p }}</a></li>
+                                    <li ng-repeat="d in productProfiles.dietary"><a href="">{{ d.name }}</a></li>
                                 </ul>
                             </uib-accordion-group>
-                            <uib-accordion-group heading="Product Type">
+                            <uib-accordion-group class="no-border" is-open="filterMenu.g6">
+                                <uib-accordion-heading>
+                                    Product Type
+                                    <span ng-show="!filterMenu.g6" class="fa fa-plus shop-filter-side-button pull-right"></span>
+                                    <span ng-show="filterMenu.g6" class="fa fa-minus shop-filter-side-button pull-right"></span>
+                                </uib-accordion-heading>
                                 <ul>
                                     <li ng-repeat="p in metadata.product_type"><a href="">{{ p }}</a></li>
                                 </ul>

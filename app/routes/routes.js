@@ -2,7 +2,6 @@
 
 var path = require('path');
 
-var mailerCtrl = require('../controllers/mailer_ctrl');
 var tokenCtrl = require('../controllers/token_ctrl');
 var customerCtrl = require('../controllers/customer_ctrl');
 var productCtrl = require('../controllers/product_ctrl');
@@ -11,6 +10,7 @@ var planCtrl = require('../controllers/plan_ctrl');
 var subscriptionCtrl = require('../controllers/subscription_ctrl');
 var userCtrl = require('../controllers/user_ctrl');
 var chargeCtrl = require('../controllers/charge_ctrl');
+var manufacturerCtrl = require('../controllers/manufacturer_ctrl');
 
 var errorHandler = require('../utils/error_handler');
 
@@ -181,6 +181,17 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
         else {
             res.status(400).send('incorrect_parameter');
         }
+    });
+
+    app.get('/api/manufacturer', function (req, res, next) {
+        manufacturerCtrl.list(dbConnPool, function(err, manufacturers) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(manufacturers);
+            }
+        });
     });
 
 
@@ -375,6 +386,17 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
                 res.send(products);
             }
         })
+    });
+
+    app.get('/api/product/profile', function (req, res, next) {
+        productCtrl.listProfiles(dbConnPool, function(err, profiles) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(profiles);
+            }
+        });
     });
 
 

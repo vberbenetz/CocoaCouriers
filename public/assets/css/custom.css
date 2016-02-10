@@ -184,3 +184,18 @@ img.resize-shop-product {
 .payment-method-border-error {
     border: 4px solid red;
 }
+
+.no-border {
+    border: none;
+}
+
+.shop-filter-side-button {
+    margin-top: 5px;
+    opacity: 0.8;
+}
+
+.shop-thumbnail-fixed-size {
+    height :300px;
+    width :200px;
+    overflow :hidden;
+}

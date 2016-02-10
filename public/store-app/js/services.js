@@ -68,6 +68,10 @@ function appService($resource) {
             }
         ),
 
+        productProfile: $resource('/api/product/profile'),
+
+        manufacturer: $resource('/api/manufacturer'),
+
         charge: $resource('/api/charge')
     }
 }

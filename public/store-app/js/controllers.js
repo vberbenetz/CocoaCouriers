@@ -12,6 +12,13 @@ function mainCtrl ($scope, $cookies, appService) {
     $scope.altShippingAddr = null;
     $scope.source = null;
 
+    $scope.productProfiles = {
+        flavor: [],
+        dietary: []
+    };
+
+    $scope.manufacturers = [];
+
     $scope.fullyLoggedIn = false;
 
     $scope.loaded = {};
@@ -123,6 +130,36 @@ function storeCtrl ($scope, $state, appService) {
         }, function(err) {
         });
     }
+
+    if ($scope.$parent.manufacturers.length === 0) {
+        appService.manufacturer.query(function(manufacturers) {
+            $scope.$parent.manufacturers = manufacturers;
+        }, function(err) {
+        });
+    }
+
+    if ( ($scope.$parent.productProfiles.flavor.length === 0) || ($scope.$parent.productProfiles.dietary.length === 0) ) {
+
+        // Reset product profiles
+        $scope.$parent.productProfiles.flavor.length = 0;
+        $scope.$parent.productProfiles.dietary.length = 0;
+
+        appService.productProfile.query(function(productProfiles) {
+            for (var i = 0; i < productProfiles.length; i++) {
+                if (productProfiles[i].profileType === 'dietary') {
+                    $scope.$parent.productProfiles.dietary.push(productProfiles[i]);
+                }
+                else {
+                    $scope.$parent.productProfiles.flavor.push(productProfiles[i]);
+                }
+            }
+        }, function(err) {
+        });
+    }
+
+    $scope.filterMenu = {};
+
+    $scope.activeThumbnail = {};
 
     $scope.goToProduct = function (product) {
         $state.go('product', {productId: product.id});
