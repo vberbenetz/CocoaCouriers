@@ -1,0 +1,9 @@
+1) npm install all packages
+2) Complete database_setup_instructions.txt
+3) Update config_priv:
+    - ssl
+    - session
+    - cookie
+    - mySqlConfig
+    - gmailXOAuth2
+    - sKey (Stripe Prod key)
