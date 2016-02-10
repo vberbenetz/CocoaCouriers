@@ -31,16 +31,73 @@ config.coolDownPeriod = {
     end: 15
 };
 
-config.mailTemplate = {
+config.mailOptionsTemplate = {
+    content: {
+        subject: '{{subject}}',
+        html: {
+            start: '<div style="font-family: Arial,Helvetica Neue,Helvetica,sans-serif;">' +
+                    '<div style="background:rgba(59,35,20,1);width:800px;margin:0 auto;text-align:center;">' +
+                    '<a href="https://cocoacouriers.com">' +
+                    '<img src="cid:cocoa_email_logo" />' +
+                    '</a>' +
+                    '</div>' +
+                    '<br />' +
+                    '<div style="text-align:center;">' +
+                    '<div style="margin-top:30px;width:500px;text-align:left;display:inline-block;overflow:auto;word-wrap:normal">',
 
-    subject: '{{subject}}',
-    text: '{{rawMsg}}',
-    html: '<div><div style="background-color:#3B2314;height:100%;width=100%;text-align:center;margin-bottom:30px;"><img src="cid:cocoa_email_logo" /></div><br /><div style="text-align:center;"><div style="width:500px;text-align:left;display:inline-block;overflow:auto;word-wrap:normal">{{htmlMsg}}</div></div></div>',
-    attachments: [{
-        filename: 'email-logo-white.png',
-        path: '../../public/assets/images',
-        cid: 'cocoa_email_logo'
-    }]
+            end: '</div>' +
+                    '</div>' +
+                    '<hr style="margin-top:40px;margin-bottom:40px;opacity:0.4;"/>' +
+                    '<div style="text-align:center;margin-bottom:30px;">' +
+                    '<h5>Follow Us on Social Media</h5>' +
+                    '</div>' +
+                    '<div style="text-align:center">' +
+                    '<a href="https://instagram.com/cocoacouriers">' +
+                    '<img src="cid:instagram_logo" style="margin-left:35px;margin-right:35px;"/>' +
+                    '</a>' +
+                    '<a href="https://facebook.com/cocoacouriers">' +
+                    '<img src="cid:facebook_logo" style="margin-left:35px;margin-right:35px;"/>' +
+                    '</a>' +
+                    '<a href="https://twitter.com/CocoaCouriers">' +
+                    '<img src="cid:twitter_logo" style="margin-left:35px;margin-right:35px;"/>' +
+                    '</a>' +
+                    '<a href="https://pinterest.com/c_couriers">' +
+                    '<img src="cid:pinterest_logo" style="margin-left:35px;margin-right:35px;"/>' +
+                    '</a>' +
+                    '</div>' +
+                    '<div style="text-align:center;margin-top:30px;">' +
+                    '<a href="https://cocoacouriers.com">' +
+                    '<small style="opacity:0.5;">Cocoa Couriers</small>' +
+                    '</a>' +
+                    '</div>' +
+                    '</div>'
+        }
+    },
+    options: {
+        generateTextFromHTML: true,
+        attachments: [
+            {
+                path: __dirname + '/../../public/assets/images/email-logo-white.png',
+                cid: 'cocoa_email_logo'
+            },
+            {
+                path: __dirname + '/../../public/assets/images/social_logos/instagram_logo_30.png',
+                cid: 'instagram_logo'
+            },
+            {
+                path: __dirname + '/../../public/assets/images/social_logos/facebook_logo_30.png',
+                cid: 'facebook_logo'
+            },
+            {
+                path: __dirname + '/../../public/assets/images/social_logos/twitter_logo_30.png',
+                cid: 'twitter_logo'
+            },
+            {
+                path: __dirname + '/../../public/assets/images/social_logos/pinterest_logo_30.png',
+                cid: 'pinterest_logo'
+            }
+        ]
+    }
 };
 
 module.exports = config;

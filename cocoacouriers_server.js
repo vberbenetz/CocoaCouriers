@@ -18,6 +18,8 @@ var config = require('./app/configuration/config');
 var configPriv = require('./app/configuration/config_priv');
 var log = require('./app/utils/logger');
 
+var xoauth2Generator = require('xoauth2').createXOAuth2Generator(configPriv.gmailXOAuth2);
+
 var app = express();
 
 app.use(compression());
@@ -43,7 +45,14 @@ var pool = mysql.createPool({
 // ------------------------------------
 // Mailer Setup
 // ------------------------------------
-var mailTransporter = nodemailer.createTransport(configPriv.mailConfig);
+var mailTransporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        xoauth2: xoauth2Generator
+    }
+});
+
+var emailUtils = require('./app/utils/email_utils')(mailTransporter);
 
 // ------------------------------------
 // Passport auth
@@ -74,7 +83,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // REST api routes
-require('./app/routes/routes')(app, passport, pool, mailTransporter);
+require('./app/routes/routes')(app, passport, pool, emailUtils);
 
 // Error Handler
 app.use(function (err, req, res, next) {

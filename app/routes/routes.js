@@ -15,7 +15,7 @@ var chargeCtrl = require('../controllers/charge_ctrl');
 var errorHandler = require('../utils/error_handler');
 
 
-module.exports = function(app, passport, dbConnPool, mailTransporter) {
+module.exports = function(app, passport, dbConnPool, emailUtils) {
 
     // ================================================================================ //
     // ================================= Static Pages ================================= //
@@ -55,24 +55,14 @@ module.exports = function(app, passport, dbConnPool, mailTransporter) {
 
     app.post('/signup', passport.authenticate('local-signup'), function(req, res) {
 
-        var newUser = req.user;
-
-        // Send user their new temp password
-        mailerCtrl.sendNewAccount(mailTransporter, req.user, function(err, result) {
+        // Send user their auto generated password
+        emailUtils.sendNewPassword(req.user.email, req.user.rawPass, function(err, result) {
             if (err) {
-                var newUser = req.user;
-                if (newUser.rawPass) {
-                    delete newUser.rawPass;
-                }
-                errorHandler.handle(res, err, newUser, req.connection.remoteAddress);
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
             }
         });
 
-        // Remove non-hashed password (this is sent to user via email)
-        if (newUser.rawPass) {
-            delete newUser.rawPass;
-        }
-        res.send(newUser);
+        res.send(req.user);
     });
 
 
@@ -247,7 +237,7 @@ module.exports = function(app, passport, dbConnPool, mailTransporter) {
                     errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
                 }
                 else {
-                    chargeCtrl.oneTimeCharge(dbConnPool, customer, req.body.source, req.body.altShipping, req.body.cart, req.body.metadata, req.connection.remoteAddress, function(err, result) {
+                    chargeCtrl.oneTimeCharge(customer, req.body.source, req.body.altShipping, req.body.cart, req.body.metadata, dbConnPool, emailUtils, req.connection.remoteAddress, function(err, result) {
                         if (err) {
                             errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
                         }

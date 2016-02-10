@@ -20,7 +20,7 @@ var chargeCtrl = function() {};
 
 chargeCtrl.prototype = {
 
-    oneTimeCharge: function (dbConnPool, customer, source, altShipping, cart, metadata, reqIP, callback) {
+    oneTimeCharge: function (customer, source, altShipping, cart, metadata, dbConnPool, emailUtils, reqIP, callback) {
 
 // TODO: ADD SHIPPING RATE FOR FUTURE CUSTOMERS OUTSIDE OF CANADA AND LOWER 48 STATES
         var shippingCost = 0;
@@ -86,6 +86,7 @@ chargeCtrl.prototype = {
                 var amount = 0;
 
                 var shipmentItems = [];
+                var receiptProducts = [];
 
                 // Tabulate subtotal of products and add to ShipmentItems
                 for (var i = 0; i < products.length; i++) {
@@ -108,9 +109,16 @@ chargeCtrl.prototype = {
                                 price
                             ]);
 
+                            receiptProducts.push({
+                                name: products[i].name,
+                                quantity: cart[j].quantity,
+                                price: price
+                            })
                         }
                     }
                 }
+
+                var subtotal = amount;
 
                 amount += shippingCost;
 
@@ -126,7 +134,8 @@ chargeCtrl.prototype = {
                  * 1581
                  * $15.81
                  */
-                amount += Math.ceil((taxRate * (amount)) / 100);
+                var taxAmount = Math.ceil((taxRate * (amount)) / 100);
+                amount += taxAmount;
 
                 chargePayload.amount = amount;
 
@@ -210,6 +219,13 @@ chargeCtrl.prototype = {
 
                             // Save charge information
                             dbUtils.query(dbConnPool, chargeInsertQuery, function(err, result) {});
+
+                            // Send receipt email
+                            emailUtils.sendReceipt(customer.email, shipmentId, receiptProducts, subtotal, 0, shippingCost, {amount: taxAmount, rate: taxRate, desc: taxDesc}, amount, function(err, res) {
+                                if (err) {
+                                    log.error("Could not send receipt to customer", charge, reqIP);
+                                }
+                            });
 
                             return callback(null, charge);
                         }
