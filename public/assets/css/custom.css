@@ -159,3 +159,14 @@
     -webkit-background-size: cover;
     background-size: cover;
 }
+
+.color-facebook {
+    color: #3b5998;
+}
+
+.color-twitter {
+    color: #00aced;
+}
+.color-instagram {
+    color: #125688;
+}
