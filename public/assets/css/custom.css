@@ -199,3 +199,7 @@ img.resize-shop-product {
     width :200px;
     overflow :hidden;
 }
+
+.faded-panel {
+    opacity: 0.5;
+}

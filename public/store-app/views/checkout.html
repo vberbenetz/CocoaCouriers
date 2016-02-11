@@ -129,11 +129,11 @@
                         </fieldset>
 
                         <p class="margin-bottom-40 margin-top-30" ng-show="$parent.loaded.altShippingAddr && !$parent.altShippingAddr">
-                            <input type="checkbox" ng-model="newAltShipping" />
+                            <input type="checkbox" ng-model="newAltShipping" ng-change="calcCheckout()" />
                             Shipping address is different from billing address
                         </p>
                         <p class="margin-bottom-40 margin-top-30" ng-show="$parent.loaded.altShippingAddr && $parent.altShippingAddr">
-                            <input type="checkbox" ng-model="altShippingReq" />
+                            <input type="checkbox" ng-model="altShippingReq" ng-change="calcCheckout()" />
                             Shipping address is different from billing address
                         </p>
 
@@ -170,7 +170,7 @@
                             </div>
 
                             <p class="margin-bottom-40 margin-top-30" ng-show="$parent.altShippingAddr">
-                                <input type="checkbox" ng-model="newAltShipping" />
+                                <input type="checkbox" ng-model="newAltShipping" ng-change="calcCheckout()" />
                                 Different Shipping Address
                             </p>
 
@@ -321,7 +321,7 @@
                                 </div>
                             </div>
 
-                            <div class="panel panel-default">
+                            <div class="panel panel-default" ng-class="{'faded-panel': recalculatingTotal}">
                                 <div class="panel-heading text-center">
                                     <h4>Order Details</h4>
                                 </div>
@@ -329,7 +329,12 @@
                                 <div class="panel-body">
                                     <div class="clearfix" ng-repeat="i in $parent.cart">
                                         <p class="pull-left">{{ i.product.name }}</p>
-                                        <p class="pull-right"><input style="width:50px;" type="number" ng-model="$parent.cart[$index].quantity" maxlength="2" max="50" min="1" /> &times; ${{ (i.product.cadPrice / 100).toFixed(2) }}</p>
+                                        <p class="pull-right">
+                                            <input style="width:50px;" type="number" ng-model="$parent.cart[$index].quantity" ng-change="calcCheckout()" maxlength="2" max="50" min="1" />
+                                            &times;
+                                            <span ng-show="userCountry==='CA'">${{ (i.product.cadPrice / 100).toFixed(2) }}</span>
+                                            <span ng-show="userCountry==='US'">${{ (i.product.usPrice / 100).toFixed(2) }}</span>
+                                        </p>
                                     </div>
 
                                     <div class="divider double-line margin-top-10 margin-bottom-10"></div>
@@ -340,11 +345,12 @@
                                     </span>
 
                                     <span class="clearfix">
-                                        <span class="pull-right">$ {{ calcSubtotal() }}</span>
+                                        <span class="pull-right">$ {{ (subtotal/100).toFixed(2) }}</span>
                                         <strong class="pull-left">Subtotal:</strong>
                                     </span>
                                     <span class="clearfix">
-                                        <h3><span class="pull-right label label-success" ><strong>FREE !</strong></span></h3>
+                                        <h3 ng-show="shippingCost === 0" ><span class="pull-right label label-success" ><strong>FREE !</strong></span></h3>
+                                        <span ng-show="shippingCost > 0" class="pull-right">{{ (shippingCost/100).toFixed(2) }}</span>
                                         <span class="pull-left">Shipping:</span>
                                     </span>
 
@@ -359,13 +365,13 @@
                                     <hr />
 
                                     <span class="clearfix">
-                                        <span class="pull-right size-20">$ {{ ((subtotal + tax.amount) / 100).toFixed(2) }}</span>
+                                        <span class="pull-right size-20">$ {{ (total / 100).toFixed(2) }}</span>
                                         <strong class="pull-left">TOTAL:</strong>
                                     </span>
                                 </div>
                             </div>
 
-                            <button type="submit" ng-disabled="processingOrder" class="btn btn-green btn-xlg btn-featured" ng-click="placeOrder()">
+                            <button type="submit" ng-disabled="processingOrder || recalculatingTotal" class="btn btn-green btn-xlg btn-featured" ng-click="placeOrder()">
                                 <span class="size-25 margin-top-20">Place Order </span>
                                 <i ng-show="processingOrder" class="three-quarters-loader margin-top-20"></i>
                                 <i ng-hide="processingOrder" class="fa fa-chevron-circle-right"></i>

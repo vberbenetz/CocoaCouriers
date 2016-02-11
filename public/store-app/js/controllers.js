@@ -1,6 +1,6 @@
 'use strict';
 
-function mainCtrl ($scope, $cookies, appService) {
+function mainCtrl ($scope, $cookies, $http, appService) {
 
     $scope.basePath = '/assets/media';
 
@@ -46,6 +46,20 @@ function mainCtrl ($scope, $cookies, appService) {
     // Retrieve recent order from cookie
     $scope.recentShipmentId = $cookies.getObject('recentShipmentId');
 
+    var c = $cookies.get('uCrId');
+    if (!c) {
+        $http({
+            url: 'http://ipinfo.io/json',
+            method: 'GET'
+        }).success(function(res) {
+            $cookies.put('uCrId', res.country, [{secure: true}]);
+            $scope.userCountry = res.country;
+        }).error(function(err) {
+        });
+    }
+    else if ( (c == 'CA') || (c == 'US') ) {
+        $scope.userCountry = c;
+    }
 
     // Retrieve user object (check if logged in)
     appService.user.get(function(user) {
@@ -286,24 +300,29 @@ function cartCtrl ($scope) {
 }
 
 function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
-    $scope.discount = 0;
     $scope.subtotal = 0;
     $scope.tax = {
         rate: 0,
         desc: '',
         amount: 0
     };
+    $scope.shippingCost = 0;
+    $scope.discount = 0;
+    $scope.total = 0;
 
     $scope.chargeErr = null;
 
     $scope.Math = window.Math;
 
     $scope.processingOrder = false;
+    $scope.recalculatingTotal = false;
 
     $scope.altShippingReq = false;
     $scope.newAltShipping = false;
 
-    $scope.calcSubtotal = function() {
+    $scope.calcCheckout = function() {
+        $scope.recalculatingTotal = true;
+
         var cart = $scope.$parent.cart;
         var subtotal = 0;
         for (var s = 0; s < cart.length; s++) {
@@ -318,25 +337,38 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
 
         $scope.subtotal = subtotal;
 
-        // Update tax
-        $scope.tax.amount = Math.ceil(($scope.tax.rate * ($scope.subtotal)) / 100);
+        var shippingProvince = $scope.billing.address.state;
+        var shippingCountry = $scope.billing.address.country;
+        if ($scope.shipping.address.state && $scope.shipping.address.country) {
 
-        $scope.updateCartCookie();
+            // Use a new alternate shipping address as per the form
+            if ($scope.newAltShipping) {
+                shippingProvince = $scope.shipping.address.state;
+                shippingCountry = $scope.shipping.address.country;
+            }
 
-        return (subtotal / 100).toFixed(2);
-    };
-
-    // Add initial tax if customer is logged in and loaded
-    $scope.$watch('$parent.loaded.customer', function(newVal, oldVal) {
-        if (newVal !== oldVal) {
-            if (newVal) {
-                $scope.tax.rate = $scope.$parent.customer.taxRate;
-                $scope.tax.desc = $scope.$parent.customer.taxDesc;
-                $scope.calcSubtotal();
-                $scope.tax.amount = Math.ceil(($scope.tax.rate * ($scope.subtotal)) / 100);
+            // Use the existing saved alternate shipping address
+            else if ($scope.altShippingReq) {
+                shippingProvince = $scope.altShippingAddr.state;
+                shippingCountry = $scope.altShippingAddr.country;
             }
         }
-    });
+
+        calcShipping(shippingProvince, shippingCountry, subtotal, appService, function(shippingCost) {
+            $scope.shippingCost = shippingCost;
+
+            calcTaxPercentage(shippingProvince, appService, function(tax) {
+                tax.amount = Math.ceil((tax.rate * (subtotal - $scope.discount + shippingCost)) / 100);
+                $scope.tax = tax;
+
+                $scope.updateCartCookie();
+
+                $scope.total = subtotal + shippingCost - $scope.discount + tax.amount;
+
+                $scope.recalculatingTotal = false;
+            });
+        });
+    };
 
     $scope.billing = {
         address: {},
@@ -432,6 +464,19 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
     }
     $scope.ccExpYear = expiryYears;
 
+
+    // Initial calculation
+    //$scope.calcCheckout();
+
+
+
+    // Calculate subtotal initally
+    $scope.$watch('$parent.loaded.customer', function(newVal, oldVal) {
+        if (newVal) {
+            $scope.calcCheckout();
+        }
+    });
+
     // Update on load user region
     $scope.$watch('$parent.userCountry', function(newVal, oldVal) {
         if (newVal !== oldVal) {
@@ -446,37 +491,46 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
 
     $scope.$watch('billing.address.country', function(newVal, oldVal) {
         if (newVal !== oldVal) {
-            if (newVal === 'US') {
-                $scope.activeProvinceSelect = $scope.formProvinces.us;
-            }
-            else {
-                $scope.activeProvinceSelect = $scope.formProvinces.canada;
+            if (newVal) {
+                if (newVal === 'US') {
+                    $scope.activeProvinceSelect = $scope.formProvinces.us;
+                }
+                else {
+                    $scope.activeProvinceSelect = $scope.formProvinces.canada;
+                }
             }
         }
     });
 
     $scope.$watch('shipping.address.country', function(newVal, oldVal) {
         if (newVal !== oldVal) {
-            if (newVal === 'US') {
-                $scope.activeShippingProvinceSelect = $scope.formProvinces.us;
-            }
-            else {
-                $scope.activeShippingProvinceSelect = $scope.formProvinces.canada;
+            if (newVal) {
+                if (newVal === 'US') {
+                    $scope.activeShippingProvinceSelect = $scope.formProvinces.us;
+                }
+                else {
+                    $scope.activeShippingProvinceSelect = $scope.formProvinces.canada;
+                }
             }
         }
     });
 
-    // Update sales tax
     $scope.$watch('billing.address.state', function(newVal, oldVal) {
-        if (newVal != oldVal) {
+        if (newVal !== oldVal) {
             if (newVal) {
-                var tax = calculateTaxPercentage(newVal);
-                $scope.tax.rate = tax.rate;
-                $scope.tax.desc = tax.desc;
-                $scope.tax.amount = Math.ceil(($scope.tax.rate * ($scope.subtotal)) / 100);
+                $scope.calcCheckout();
             }
         }
     });
+
+    $scope.$watch('shipping.address.state', function(newVal, oldVal) {
+        if (newVal !== oldVal) {
+            if (newVal) {
+                $scope.calcCheckout();
+            }
+        }
+    });
+
 
     $scope.placeOrder = function() {
 
@@ -587,7 +641,8 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
     function chargeCustomer (chargeMetadata, callback) {
         var payload = {
             cart: [],
-            metadata: chargeMetadata
+            metadata: chargeMetadata,
+            uc: $scope.userCountry
         };
 
         var detailedCart = $scope.$parent.cart;
@@ -630,6 +685,9 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
                                 handleStCCErr(err);
                                 return callback(false);
                             });
+                        }
+                        else {
+                            return callback(false);
                         }
                     });
                 }
@@ -677,6 +735,9 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
                             handleStCCErr(err);
                             return callback(false);
                         });
+                    }
+                    else {
+                        return callback(false);
                     }
                 });
             }
@@ -1121,70 +1182,22 @@ function generateListOfProductImgLinks(basePath, productId, numImgs) {
     return imageLinks;
 }
 
-function calculateTaxPercentage(province) {
-    var taxPercentage = 0;
-    var taxDesc = '';
-    switch(province) {
-        case 'AB':
-            taxPercentage = 5;
-            taxDesc = 'GST (5%)';
-            break;
-        case 'BC':
-            taxPercentage = 12;
-            taxDesc = 'GST + PST (5% + 7%)';
-            break;
-        case 'MB':
-            taxPercentage = 13;
-            taxDesc = 'GST + PST (5% + 8%)';
-            break;
-        case 'NB':
-            taxPercentage = 13;
-            taxDesc = 'HST 13%';
-            break;
-        case 'NL':
-            taxDesc = 'HST 13%';
-            taxPercentage = 13;
-            break;
-        case 'NS':
-            taxDesc = 'HST 15%';
-            taxPercentage = 15;
-            break;
-        case 'NT':
-            taxDesc = 'GST 5%';
-            taxPercentage = 5;
-            break;
-        case 'NU':
-            taxDesc = 'GST 5%';
-            taxPercentage = 5;
-            break;
-        case 'ON':
-            taxDesc = 'HST 13%';
-            taxPercentage = 13;
-            break;
-        case 'PE':
-            taxDesc = 'HST 14%';
-            taxPercentage = 14;
-            break;
-        case 'QC':
-            taxDesc = 'GST + QST (5% + 9.975%)';
-            taxPercentage = 14.98;
-            break;
-        case 'SK':
-            taxDesc = 'GST + PST (5% + 10%)';
-            taxPercentage = 10;
-            break;
-        case 'YT':
-            taxDesc = 'GST 5%';
-            taxPercentage = 5;
-            break;
-        default:
-            taxDesc = '';
-            taxPercentage = 0;
-            break;
-    }
-
-    return {rate: taxPercentage, desc: taxDesc};
+function calcTaxPercentage (province, appService, callback) {
+    appService.taxInfo.get({province: province}, function(tax) {
+        return callback(tax);
+    }, function(err) {
+        return callback({rate:0,desc:''});
+    });
 }
+
+function calcShipping (province, country, amount, appService, callback) {
+    appService.shippingCost.get({province: province, country: country, amount: amount}, function(cost) {
+        return callback(cost.amount);
+    }, function(err) {
+        return callback(0);
+    });
+}
+
 
 // Create charge details metadata (safety net to verify customer order)
 function stringifyCartMetadata(cart) {

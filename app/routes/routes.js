@@ -11,6 +11,7 @@ var subscriptionCtrl = require('../controllers/subscription_ctrl');
 var userCtrl = require('../controllers/user_ctrl');
 var chargeCtrl = require('../controllers/charge_ctrl');
 var manufacturerCtrl = require('../controllers/manufacturer_ctrl');
+var helpers = require('../utils/helpers');
 
 var errorHandler = require('../utils/error_handler');
 
@@ -194,6 +195,16 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
         });
     });
 
+    app.get('/api/shipping-cost', function (req, res, next) {
+        var shippingCost = helpers.calculateShipping(req.query.province, req.query.country, req.query.amount);
+        res.send({amount: shippingCost});
+    });
+
+    app.get('/api/tax-info', function (req, res, next) {
+        var tax = helpers.calculateTaxPercentage(req.query.province);
+        res.send(tax);
+    });
+
 
     // ==================== STRIPE ROUTES ======================= //
 
@@ -248,7 +259,7 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
                     errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
                 }
                 else {
-                    chargeCtrl.oneTimeCharge(customer, req.body.source, req.body.altShipping, req.body.cart, req.body.metadata, dbConnPool, emailUtils, req.connection.remoteAddress, function(err, result) {
+                    chargeCtrl.oneTimeCharge(customer, req.body.uc, req.body.source, req.body.altShipping, req.body.cart, req.body.metadata, dbConnPool, emailUtils, req.connection.remoteAddress, function(err, result) {
                         if (err) {
                             errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
                         }

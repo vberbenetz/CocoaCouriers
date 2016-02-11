@@ -31,6 +31,9 @@ config.coolDownPeriod = {
     end: 15
 };
 
+// Cost of item at which shipping becomes free (amount in cents)
+config.freeShippingCutoff = 5000;
+
 config.mailOptionsTemplate = {
     content: {
         subject: '{{subject}}',

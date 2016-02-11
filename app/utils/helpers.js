@@ -103,6 +103,120 @@ helpers.prototype = {
                 country: obj.country
             }
         }
+    },
+
+    // Calculate shipping cost (in cents)
+    calculateShipping: function (province, country, chargeAmount) {
+
+        // Free shipping if amount is greater than cutoff
+        if (chargeAmount >= config.freeShippingCutoff) {
+            return 0;
+        }
+
+        if (country === 'CA') {
+            switch (province) {
+                case 'AB':
+                    return 1361;
+                case 'BC':
+                    return 1361;
+                case 'MB':
+                    return 1216;
+                case 'NB':
+                    return 1144;
+                case 'NL':
+                    return 1389;
+                case 'NS':
+                    return 1165;
+                case 'NT':
+                    return 1431;
+                case 'NU':
+                    return 2405;
+                case 'ON':
+                    return 903;
+                case 'PE':
+                    return 1155;
+                case 'QC':
+                    return 996;
+                case 'SK':
+                    return 1216;
+                case 'YT':
+                    return 1431;
+                default:
+                    return 903;
+            }
+        }
+        else if (country === 'US') {
+            return 600;
+        }
+        else {
+            return 0;
+        }
+    },
+
+    calculateTaxPercentage: function(province) {
+        var taxPercentage = 0;
+        var taxDesc = '';
+        switch(province) {
+            case 'AB':
+                taxPercentage = 5;
+                taxDesc = 'GST 5%';
+                break;
+            case 'BC':
+                taxPercentage = 12;
+                taxDesc = 'GST + PST (5% + 7%)';
+                break;
+            case 'MB':
+                taxPercentage = 13;
+                taxDesc = 'GST + PST (5% + 8%)';
+                break;
+            case 'NB':
+                taxPercentage = 13;
+                taxDesc = 'HST 13%';
+                break;
+            case 'NL':
+                taxDesc = 'HST 13%';
+                taxPercentage = 13;
+                break;
+            case 'NS':
+                taxDesc = 'HST 15%';
+                taxPercentage = 15;
+                break;
+            case 'NT':
+                taxDesc = 'GST 5%';
+                taxPercentage = 5;
+                break;
+            case 'NU':
+                taxDesc = 'GST 5%';
+                taxPercentage = 5;
+                break;
+            case 'ON':
+                taxDesc = 'HST 13%';
+                taxPercentage = 13;
+                break;
+            case 'PE':
+                taxDesc = 'HST 14%';
+                taxPercentage = 14;
+                break;
+            case 'QC':
+                taxDesc = 'GST + QST (5% + 9.975%)';
+                taxPercentage = 14.98;
+                break;
+            case 'SK':
+                taxDesc = 'GST + PST (5% + 10%)';
+                taxPercentage = 10;
+                break;
+            case 'YT':
+                taxDesc = 'GST 5%';
+                taxPercentage = 5;
+                break;
+            default:
+                taxDesc = '';
+                taxPercentage = 0;
+                break;
+        }
+
+        return {rate: taxPercentage, desc: taxDesc};
+
     }
 };
 

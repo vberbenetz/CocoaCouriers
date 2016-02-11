@@ -7,6 +7,8 @@ var userCtrl = require('./user_ctrl');
 
 var dbUtils = require('../utils/db_utils');
 
+var helpers = require('../utils/helpers');
+
 var stripe = require('stripe')(
     configPriv.sKey
 );
@@ -99,7 +101,7 @@ customerCtrl.prototype = {
         var email = req.user.email;
         var source = req.body.source;
         var billing = req.body.billing;
-        var tax = calculateTaxPercentage(billing.address.state);
+        var tax = helpers.calculateTaxPercentage(billing.address.state);
 
         // Move company to metadata from billing for stripe payload
         var company = null;
@@ -301,7 +303,7 @@ customerCtrl.prototype = {
                 break;
             case 'shipping':
                 payload = {shipping: data};
-                var tax = calculateTaxPercentage(data.address.state);
+                var tax = helpers.calculateTaxPercentage(data.address.state);
                 payload.metadata = {
                         taxRate: tax.rate,
                         taxDesc: tax.desc
@@ -407,72 +409,5 @@ customerCtrl.prototype = {
         });
     }
 };
-
-
-function calculateTaxPercentage(province) {
-    var taxPercentage = 0;
-    var taxDesc = '';
-    switch(province) {
-        case 'AB':
-            taxPercentage = 5;
-            taxDesc = 'GST 5%';
-            break;
-        case 'BC':
-            taxPercentage = 12;
-            taxDesc = 'GST + PST (5% + 7%)';
-            break;
-        case 'MB':
-            taxPercentage = 13;
-            taxDesc = 'GST + PST (5% + 8%)';
-            break;
-        case 'NB':
-            taxPercentage = 13;
-            taxDesc = 'HST 13%';
-            break;
-        case 'NL':
-            taxDesc = 'HST 13%';
-            taxPercentage = 13;
-            break;
-        case 'NS':
-            taxDesc = 'HST 15%';
-            taxPercentage = 15;
-            break;
-        case 'NT':
-            taxDesc = 'GST 5%';
-            taxPercentage = 5;
-            break;
-        case 'NU':
-            taxDesc = 'GST 5%';
-            taxPercentage = 5;
-            break;
-        case 'ON':
-            taxDesc = 'HST 13%';
-            taxPercentage = 13;
-            break;
-        case 'PE':
-            taxDesc = 'HST 14%';
-            taxPercentage = 14;
-            break;
-        case 'QC':
-            taxDesc = 'GST + QST (5% + 9.975%)';
-            taxPercentage = 14.98;
-            break;
-        case 'SK':
-            taxDesc = 'GST + PST (5% + 10%)';
-            taxPercentage = 10;
-            break;
-        case 'YT':
-            taxDesc = 'GST 5%';
-            taxPercentage = 5;
-            break;
-        default:
-            taxDesc = '';
-            taxPercentage = 0;
-            break;
-    }
-
-    return {rate: taxPercentage, desc: taxDesc};
-
-}
 
 module.exports = new customerCtrl();

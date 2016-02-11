@@ -4,6 +4,38 @@ function appService($resource) {
     return {
         user: $resource('/api/user'),
 
+        productProfile: $resource('/api/product/profile'),
+
+        manufacturer: $resource('/api/manufacturer'),
+
+        taxInfo: $resource('/api/tax-info',
+            {},
+            {
+                get: {
+                    method: 'GET',
+                    params: {
+                        province: '@province'
+                    },
+                    isArray: false
+                }
+            }
+        ),
+
+        shippingCost: $resource('/api/shipping-cost',
+            {},
+            {
+                get: {
+                    method: 'GET',
+                    params: {
+                        province: '@province',
+                        country: '@country',
+                        amount: '@amount'
+                    },
+                    isArray: false
+                }
+            }
+        ),
+
         customer: $resource('/api/customer',
             {},
             {
@@ -67,10 +99,6 @@ function appService($resource) {
                 }
             }
         ),
-
-        productProfile: $resource('/api/product/profile'),
-
-        manufacturer: $resource('/api/manufacturer'),
 
         charge: $resource('/api/charge')
     }

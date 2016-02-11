@@ -20,13 +20,13 @@ var chargeCtrl = function() {};
 
 chargeCtrl.prototype = {
 
-    oneTimeCharge: function (customer, source, altShipping, cart, metadata, dbConnPool, emailUtils, reqIP, callback) {
+    oneTimeCharge: function (customer, userCountry, source, altShipping, cart, metadata, dbConnPool, emailUtils, reqIP, callback) {
 
 // TODO: ADD SHIPPING RATE FOR FUTURE CUSTOMERS OUTSIDE OF CANADA AND LOWER 48 STATES
         var shippingCost = 0;
 
         var chargeCurrency = 'CAD';
-        if (customer.country === 'US') {
+        if ((userCountry) && (userCountry === 'US')) {
             chargeCurrency = 'USD';
         }
 
@@ -119,6 +119,11 @@ chargeCtrl.prototype = {
                 }
 
                 var subtotal = amount;
+
+                shippingCost = helpers.calculateShipping(shipping.address.province, shipping.address.country, subtotal);
+                if (!shippingCost) {
+                    shippingCost = 0;
+                }
 
                 amount += shippingCost;
 
