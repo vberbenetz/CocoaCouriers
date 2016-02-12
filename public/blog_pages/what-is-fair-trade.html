@@ -33,6 +33,10 @@
     <link href="../assets/css/header-1.css" rel="stylesheet" type="text/css" />
     <link href="../assets/css/color_scheme/green.css" rel="stylesheet" type="text/css" id="color_scheme" />
 
+    <!--Facebook Moderation ID -->
+    <meta property="fb:app_id" content="1667937230127095" />
+    <!--Facebook Moderation ID -->
+
 </head>
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -355,6 +359,9 @@
                             <div class="divider divider-dotted"><!-- divider --></div>
 
 						</div>
+                        <div class="col-md-2 col-sm-12">
+                            <div class="fb-comments" data-href="https://www.cocoacouriers.com/blog/what-is-fair-trade" data-width="400" data-numposts="5"></div>
+                        </div>
                     </div>
 				</div>
 			</section>
@@ -428,7 +435,25 @@
 		<script type="text/javascript" src="../assets/plugins/jquery/jquery-2.1.4.min.js"></script>
 
 		<script type="text/javascript" src="../assets/js/scripts.js"></script>
-		
 
+        <script type="text/javascript">
+            (function() {
+                window._pa = window._pa || {};
+                // _pa.orderId = "myOrderId"; // OPTIONAL: attach unique conversion identifier to conversions
+                // _pa.revenue = "19.99"; // OPTIONAL: attach dynamic purchase values to conversions
+                // _pa.productId = "myProductId"; // OPTIONAL: Include product ID for use with dynamic ads
+                var pa = document.createElement('script'); pa.type = 'text/javascript'; pa.async = true;
+                pa.src = ('https:' == document.location.protocol ? 'https:' : 'http:') + "//tag.marinsm.com/serve/56b8e3ecd1db8fef59000194.js";
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(pa, s);
+            })();
+        </script>
+
+        <script>(function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=1667937230127095";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
 	</body>
 </html>
