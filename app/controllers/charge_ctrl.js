@@ -120,7 +120,7 @@ chargeCtrl.prototype = {
 
                 var subtotal = amount;
 
-                shippingCost = helpers.calculateShipping(shipping.address.province, shipping.address.country, subtotal);
+                shippingCost = helpers.calculateShipping(shipping.address.state, shipping.address.country, subtotal);
                 if (!shippingCost) {
                     shippingCost = 0;
                 }
@@ -159,7 +159,8 @@ chargeCtrl.prototype = {
                         pkgLength: 0,
                         pkgWidth: 0,
                         pkgHeight: 0,
-                        shippingRequired: true
+                        shippingRequired: true,
+                        shipmentCost: shippingCost
                     }
                 };
 
@@ -209,6 +210,8 @@ chargeCtrl.prototype = {
                                     altShippingAddressId: altShippingAddressId,
                                     created: new Date(charge.created * 1000),
                                     amount: charge.amount,
+                                    taxAmount: taxAmount,
+                                    shippingCost: shippingCost,
                                     currency: charge.currency,
                                     customerId: charge.customer,
                                     failureCode: charge.failureCode,

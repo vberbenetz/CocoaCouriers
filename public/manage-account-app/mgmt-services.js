@@ -5,13 +5,6 @@ function appService($resource) {
         user: $resource('/api/user',
             {},
             {
-                updateEmail: {
-                    method: 'PUT',
-                    params: {
-                        item: 'email'
-                    },
-                    isArray: false
-                },
                 updatePassword: {
                     method: 'PUT',
                     params: {

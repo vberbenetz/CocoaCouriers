@@ -339,25 +339,28 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
 
         var shippingProvince = $scope.billing.address.state;
         var shippingCountry = $scope.billing.address.country;
-        if ($scope.shipping.address.state && $scope.shipping.address.country) {
 
-            // Use a new alternate shipping address as per the form
-            if ($scope.newAltShipping) {
-                shippingProvince = $scope.shipping.address.state;
-                shippingCountry = $scope.shipping.address.country;
-            }
+        // Use a new alternate shipping address as per the form
+        if ($scope.newAltShipping) {
+            shippingProvince = $scope.shipping.address.state;
+            shippingCountry = $scope.shipping.address.country;
+        }
 
-            // Use the existing saved alternate shipping address
-            else if ($scope.altShippingReq) {
-                shippingProvince = $scope.altShippingAddr.state;
-                shippingCountry = $scope.altShippingAddr.country;
-            }
+        // Use the existing saved alternate shipping address
+        else if ($scope.altShippingReq) {
+            shippingProvince = $scope.altShippingAddr.state;
+            shippingCountry = $scope.altShippingAddr.country;
         }
 
         calcShipping(shippingProvince, shippingCountry, subtotal, appService, function(shippingCost) {
             $scope.shippingCost = shippingCost;
 
-            calcTaxPercentage(shippingProvince, appService, function(tax) {
+            var taxState = $scope.billing.address.state;
+            if ($scope.$parent.fullyLoggedIn) {
+                taxState = $scope.$parent.customer.state;
+            }
+
+            calcTaxPercentage(taxState, appService, function(tax) {
                 tax.amount = Math.ceil((tax.rate * (subtotal - $scope.discount + shippingCost)) / 100);
                 $scope.tax = tax;
 

@@ -54,59 +54,6 @@ function membershipCtrl($scope, appService) {
         newPasswordConfirm: ''
     };
 
-    $scope.changeEmail = function() {
-
-        $scope.validationErrors = {};
-
-        var emailRegex = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-        var validationFailed = false;
-
-        // Check if email is valid
-        if (typeof $scope.formData.email === 'undefined') {
-            $scope.validationErrors.newEmail = 'Please enter your email';
-            validationFailed = true;
-        }
-        else if ( ($scope.formData.email.length == 0) || ($scope.formData.email === '') ) {
-            $scope.validationErrors.newEmail = 'Please enter your email';
-            validationFailed = true;
-        }
-        else if ( $scope.formData.email.length > 254 ) {
-            $scope.validationErrors.newEmail = 'Email is invalid because it is too long';
-            validationFailed = true;
-        }
-        else if ( !emailRegex.test($scope.formData.email) ) {
-            $scope.validationErrors.newEmail = 'Please enter a valid email';
-            validationFailed = true;
-        }
-
-        if (!validationFailed) {
-            var payload = {
-                newEmail: $scope.formData.email,
-                currentPassword: $scope.formData.currentPassword
-            };
-
-            appService.user.updateEmail(payload, function(data) {
-                // Reset vars
-                $scope.validationErrors = {};
-                $scope.formData = {};
-
-                $scope.$parent.account.email = data.email;
-
-            }, function(err) {
-                if (err.data === 'email_exists') {
-                    $scope.validationErrors.newEmail = 'This email is already in use';
-                }
-                else if (err.data === 'incorrect_password') {
-                    $scope.validationErrors.password = 'Your password is incorrect';
-                }
-                else {
-                    $scope.validationErrors.newEmail = 'Something went wrong with changing your email. Please try again';
-                    $scope.validationErrors.password = ' ';
-                }
-            });
-        }
-    };
-
     $scope.changePassword = function () {
 
         $scope.validationErrors = {};
@@ -115,7 +62,7 @@ function membershipCtrl($scope, appService) {
         // 1 Uppercase
         // 1 Lowercase
         // 1 Number
-        var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+        var passwordRegex = /^{8,}$/;
         var validationFailed = false;
 
         // Password validation
