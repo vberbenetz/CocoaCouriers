@@ -62,7 +62,7 @@ function membershipCtrl($scope, appService) {
         // 1 Uppercase
         // 1 Lowercase
         // 1 Number
-        var passwordRegex = /^{8,}$/;
+        var passwordRegex = /^[]{8,}$/;
         var validationFailed = false;
 
         // Password validation

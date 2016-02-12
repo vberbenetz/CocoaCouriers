@@ -295,6 +295,24 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
         });
     });
 
+    app.get('/api/legacy/customer', auth, function (req, res, next) {
+        var customerId = req.user.stId;
+
+        // Customer has no information associated with them
+        if (customerId === null) {
+            res.status(404).send();
+        }
+
+        customerCtrl.getLegacy(customerId, function (err, result) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(result);
+            }
+        });
+    });
+
     app.get('/api/customer/source', auth, function (req, res, next) {
         var stId = req.user.stId;
 
@@ -346,6 +364,19 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
             }
         });
 
+    });
+
+    app.post('/api/legacy/customer', function (req, res, next) {
+
+        // Create customer within Stripe
+        customerCtrl.createLegacy(req, res, dbConnPool, function (err, newCustomer) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(newCustomer);
+            }
+        });
     });
 
     app.post('/api/customer/altShippingAddr', auth, function (req, res, next) {
@@ -502,7 +533,7 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
                     req.body.data = {
                         card_error_code: err.cardErrorCode
                     };
-                    customerCtrl.update(req, res, function(customerErr, result) {
+                    customerCtrl.updateLegacy(req, res, function(customerErr, result) {
                         errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
                     });
                 }
@@ -516,7 +547,7 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
                 req.body.data = {
                     card_error_code: null
                 };
-                customerCtrl.update(req, res, function(customerErr, result) {
+                customerCtrl.updateLegacy(req, res, function(customerErr, result) {
                     res.send(result);
                 });
             }

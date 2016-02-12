@@ -302,7 +302,7 @@ angular.module('subscribe', ['ui.bootstrap'])
 
                     // Get st info
                     $http({
-                        url: '/api/customer',
+                        url: '/api/legacy/customer',
                         method: 'GET'
                     }).success(function(customer) {
                         $scope.customer = customer;
@@ -1215,7 +1215,7 @@ angular.module('subscribe', ['ui.bootstrap'])
 
         function createStCustomer(newUserEmail, callback) {
             $http({
-                url: '/api/customer',
+                url: '/api/legacy/customer',
                 method: 'POST',
                 data: {
                     email: newUserEmail,
