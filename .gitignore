@@ -2,5 +2,6 @@
 node_modules/
 logs/
 /public/assets/product_imgs/
+/public/assets/media/
 app/configuration/config_priv.js
 *~

@@ -15,7 +15,7 @@ function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProv
         .state('product', {
             templateUrl: '../store-app/views/product.html',
             controller: productCtrl,
-            url: '/item/:productId'
+            url: '/item/:urlSubPath'
         })
         .state('cart', {
             templateUrl: '../store-app/views/cart.html',

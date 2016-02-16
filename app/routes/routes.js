@@ -406,14 +406,29 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
 
     // ----------------- Product Related ---------------------- //
     app.get('/api/product', function (req, res, next) {
-        productCtrl.getById(req.query.productId, dbConnPool, function(err, product) {
-            if (err) {
-                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-            }
-            else {
-                res.send(product);
-            }
-        })
+        if (req.query.productId) {
+            productCtrl.getById(req.query.productId, dbConnPool, function(err, product) {
+                if (err) {
+                    errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                }
+                else {
+                    res.send(product);
+                }
+            });
+        }
+        else if (req.query.urlSubPath) {
+            productCtrl.getByUrlSubPath(req.query.urlSubPath, dbConnPool, function(err, product) {
+                if (err) {
+                    errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                }
+                else {
+                    res.send(product);
+                }
+            })
+        }
+        else {
+            res.status(400).send('bad_request');
+        }
     });
 
     app.get('/api/product/list', function (req, res, next) {

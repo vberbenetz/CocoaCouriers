@@ -70,6 +70,13 @@ function appService($resource) {
                         productId: '@productId'
                     },
                     isArray: false
+                },
+                getByUrlSubPath: {
+                    method: 'GET',
+                    params: {
+                        urlSubPath: '@urlSubPath'
+                    },
+                    isArray: false
                 }
             }
         ),

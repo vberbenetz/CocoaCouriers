@@ -29,6 +29,27 @@ productCtrl.prototype = {
 
     },
 
+    getByUrlSubPath: function (urlSubPath, dbConnPool, callback) {
+        var query = {
+            statement: 'SELECT * FROM Product WHERE ?',
+            params: {
+                urlSubPath: urlSubPath
+            }
+        };
+
+        dbUtils.query(dbConnPool, query, function(err, rows) {
+            if (err) {
+                return callback(err, false);
+            }
+            else if (rows.length < 1) {
+                return callback(null, {});
+            }
+            else {
+                return callback(null, rows[0]);
+            }
+        });
+    },
+
     getByIdList: function (dbConnPool, productIds, callback) {
 
         var query = {

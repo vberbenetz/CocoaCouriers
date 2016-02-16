@@ -176,7 +176,7 @@ function storeCtrl ($scope, $state, appService) {
     $scope.activeThumbnail = {};
 
     $scope.goToProduct = function (product) {
-        $state.go('product', {productId: product.id});
+        $state.go('product', {urlSubPath: product.urlSubPath});
     };
 
     $scope.addToCart = function(product) {
@@ -220,7 +220,7 @@ function productCtrl ($scope, $state, $stateParams, appService) {
 
     // Load product if parent list was not populated
     if (!$scope.$parent.products) {
-        appService.product.get({productId: $stateParams.productId}, function(product) {
+        appService.product.getByUrlSubPath({urlSubPath: $stateParams.urlSubPath}, function(product) {
             $scope.product = product;
 
             $scope.productLoadFlag = true;
@@ -231,11 +231,11 @@ function productCtrl ($scope, $state, $stateParams, appService) {
     }
     // Fetch from parent list cache since it was loaded
     else {
-        $scope.product = findProductInList($scope.$parent.products, $stateParams.productId);
+        $scope.product = findProductInListByUrlSubPath($scope.$parent.products, $stateParams.urlSubPath);
 
         // Not in parent cache
         if ($scope.product === null) {
-            appService.product.get({productId: $stateParams.productId}, function(product) {
+            appService.product.getByUrlSubPath({urlSubPath: $stateParams.urlSubPath}, function(product) {
                 $scope.product = product;
 
                 $scope.productLoadFlag = true;
@@ -1157,6 +1157,16 @@ function postCheckoutCtrl ($scope) {
 function findProductInList(list, productId) {
     for (var i = 0; i < list.length; i++) {
         if (list[i].id === productId) {
+            return list[i];
+        }
+    }
+
+    return null;
+}
+
+function findProductInListByUrlSubPath(list, urlSubPath) {
+    for (var i = 0; i < list.length; i++) {
+        if (list[i].urlSubPath === urlSubPath) {
             return list[i];
         }
     }
