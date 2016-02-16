@@ -32,6 +32,10 @@ function config($routeProvider, $locationProvider) {
             controller: 'updateBillingCtrl',
             templateUrl: '/manage-account-app/views/update_billing.html'
         })
+        .when('/update-shipping', {
+            controller: 'updateShippingCtrl',
+            templateUrl: '/manage-account-app/views/update_shipping.html'
+        })
 
         .when('/billing-details', {
             controller: 'billingHistoryCtrl',

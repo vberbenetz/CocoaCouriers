@@ -7,16 +7,16 @@
     <div class="col-lg-10 col-lg-offset-1">
 
         <div class="row">
-            <div class="col-md-5 col-lg-3">
+            <div class="col-md-3 col-lg-3">
                 <h4>Account Details</h4>
             </div>
-            <div class="col-md-7 col-lg-9">
+            <div class="col-md-9 col-lg-9">
                 <div class="row">
-                    <div class="col-xs-6">
+                    <div class="col-md-7">
                         <h5>{{ account.email }}</h5>
                     </div>
-                    <div class="col-xs-6">
-                        <strong class="pull-right"><a class="pull-right text-blue" ng-href="/My-Account/change-password">Change Password</a></strong>
+                    <div class="col-md-5">
+                        <strong class="margin-top-20 pull-right"><a class="btn btn-default" ng-href="/My-Account/change-password">Change Password</a></strong>
                     </div>
                 </div>
             </div>
@@ -25,12 +25,12 @@
         <div class="divider"></div>
 
         <div class="row">
-            <div class="col-md-5 col-lg-3">
+            <div class="col-md-3 col-lg-3">
                 <h4>Billing Information</h4>
             </div>
-            <div class="col-md-7 col-lg-9">
+            <div class="col-md-9 col-lg-9">
                 <div class="row">
-                    <div class="col-xs-6">
+                    <div class="col-md-7">
                         <div class="address-box">
                             <div class="bg-emerald-green opacity-9 radius-8 padding-top-15 padding-bottom-15">
                                 <div class="row margin-left-15 margin-right-15">
@@ -40,8 +40,8 @@
                                         <span class="text-white">{{ customer.street1 }} <br/></span>
                                         <span ng-if="customer.street2" class="text-white">{{ customer.street2 }} <br/></span>
                                         <span ng-if="customer.street3" class="text-white">{{ customer.street3 }}<br/></span>
-                                        <span class="text-white">{{ capitalizeFirst(customer.city) }}, {{ customer.state }} <br/></span>
-                                        <span class="text-white">{{ formatPostalCode(customer.postalCode) }}<br/></span>
+                                        <span class="text-white">{{ customer.city | capitalizeFirst }}, {{ customer.state }} <br/></span>
+                                        <span class="text-white">{{ customer.postalCode | formatPostalCode }}<br/></span>
                                         <span ng-if="customer.country==='CA'" class="text-white">Canada</span>
                                         <span ng-if="customer.country==='US'" class="text-white">United States</span>
                                     </div>
@@ -72,8 +72,8 @@
                             </h4>
                         </div>
                     </div>
-                    <div class="col-xs-6">
-                        <strong><a class="pull-right text-blue" ng-href="/My-Account/update-billing">Update Billing Information</a></strong>
+                    <div class="col-md-5">
+                        <strong class="margin-top-20 pull-right"><a class="btn btn-default" ng-href="/My-Account/update-billing">Update Billing Information</a></strong>
                     </div>
                 </div>
             </div>
@@ -82,25 +82,37 @@
         <div class="divider"></div>
 
         <div class="row">
-            <div class="col-md-5 col-lg-3">
+            <div class="col-md-3 col-lg-3">
                 <h4>Shipping Information</h4>
             </div>
-            <div class="col-md-7 col-lg-9">
+            <div class="col-md-9 col-lg-9">
                 <div class="row">
-                    <div class="col-xs-6">
+                    <div class="col-md-7">
                         <div ng-show="customer">
                             <div class="address-box">
                                 <div class="bg-emerald-green opacity-9 radius-8 padding-top-15 padding-bottom-15">
                                     <div class="row margin-left-15 margin-right-15">
 
-                                        <div ng-show="!altShippingAddr" class="col-xs-8">
+                                        <div ng-show="altShippingAddr" class="col-xs-8">
+                                            <span class="text-white">{{ altShippingAddr.name }} <br/></span>
+                                            <span ng-if="altShippingAddr.company" class="text-white">{{ altShippingAddr.company }}<br/></span>
+                                            <span class="text-white">{{ altShippingAddr.street1 }} <br/></span>
+                                            <span ng-if="altShippingAddr.street2" class="text-white">{{ altShippingAddr.street2 }} <br/></span>
+                                            <span ng-if="altShippingAddr.street3" class="text-white">{{ altShippingAddr.street3 }}<br/></span>
+                                            <span class="text-white">{{ altShippingAddr.city | capitalizeFirst }}, {{ altShippingAddr.state }} <br/></span>
+                                            <span class="text-white">{{ altShippingAddr.postalCode | formatPostalCode }}<br/></span>
+                                            <span ng-if="altShippingAddr.country==='CA'" class="text-white">Canada</span>
+                                            <span ng-if="altShippingAddr.country==='US'" class="text-white">United States</span>
+                                        </div>
+
+                                        <div ng-hide="altShippingAddr" class="col-xs-8">
                                             <span class="text-white">{{ customer.name }} <br/></span>
                                             <span ng-if="customer.company" class="text-white">{{ customer.company }}<br/></span>
                                             <span class="text-white">{{ customer.street1 }} <br/></span>
                                             <span ng-if="customer.street2" class="text-white">{{ customer.street2 }} <br/></span>
                                             <span ng-if="customer.street3" class="text-white">{{ customer.street3 }}<br/></span>
-                                            <span class="text-white">{{ capitalizeFirst(customer.city) }}, {{ customer.state }} <br/></span>
-                                            <span class="text-white">{{ formatPostalCode(customer.postalCode) }}<br/></span>
+                                            <span class="text-white">{{ customer.city | capitalizeFirst }}, {{ customer.state }} <br/></span>
+                                            <span class="text-white">{{ customer.postalCode | formatPostalCode }}<br/></span>
                                             <span ng-if="customer.country==='CA'" class="text-white">Canada</span>
                                             <span ng-if="customer.country==='US'" class="text-white">United States</span>
                                         </div>
@@ -115,8 +127,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-6">
-                        <strong><a class="pull-right text-blue" ng-href="/My-Account/update-payment">Add / Update Shipping Address</a></strong><br/>
+                    <div class="col-md-5">
+                        <strong class="margin-top-20 pull-right"><a class="btn btn-default" ng-href="/My-Account/update-shipping">Add / Update Shipping Address</a></strong><br/>
                         <small class="pull-right">* If different from billing address</small>
                     </div>
                 </div>
@@ -131,13 +143,13 @@
             </div>
             <div class="col-md-7 col-lg-9">
                 <div class="row">
-                    <div class="col-xs-6">
+                    <div class="col-md-7">
                         <p>
                             Applies only to recurring subscriptions
                         </p>
                     </div>
-                    <div class="col-xs-6">
-                        <strong><a class="pull-right text-blue" ng-href="/My-Account/update-subscription">Update / Cancel Plan</a></strong>
+                    <div class="col-md-5">
+                        <strong><a class="pull-right btn btn-default" ng-href="/My-Account/update-subscription">Update / Cancel Plan</a></strong>
                     </div>
                 </div>
             </div>

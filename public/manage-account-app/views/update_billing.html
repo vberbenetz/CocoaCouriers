@@ -1,14 +1,62 @@
 <div class="ng-cloak" ng-cloak>
     <div class="divider double-line"></div>
 
-    <h1 class="text-center"><a href="/My-Account"><button class="btn btn-green pull-left"><span class="fa fa-chevron-left"></span> Back</button></a> Shipping and Billing Details <button class="btn btn-default pull-right" ng-click="logout()">Logout</button></h1>
+    <h1 class="text-center"><a href="/My-Account"><button class="btn btn-green pull-left"><span class="fa fa-chevron-left"></span> Back</button></a> Update Billing Information <button class="btn btn-default pull-right" ng-click="logout()">Logout</button></h1>
 
     <div class="divider double-line"></div>
 
     <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+
+        <div class="row">
+            <div class="margin-bottom-30 col-lg-6 col-lg-offset-6 col-md-9 col-md-offset-3">
+                <div class="address-box">
+                    <div class="bg-emerald-green opacity-9 radius-8 padding-top-15 padding-bottom-15">
+                        <div class="row margin-left-15 margin-right-15">
+                            <div class="col-xs-8">
+                                <span class="text-white">{{ $parent.customer.name }} <br/></span>
+                                <span ng-if="$parent.customer.company" class="text-white">{{ $parent.customer.company }}<br/></span>
+                                <span class="text-white">{{ $parent.customer.street1 }} <br/></span>
+                                <span ng-if="$parent.customer.street2" class="text-white">{{ $parent.customer.street2 }} <br/></span>
+                                <span ng-if="$parent.customer.street3" class="text-white">{{ $parent.customer.street3 }}<br/></span>
+                                <span class="text-white">{{ $parent.customer.city | capitalizeFirst }}, {{ $parent.customer.state }} <br/></span>
+                                <span class="text-white">{{ $parent.customer.postalCode | formatPostalCode }}<br/></span>
+                                <span ng-if="$parent.customer.country==='CA'" class="text-white">Canada</span>
+                                <span ng-if="$parent.customer.country==='US'" class="text-white">United States</span>
+                            </div>
+                            <div class="col-xs-4 text-right">
+                                <div class="row margin-left-15">
+                                    <span class="fa fa-credit-card fa-3x text-white"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div ng-show="source">
+                    <h5>
+                        <i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i>&nbsp;
+                        <i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i>&nbsp;
+                        <i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i>&nbsp;
+                        <strong class="size-20">{{ $parent.source.lastFour }}</strong>
+                        <span ng-if="$parent.source.brand=='Visa'" class="fa fa-3x fa-cc-visa color-visa pull-right"></span>
+                        <span ng-if="$parent.source.brand=='MasterCard'" class="fa fa-3x fa-cc-mastercard color-mastercard pull-right"></span>
+                        <span ng-if="$parent.source.brand=='American Express'" class="fa fa-3x fa-cc-amex color-amex pull-right"></span>
+                        <span ng-if="$parent.source.brand=='Discover'" class="fa fa-3x fa-cc-discover color-discover pull-right"></span>
+                        <span ng-if="$parent.source.brand=='Diners Club'" class="fa fa-3x fa-cc-diners-club color-diners-club pull-right"></span>
+                        <span ng-if="$parent.source.brand=='JCB'" class="fa fa-3x fa-cc-jcb color-jcb pull-right"></span>
+                    </h5>
+                    <h4>
+
+                    </h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider double-line"></div>
+
         <div class="box-static margin-bottom-30">
             <div class="box-title">
-                <h4>Billing Information</h4>
+                <h3>Update Billing</h3>
             </div>
             <form class="row clearfix" novalidate>
                 <fieldset>
@@ -65,9 +113,8 @@
                 </fieldset>
             </form>
 
-            <div class="box-title">
-                <h4>Payment Information</h4>
-            </div>
+            <hr />
+
             <form class="row clearfix" novalidate>
                 <fieldset>
                     <div class="col-xs-12">
@@ -117,7 +164,7 @@
                     </div>
                 </fieldset>
 
-                <button href="/My-Account" ng-show="!updateInProgress" ng-hide="successfullyUpdated" ng-disabled="updateInProgress" class="btn btn-default margin-right-20 pull-right">
+                <a href="/My-Account" ng-show="!updateInProgress" ng-hide="successfullyUpdated" ng-disabled="updateInProgress" class="btn btn-default margin-right-20 pull-right">Cancel</a>
                 <button ng-show="!updateInProgress" ng-hide="successfullyUpdated" ng-disabled="updateInProgress" class="btn btn-green margin-right-20 pull-right" ng-click="updateBilling()">
                     Update Billing
                 </button>
@@ -127,7 +174,7 @@
                 <div ng-show="successfullyUpdated" class="alert alert-success margin-top-30 padding-bottom-30">
                     <div class="row">
                         <strong class="pull-left">Successfully updated your billing information</strong>
-                        <button href="/My-Account" class="btn btn-default pull-right">Back To Account</button>
+                        <a href="/My-Account"><button class="btn btn-default pull-right">Back To Account</button></a>
                     </div>
                 </div>
             </form>
