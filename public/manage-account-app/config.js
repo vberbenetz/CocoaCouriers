@@ -36,6 +36,9 @@ function config($routeProvider, $locationProvider) {
         .when('/billing-details', {
             controller: 'billingHistoryCtrl',
             templateUrl: '/manage-account-app/views/billing_details.html'
+        })
+        .when('/update-subscription', {
+            templateUrl: '/manage-account-app/views/update_subscription.html'
         });
 
     $locationProvider.html5Mode(true);

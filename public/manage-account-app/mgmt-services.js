@@ -15,41 +15,36 @@ function appService($resource) {
             }
         ),
 
-        logout: $resource('/logout')
-    }
-}
-
-function stService($resource) {
-    return {
         customer: $resource('/api/customer',
             {},
             {
                 update: {
                     method: 'PUT',
-                    params: {},
                     isArray: false
                 }
             }
         ),
 
-        subscription: $resource('/api/subscription',
+        source: $resource('/api/customer/source',
             {},
             {
-                updatePlan: {
-                    method: 'PUT',
-                    params: {},
+                getSourceById: {
+                    method: 'GET',
+                    params: {
+                        sourceId: '@sourceId'
+                    },
                     isArray: false
                 }
             }
         ),
 
-        token: $resource('/api/token'),
+        altShippingAddress: $resource('/api/customer/altShippingAddr'),
 
-        plan: $resource('/api/plan')
+        logout: $resource('/logout')
     }
 }
 
+
 angular
     .module('account')
-    .factory('appService', appService)
-    .factory('stService', stService);
+    .factory('appService', appService);

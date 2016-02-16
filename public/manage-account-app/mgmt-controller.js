@@ -1,6 +1,6 @@
 'use strict';
 
-function mainCtrl($scope, $window, appService, stService) {
+function mainCtrl($scope, $window, appService) {
 
     $scope.account = {
         email: '',
@@ -13,11 +13,29 @@ function mainCtrl($scope, $window, appService, stService) {
         $scope.account.email = data.email;
         $scope.account.stId = data.stId;
 
-        // -----------------------------------------
-        // Retrieve St customer info
-        stService.customer.get(function (data) {
-            $scope.customer = data;
-        }, function (error) {
+        // Retrieve customer and billing address
+        appService.customer.get(function(customer) {
+            $scope.customer = customer;
+
+            // Retrieve sources and filter out default source
+            appService.source.getSourceById({sourceId: customer.defaultSource}, function(source) {
+                if (source) {
+                    $scope.source = source;
+                }
+            });
+
+        }, function (err) {
+        });
+
+        // Retrieve alt shipping addrs
+        appService.altShippingAddress.get(function(altShippingAddr) {
+
+            // If and alternate address exists
+            if (altShippingAddr.hasOwnProperty('name')) {
+                $scope.altShippingAddr = altShippingAddr;
+            }
+
+        }, function (err) {
         });
 
     }, function (error) {

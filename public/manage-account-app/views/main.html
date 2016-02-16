@@ -15,13 +15,8 @@
                     <div class="col-xs-6">
                         <h5>{{ account.email }}</h5>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-xs-6">
-                        <h5>Password: *******</h5>
-                    </div>
-                    <div class="col-xs-6">
-                        <strong><a class="pull-right text-blue" ng-href="/My-Account/change-password">Change Password</a></strong>
+                        <strong class="pull-right"><a class="pull-right text-blue" ng-href="/My-Account/change-password">Change Password</a></strong>
                     </div>
                 </div>
             </div>
@@ -36,20 +31,22 @@
             <div class="col-md-7 col-lg-9">
                 <div class="row">
                     <div class="col-xs-6">
-                        <h5>
-                            <span ng-if="customer.sources.data[0].brand=='Visa'" class="fa fa-3x fa-cc-visa color-visa"></span>
-                            <span ng-if="customer.sources.data[0].brand=='MasterCard'" class="fa fa-3x fa-cc-mastercard color-mastercard"></span>
-                            <span ng-if="customer.sources.data[0].brand=='Amex'" class="fa fa-3x fa-cc-amex color-amex"></span>
-                            <span ng-if="customer.sources.data[0].brand=='Discover'" class="fa fa-3x fa-cc-discover color-discover"></span>
-                            <span ng-if="customer.sources.data[0].brand=='Diners-Club'" class="fa fa-3x fa-cc-diners-club color-diners-club"></span>
-                            <span ng-if="customer.sources.data[0].brand=='JCB'" class="fa fa-3x fa-cc-jcb color-jcb"></span>
-                        </h5>
-                        <h4>
-                            <small><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i></small>&nbsp;
-                            <small><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i></small>&nbsp;
-                            <small><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i></small>&nbsp;
-                            {{ customer.sources.data[0].last4 }}
-                        </h4>
+                        <div ng-show="source">
+                            <h5>
+                                <span ng-if="source.brand=='Visa'" class="fa fa-3x fa-cc-visa color-visa"></span>
+                                <span ng-if="source.brand=='MasterCard'" class="fa fa-3x fa-cc-mastercard color-mastercard"></span>
+                                <span ng-if="source.brand=='Amex'" class="fa fa-3x fa-cc-amex color-amex"></span>
+                                <span ng-if="source.brand=='Discover'" class="fa fa-3x fa-cc-discover color-discover"></span>
+                                <span ng-if="source.brand=='Diners-Club'" class="fa fa-3x fa-cc-diners-club color-diners-club"></span>
+                                <span ng-if="source.brand=='JCB'" class="fa fa-3x fa-cc-jcb color-jcb"></span>
+                            </h5>
+                            <h4>
+                                <small><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i></small>&nbsp;
+                                <small><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i></small>&nbsp;
+                                <small><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i></small>&nbsp;
+                                {{ source.lastFour }}
+                            </h4>
+                        </div>
                     </div>
                     <div class="col-xs-6">
                         <strong><a class="pull-right text-blue" ng-href="/My-Account/update-payment">Update Payment / Shipping</a></strong>
@@ -62,17 +59,17 @@
 
         <div class="row">
             <div class="col-md-5 col-lg-3">
-                <h4>Order Details</h4>
+                <h4>Subscription Details</h4>
             </div>
             <div class="col-md-7 col-lg-9">
                 <div class="row">
                     <div class="col-xs-6">
-                        <h5>
-
-                        </h5>
+                        <p>
+                            Applies only to recurring subscriptions
+                        </p>
                     </div>
                     <div class="col-xs-6">
-                        <strong><a class="pull-right text-blue" ng-href="/subscribe">Change Plan</a></strong>
+                        <strong><a class="pull-right text-blue" ng-href="/My-Account/update-subscription">Update / Cancel Plan</a></strong>
                     </div>
                 </div>
             </div>
