@@ -167,7 +167,6 @@ userCtrl.prototype = {
         var currentPassword = req.body.currentPass;
 
         // Validate that new password meets criteria
-        var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
         if (typeof newPassword === 'undefined') {
             return callback({
                 status: 400,
@@ -178,7 +177,7 @@ userCtrl.prototype = {
                 }
             }, null);
         }
-        else if ( !passwordRegex.test(newPassword) ) {
+        else if ( (newPassword.length < 6) || (newPassword.length > 254) ) {
             return callback({
                 status: 400,
                 type: 'app',

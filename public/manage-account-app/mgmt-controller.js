@@ -23,20 +23,6 @@ function mainCtrl($scope, $window, appService, stService) {
     }, function (error) {
     });
 
-    // Retrieve plans
-    stService.plan.get(function(plans) {
-        plans = plans.data;
-        $scope.plans = [];
-        for (var i = 0; i < plans.length; i++) {
-            if ( (typeof plans[i].metadata.is_gift !== 'undefined') && (plans[i].metadata.is_gift === 'false') ) {
-                if (plans[i].currency === 'cad') {
-                    $scope.plans.push(plans[i]);
-                }
-            }
-        }
-    }, function(err) {
-    });
-
     $scope.logout = function() {
         appService.logout.save(function(data, status, headers, config) {
             $window.location.href = '/';
@@ -58,11 +44,6 @@ function membershipCtrl($scope, appService) {
 
         $scope.validationErrors = {};
 
-        // Min 8 characters
-        // 1 Uppercase
-        // 1 Lowercase
-        // 1 Number
-        var passwordRegex = /^[]{8,}$/;
         var validationFailed = false;
 
         // Password validation
@@ -74,12 +55,8 @@ function membershipCtrl($scope, appService) {
             $scope.validationErrors.newPassword = 'Please enter a new password';
             validationFailed = true;
         }
-        else if ( $scope.passwordData.newPassword.length > 254 ) {
-            $scope.validationErrors.newPassword = 'Please limit password to 250 characters';
-            validationFailed = true;
-        }
-        else if ( !passwordRegex.test($scope.passwordData.newPassword) ) {
-            $scope.validationErrors.newPassword = 'Password must contain at least 8 characters long, 1 uppercase letter, 1 lowercase letter and 1 number';
+        else if ( ($scope.passwordData.newPassword.length < 6) || ($scope.passwordData.newPassword.length > 254) ) {
+            $scope.validationErrors.password = 'Please use a password that is 6 to 200 characters';
             validationFailed = true;
         }
 
