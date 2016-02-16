@@ -24,6 +24,21 @@ function mainCtrl($scope, $window, appService) {
                 }
             });
 
+            $scope.capitalizeFirst = function(str) {
+                return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+            };
+
+            $scope.formatPostalCode = function(postalCode) {
+                if ($scope.customer.country === 'CA') {
+                    postalCode = postalCode.toUpperCase();
+                    postalCode = postalCode.replace(/ /g, '');
+                    return (postalCode.slice(0, -3) + ' ' + postalCode.slice(3));
+                }
+                else {
+                    return postalCode;
+                }
+            }
+
         }, function (err) {
         });
 
@@ -45,7 +60,7 @@ function mainCtrl($scope, $window, appService) {
         appService.logout.save(function(data, status, headers, config) {
             $window.location.href = '/';
         }, function(data, status, headers, config) {});
-    }
+    };
 
 }
 
@@ -121,249 +136,259 @@ function membershipCtrl($scope, appService) {
 
 }
 
-function updatePaymentCtrl ($scope, stService) {
+function updateBillingCtrl ($scope, $http, appService) {
 
-    $scope.formOptions = {
-        provinces: [
-            { id: 'AB', name: 'Alberta' },
-            { id: 'ON', name: 'Ontario' }
-        ],
-        countries: [
-            {id: 'CA', name: 'Canada'}
-        ],
-        ccExp: {
-            month: [
-                { id: 1, name: 'January - 01' },
-                { id: 2, name: 'February - 02' },
-                { id: 3, name: 'March - 03' },
-                { id: 4, name: 'April - 04' },
-                { id: 5, name: 'May - 05' },
-                { id: 6, name: 'June - 06' },
-                { id: 7, name: 'July - 07' },
-                { id: 8, name: 'August - 08' },
-                { id: 9, name: 'September - 09' },
-                { id: 10, name: 'October - 10' },
-                { id: 11, name: 'November - 11' },
-                { id: 12, name: 'December - 12' }
-            ]
-        }
+    $scope.billing = {
+        address: {}
     };
+    $scope.source = {};
+    $scope.sourceToken = null;
+
+    $scope.updateInProgress = false;
+
+    $scope.validationErrors = {};
+
+    $scope.formProvinces = {
+        canada: [
+            { id: 'AB', name: 'Alberta' },
+            { id: 'BC', name: 'British Columbia' },
+            { id: 'MB', name: 'Manitoba' },
+            { id: 'NB', name: 'New Brunswick' },
+            { id: 'NL', name: 'Newfoundland and Labrador' },
+            { id: 'NS', name: 'Nova Scotia' },
+            { id: 'ON', name: 'Ontario' },
+            { id: 'PE', name: 'Prince Edward Island' },
+            { id: 'QC', name: 'Quebec' },
+            { id: 'SK', name: 'Saskatchewan' },
+            { id: 'NT', name: 'Northwest Territories' },
+            { id: 'NU', name: 'Nunavut' },
+            { id: 'YT', name: 'Yukon' }
+        ],
+        us: [
+            { id: 'AL', name: 'Alabama' },
+            { id: 'AR', name: 'Arkansas' },
+            { id: 'AZ', name: 'Arizona' },
+            { id: 'CA', name: 'California' },
+            { id: 'CO', name: 'Colorado' },
+            { id: 'CT', name: 'Connecticut' },
+            { id: 'DE', name: 'Delaware' },
+            { id: 'FL', name: 'Florida' },
+            { id: 'GA', name: 'Georgia' },
+            { id: 'HI', name: 'Hawaii' },
+            { id: 'ID', name: 'Idaho' },
+            { id: 'IL', name: 'Illinois' },
+            { id: 'IA', name: 'Indiana' },
+            { id: 'KS', name: 'Kansas' },
+            { id: 'KY', name: 'Kentucky' },
+            { id: 'LA', name: 'Louisiana' },
+            { id: 'ME', name: 'Maine' },
+            { id: 'MD', name: 'Maryland' },
+            { id: 'MA', name: 'Massachusetts' },
+            { id: 'MI', name: 'Michigan' },
+            { id: 'MN', name: 'Minnesota' },
+            { id: 'MS', name: 'Mississippi' },
+            { id: 'MO', name: 'Missouri' },
+            { id: 'MT', name: 'Montana' },
+            { id: 'NE', name: 'Nebraska' },
+            { id: 'NV', name: 'Nevada' },
+            { id: 'NH', name: 'New Hampshire' },
+            { id: 'NJ', name: 'New Jersey' },
+            { id: 'NM', name: 'New Mexico' },
+            { id: 'NY', name: 'New York' },
+            { id: 'NC', name: 'North Carolina' },
+            { id: 'ND', name: 'North Dakota' },
+            { id: 'OH', name: 'Ohio' },
+            { id: 'OK', name: 'Oklahoma' },
+            { id: 'OR', name: 'Oregon' },
+            { id: 'PA', name: 'Pennsylvania' },
+            { id: 'RI', name: 'Rhode Island' },
+            { id: 'SC', name: 'South Carolina' },
+            { id: 'SD', name: 'South Dakota' },
+            { id: 'TN', name: 'Tennessee' },
+            { id: 'TX', name: 'Texas' },
+            { id: 'UT', name: 'Utah' },
+            { id: 'VT', name: 'Vermont' },
+            { id: 'VA', name: 'Virginia' },
+            { id: 'WA', name: 'Washington' },
+            { id: 'WV', name: 'West Virginia' },
+            { id: 'WI', name: 'Wisconsin' },
+            { id: 'WY', name: 'Wyoming' },
+            { id: 'DC', name: 'District of Columbia' }
+        ]
+    };
+
+    // Set Default to Canada until region loaded
+    $scope.billing.address.country = 'CA';
+    $scope.activeProvinceSelect = $scope.formProvinces.canada;
+    $scope.activeShippingProvinceSelect = $scope.formProvinces.canada;
+
     // Populate the expiry years for the form
     var currentYear = new Date().getFullYear();
     var expiryYears = [];
     for (var i = 0; i < 26; i++) {
         expiryYears.push(currentYear + i);
     }
-    $scope.formOptions.ccExp.year = expiryYears;
+    $scope.ccExpYear = expiryYears;
 
+    $scope.updateBilling = function() {
 
-    var customer = $scope.$parent.customer;
-    var source = customer.sources.data[0];
+        $scope.updateInProgress = true;
 
-    $scope.userInfo = {
-        name: customer.shipping.name,
-        address: customer.shipping.address,
-        source: {
-            object: 'card',
-            exp_month: source.exp_month,
-            exp_year: source.exp_year,
-            number: '**** **** **** ' + source.last4,
-            cvc: '',
-            name: source.name,
-            address_zip: source.address_zip
-        }
-    };
+        var billingAddrValiadtion = validateAddress($scope.billing);
 
-    // Pre-populate province, country, and exp_month on form from existing values
-    prePopulateShippingForm();
-    prePopulatePaymentForm();
+        if (billingAddrValiadtion.valid) {
 
+            validateUserPayment(function(result) {
+                if (result) {
 
+                    // Update customer with new billing address
+                    appService.customer.update({item: 'shipping', data: $scope.billing}, function(customer) {
 
-    $scope.updateShipping = function() {
+                        appService.customer.get(function(customer) {
+                            $scope.$parent.customer = customer;
+                        }, function(err) {
+                        });
 
-        if (validateAddressInfo()) {
-            var payload = {
-                item: 'shipping',
-                data: {
-                    name: $scope.userInfo.name,
-                    address: $scope.userInfo.address
-                },
-                customerId: $scope.$parent.customer.id
-            };
+                        // Update customer with new card
+                        appService.customer.update({item: 'source', data: $scope.sourceToken}, function(customer) {
+                            $scope.$parent.source.lastFour = customer.sources.data[0].last4;
+                            $scope.$parent.source.brand = customer.sources.data[0].brand;
+                            $scope.$parent.source.country = customer.sources.data[0].country;
+                            $scope.$parent.source.sourceId = customer.sources.data[0].id;
+                            $scope.$parent.customer.defaultSource = customer.sources.data[0].id;
+                            $scope.updateInProgress = false;
+                            $scope.successfullyUpdated = true;
 
-            stService.customer.update(payload, function(data) {
-                $scope.$parent.customer.shipping = data.shipping;
-                prePopulateShippingForm();
-            }, function(err) {
-                prePopulateShippingForm();
+                            $scope.billing = {
+                                address: {}
+                            };
+                            $scope.source = {};
+                            $scope.sourceToken = null;
+                        }, function(err) {
+                            handleStCCErr(err);
+                            $scope.updateInProgress = false;
+                            $scope.successfullyUpdated = false;
+                        });
+                    }, function(err) {
+                        $scope.updateInProgress = false;
+                        $scope.successfullyUpdated = false;
+                    });
+                }
+                else {
+                    $scope.updateInProgress = false;
+                    $scope.successfullyUpdated = false;
+                }
             });
-
-
+        }
+        else {
+            $scope.validationErrors.billing = billingAddrValiadtion.errors;
+            $scope.updateInProgress = false;
+            $scope.successfullyUpdated = false;
         }
     };
 
-    $scope.updatePayment = function() {
-        validateUserPayment(function (result, token) {
-            if (result) {
-                var payload = {
-                    item: 'source',
-                    data: token,
-                    customerId: $scope.$parent.customer.id
-                };
-
-                stService.customer.update(payload, function(data) {
-                    $scope.$parent.customer.sources = data.sources;
-                    $scope.userInfo.source.number = '**** **** **** ' + data.sources.data[0].last4;
-                    $scope.userInfo.source.cvc = '';
-                    prePopulatePaymentForm();
-                }, function(err) {
-                    translateStCCErr( handleStCCErr(err.data) );
-                    prePopulatePaymentForm();
-                });
-
-            }
-        })
-    };
-
-
-    // Pre-populate province and country on form from existing values
-    function prePopulateShippingForm() {
-        var stateList = $scope.formOptions.provinces;
-        for (var j = 0; j < stateList.length; j++) {
-            if (stateList[j].id === $scope.userInfo.address.state) {
-                $scope.userInfo.address.state = stateList[j];
-            }
-        }
-        var countryList = $scope.formOptions.countries;
-        for (var k = 0; k < countryList.length; k++) {
-            if (countryList[k].id === $scope.userInfo.address.country) {
-                $scope.userInfo.address.country = countryList[k];
-            }
-        }
-    }
-
-    // Pre-populate exp_month on form from existing values
-    function prePopulatePaymentForm() {
-        var ccMonExpList = $scope.formOptions.ccExp.month;
-        for (var l = 0; l < ccMonExpList.length; l++) {
-            if (ccMonExpList[l].id === $scope.userInfo.source.exp_month) {
-                $scope.userInfo.source.exp_month = ccMonExpList[l];
-            }
-        }
-    }
-
-    // Validate user's address
-    function validateAddressInfo() {
+    // Validate shipping address if using another one
+    function validateAddress(addressInfo) {
 
         // Reset validation objects
         var validationFailed = false;
-        $scope.validationErrors = {
+        var validationErrors = {
             address: {}
         };
 
-        // Upper and lower case letters, numbers, and spaces
-        var alphaSpaceRegex = /^[a-zA-Z ]+$/i;
+        var numRegex = /^[0-9]+$/i;
+        var canadianPostalRegex = /^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i;
 
         // Name validation
-        if (typeof $scope.userInfo.name === 'undefined') {
-            $scope.validationErrors.name = 'Please enter your full name';
+        if (!addressInfo.name) {
+            validationErrors.name = 'Please enter your full name';
             validationFailed = true;
         }
-        else if ( ($scope.userInfo.name.length == 0) || ($scope.userInfo.name === '') ) {
-            $scope.validationErrors.name = 'Please enter your full name';
+        else if ( addressInfo.name.length > 254 ) {
+            validationErrors.name = 'Name is too long. Please enter a valid name';
             validationFailed = true;
         }
-        else if ( !alphaSpaceRegex.test($scope.userInfo.name) ) {
-            $scope.validationErrors.name = 'Please use only letters and spaces for your full name';
-            validationFailed = true;
-        }
-        else if ( $scope.userInfo.name.length > 254 ) {
-            $scope.validationErrors.name = 'Name is too long. Please enter a valid name';
-            validationFailed = true;
+
+        if (addressInfo.company) {
+            if (addressInfo.company.length > 254) {
+                validationErrors.company = 'Company name is too long. Please limit to 250 characters';
+                validationFailed = true;
+            }
         }
 
         // Address validation
-        if (typeof $scope.userInfo.address.line1 === 'undefined') {
-            $scope.validationErrors.address.line1 = 'Please enter your address';
+        if (!addressInfo.address.line1) {
+            validationErrors.address.line1 = 'Please enter your address';
             validationFailed = true;
         }
-        else if ( ($scope.userInfo.address.line1.length == 0) || ($scope.userInfo.address.line1 === '') ) {
-            $scope.validationErrors.address.line1 = 'Please enter your address';
+        else if ( addressInfo.address.line1.length > 1024 ) {
+            validationErrors.address.line1 = 'Address is too long. Please enter a valid address';
             validationFailed = true;
         }
-        else if ( $scope.userInfo.address.line1.length > 1024 ) {
-            $scope.validationErrors.address.line1 = 'Address is too long. Please enter a valid address';
-            validationFailed = true;
-        }
-        if ($scope.userInfo.address.line2.length > 1024) {
-            $scope.validationErrors.address.line2 = 'Address line 2 is too long. Please enter a valid address for line 2';
-            validationFailed = true;
+        if (addressInfo.address.line2) {
+            if (addressInfo.address.line2.length > 1024) {
+                validationErrors.address.line2 = 'Address line 2 is too long. Please enter a valid address for line 2';
+                validationFailed = true;
+            }
         }
 
         // City validation
-        if (typeof $scope.userInfo.address.city === 'undefined') {
-            $scope.validationErrors.address.city = 'Please enter your city';
+        if (!addressInfo.address.city) {
+            validationErrors.address.city = 'Please enter your city';
             validationFailed = true;
         }
-        else if ( ($scope.userInfo.address.city.length == 0) || ($scope.userInfo.address.city === '') ) {
-            $scope.validationErrors.address.city = 'Please enter your city';
-            validationFailed = true;
-        }
-        else if ( $scope.userInfo.address.city.length > 1024 ) {
-            $scope.validationErrors.address.city = 'City is too long. Please enter a valid city';
+        else if ( addressInfo.address.city.length > 1024 ) {
+            validationErrors.address.city = 'City is too long. Please enter a valid city';
             validationFailed = true;
         }
 
         // State validation
-        if (typeof $scope.userInfo.address.state === 'undefined') {
-            $scope.validationErrors.address.state = 'Please select a province/state';
+        if (!addressInfo.address.state) {
+            validationErrors.address.state = 'Please select a province/state';
             validationFailed = true;
-        }
-        else if ( ($scope.userInfo.address.state.length == 0) || ($scope.userInfo.address.state === '') ) {
-            $scope.validationErrors.address.state = 'Please select a province/state';
-            validationFailed = true;
-        }
-        // Set province to ISO value
-        else {
-            $scope.userInfo.address.state = $scope.userInfo.address.state.id;
         }
 
         // Country validation
-        if (typeof $scope.userInfo.address.country === 'undefined') {
-            $scope.validationErrors.address.country = 'Please select a country';
+        if (!addressInfo.address.country) {
+            validationErrors.address.country = 'Please select a country';
             validationFailed = true;
-        }
-        else if ( ($scope.userInfo.address.country.length == 0) || ($scope.userInfo.address.country === '') ) {
-            $scope.validationErrors.address.country = 'Please select a country';
-            validationFailed = true;
-        }
-        // Set country to ISO value
-        else {
-            $scope.userInfo.address.country = $scope.userInfo.address.country.id;
         }
 
         // Postal Code validation
-        if (typeof $scope.userInfo.address.postal_code === 'undefined') {
-            $scope.validationErrors.address.postal_code = 'Please enter your postal / zip code';
+        if (!addressInfo.address.postal_code) {
+            validationErrors.address.postal_code = 'Please enter your postal / zip code';
             validationFailed = true;
         }
-        else if ( ($scope.userInfo.address.postal_code.length == 0) || ($scope.userInfo.address.postal_code === '') ) {
-            $scope.validationErrors.address.postal_code = 'Please enter your postal / zip code';
-            validationFailed = true;
+        else if (addressInfo.address.country === 'US') {
+            if (!numRegex.test(addressInfo.address.postal_code.toString())) {
+                validationErrors.address.postal_code = 'Zip code is invalid. Please enter in the form of: 10001';
+                validationFailed = true;
+            }
+            else if (addressInfo.address.postal_code.length > 5) {
+                validationErrors.address.postal_code = 'Zip code is invalid (more than 5 digits). Please enter in the form of: 10001';
+                validationFailed = true;
+            }
         }
-        else if ( $scope.userInfo.address.postal_code.length > 1024 ) {
-            $scope.validationErrors.address.postal_code = 'Postal / Zip code is too long. Please enter a valid postal / zip code';
-            validationFailed = true;
+        else if (addressInfo.address.country === 'CA') {
+
+            // Strip spaces
+            addressInfo.address.postal_code = addressInfo.address.postal_code.replace(/\s+/g, '');
+
+            if (!canadianPostalRegex.test(addressInfo.address.postal_code)) {
+                validationErrors.address.postal_code = 'Postal code is invalid. Please enter in the form of: A1B 2C3';
+                validationFailed = true;
+            }
+            else if (addressInfo.address.postal_code.length > 6) {
+                validationErrors.address.postal_code = 'Postal code is invalid (more than 6 characters). Please enter in the form of: A1B 2C3';
+                validationFailed = true;
+            }
         }
 
-        return !validationFailed;
-
+        return {valid: !validationFailed, errors: validationErrors};
     }
 
-
     // Validate payment info
-    function validateUserPayment (callback) {
+    function validateUserPayment(callback) {
 
         // Reset validation objects
         var validationFailed = false;
@@ -371,193 +396,136 @@ function updatePaymentCtrl ($scope, stService) {
             source: {}
         };
 
-        // Upper and lower case letters, numbers, and spaces
-        var alphaSpaceRegex = /^[a-zA-Z ]+$/i;
-
         // CC Number basic validation
         var numSpaceDashRegex = /^[0-9 -]+$/i;
-        var creditCardRegex = /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/;
-        var cvvRegex = /^[0-9]{3,4}$/;
-
-        // Name validation
-        if (typeof $scope.userInfo.source.name === 'undefined') {
-            $scope.validationErrors.source.name = 'Please enter your full name';
-            validationFailed = true;
-        }
-        else if ( ($scope.userInfo.source.name.length == 0) || ($scope.userInfo.source.name === '') ) {
-            $scope.validationErrors.source.name = 'Please enter your full name';
-            validationFailed = true;
-        }
-        else if ( !alphaSpaceRegex.test($scope.userInfo.source.name) ) {
-            $scope.validationErrors.source.name = 'Please use only letters and spaces for your full name';
-            validationFailed = true;
-        }
-        else if ( $scope.userInfo.source.name.length > 254 ) {
-            $scope.validationErrors.source.name = 'Name is too long. Please enter a valid name';
-            validationFailed = true;
-        }
+        var creditCardRegex = /^\d{12,19}$/;
+        var cvvRegex = /^[0-9]{3,6}$/;
 
         // Basic Card Number Validation
-        if (typeof $scope.userInfo.source.number === 'undefined') {
+        if (!$scope.source.number) {
             $scope.validationErrors.source.number = 'Please enter your credit card number';
             validationFailed = true;
         }
-        else if ( ($scope.userInfo.source.number.length == 0) || ($scope.userInfo.source.number === '') ) {
-            $scope.validationErrors.source.number = 'Please enter your credit card number';
-            validationFailed = true;
-        }
-        else if ( !numSpaceDashRegex.test($scope.userInfo.source.number) ) {
+        else if ( !numSpaceDashRegex.test($scope.source.number) ) {
             $scope.validationErrors.source.number = 'Please enter a valid number. You can use dashes or spaces to separate blocks of numbers if you choose';
             validationFailed = true;
         }
-        else if ( !creditCardRegex.test($scope.userInfo.source.number.replace(/\D/g,'')) ) {
+        else if ( !creditCardRegex.test($scope.source.number.replace(/\D/g,'')) ) {
             $scope.validationErrors.source.number = 'Please enter a valid number. You can use dashes or spaces to separate blocks of numbers if you choose';
             validationFailed = true;
         }
 
         // Expiry Validation
-        if (typeof $scope.userInfo.source.exp_month === 'undefined') {
+        if (!$scope.source.exp_month) {
             $scope.validationErrors.source.exp_month = 'Please select an expiration month';
             validationFailed = true;
         }
-        else if ( ($scope.userInfo.source.exp_month.length == 0) || ($scope.userInfo.source.exp_month === '') ) {
-            $scope.validationErrors.source.exp_month = 'Please select an expiration month';
-            validationFailed = true;
-        }
-        else {      // Set card month expiry to number value
-            $scope.userInfo.source.exp_month = $scope.userInfo.source.exp_month.id;
-        }
-        if (typeof $scope.userInfo.source.exp_year === 'undefined') {
-            $scope.validationErrors.source.exp_year = 'Please select an expiration year';
-            validationFailed = true;
-        }
-        else if ( ($scope.userInfo.source.exp_year.length == 0) || ($scope.userInfo.source.exp_year === '') ) {
+
+        if (!$scope.source.exp_year) {
             $scope.validationErrors.source.exp_year = 'Please select an expiration year';
             validationFailed = true;
         }
 
         // CVV validation
-        if (typeof $scope.userInfo.source.cvc === 'undefined') {
+        if (!$scope.source.cvc) {
             $scope.validationErrors.source.cvc = 'Please enter the verification number on the back of your card';
             validationFailed = true;
         }
-        else if ( ($scope.userInfo.source.cvc == 0) || ($scope.userInfo.source.cvc === '') ) {
-            $scope.validationErrors.source.cvc = 'Please enter the verification number on the back of your card';
-            validationFailed = true;
-        }
-        else if ( (!cvvRegex.test($scope.userInfo.source.cvc.toString())) ) {
+        else if ( (!cvvRegex.test($scope.source.cvc.toString())) ) {
             $scope.validationErrors.source.cvc = 'Please enter a valid verification number';
-            validationFailed = true;
-        }
-
-        // Use postal code of card holder
-        if (typeof $scope.userInfo.source.address_zip === 'undefined') {
-            $scope.validationErrors.source.address_zip = 'Please enter the zip / postal code associated with your card';
-            validationFailed = true;
-        }
-        else if ( ($scope.userInfo.source.address_zip.length == 0) || ($scope.userInfo.source.address_zip === '') ) {
-            $scope.validationErrors.source.address_zip = 'Please enter the zip / postal code associated with your card';
-            validationFailed = true;
-        }
-        else if ($scope.userInfo.source.address_zip.length > 255) {
-            $scope.validationErrors.source.address_zip = 'Please enter a valid zip / postal code';
             validationFailed = true;
         }
 
         // Attempt to generate token
         if (!validationFailed) {
-            stService.token.save($scope.userInfo.source, function(data, status, headers, config) {
-                return callback(true, data.id);
 
-            }, function(err, status, headers, config) {
-                translateStCCErr( handleStCCErr(err.data) );
-                return callback(false, null);
+            // Append postal code for additional CC verification
+            // (Address line 1 check is currently not used)
+            $scope.source.address_zip = $scope.billing.address.postal_code;
+
+            $http({
+                url: '/api/token',
+                method: 'POST',
+                data: $scope.source
+            }).success(function(token) {
+                $scope.sourceToken = token.id;
+                $scope.chargeErr = false;
+                return callback(true);
+
+            }).error(function(err) {
+                handleStCCErr(err);
+                return callback(false);
             });
-
         }
 
         else {
-            callback(false, null);
+            callback(false);
         }
 
     }
 
-    $scope.identifyCardType = function() {
-        var number = $scope.userInfo.source.number;
-        number = number.toString();
-
-        // Visa 4XXX
-        if ( (number.length >= 1) && (number[0] === '4') ) {
-            return 'visa';
-        }
-
-        // Mastercard 51XX 52XX 53XX 54XX 55XX
-        if ( (number.length >=2) && (number[0] === '5') &&
-            ( (number[1] === '1') || (number[1] === '2') || (number[1] === '3') || (number[1] === '4') || (number[1] === '5') ) ) {
-            return 'mastercard';
-        }
-
-        // AMEX 34XX 37XX
-        if ( (number.length >= 2) && (number[0] === '3') && ( (number[1] === '4') || (number[1] === '7') ) ) {
-            return 'amex';
-        }
-
-        // Diners club 36XX 38XX 39XX
-        if ( (number.length >= 2) && (number[0] === '3') && ( (number[1] === '6') || (number[1] === '8') || (number[1] === '9') ) ) {
-            return 'diners-club';
-        }
-        // 300X 301X 302X 303X 304X 305X 309X
-        else if ( (number.length >=3) && (number[0] === '3') && (number[1] === '0') &&
-            ( (number[2] === '0') || (number[2] === '1') || (number[2] === '2') || (number[2] === '3') || (number[2] === '4') ||
-            (number[2] === '5') || (number[2]) === '9' ) ) {
-            return 'diners-club';
-        }
-
-        // Discover 65XX
-        if ( (number.length >= 6) && (number[0] === '5') ) {
-            return 'discover';
-        }
-        // 644X 645X 646X 647X 648X 649X
-        else if ( (number.length >=3) && (number[0] === '6') && (number[1] === '4') &&
-            ( (number[2] === '4') || (number[2] === '5') || (number[2] === '6') || (number[2] === '7') || (number[2] === '8') ||
-            (number[2] === '9') ) ) {
-            return 'discover';
-        }
-        // 6011
-        else if ( (number.length >= 4) && (number[0] === '6') && (number[1] === '0') && (number[2] === '1') && (number[3] === '1') ) {
-            return 'discover';
-        }
-
-        // JCB 352X 353X 354X 355X 356X 357X 358X
-        if ( (number.length >=3) && (number[0] === '3') && (number[1] === '5') &&
-            ( (number[2] === '2') || (number[2] === '3') || (number[2] === '4') || (number[2] === '5') || (number[2] === '6') ||
-            (number[2] === '7') || (number[2]) === '8' ) ) {
-            return 'jcb';
-        }
-
-        return null;
-    };
-
     // Handle payment cc error codes
-    function translateStCCErr(err) {
-        switch (err.variable) {
-            case 'number':
-                $scope.validationErrors.source.number = err.msg;
+    function handleStCCErr(err) {
+        // Reset validation objects
+        if (!$scope.validationErrors) {
+            $scope.validationErrors = {
+                source: {},
+                billing: {
+                    address: {}
+                }
+            }
+        }
+        else if (!$scope.validationErrors.source) {
+            $scope.validationErrors.source = {};
+        }
+        else if (!$scope.validationErrors.billing) {
+            $scope.validationErrors.billing = {
+                address: {}
+            };
+        }
+
+        // Pick correct error code to switch on
+        var errCode = err;
+        if (err.data) {
+            errCode = err.data;
+        }
+
+        $scope.chargeErr = errCode;
+
+        switch (errCode) {
+            case 'invalid_number':
+                $scope.validationErrors.source.number = 'Please enter a valid number. You can use dashes or spaces to separate blocks of numbers if you choose';
                 break;
-            case 'exp_month':
-                $scope.validationErrors.source.exp_month = err.msg;
+            case 'incorrect_number':
+                $scope.validationErrors.source.number = 'Please enter a correct number. You can use dashes or spaces to separate blocks of numbers if you choose';
                 break;
-            case 'exp_year':
-                $scope.validationErrors.source.exp_year = err.msg;
+            case 'card_declined':
+                $scope.validationErrors.source.number = 'Your card has been declined.';
                 break;
-            case 'cvc':
-                $scope.validationErrors.source.cvc = err.msg;
+            case 'processing_error':
+                $scope.validationErrors.source.number = 'There was an issue updating your payment method. Please try again or contact our support team';
                 break;
-            case 'address_zip':
-                $scope.validationErrors.source.address_zip = err.msg;
+            case 'expired_card':
+                $scope.validationErrors.source.number = 'This card has expired. Please use a different card';
+                break;
+            case 'invalid_expiry_month':
+                $scope.validationErrors.source.exp_month = 'Please enter a valid expiry month';
+                break;
+            case 'invalid_expiry_year':
+                $scope.validationErrors.source.exp_month = 'Please enter a valid expiry year';
+                break;
+            case 'invalid_cvc':
+                $scope.validationErrors.source.cvc = 'Please enter a valid CVC';
+                break;
+            case 'incorrect_cvc':
+                $scope.validationErrors.source.cvc = 'Please enter a correct CVC';
+                break;
+            case 'incorrect_zip':
+                $scope.validationErrors.billing.address.postal_code = 'Please make sure postal code matches credit card billing address';
+                $scope.validationErrors.source.number = 'Please make sure postal code matches credit card billing address';
                 break;
             default:
-                $scope.validationErrors.source.number = err.msg;
+                $scope.validationErrors.source.number = 'There was an issue updating your payment method. Please try again or contact our support team';
                 break;
         }
     }
@@ -668,5 +636,5 @@ angular
     .module('account')
     .controller('mainCtrl', mainCtrl)
     .controller('membershipCtrl', membershipCtrl)
-    .controller('updatePaymentCtrl', updatePaymentCtrl)
+    .controller('updateBillingCtrl', updateBillingCtrl)
     .controller('updatePlanCtrl', updatePlanCtrl);

@@ -28,9 +28,9 @@ function config($routeProvider, $locationProvider) {
             templateUrl: '/manage-account-app/views/change_plan.html'
         })
 
-        .when('/update-payment', {
-            controller: 'updatePaymentCtrl',
-            templateUrl: '/manage-account-app/views/update_payment.html'
+        .when('/update-billing', {
+            controller: 'updateBillingCtrl',
+            templateUrl: '/manage-account-app/views/update_billing.html'
         })
 
         .when('/billing-details', {

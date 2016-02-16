@@ -387,25 +387,29 @@ customerCtrl.prototype = {
         var item = req.body.item;
         var data = req.body.data;
         var customerId = req.user.stId;
-        var payload;
+        var payload = {};
 
         switch (item) {
             case 'email':
-                payload = {email: data};
+                payload.email = data;
                 break;
             case 'shipping':
-                payload = {shipping: data};
+                payload.metadata = {};
+                if (data.company) {
+                    payload.metadata.company = data.company;
+                    delete data.company;
+                }
+
+                payload.shipping = data;
                 var tax = helpers.calculateTaxPercentage(data.address.state);
-                payload.metadata = {
-                        taxRate: tax.rate,
-                        taxDesc: tax.desc
-                    };
+                payload.metadata.taxRate = tax.rate;
+                payload.metadata.taxRate = tax.desc;
                 break;
             case 'source':
-                payload = {source: data};
+                payload.source = data;
                 break;
             case 'metadata':
-                payload = {metadata: data};
+                payload.metadata = data;
                 break;
             default:
                 return callback({
@@ -419,6 +423,7 @@ customerCtrl.prototype = {
         }
 
         stripe.customers.update(customerId, payload, function(err, customer) {
+
             if (err) {
                 console.log(err);
                 return callback({
@@ -435,28 +440,35 @@ customerCtrl.prototype = {
 
                 // Update customer's subscription tax rate because province to ship to has changed
                 if (item === 'shipping') {
-                    if (typeof customer.subscriptions.data[0] !== 'undefined') {
-                        stripe.customers.updateSubscription(
-                            customerId,
-                            customer.subscriptions.data[0].id,
-                            {tax_percent: tax.rate},
-                            function(err, subscription) {
-                                if (err) {
-                                    console.log(err);
-                                    return callback({
-                                        status: 500,
-                                        type: 'stripe',
-                                        msg: {
-                                            simplified: 'server_error',
-                                            detailed: err
-                                        }
-                                    }, null);
-                                }
-                                else {
-                                    return callback(false, customer);
-                                }
-                        });
-                    }
+                    var billingAddressUpdateQuery = {
+                        statement: 'UPDATE BillingAddress SET ? WHERE ?',
+                        params: [
+                            {
+                                name: customer.shipping.name,
+                                company: payload.company,
+                                street1: customer.shipping.address.line1,
+                                street2: customer.shipping.address.line2,
+                                city: customer.shipping.address.city,
+                                state: customer.shipping.address.state,
+                                postalCode: customer.shipping.address.postal_code,
+                                country: customer.shipping.address.country
+                            },
+                            {
+                                stripeId: customerId
+                            }
+                        ]
+                    };
+
+                    dbUtils.query(dbConnPool, billingAddressUpdateQuery, function(err, rows) {
+                        if (err) {
+                            return callback(err, null);
+                        }
+                        else {
+                            log.info('Updated billing address on internal DB', billingAddressUpdateQuery.params, req.connection.remoteAddress);
+                        }
+                    });
+
+                    return callback(false, customer);
                 }
                 else if ( (item === 'source') && (customer.sources.data.length > 0) ) {
                     var sourceInsertQuery = {

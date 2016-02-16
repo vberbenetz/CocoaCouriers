@@ -182,7 +182,8 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
                     errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
                 }
                 else {
-                    res.send(200);
+                    res.sendStatus(200);
+                    res.sendStatus(200);
                 }
             });
         }

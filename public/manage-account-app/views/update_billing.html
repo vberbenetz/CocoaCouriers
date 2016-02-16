@@ -1,0 +1,138 @@
+<div class="ng-cloak" ng-cloak>
+    <div class="divider double-line"></div>
+
+    <h1 class="text-center"><a href="/My-Account"><button class="btn btn-green pull-left"><span class="fa fa-chevron-left"></span> Back</button></a> Shipping and Billing Details <button class="btn btn-default pull-right" ng-click="logout()">Logout</button></h1>
+
+    <div class="divider double-line"></div>
+
+    <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+        <div class="box-static margin-bottom-30">
+            <div class="box-title">
+                <h4>Billing Information</h4>
+            </div>
+            <form class="row clearfix" novalidate>
+                <fieldset>
+                    <div class="col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.billing.name }">
+                        <label for="billing_name"><small>* Full Name</small></label>
+                        <input class="form-control required" id="billing_name" name="ccname"
+                               type="text" ng-model="billing.name" required autocomplete="name" />
+                        <p class="text-danger" ng-show="validationErrors.billing.name">{{ validationErrors.billing.name }}</p>
+                    </div>
+                    <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.billing.company }">
+                        <label for="billing_organization"><small>Company / Org</small></label>
+                        <input class="form-control" id="billing_organization" name="organization"
+                               type="text" ng-model="billing.company" placeholder="(Optional)" autocomplete="organization" />
+                        <p class="text-danger" ng-show="validationErrors.billing.company">{{ validationErrors.billing.company }}</p>
+                    </div>
+                    <div class="col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.billing.address.line1 }">
+                        <label for="billing_address1"><small>* Address</small></label>
+                        <input class="form-control required" id="billing_address1" name="address-line1"
+                               type="text" ng-model="billing.address.line1" required autocomplete="address-line1" />
+                        <p class="text-danger" ng-show="validationErrors.billing.address.line1">{{ validationErrors.billing.address.line1 }}</p>
+
+                        <label for="billing_address2"><small>Apartment, Suite, Floor, etc...</small></label>
+                        <input class="form-control" id="billing_address2" name="address-line2"
+                               type="text" ng-model="billing.address.line2" placeholder="(Optional) Ex: Apt 123" autocomplete="address-line2" />
+                        <p class="text-danger" ng-show="validationErrors.billing.address.line2">{{ validationErrors.billing.address.line2 }}</p>
+                    </div>
+                    <div class="col-md-6 col-xs-12" ng-class="{ 'has-error' : validationErrors.billing.address.country }">
+                        <label for="billing_country"><small>* Country</small></label>
+                        <select id="billing_country" name="country" class="form-control input-normal" ng-model="billing.address.country">
+                            <option value="CA">Canada</option>
+                            <option value="US">United States</option>
+                        </select>
+                        <p class="text-danger" ng-show="validationErrors.billing.address.country">{{ validationErrors.billing.address.country }}</p>
+                    </div>
+                    <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.billing.address.city }">
+                        <label for="billing_city"><small>* City / Town</small></label>
+                        <input class="form-control required" id="billing_city" name="city"
+                               type="text" ng-model="billing.address.city" required autocomplete="address-level2" />
+                        <p class="text-danger" ng-show="validationErrors.billing.address.city">{{ validationErrors.billing.address.city }}</p>
+                    </div>
+                    <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.billing.address.state }">
+                        <label for="billing_state"><small>* State / Province</small></label>
+                        <select class="form-control input-normal" id="billing_state" name="state"
+                                ng-options="o.id as o.name for o in activeProvinceSelect" ng-model="billing.address.state" required>
+                        </select>
+                        <p class="text-danger" ng-show="validationErrors.billing.address.state">{{ validationErrors.billing.address.state }}</p>
+                    </div>
+                    <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.billing.address.postal_code }">
+                        <label for="billing_postal"><small>* Postal/Zip Code</small></label>
+                        <input class="form-control required" id="billing_postal" name="postal"
+                               type="text" ng-model="billing.address.postal_code" required autocomplete="postal-code" />
+                        <p class="text-danger" ng-show="validationErrors.billing.address.postal_code">{{ validationErrors.billing.address.postal_code }}</p>
+                    </div>
+                </fieldset>
+            </form>
+
+            <div class="box-title">
+                <h4>Payment Information</h4>
+            </div>
+            <form class="row clearfix" novalidate>
+                <fieldset>
+                    <div class="col-xs-12">
+                        <div class="pull-right">
+                            <span class="fa fa-cc-visa fa-2x color-visa"></span>
+                            <span class="fa fa-cc-mastercard fa-2x color-mastercard"></span>
+                            <span class="fa fa-cc-amex fa-2x color-amex"></span>
+                            <span class="fa fa-cc-discover fa-2x color-discover"></span>
+                            <span class="fa fa-cc-diners-club fa-2x color-diners-club"></span>
+                            <span class="fa fa-cc-jcb fa-2x color-jcb"></span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.source.number }">
+                        <label for="card_number"><small>* Card Number</small></label>
+                        <input class="form-control input-normal" id="card_number" name="cardnumber"
+                               type="text" ng-model="source.number" required autocomplete="cc-number">
+                        <p class="text-danger" ng-show="validationErrors.source.number">{{ validationErrors.source.number }}</p>
+                    </div>
+                    <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.source.exp_month }">
+                        <label for="cc_exp_mon"><small>* Expiry Month</small></label>
+                        <select id="cc_exp_mon" class="form-control input-normal" name="ccmonth" ng-model="source.exp_month" required>
+                            <option value="1">01 - January</option>
+                            <option value="2">02 - February</option>
+                            <option value="3">03 - March</option>
+                            <option value="4">04 - April</option>
+                            <option value="5">05 - May</option>
+                            <option value="6">06 - June</option>
+                            <option value="7">07 - July</option>
+                            <option value="8">08 - August</option>
+                            <option value="9">09 - September</option>
+                            <option value="10">10 - October</option>
+                            <option value="11">11 - November</option>
+                            <option value="12">12 - December</option>
+                        </select>
+                        <p class="text-danger" ng-show="validationErrors.source.exp_month">{{ validationErrors.source.exp_month }}</p>
+                    </div>
+                    <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.source.exp_year }">
+                        <label for="cc_exp_year"><small>* Expiry Year</small></label>
+                        <select class="form-control input-normal" id="cc_exp_year" name="ccyear" ng-options="year for year in ccExpYear" ng-model="source.exp_year" required>
+                        </select>
+                        <p class="text-danger" ng-show="validationErrors.source.exp_year">{{ validationErrors.source.exp_year }}</p>
+                    </div>
+                    <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.source.cvc }">
+                        <label for="cc_cvc"><small>* CVC</small></label>
+                        <input id="cc_cvc" type="text" name="cvc" class="form-control required" ng-model="source.cvc" required />
+                        <p class="text-danger" ng-show="validationErrors.source.cvc">{{ validationErrors.source.cvc }}</p>
+                    </div>
+                </fieldset>
+
+                <button href="/My-Account" ng-show="!updateInProgress" ng-hide="successfullyUpdated" ng-disabled="updateInProgress" class="btn btn-default margin-right-20 pull-right">
+                <button ng-show="!updateInProgress" ng-hide="successfullyUpdated" ng-disabled="updateInProgress" class="btn btn-green margin-right-20 pull-right" ng-click="updateBilling()">
+                    Update Billing
+                </button>
+
+                <span ng-show="updateInProgress" class="three-quarters-loader margin-top-20 pull-right"></span>
+
+                <div ng-show="successfullyUpdated" class="alert alert-success margin-top-30 padding-bottom-30">
+                    <div class="row">
+                        <strong class="pull-left">Successfully updated your billing information</strong>
+                        <button href="/My-Account" class="btn btn-default pull-right">Back To Account</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+</div>

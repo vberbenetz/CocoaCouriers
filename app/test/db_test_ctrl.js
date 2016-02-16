@@ -96,6 +96,38 @@ dbConnTestCtrl.prototype = {
         });
     },
 
+    testOptimizedUpdate: function(dbConnPool, callback) {
+        var stripeId = undefined;
+
+        var query = {
+            statement: 'UPDATE BillingAddress SET ? WHERE ?',
+            params: [
+                {
+                    name: 'MY Name',
+                    company: 'Company A',
+                    street1: '4600 Street Rd',
+                    street2: 'Suite 2000',
+                    city: 'Vancouver',
+                    state: 'BC',
+                    postalCode: 'v6w1a1',
+                    country: 'CA'
+                },
+                {
+                    stripeId: stripeId
+                }
+            ]
+        };
+
+        dbUtils.query(dbConnPool, query, function(err, rows) {
+            if (err) {
+                return callback(err, null);
+            }
+            else {
+                return callback(null, rows);
+            }
+        });
+    },
+
     testListOfIds: function(dbConnPool, callback) {
         dbConnPool.getConnection(function (err, connection) {
             if (err) {
