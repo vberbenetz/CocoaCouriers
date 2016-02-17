@@ -31,10 +31,10 @@ productCtrl.prototype = {
 
     getByUrlSubPath: function (urlSubPath, dbConnPool, callback) {
         var query = {
-            statement: 'SELECT * FROM Product WHERE ?',
-            params: {
-                urlSubPath: urlSubPath
-            }
+            statement: 'SELECT p.*, m.name as m_name, m.description as m_description, m.origin as m_origin, m.website as m_website FROM Product p INNER JOIN Manufacturer m ON p.manufacturer_id=m.id WHERE p.urlSubPath = ?',
+            params: [
+                [urlSubPath]
+            ]
         };
 
         dbUtils.query(dbConnPool, query, function(err, rows) {

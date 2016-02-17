@@ -47,29 +47,45 @@
                         <div id="cartContent">
                             <!-- cart header -->
                             <div class="item head clearfix">
-                                <span class="cart_img"></span>
-                                <span class="product_name size-13 bold">PRODUCT NAME</span>
-                                <span class="remove_item size-13 bold"></span>
-                                <span class="total_price size-13 bold">TOTAL</span>
+                                <span class="product_name size-13 bold col-md-4">PRODUCT NAME</span>
                                 <span class="qty size-13 bold">QUANTITY</span>
+                                <!--<span class="total_price size-13 bold">TOTAL</span>-->
                             </div>
                             <!-- /cart header -->
 
+                            <div class="divider double-line margin-top-neg-20"></div>
+
                             <!-- cart item -->
-                            <div class="item" ng-repeat="i in $parent.cart">
-                                <div class="cart_img pull-left width-100 padding-10 text-left"><img ng-src="{{ $parent.basePath + '/' + i.product.id + '-' + '1.png' }}" alt="Picture 1" width="80" /></div>
-                                <a ui-sref="product({productId: i.product.id})" class="product_name">
-                                    <span>{{ i.product.name }}</span>
-                                    <small></small>
-                                </a>
-                                <a ng-click="removeFromCart(i.product.id)" class="remove_item"><i class="fa fa-times"></i></a>
-                                <div class="total_price">$<span>{{ ( (i.product.cadPrice * i.quantity) / 100 ).toFixed(2) }}</span></div>
-                                <div class="qty"><input type="number" ng-model="$parent.cart[$index].quantity" maxlength="2" max="50" min="1" /> &times; ${{ i.product.cadPrice / 100 }}</div>
-                                <div class="clearfix"></div>
+                            <div ng-repeat="i in $parent.cart">
+                                <div class="row">
+                                    <div class="item">
+                                        <div class="col-md-2 col-xs-1">
+                                            <a ng-click="removeFromCart(i.product.id)" class="remove_item margin-top-50 margin-left-10 pull-left"><i class="fa fa-times"></i></a>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <a ui-sref="product({urlSubPath: i.product.urlSubPath})">
+                                                <div class="cart_img pull-left width-100 padding-10 text-left"><img ng-src="{{ $parent.basePath + '/' + i.product.id + '-' + '1.png' }}" alt="Picture 1" width="80" /></div>
+                                            </a>
+                                            <h5 class="margin-left-10 margin-top-50">
+                                                <a ui-sref="product({urlSubPath: i.product.urlSubPath})" >
+                                                    {{ i.product.name }}
+                                                </a>
+                                            </h5>
+                                        </div>
+                                        <div class="col-md-4 col-xs-5">
+                                            <div class="margin-top-40">
+                                                <div class="qty pull-right"><input type="number" ng-model="$parent.cart[$index].quantity" maxlength="2" max="50" min="1" /> &times; ${{ i.product.cadPrice / 100 }}</div>
+                                                <!--<div class="total_price pull-left">$<span>{{ ( (i.product.cadPrice * i.quantity) / 100 ).toFixed(2) }}</span></div>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr/>
+
                             </div>
                             <!-- /cart item -->
 
-                            <div class="clearfix"></div>
                         </div>
                         <!-- /cart content -->
 

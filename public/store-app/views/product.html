@@ -16,12 +16,11 @@
     <section>
         <div class="container">
 
-            <div class="row text-center">
-                <h1>{{ product.name }}</h1>
-                <h4 class="margin-top-neg-30 font-style-italic"><span class="font-cursive text-black">&lt;</span> {{ product.m_name }} <span class="font-cursive text-black">&gt;</span></h4>
+            <div class="row text-center margin-bottom-neg-50 margin-top-neg-50">
+                <h1>{{ product.m_name }} - {{ product.name }}</h1>
             </div>
 
-            <hr/>
+            <div class="divider double-line"></div>
 
             <div class="row">
 
@@ -42,52 +41,52 @@
                     <!-- price -->
                     <div class="row margin-bottom-30">
                         <div class="col-md-3 col-sm-4 col-xs-6">
-                            <div class="shop-item-price">
-                                <div ng-show="$parent.userCountry==='CA'">$ {{ (product.cadPrice / 100).toFixed(2) }} CAD</div>
-                                <div ng-show="$parent.userCountry==='US'">$ {{ (product.usPrice / 100).toFixed(2) }} USD</div>
+                            <div class="row margin-left-10">
+                                <div class="shop-item-price">
+                                    <div ng-show="$parent.userCountry==='CA'">$ {{ (product.cadPrice / 100).toFixed(2) }} CAD</div>
+                                    <div ng-show="$parent.userCountry==='US'">$ {{ (product.usPrice / 100).toFixed(2) }} USD</div>
+                                </div>
+
+
+                                    <span ng-if="product.stockQuantity > 20" class="text-success"><i class="fa fa-check"></i> In Stock</span>
+                                    <span ng-if="(product.stockQuantity > 0) && (product.stockQuantity < 20)" class="text-danger"><strong>Low Stock</strong> ({{ product.stockQuantity }} remaining)</span>
+                                    <span ng-if="product.stockQuantity < 1" class="text-danger"><i class="glyphicon glyphicon-remove"></i> Out of Stock</span>
+
                             </div>
-                            <br/>
-                            <div class="clearfix">
-                                <span ng-if="product.stockQuantity > 20" class="text-success"><i class="fa fa-check"></i> In Stock</span>
-                                <span ng-if="(product.stockQuantity > 0) && (product.stockQuantity < 20)" class="text-danger"><strong>Low Stock</strong> ({{ product.stockQuantity }} remaining)</span>
-                                <span ng-if="product.stockQuantity < 1" class="text-danger"><i class="glyphicon glyphicon-remove"></i> Out of Stock</span>
+                            <div class="row margin-top-20 margin-left-10">
+                                <div class="btn-group pull-left product-opt-qty">
+                                    <button type="button" class="btn btn-default dropdown-toggle product-qty-dd noradius" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                        Qty <small id="product-selected-qty">(<span>5</span>)</small>
+                                    </button>
+
+                                    <ul id="product-qty-dd" class="dropdown-menu clearfix" role="menu">
+                                        <li class="active"><a data-val="1" href="#">1</a></li>
+                                        <li><a data-val="2" href="#">2</a></li>
+                                    </ul>
+                                </div><!-- /btn-group -->
                             </div>
                         </div>
                         <div class="col-md-9 col-sm-8 col-xs-6">
-                            <h1>
-                                <span class="ico-bordered ico-lg ico-hover et-camera"></span>
-                                <span class="ico-bordered ico-lg ico-hover et-camera"></span>
-                                <span class="ico-bordered ico-lg ico-hover et-camera"></span>
-                                <span class="ico-bordered ico-lg ico-hover et-camera"></span>
-                                <span class="ico-bordered ico-lg ico-hover et-camera"></span>
-                                <span class="ico-bordered ico-lg ico-hover et-camera"></span>
-                                <span class="ico-bordered ico-lg ico-hover et-camera"></span>
-                                <span class="ico-bordered ico-lg ico-hover et-camera"></span>
-                            </h1>
+                            <button ng-click="addToCart(product)" class="btn btn-lg btn-green pull-right noradius"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;&nbsp;ADD TO CART</button>
                         </div>
                     </div>
                     <!-- /price -->
 
-                    <div class="row">
-                        <div class="btn-group pull-left product-opt-qty">
-                            <button type="button" class="btn btn-default dropdown-toggle product-qty-dd noradius" data-toggle="dropdown">
-                                <span class="caret"></span>
-                                Qty <small id="product-selected-qty">(<span>5</span>)</small>
-                            </button>
+                    <hr class="margin-top-20 margin-bottom-20"/>
 
-                            <ul id="product-qty-dd" class="dropdown-menu clearfix" role="menu">
-                                <li class="active"><a data-val="1" href="#">1</a></li>
-                                <li><a data-val="2" href="#">2</a></li>
-                            </ul>
-                        </div><!-- /btn-group -->
-
-                        <button ng-click="addToCart(product)" class="btn btn-lg btn-green pull-right noradius"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;&nbsp;ADD TO CART</button>
+                    <div class="row margin-left-10 margin-right-10 text-center">
+                        <img class="product-profile-thumbnail" src="/assets/media/flavor_profiles/strong.png" />
+                        <img class="product-profile-thumbnail" src="/assets/media/flavor_profiles/fruity.png" />
+                        <img class="product-profile-thumbnail" src="/assets/media/flavor_profiles/infused.png" />
                     </div>
 
-                    <hr class="margin-top-40 margin-bottom-40"/>
+                    <hr class="margin-top-20 margin-bottom-20"/>
 
                     <!-- short description -->
-                    <p>{{ product.description }}</p>
+                    <div class="row margin-left-10 margin-right-10">
+                        <p>{{ product.description }}</p>
+                    </div>
                     <!-- /short description -->
 
                 </div>
