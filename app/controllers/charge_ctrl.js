@@ -235,6 +235,20 @@ chargeCtrl.prototype = {
                                 }
                             });
 
+                            var updateQuantityQueries = [];
+
+                            // Decrement product stock quantity
+                            for (var k = 0; k < cart.length; k++) {
+                                updateQuantityQueries.push({
+                                    statement: 'UPDATE Product SET stockQuantity = stockQuantity - ? WHERE id = ? AND stockQuantity > 1',
+                                    params : [
+                                        cart[k].quantity,
+                                        cart[k].id
+                                    ]
+                                });
+                                dbUtils.query(dbConnPool, updateQuantityQueries[k], function(err, result){});
+                            }
+
                             return callback(null, charge);
                         }
                     });
