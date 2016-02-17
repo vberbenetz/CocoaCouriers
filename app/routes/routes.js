@@ -88,10 +88,6 @@ module.exports = function(app, passport, dbConnPool) {
         res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'blog.html') );
     });
 
-    app.get('/contact_us', function(req, res) {
-        res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'contact_us.html') );
-    });
-
     app.get('/blog/Cocoa-Couriers-First-Annual-Tasting-Event', function(req, res) {
         res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog_pages', 'Cocoa-Couriers-First-Annual-Tasting-Event.html') );
     });
