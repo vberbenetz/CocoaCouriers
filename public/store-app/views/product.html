@@ -25,9 +25,9 @@
             <div class="row">
 
                 <!-- IMAGE -->
-                <div class="col-sm-5 col-xs-12">
+                <div class="col-md-4 col-sm-5 col-xs-7 text-center">
                     <img class="resize-shop-product" ng-src="{{ productImages[activeImageIndex] }}" alt="Image Not Found" />
-                    <div class="row">
+                    <div class="row text-center">
                         <a ng-repeat="pi in productImages" href="" ng-click="$parent.activeImageIndex=$index">
                             <img class="resize-shop-item-thumbnail" ng-src="{{ productImages[$index] }}"  alt="Image Thumbnail Not Found" />
                         </a>
@@ -36,92 +36,60 @@
                 <!-- /IMAGE -->
 
                 <!-- ITEM DESC -->
-                <div class="col-sm-7 col-xs-12">
+                <div class="col-md-8 col-sm-7 col-xs-5">
 
                     <!-- price -->
-                    <div class="row margin-bottom-30">
-                        <div class="col-md-3 col-sm-4 col-xs-6">
-                            <div class="row margin-left-10">
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-12 margin-bottom-10">
+                            <div class="col-xs-12 margin-left-10">
                                 <div class="shop-item-price">
                                     <div ng-show="$parent.userCountry==='CA'">$ {{ (product.cadPrice / 100).toFixed(2) }} CAD</div>
                                     <div ng-show="$parent.userCountry==='US'">$ {{ (product.usPrice / 100).toFixed(2) }} USD</div>
                                 </div>
 
-
-                                    <span ng-if="product.stockQuantity > 20" class="text-success"><i class="fa fa-check"></i> In Stock</span>
-                                    <span ng-if="(product.stockQuantity > 0) && (product.stockQuantity < 20)" class="text-danger"><strong>Low Stock</strong> ({{ product.stockQuantity }} remaining)</span>
-                                    <span ng-if="product.stockQuantity < 1" class="text-danger"><i class="glyphicon glyphicon-remove"></i> Out of Stock</span>
-
+                                <span ng-if="product.stockQuantity > 20" class="text-success"><i class="fa fa-check"></i> In Stock</span>
+                                <span ng-if="(product.stockQuantity > 0) && (product.stockQuantity < 20)" class="text-danger"><strong>Low Stock</strong> ({{ product.stockQuantity }} remaining)</span>
+                                <span ng-if="product.stockQuantity < 1" class="text-danger"><i class="glyphicon glyphicon-remove"></i> Out of Stock</span>
                             </div>
-                            <div class="row margin-top-20 margin-left-10">
-                                <div class="btn-group pull-left product-opt-qty">
-                                    <button type="button" class="btn btn-default dropdown-toggle product-qty-dd noradius" data-toggle="dropdown">
-                                        <span class="caret"></span>
-                                        Qty <small id="product-selected-qty">(<span>5</span>)</small>
-                                    </button>
-
-                                    <ul id="product-qty-dd" class="dropdown-menu clearfix" role="menu">
-                                        <li class="active"><a data-val="1" href="#">1</a></li>
-                                        <li><a data-val="2" href="#">2</a></li>
-                                    </ul>
-                                </div><!-- /btn-group -->
+                            <div class="col-xs-12 margin-top-20 margin-left-10">
+                                <input class="product-qty-select" type="number" ng-model="quantity" maxlength="2" max="50" min="1" />
                             </div>
                         </div>
-                        <div class="col-md-9 col-sm-8 col-xs-6">
-                            <button ng-click="addToCart(product)" class="btn btn-lg btn-green pull-right noradius"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;&nbsp;ADD TO CART</button>
+                        <div class="col-sm-6 col-xs-12 margin-bottom-10 hidden-xs">
+                            <button ng-click="addToCart()" class="btn btn-lg btn-green pull-right noradius"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;&nbsp;ADD TO CART</button>
+                        </div>
+                        <div class="col-sm-6 col-xs-12 margin-bottom-30 margin-top-20 visible-xs">
+                            <button ng-click="addToCart()" class="btn btn-green text-center noradius"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;&nbsp;ADD TO CART</button>
                         </div>
                     </div>
                     <!-- /price -->
 
-                    <hr class="margin-top-20 margin-bottom-20"/>
+                    <hr />
 
-                    <div class="row margin-left-10 margin-right-10 text-center">
+                    <div class="row text-center">
                         <img class="product-profile-thumbnail" src="/assets/media/flavor_profiles/strong.png" />
                         <img class="product-profile-thumbnail" src="/assets/media/flavor_profiles/fruity.png" />
                         <img class="product-profile-thumbnail" src="/assets/media/flavor_profiles/infused.png" />
                     </div>
 
-                    <hr class="margin-top-20 margin-bottom-20"/>
+                    <hr class="hidden-xs"/>
 
                     <!-- short description -->
-                    <div class="row margin-left-10 margin-right-10">
-                        <p>{{ product.description }}</p>
+                    <div class="row margin-left-10 margin-right-10 margin-top-20 hidden-xs">
+                        <p class="margin-top-30">{{ product.description }}</p>
                     </div>
                     <!-- /short description -->
 
                 </div>
                 <!-- /ITEM DESC -->
-            </div>
 
-            <hr class="margin-top-80 margin-bottom-80" />
-
-            <div class="row">
-                <!-- INFO -->
-                <div class="col-sm-12">
-
-                    <div class="col-sm-4">
-                        <h4 class="size-18">
-                            <i class="fa fa-paper-plane-o"></i>
-                            FREE SHIPPING
-                        </h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas metus nulla.</p>
-                    </div>
-                    <div class="col-sm-4">
-                        <h4 class="size-18">
-                            <i class="fa fa-clock-o"></i>
-                            30 DAYS MONEY BACK
-                        </h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas metus nulla.</p>
-                    </div>
-                    <div class="col-sm-4">
-                        <h4 class="size-18">
-                            <i class="fa fa-users"></i>
-                            CUSTOMER SUPPORT
-                        </h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas metus nulla.</p>
-                    </div>
+                <div class="col-xs-12 visible-xs">
+                    <hr class="margin-top-neg-20"/>
                 </div>
-                <!-- /INFO -->
+
+                <div class="col-xs-12 margin-left-10 margin-right-10 margin-bottom-neg-20 visible-xs">
+                    <p>{{ product.description }}</p>
+                </div>
             </div>
 
         </div>

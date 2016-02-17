@@ -121,14 +121,14 @@ function mainCtrl ($scope, $cookies, $http, appService) {
         $cookies.putObject('cartPidQs', pidQs, [{secure:true}]);
     };
 
-    $scope.updateCart = function(product) {
+    $scope.updateCart = function(product, quantity) {
         var cart = $scope.cart;
 
         // Not in cart
         if (findProductInCart(cart, product.id) === null) {
             $scope.cart.push({
                 product: product,
-                quantity: 1
+                quantity: quantity
             });
             $scope.updateCartCookie();
         }
@@ -180,7 +180,7 @@ function storeCtrl ($scope, $state, appService) {
     };
 
     $scope.addToCart = function(product) {
-        $scope.$parent.updateCart(product);
+        $scope.$parent.updateCart(product, 1);
         $state.go('cart');
     };
 }
@@ -190,6 +190,7 @@ function productCtrl ($scope, $state, $stateParams, appService) {
     // Flag indicating successful product retrieval
     $scope.productLoadFlag = null;
     $scope.uncloak = false;
+    $scope.quantity = 1;
 
     // Process all other items on page after product has completed loading
     $scope.loadPage = function() {
@@ -210,8 +211,8 @@ function productCtrl ($scope, $state, $stateParams, appService) {
         }
     });
 
-    $scope.addToCart = function(product) {
-        $scope.$parent.updateCart(product);
+    $scope.addToCart = function() {
+        $scope.$parent.updateCart($scope.product, $scope.quantity);
         $state.go('cart');
     };
 

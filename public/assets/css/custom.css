@@ -233,3 +233,7 @@ img.resize-shop-product {
     height: 100px;
     width: auto;
 }
+
+.product-qty-select {
+    width: 65px;
+}
