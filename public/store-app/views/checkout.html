@@ -330,7 +330,7 @@
                                     <div class="clearfix" ng-repeat="i in $parent.cart">
                                         <p class="pull-left">{{ i.product.name }}</p>
                                         <p class="pull-right">
-                                            <input style="width:50px;" type="number" ng-model="$parent.cart[$index].quantity" ng-change="calcCheckout()" maxlength="2" max="50" min="1" />
+                                            <input style="width:50px;" type="number" ng-model="$parent.cart[$index].quantity" ng-change="calcCheckout()" maxlength="2" max="{{i.product.stockQuantity}}" min="1" />
                                             &times;
                                             <span ng-show="userCountry==='CA'">${{ (i.product.cadPrice / 100).toFixed(2) }}</span>
                                             <span ng-show="userCountry==='US'">${{ (i.product.usPrice / 100).toFixed(2) }}</span>

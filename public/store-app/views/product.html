@@ -52,14 +52,16 @@
                                 <span ng-if="product.stockQuantity < 1" class="text-danger"><i class="glyphicon glyphicon-remove"></i> Out of Stock</span>
                             </div>
                             <div class="col-xs-12 margin-top-20 margin-left-10">
-                                <input class="product-qty-select" type="number" ng-model="quantity" maxlength="2" max="50" min="1" />
+                                <input class="product-qty-select" type="number" ng-model="quantity" maxlength="2" max="{{ product.stockQuantity }}" min="1" />
                             </div>
                         </div>
                         <div class="col-sm-6 col-xs-12 margin-bottom-10 hidden-xs">
-                            <button ng-click="addToCart()" class="btn btn-lg btn-green pull-right noradius"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;&nbsp;ADD TO CART</button>
+                            <button ng-show="product.stockQuantity > 0" ng-click="addToCart()" class="btn btn-lg btn-green pull-right noradius"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;&nbsp;ADD TO CART</button>
+                            <button ng-hide="product.stockQuantity > 0" ng-disabled="true" class="btn btn-lg btn-danger pull-right noradius"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;&nbsp;OUT OF STOCK</button>
                         </div>
                         <div class="col-sm-6 col-xs-12 margin-bottom-30 margin-top-20 visible-xs">
-                            <button ng-click="addToCart()" class="btn btn-green text-center noradius"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;&nbsp;ADD TO CART</button>
+                            <button ng-show="product.stockQuantity > 0" ng-click="addToCart()" class="btn btn-green text-center noradius"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;&nbsp;ADD TO CART</button>
+                            <button ng-hide="product.stockQuantity > 0" ng-disabled="true" class="btn btn-danger text-center noradius"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;&nbsp;OUT OF STOCK</button>
                         </div>
                     </div>
                     <!-- /price -->

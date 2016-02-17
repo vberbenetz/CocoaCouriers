@@ -74,7 +74,7 @@
                                         </div>
                                         <div class="col-md-4 col-xs-5">
                                             <div class="margin-top-40">
-                                                <div class="qty pull-right"><input type="number" ng-model="$parent.cart[$index].quantity" maxlength="2" max="50" min="1" /> &times; ${{ i.product.cadPrice / 100 }}</div>
+                                                <div class="qty pull-right"><input type="number" ng-model="$parent.cart[$index].quantity" maxlength="2" max="{{i.product.stockQuantity}}" min="1" /> &times; ${{ i.product.cadPrice / 100 }}</div>
                                                 <!--<div class="total_price pull-left">$<span>{{ ( (i.product.cadPrice * i.quantity) / 100 ).toFixed(2) }}</span></div>-->
                                             </div>
                                         </div>
