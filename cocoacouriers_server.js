@@ -29,7 +29,7 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/public/pages');
 
-app.use(cookieParser(configPriv.cookieSecret, { httpOnly: true }));
+app.use(cookieParser(configPriv.cookie.secret, { httpOnly: true, secure: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());

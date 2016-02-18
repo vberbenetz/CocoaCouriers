@@ -49,7 +49,7 @@ function mainCtrl ($scope, $cookies, $http, appService) {
     var c = $cookies.get('uCrId');
     if (!c) {
         $http({
-            url: 'http://ipinfo.io/json',
+            url: 'https://ipinfo.io/json?token=039ebf07f4a8d2',
             method: 'GET'
         }).success(function(res) {
             var expireDate = new Date();

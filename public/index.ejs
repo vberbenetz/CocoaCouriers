@@ -108,53 +108,53 @@
         <!-- /INFO BAR -->
 
 
-            <section id="features" class="font-spin">
-                <div class="container">
-                    <header class="text-center margin-bottom-30">
-                        <h2 class="font-spin color-emerald-green">How It Works</h2>
-                        <p class="lead font-spin">It's Simple!</p>
-                        <div class="row process-wizard process-wizard-default">
+        <section id="features" class="font-spin">
+            <div class="container">
+                <header class="text-center margin-bottom-30">
+                    <h2 class="font-spin color-emerald-green">How It Works</h2>
+                    <p class="lead font-spin">It's Simple!</p>
+                    <div class="row process-wizard process-wizard-default">
 
-                            <div class="col-xs-4 process-wizard-step complete">
-                                <div class="text-center process-wizard-stepnum">Step 1</div>
-                                <div class="progress"><div class="progress-bar"></div></div>
-                                <a href="#" class="process-wizard-dot"></a>
-                                <div class="process-wizard-info text-center">Select a Plan</div>
-                            </div>
-
-                            <div class="col-xs-4 process-wizard-step active"><!-- complete -->
-                                <div class="text-center process-wizard-stepnum">Step 2</div>
-                                <div class="progress"><div class="progress-bar"></div></div>
-                                <a href="#" class="process-wizard-dot"></a>
-                                <div class="process-wizard-info text-center">We Build Your Box</div>
-                            </div>
-
-                            <div class="col-xs-4 process-wizard-step disabled"><!-- complete -->
-                                <div class="text-center process-wizard-stepnum">Step 3</div>
-                                <div class="progress"><div class="progress-bar"></div></div>
-                                <a href="#" class="process-wizard-dot"></a>
-                                <div class="process-wizard-info text-center">You Receive Your Chocolate!</div>
-                            </div>
+                        <div class="col-xs-4 process-wizard-step complete">
+                            <div class="text-center process-wizard-stepnum">Step 1</div>
+                            <div class="progress"><div class="progress-bar"></div></div>
+                            <a href="#" class="process-wizard-dot"></a>
+                            <div class="process-wizard-info text-center">Select a Plan</div>
                         </div>
-                    </header>
 
-
-                    <!-- FEATURED BOXES 3 -->
-                    <div class="row font-spin">
-                        <div class="col-sm-8 col-sm-offset-2 text-center">
-                            <p class="">Every Month on the 15th (closest Monday) we will ship your box. If you make your first order after the 15th of any month, we will ship your first box
-                            right away, and your second box on the 15th of the next month!</p>
+                        <div class="col-xs-4 process-wizard-step active"><!-- complete -->
+                            <div class="text-center process-wizard-stepnum">Step 2</div>
+                            <div class="progress"><div class="progress-bar"></div></div>
+                            <a href="#" class="process-wizard-dot"></a>
+                            <div class="process-wizard-info text-center">We Build Your Box</div>
                         </div>
-                        <div class="col-sm-12 text-center font-cursive">
-                            <a href="/subscribe" class="btn btn-3d btn-flat-green btn-mega padding-top-15 shadow-after-1">Subscribe Now!</a>
 
+                        <div class="col-xs-4 process-wizard-step disabled"><!-- complete -->
+                            <div class="text-center process-wizard-stepnum">Step 3</div>
+                            <div class="progress"><div class="progress-bar"></div></div>
+                            <a href="#" class="process-wizard-dot"></a>
+                            <div class="process-wizard-info text-center">You Receive Your Chocolate!</div>
                         </div>
+                    </div>
+                </header>
+
+
+                <!-- FEATURED BOXES 3 -->
+                <div class="row font-spin">
+                    <div class="col-sm-8 col-sm-offset-2 text-center">
+                        <p class="">Every Month on the 15th (closest Monday) we will ship your box. If you make your first order after the 15th of any month, we will ship your first box
+                        right away, and your second box on the 15th of the next month!</p>
+                    </div>
+                    <div class="col-sm-12 text-center font-cursive">
+                        <a href="/subscribe" class="btn btn-3d btn-flat-green btn-mega padding-top-15 shadow-after-1">Subscribe Now!</a>
 
                     </div>
-                    <!-- /FEATURED BOXES 3 -->
+
                 </div>
-            </section>
-            <!-- /FEATURES -->
+                <!-- /FEATURED BOXES 3 -->
+            </div>
+        </section>
+        <!-- /FEATURES -->
 
         <section id="other_features">
             <div class="container">
@@ -255,15 +255,6 @@
             // Called after the entrance animation is executed.
             }
             });
-        </script>
-
-        <script type="text/javascript">
-            var uCrId = $.cookie('uCrId');
-            if (!uCrId) {
-                $.getJSON('https://ipinfo.io', function(res) {
-                    $.cookie('uCrId', res.country, {expires: 1, secure: true});
-                });
-            }
         </script>
 
         </div>
