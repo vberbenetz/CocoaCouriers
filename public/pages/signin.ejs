@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<!--[if IE 8]>			<html class="ie ie8"> <![endif]-->
+<!--[if IE 9]>			<html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
+
+<!-- Include the head template -->
+<head>
+    <%- include templates/head.ejs %>
+</head>
+
+<body class="smoothscroll enable-animation font-spin ng-cloak" ng-app="signin" ng-clock>
+
+<!-- wrapper -->
+<div id="wrapper">
+
+    <!-- Include the header template -->
+    <%- include templates/header.ejs %>
+
+    <!-- -->
+    <section ng-controller="signinCtrl">
+        <div class="container">
+
+            <div class="row heading-title heading-dotted text-center">
+                <h1>
+                    Returning Customer
+                </h1>
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6 col-md-offset-3">
+
+                    <div class="box-static padding-30">
+                        <form class="nomargin" ng-submit="login()">
+                            <div class="clearfix">
+                                <div id="email-group" class="form-group" ng-class="{ 'has-error': loginError }">
+                                    <input type="text" class="form-control" placeholder="Email" ng-model="formData.email">
+                                </div>
+                                <div id="password-group" class="form-group" ng-class="{ 'has-error': loginError }">
+                                    <input type="password" class="form-control" placeholder="Password" ng-model="formData.password">
+                                    <div ng-show="loginError" class="alert alert-danger">
+                                        Email or password is incorrect
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <div class="form-tip pt-20">
+                                        <a class="no-text-decoration size-13 margin-top-10 block" href="#">Forgot Password?</a>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6 text-right">
+                                    <button ng-disabled="loggingIn" type="submit" class="btn btn-lg btn-success">Login</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!-- / -->
+
+    <div class="row secondary-sep-100 bg-emerald-green">
+        <div class="col-sm-12 text-center margin-top-20">
+            <h3 class="text-white font-spin">Sign up for as little as $24.99 per month, shipping included! <a class="btn btn-lg btn-default" href="/subscribe"><strong>Subscribe</strong></a></h3>
+        </div>
+    </div>
+
+    <%- include templates/footer.ejs %>
+
+</div>
+<!-- /wrapper -->
+
+<script type="text/javascript" src="/assets/plugins/angular/angular.min.js"></script>
+
+<script type="text/javascript">
+    angular.module('signin', [])
+            .controller('signinCtrl', function ($scope, $http, $window) {
+                $scope.formData = {
+                    email: '',
+                    password: ''
+                };
+
+                $scope.login = function () {
+                    $scope.loginError = false;
+                    $scope.loggingIn = true;
+
+                    $http({
+                        url: '/login',
+                        method: 'POST',
+                        data: {
+                            email: $scope.formData.email,
+                            password: $scope.formData.password
+                        }
+                    })
+                    .success(function(data) {
+                        $window.location.href = '/My-Account';
+                    })
+                    .error(function(error) {
+                        $scope.loginError = true;
+                        $scope.loggingIn = false;
+                    });
+                };
+
+            });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!--[if IE 8]>			<html class="ie ie8"> <![endif]-->
+<!--[if IE 9]>			<html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
+
+<head>
+    <%- include templates/head.ejs %>
+
+    <base href="/My-Account/"/>
+</head>
+
+<body ng-app="account" class="smoothscroll enable-animation font-spin ng-cloak" ng-controller="mainCtrl" ng-cloak>
+    <!--[if lt IE 9]>
+    <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!-- wrapper -->
+    <div id="wrapper">
+
+        <!-- Include the header template -->
+        <%- include templates/header.ejs %>
+
+        <div class="container-fluid">
+            <div class="col-xs-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+                <div ng-view></div>
+            </div>
+        </div>
+
+        <!-- Include the header template -->
+        <%- include templates/footer.ejs %>
+
+    </div>
+
+    <script src="/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/plugins/angular/angular.min.js"></script>
+    <script src="/assets/plugins/angular/angular-route.min.js"></script>
+    <script src="/assets/plugins/angular/angular-resource.min.js"></script>
+    <script src="/assets/plugins/bootstrap/js/ui-bootstrap-tpls-0.14.3.min.js"></script>
+
+    <!-- App -->
+    <script src="/manage-account-app/manager-account-app.js"></script>
+    <script src="/manage-account-app/mgmt-controller.js"></script>
+    <script src="/manage-account-app/mgmt-services.js"></script>
+    <script src="/manage-account-app/config.js"></script>
+    <script src="/manage-account-app/filters.js"></script>
+
+</body>
+</html>

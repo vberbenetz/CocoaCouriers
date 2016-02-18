@@ -52,7 +52,9 @@ function mainCtrl ($scope, $cookies, $http, appService) {
             url: 'http://ipinfo.io/json',
             method: 'GET'
         }).success(function(res) {
-            $cookies.put('uCrId', res.country, [{secure: true}]);
+            var expireDate = new Date();
+            expireDate.setDate(expireDate.getDate() + 1);
+            $cookies.put('uCrId', res.country, {'secure': true, 'expires': expireDate});
             $scope.userCountry = res.country;
         }).error(function(err) {
         });

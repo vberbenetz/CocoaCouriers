@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!--[if IE 8]>			<html class="ie ie8"> <![endif]-->
+<!--[if IE 9]>			<html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
+<head>
+    <%- include templates/head.ejs %>
+
+    <link href="/assets/css/layout-shop.css" rel="stylesheet" type="text/css" media="none" onload="if(media!='all')media='all'" />
+
+    <link rel="stylesheet" href="/assets/plugins/spinner/spinner-white.css" />
+
+    <base href="/store/" />
+
+</head>
+
+<body class="smoothscroll enable-animation font-spin ng-cloak" ng-app="storeapp" ng-controller="mainCtrl" ng-cloak>
+
+    <!-- wrapper -->
+    <div id="wrapper">
+
+        <%- include templates/header.ejs %>
+
+        <div ui-view></div>
+
+        <%- include templates/footer.ejs %>
+
+        <script src="/assets/plugins/angular/angular.min.js"></script>
+        <script src="/assets/plugins/angular/angular-resource.min.js"></script>
+        <script src="/assets/plugins/angular/angular-animate.min.js"></script>
+        <script src="/assets/plugins/angular/angular-cookies.min.js"></script>
+        <script src="/assets/plugins/ui-router/angular-ui-router.min.js"></script>
+        <script src="/assets/plugins/ui-bootstrap/ui-bootstrap-tpls.min.js"></script>
+        <script src="/store-app/js/store-app.js"></script>
+        <script src="/store-app/js/config.js"></script>
+        <script src="/store-app/js/controllers.js"></script>
+        <script src="/store-app/js/services.js"></script>
+        <script src="/store-app/js/filters.js"></script>
+
+        <script src="/assets/plugins/Morphext-2.4.4/dist/morphext.min.js"></script>
+        <script async>
+            $("#js-rotating").Morphext({
+                // The [in] animation type. Refer to Animate.css for a list of available animations.
+                animation: "fadeIn",
+                // An array of phrases to rotate are created based on this separator. Change it if you wish to separate the phrases differently (e.g. So Simple | Very Doge | Much Wow | Such Cool).
+                separator: ",",
+                // The delay between the changing of each phrase in milliseconds.
+                speed: 4000,
+                complete: function () {
+                    // Called after the entrance animation is executed.
+                }
+            });
+        </script>
+
+    </div>
+</body>
+</html>

@@ -12,15 +12,12 @@ var userCtrl = require('../controllers/user_ctrl');
 var chargeCtrl = require('../controllers/charge_ctrl');
 var manufacturerCtrl = require('../controllers/manufacturer_ctrl');
 var helpers = require('../utils/helpers');
+var ejs = require('ejs');
 
 var errorHandler = require('../utils/error_handler');
 
 
 module.exports = function(app, passport, dbConnPool, emailUtils) {
-
-    // ================================================================================ //
-    // ================================= Static Pages ================================= //
-    // ================================================================================ //
 
     // ======================= AUTHENTICATION ========================== //
 
@@ -67,10 +64,16 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
     });
 
 
-    // ======================== STATIC PAGES ========================= //
+
+
+
+
+    // ================================================================================ //
+    // ================================= Static Pages ================================= //
+    // ================================================================================ //
 
     app.get('/', function(req, res) {
-        res.sendFile( path.join(__dirname, '..', '..', 'public', 'index.html') );
+        res.render('../index');
     });
 
     app.get('/signin', function(req, res) {
@@ -78,34 +81,45 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
             res.redirect('/My-Account');
         }
         else {
-            res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'signin.html') );
+            res.render('signin');
         }
     });
 
     app.get('/partners', function(req, res) {
-        res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'partners.html') );
+        res.render('partners');
     });
 
     app.get('/subscribe', function(req, res) {
-        res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'subscribe.html') );
+        res.render('subscribe');
     });
 
     app.get('/store*', function(req, res) {
-        res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'store_index.html') );
+        res.render('store_index');
     });
 
     app.get('/blog', function(req, res) {
-        res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'blog.html') );
+        res.render('blog_home');
     });
 
+    app.get('/My-Account' , auth, function(req, res) {
+        res.render('user_mgmt');
+    });
+    app.get('/My-Account*' , auth, function(req, res) {
+        res.redirect('/My-Account');
+    });
+
+
+
+    // ========================= BLOG PAGES ============================== //
+
     app.get('/blog/Cocoa-Couriers-First-Annual-Tasting-Event', function(req, res) {
-        res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog_pages', 'Cocoa-Couriers-First-Annual-Tasting-Event.html') );
+        res.render('blog/Cocoa-Couriers-First-Annual-Tasting-Event');
     });
     app.get('/blog/valentines-day-gift', function(req, res) {
         res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog_pages', 'valentines-day-gift-box.html') );
     });
     app.get('/blog/free-chocolate-givaway', function(req, res) {
-        res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog_pages', 'free-chocolate-givaway-contest.html') );
+        res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog_pages', 'free-chocolate-giveaway-contest.html') );
     });
     app.get('/blog/Why-Does-Chocolate-Cost-So-Much', function(req, res) {
         res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog_pages', 'why-does-chocolate-cost-so-much.html') );
@@ -120,19 +134,17 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
         res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog_pages', 'month-1-box.html') );
     });
 
-    app.get('/My-Account' , auth, function(req, res) {
-        res.sendFile( path.join(__dirname, '..', '..', 'public', 'pages', 'user_mgmt.html') );
-    });
-    app.get('/My-Account*' , auth, function(req, res) {
-        res.redirect('/My-Account');
-    });
+    // -------------------------------------------------------------------- //
+
+
+
+
+
 
 
     // ================================================================================ //
     // ================================== API ROUTES ================================== //
     // ================================================================================ //
-
-    // ==================== APP ROUTES ========================== //
 
     app.get('/api/emailexists', function(req, res) {
         userCtrl.checkEmailExists(req.query.email, dbConnPool, function(err, result) {

@@ -25,6 +25,10 @@ var app = express();
 app.use(compression());
 app.use(express.static('public'));
 
+// Template rendering engine
+app.set('view engine', 'ejs');
+app.set('views', __dirname + '/public/pages');
+
 app.use(cookieParser(configPriv.cookieSecret, { httpOnly: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
