@@ -113,25 +113,56 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
     // ========================= BLOG PAGES ============================== //
 
     app.get('/blog/Cocoa-Couriers-First-Annual-Tasting-Event', function(req, res) {
-        res.render('blog/Cocoa-Couriers-First-Annual-Tasting-Event');
+        res.render('blog/Cocoa-Couriers-First-Annual-Tasting-Event', {
+            title: 'Cocoa Couriers First Annual Tasting Event',
+            description: 'Cocoa Courier first annual chocolate tasting event'
+        });
     });
     app.get('/blog/valentines-day-gift', function(req, res) {
-        res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog_pages', 'valentines-day-gift-box.html') );
+        res.render('blog/valentines-day-gift-box', {
+            title: 'Valentine\'s Day Gift Box',
+            description: 'Our Cocoa Couriers valentine\'s day gift box is now available. Don\'t forget that special someone!',
+            keywords: [
+                'valentine\'s day',
+                'gift box'
+            ]
+        });
     });
-    app.get('/blog/free-chocolate-givaway', function(req, res) {
-        res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog_pages', 'free-chocolate-giveaway-contest.html') );
+    app.get('/blog/free-chocolate-giveaway', function(req, res) {
+        res.render('blog/free-chocolate-giveaway-contest', {
+            title: 'Free chocolate givaway contest',
+            description: 'A Monthly Box of Artisan Chocolate | Fair Trade | Bean to Bar | Enter for a chance to win a free box of chocolate delivered right to your door!'
+        });
     });
     app.get('/blog/Why-Does-Chocolate-Cost-So-Much', function(req, res) {
-        res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog_pages', 'why-does-chocolate-cost-so-much.html') );
+        res.render('blog/why-does-chocolate-cost-so-much', {
+            title: 'Why Does Chocolate Cost So Much'
+        });
     });
     app.get('/blog/what-is-fair-trade', function(req, res) {
-        res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog_pages', 'what-is-fair-trade.html') );
+        res.render('blog/what-is-fair-trade', {
+            title: 'Cocoa Couriers What Is Fair Trade',
+            description: 'Learn about what fair trade means and why it\'s so important to support the fair trade cacao market! Fair Tastes Better!'
+        });
     });
     app.get('/blog/whats-the-deal-with-chocolate-infusions', function(req, res) {
-        res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog_pages', 'whats-the-deal-with-chocolate-infusions.html') );
+        res.render('blog/whats-the-deal-with-chocolate-infusions', {
+            title: 'What\'s The Deal with Chocolate Infusions?',
+            description: 'What\'s The Deal with Chocolate Infusions? Why are they so popular?',
+            keywords: [
+                'Infusions',
+                'Cacao',
+                'Artisan Chocolate',
+                'Craft Chocolate',
+                'Chocolate Box',
+                'Chocolate Subscription'
+            ]
+        });
     });
     app.get('/blog/month-1-box', function(req, res) {
-        res.sendFile( path.join(__dirname, '..', '..', 'public', 'blog_pages', 'month-1-box.html') );
+        res.render('blog/month-1-box', {
+            title: 'December 2015 Box Review'
+        });
     });
 
     // -------------------------------------------------------------------- //
