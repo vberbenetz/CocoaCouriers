@@ -74,6 +74,25 @@ productCtrl.prototype = {
         });
     },
 
+    getProductProfiles: function (dbConnPool, productId, callback) {
+
+        var query = {
+            statement: 'SELECT * FROM ProductProfileMapping WHERE ?',
+            params: {
+                productId: productId
+            }
+        };
+
+        dbUtils.query(dbConnPool, query, function(err, rows) {
+            if (err) {
+                return callback(err, false);
+            }
+            else {
+                return callback(null, rows);
+            }
+        });
+    },
+
     listByProductType: function (productTypeId, dbConnPool, callback) {
 
         dbConnPool.getConnection(function (err, connection) {

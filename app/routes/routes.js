@@ -494,17 +494,6 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
 
     app.get('/api/product/filter', function(req, res, next) {
 
-        /*
-        var c = {
-            manufacturers: [1001,1002],
-            manufacturerOrigins: ['US'],
-            cocoaOrigins: ['MG', 'MIX'],
-            productTypes: ['bar'],
-            flavorProfiles: ['dark'],
-            dietaryProfiles: []
-        };
-        */
-
         var conditions = {
             manufacturers: [],
             manufacturerOrigins: [],
@@ -607,7 +596,24 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
         });
     });
 
-    app.get('/api/product/profile', function (req, res, next) {
+    // Get product profiles corresponding to product
+    app.get('/api/product/profiles', function (req, res, next) {
+        if (!req.query.productId) {
+            res.status(400).send('bad_request');
+        }
+
+        productCtrl.getProductProfiles(dbConnPool, req.query.productId, function(err, productProfiles) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(productProfiles);
+            }
+        });
+    });
+
+    // Get a list of all product profiles
+    app.get('/api/profiles/list', function (req, res, next) {
         productCtrl.listProfiles(dbConnPool, function(err, profiles) {
             if (err) {
                 errorHandler.handle(res, err, req.user, req.connection.remoteAddress);

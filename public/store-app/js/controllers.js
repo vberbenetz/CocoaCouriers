@@ -5,6 +5,7 @@ function mainCtrl ($scope, $cookies, $http, appService) {
     $scope.basePath = '/assets/store_media';
     $scope.thumbnailSubPath = 'thumbnails';
     $scope.fullProductImageSubPath = 'full';
+    $scope.flavorProfileImagePath = 'flavor_profiles';
 
     $scope.userCountry = 'CA';
 
@@ -217,7 +218,7 @@ function storeCtrl ($scope, $state, appService) {
         $scope.$parent.productProfiles.flavor.length = 0;
         $scope.$parent.productProfiles.dietary.length = 0;
 
-        appService.productProfile.query(function(productProfiles) {
+        appService.productProfileList.query(function(productProfiles) {
             for (var i = 0; i < productProfiles.length; i++) {
                 if (productProfiles[i].profileType === 'dietary') {
                     $scope.$parent.productProfiles.dietary.push(productProfiles[i]);
@@ -316,6 +317,10 @@ function productCtrl ($scope, $state, $stateParams, appService) {
 
     // Process all other items on page after product has completed loading
     $scope.loadPage = function() {
+
+        appService.productProfiles.query({productId: $scope.product.id}, function(productProfiles) {
+            $scope.thisProductProfiles = productProfiles;
+        });
 
         // Load links to product images
         $scope.productImages = generateListOfProductImgLinks($scope.$parent.basePath, $scope.$parent.fullProductImageSubPath, $scope.product.id, $scope.product.numberOfImages);

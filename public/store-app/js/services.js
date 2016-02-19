@@ -6,7 +6,7 @@ function appService($resource) {
 
         productOrigins: $resource('/api/product/origin/list'),
 
-        productProfile: $resource('/api/product/profile'),
+        productProfileList: $resource('/api/profiles/list'),
 
         manufacturer: $resource('/api/manufacturer'),
 
@@ -123,6 +123,19 @@ function appService($resource) {
                     method: 'GET',
                     params: {
                         productTypeId: '@productTypeId'
+                    },
+                    isArray: true
+                }
+            }
+        ),
+
+        productProfiles: $resource('/api/product/profiles',
+            {},
+            {
+                query: {
+                    method: 'GET',
+                    params: {
+                        productId: '@productId'
                     },
                     isArray: true
                 }

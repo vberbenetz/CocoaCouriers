@@ -69,9 +69,7 @@
                     <hr />
 
                     <div class="row text-center">
-                        <img class="product-profile-thumbnail" src="/assets/media/flavor_profiles/strong.png" />
-                        <img class="product-profile-thumbnail" src="/assets/media/flavor_profiles/fruity.png" />
-                        <img class="product-profile-thumbnail" src="/assets/media/flavor_profiles/infused.png" />
+                        <img ng-repeat="fp in thisProductProfiles" class="product-profile-thumbnail" ng-src="{{ $parent.basePath + '/' + $parent.flavorProfileImagePath + '/' + fp.productProfileId + '.png' }}" />
                     </div>
 
                     <hr class="hidden-xs"/>
