@@ -94,6 +94,24 @@ function appService($resource) {
             }
         ),
 
+        productListFilter: $resource('/api/product/filter',
+            {},
+            {
+                query: {
+                    method: 'GET',
+                    params: {
+                        mid: '@mid',
+                        mo: '@mo',
+                        co: '@co',
+                        pt: '@pt',
+                        fp: '@fp',
+                        dp: '@dp'
+                    },
+                    isArray: true
+                }
+            }
+        ),
+
         productListByType: $resource('/api/product/list/byType',
             {},
             {

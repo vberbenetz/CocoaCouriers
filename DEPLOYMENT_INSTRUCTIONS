@@ -7,3 +7,8 @@
     - mySqlConfig
     - gmailXOAuth2
     - sKey (Stripe Prod key)
+
+4) Create log folder /logs
+5) Create product images folder /assets/product_images/thumbnails and /assets/product_images/full
+6) Import product images <product.id>-<number>.png
+7) Import product thumbnails <product.id>-T-<number>.png

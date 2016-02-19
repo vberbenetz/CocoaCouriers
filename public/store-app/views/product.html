@@ -26,10 +26,10 @@
 
                 <!-- IMAGE -->
                 <div class="col-md-4 col-sm-5 col-xs-7 text-center">
-                    <img class="resize-shop-product" ng-src="{{ productImages[activeImageIndex] }}" alt="Image Not Found" />
-                    <div class="row text-center">
+                    <img class="resize-shop-product" ng-src="{{ productImages[activeImageIndex] }}" />
+                    <div class="row text-center margin-top-30">
                         <a ng-repeat="pi in productImages" href="" ng-click="$parent.activeImageIndex=$index">
-                            <img class="resize-shop-item-thumbnail" ng-src="{{ productImages[$index] }}"  alt="Image Thumbnail Not Found" />
+                            <img class="resize-shop-item-thumbnail" ng-src="{{ productImages[$index] }}" />
                         </a>
                     </div>
                 </div>

@@ -481,6 +481,99 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
         })
     });
 
+    app.get('/api/product/filter', function(req, res, next) {
+
+        /*
+        var c = {
+            manufacturers: [1001,1002],
+            manufacturerOrigins: ['US'],
+            cocoaOrigins: ['MG', 'MIX'],
+            productTypes: ['bar'],
+            flavorProfiles: ['dark'],
+            dietaryProfiles: []
+        };
+        */
+
+        var conditions = {
+            manufacturers: [],
+            manufacturerOrigins: [],
+            cocoaOrigins: [],
+            productTypes: [],
+            flavorProfiles: [],
+            dietaryProfiles: []
+        };
+
+        if (req.query.mid) {
+            if (Array.isArray(req.query.mid)) {
+                for (var i = 0; i < req.query.mid.length; i++) {
+                    conditions.manufacturers.push( parseInt(req.query.mid[i]) );
+                }
+            }
+            else {
+                conditions.manufacturers.push( parseInt(req.query.mid) );
+            }
+        }
+        if (req.query.mo) {
+            if (Array.isArray(req.query.mo)) {
+                for (var j = 0; j < req.query.mo.length; j++) {
+                    conditions.manufacturerOrigins.push(req.query.mo[j]);
+                }
+            }
+            else {
+                conditions.manufacturerOrigins.push(req.query.mo);
+            }
+        }
+        if (req.query.co) {
+            if (Array.isArray(req.query.co)) {
+                for (var k = 0; k < req.query.co.length; k++) {
+                    conditions.cocoaOrigins.push(req.query.co[k]);
+                }
+            }
+            else {
+                conditions.cocoaOrigins.push(req.query.co);
+            }
+        }
+        if (req.query.pt) {
+            if (Array.isArray(req.query.pt)) {
+                for (var l = 0; l < req.query.pt.length; l++) {
+                    conditions.productTypes.push(req.query.pt[l]);
+                }
+            }
+            else {
+                conditions.productTypes.push(req.query.pt);
+            }
+        }
+        if (req.query.fp) {
+            if (Array.isArray(req.query.fp)) {
+                for (var o = 0; o < req.query.fp.length; o++) {
+                    conditions.flavorProfiles.push(req.query.fp[o]);
+                }
+            }
+            else {
+                conditions.flavorProfiles.push(req.query.fp);
+            }
+        }
+        if (req.query.dp) {
+            if (Array.isArray(req.query.dp)) {
+                for (var p = 0; p < req.query.dp.length; p++) {
+                    conditions.dietaryProfiles.push(req.query.dp[p]);
+                }
+            }
+            else {
+                conditions.dietaryProfiles.push(req.query.dp);
+            }
+        }
+
+        productCtrl.listByFilter(conditions, dbConnPool, function(err, result) {
+            if (err) {
+                res.send(err);
+            }
+            else {
+                res.send(result);
+            }
+        });
+    });
+
     app.get('/api/product/list/byType', function (req, res, next) {
         productCtrl.listByProductType(req.query.productTypeId, dbConnPool, function(err, products) {
             if (err) {

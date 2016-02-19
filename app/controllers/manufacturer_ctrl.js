@@ -22,6 +22,23 @@ manufacturerCtrl.prototype = {
             }
         });
 
+    },
+
+    listOrigin: function (dbConnPool, callback) {
+
+        var query = {
+            statement: 'SELECT DISTINCT origin FROM Manufacturer',
+            params: []
+        };
+
+        dbUtils.query(dbConnPool, query, function(err, rows) {
+            if (err) {
+                return callback(err, null);
+            }
+            else {
+                return callback(false, rows);
+            }
+        });
     }
 
 };

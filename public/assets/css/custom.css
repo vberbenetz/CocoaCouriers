@@ -35,11 +35,19 @@
 }
 
 .margin-left-2 {
-    margin-left: 2px; !important;
+    margin-left: 2px !important;
+}
+
+.margin-left-5 {
+    margin-left: 5px !important;
 }
 
 .margin-left-neg-20 {
-    margin-left: -20px; !important;
+    margin-left: -20px !important;
+}
+
+.margin-right-5 {
+    margin-right: 5px !important;
 }
 
 .color-visa {

@@ -20,15 +20,16 @@
 
                             <div class="shop-item">
 
-                                <div class="thumbnail shop-thumbnail-fixed-size" ng-mouseover="activeThumbnail[$index]=2" ng-mouseleave="activeThumbnail[$index]=1">
-                                    <!-- product image(s) -->
-                                    <a ng-click="goToProduct(p)">
-                                        <img ng-show="activeThumbnail[$index]==1" ng-src="{{ $parent.basePath + '/' + 'thumbnails' + '/' + p.id + '-' + 'T' + '-' + '1.png' }}" alt="Picture 1" />
-                                        <img ng-hide="activeThumbnail[$index]==1" ng-src="{{ $parent.basePath + '/' + 'thumbnails' + '/' + p.id + '-' + 'T' + '-' + '2.png' }}" alt="Picture 2" />
-                                    </a>
-                                    <!-- /product image(s) -->
+                                <a ng-click="goToProduct(p)">
+                                    <div class="thumbnail shop-thumbnail-fixed-size" ng-mouseover="activeThumbnail[$index]=2" ng-mouseleave="activeThumbnail[$index]=1">
+                                        <!-- product image(s) -->
 
-                                </div>
+                                            <img ng-show="activeThumbnail[$index]==1" ng-src="{{ $parent.basePath + '/' + $parent.thumbnailSubPath + '/' + p.id + '-' + 'T' + '-' + '1.png' }}" />
+                                            <img ng-hide="activeThumbnail[$index]==1" ng-src="{{ $parent.basePath + '/' + $parent.thumbnailSubPath + '/' + p.id + '-' + 'T' + '-' + '2.png' }}" />
+                                        <!-- /product image(s) -->
+
+                                    </div>
+                                </a>
 
                                 <a href="" ng-click="goToProduct(p)">
                                     <div class="shop-item-summary text-center">
@@ -46,7 +47,9 @@
 
                                 <!-- buttons -->
                                 <div class="shop-item-buttons text-center">
-                                    <a class="btn btn-flat-green" ng-click="addToCart(p)"><i class="fa fa-cart-plus"></i> Add to Cart</a>
+                                    <a ng-show="p.stockQuantity > 5" class="btn btn-flat-green" ng-click="addToCart(p)"><i class="fa fa-cart-plus"></i> Add to Cart</a>
+                                    <a ng-show="p.stockQuantity > 0 && p.stockQuantity <= 5" class="btn btn-flat-green" ng-click="addToCart(p)"><i class="fa fa-cart-plus"></i> Low Stock</a>
+                                    <a ng-hide="p.stockQuantity > 0" class="btn btn-danger" ng-disabled="true"><i class="fa fa-times"></i> Out Of Stock</a>
                                 </div>
                                 <!-- /buttons -->
                             </div>
@@ -73,8 +76,11 @@
                                     <span ng-show="!filterMenu.g1" class="fa fa-plus shop-filter-side-button pull-right"></span>
                                     <span ng-show="filterMenu.g1" class="fa fa-minus shop-filter-side-button pull-right"></span>
                                 </uib-accordion-heading>
-                                <ul>
-                                    <li ng-repeat="m in manufacturers"><a href="">{{ m.name }}</a></li>
+                                <ul class="list-unstyled">
+                                    <li class="row margin-left-5 margin-right-5" ng-repeat="m in $parent.$parent.manufacturers">
+                                        <span class="pull-left">{{ m.name }}</span>
+                                        <input class="pull-right" type="checkbox" ng-model="searchFilter.mid[$index]" />
+                                    </li>
                                 </ul>
                             </uib-accordion-group>
                             <uib-accordion-group class="no-border" is-open="filterMenu.g2">
@@ -83,8 +89,11 @@
                                     <span ng-show="!filterMenu.g2" class="fa fa-plus shop-filter-side-button pull-right"></span>
                                     <span ng-show="filterMenu.g2" class="fa fa-minus shop-filter-side-button pull-right"></span>
                                 </uib-accordion-heading>
-                                <ul>
-                                    <li ng-repeat="po in metadata.producer_origins"><a href="">{{ po }}</a></li>
+                                <ul class="list-unstyled">
+                                    <li class="row margin-left-5 margin-right-5" ng-repeat="mo in $parent.$parent.manufacturerOrigins">
+                                        <span class="pull-left">{{ mo }}</span>
+                                        <input class="pull-right" type="checkbox" ng-model="searchFilter.mo[$index]" />
+                                    </li>
                                 </ul>
                             </uib-accordion-group>
                             <uib-accordion-group class="no-border" is-open="filterMenu.g3">
@@ -93,8 +102,11 @@
                                     <span ng-show="!filterMenu.g3" class="fa fa-plus shop-filter-side-button pull-right"></span>
                                     <span ng-show="filterMenu.g3" class="fa fa-minus shop-filter-side-button pull-right"></span>
                                 </uib-accordion-heading>
-                                <ul>
-                                    <li ng-repeat="co in metadata.cocoa_origins"><a href="">{{ co }}</a></li>
+                                <ul class="list-unstyled">
+                                    <li class="row margin-left-5 margin-right-5" ng-repeat="co in $parent.$parent.cocoaOrigins">
+                                        <span class="pull-left">{{ co }}</span>
+                                        <input class="pull-right" type="checkbox" ng-model="searchFilter.co[$index]" />
+                                    </li>
                                 </ul>
                             </uib-accordion-group>
                             <uib-accordion-group class="no-border" is-open="filterMenu.g4">
@@ -103,8 +115,11 @@
                                     <span ng-show="!filterMenu.g4" class="fa fa-plus shop-filter-side-button pull-right"></span>
                                     <span ng-show="filterMenu.g4" class="fa fa-minus shop-filter-side-button pull-right"></span>
                                 </uib-accordion-heading>
-                                <ul>
-                                    <li ng-repeat="f in productProfiles.flavor"><a href="">{{ f.name }}</a></li>
+                                <ul class="list-unstyled">
+                                    <li class="row margin-left-5 margin-right-5" ng-repeat="fp in $parent.$parent.productProfiles.flavor">
+                                        <span class="pull-left">{{ fp.name }}</span>
+                                        <input class="pull-right" type="checkbox" ng-model="searchFilter.fp[$index]" />
+                                    </li>
                                 </ul>
                             </uib-accordion-group>
                             <uib-accordion-group class="no-border" is-open="filterMenu.g5">
@@ -113,8 +128,11 @@
                                     <span ng-show="!filterMenu.g5" class="fa fa-plus shop-filter-side-button pull-right"></span>
                                     <span ng-show="filterMenu.g5" class="fa fa-minus shop-filter-side-button pull-right"></span>
                                 </uib-accordion-heading>
-                                <ul>
-                                    <li ng-repeat="d in productProfiles.dietary"><a href="">{{ d.name }}</a></li>
+                                <ul class="list-unstyled">
+                                    <li class="row margin-left-5 margin-right-5" ng-repeat="dp in $parent.$parent.productProfiles.dietary">
+                                        <span class="pull-left">{{ dp.name }}</span>
+                                        <input class="pull-right" type="checkbox" ng-model="searchFilter.dp[$index]" />
+                                    </li>
                                 </ul>
                             </uib-accordion-group>
                             <uib-accordion-group class="no-border" is-open="filterMenu.g6">
@@ -123,14 +141,24 @@
                                     <span ng-show="!filterMenu.g6" class="fa fa-plus shop-filter-side-button pull-right"></span>
                                     <span ng-show="filterMenu.g6" class="fa fa-minus shop-filter-side-button pull-right"></span>
                                 </uib-accordion-heading>
-                                <ul>
-                                    <li ng-repeat="p in metadata.product_type"><a href="">{{ p }}</a></li>
+                                <ul class="list-unstyled">
+                                    <li class="row margin-left-5 margin-right-5">
+                                        <span class="pull-left">Bar</span>
+                                        <input class="pull-right" type="checkbox" ng-model="searchFilter.pt[0]" />
+                                    </li>
+                                    <li class="row margin-left-5 margin-right-5">
+                                        <span class="pull-left">Gift Box</span>
+                                        <input class="pull-right" type="checkbox" ng-model="searchFilter.pt[1]" />
+                                    </li>
                                 </ul>
                             </uib-accordion-group>
                         </uib-accordion>
 
                     </div>
                     <!-- /CATEGORIES -->
+
+                    <button class="btn btn-default" ng-click="applyFilter()">Apply Filter</button>
+                    <button class="btn btn-default" ng-click="resetFilter()">Reset Filter</button>
 
                 </div>
 

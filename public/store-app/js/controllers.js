@@ -2,7 +2,9 @@
 
 function mainCtrl ($scope, $cookies, $http, appService) {
 
-    $scope.basePath = '/assets/media';
+    $scope.basePath = '/assets/store_media';
+    $scope.thumbnailSubPath = 'thumbnails';
+    $scope.fullProductImageSubPath = 'full';
 
     $scope.userCountry = 'CA';
 
@@ -16,6 +18,8 @@ function mainCtrl ($scope, $cookies, $http, appService) {
         flavor: [],
         dietary: []
     };
+
+    $scope.productTypes = [];
 
     $scope.manufacturers = [];
 
@@ -140,6 +144,15 @@ function mainCtrl ($scope, $cookies, $http, appService) {
 
 function storeCtrl ($scope, $state, appService) {
 
+    $scope.searchFilter = {
+        mid: [],
+        mo: [],
+        co: [],
+        pt: [],
+        fp: [],
+        dp: []
+    };
+
     if (typeof $scope.$parent.products === 'undefined') {
         appService.productList.query(function(products) {
             $scope.$parent.products = products;
@@ -152,6 +165,13 @@ function storeCtrl ($scope, $state, appService) {
             $scope.$parent.manufacturers = manufacturers;
         }, function(err) {
         });
+    }
+
+    if ($scope.$parent.productTypes.length === 0) {
+        $scope.$parent.productTypes = [
+            'bar',
+            'gift_box'
+        ]
     }
 
     if ( ($scope.$parent.productProfiles.flavor.length === 0) || ($scope.$parent.productProfiles.dietary.length === 0) ) {
@@ -185,6 +205,70 @@ function storeCtrl ($scope, $state, appService) {
         $scope.$parent.updateCart(product, 1);
         $state.go('cart');
     };
+
+    $scope.applyFilter = function() {
+
+        var queryParams = {
+            mid: [],
+            mo: [],
+            co: [],
+            fp: [],
+            dp: [],
+            pt: []
+        };
+
+        var searchFilter = $scope.searchFilter;
+
+        for (var i = 0; i < searchFilter.mid.length; i++) {
+            if (searchFilter.mid[i]) {
+                queryParams.mid.push($scope.$parent.manufacturers[i].id);
+            }
+        }
+        /*
+        for (var j = 0; j < searchFilter.mo.length; j++) {
+            if (searchFilter.mo[j]) {
+                queryParams.mo.push($scope.$parent.manufacturers[j].origin);
+            }
+        }
+        for (var k = 0; k < searchFilter.co.length; k++) {
+            if (searchFilter.co[k]) {
+                queryParams.co.push($scope.$parent.product[k].cocoaOrigin);
+            }
+        }
+        */
+        for (var l = 0; l < searchFilter.fp.length; l++) {
+            if (searchFilter.fp[l]) {
+                queryParams.fp.push($scope.$parent.productProfiles.flavor[l].name);
+            }
+        }
+        for (var o = 0; o < searchFilter.dp.length; o++) {
+            if (searchFilter.dp[o]) {
+                queryParams.dp.push($scope.$parent.productProfiles.dietary[o].name);
+            }
+        }
+        for (var p = 0; p < searchFilter.pt.length; p++) {
+            if (searchFilter.pt[p]) {
+                queryParams.pt.push($scope.$parent.productTypes[p]);
+            }
+        }
+
+        appService.productListFilter.query(queryParams, function(products) {
+            $scope.$parent.products = products;
+        });
+    };
+
+    $scope.resetFilter = function() {
+        $scope.searchFilter.mid.length = 0;
+        $scope.searchFilter.mo.length = 0;
+        $scope.searchFilter.co.length = 0;
+        $scope.searchFilter.pt.length = 0;
+        $scope.searchFilter.fp.length = 0;
+        $scope.searchFilter.dp.length = 0;
+
+        appService.productListFilter.query({}, function(products) {
+            $scope.$parent.products = products;
+        });
+    }
 }
 
 function productCtrl ($scope, $state, $stateParams, appService) {
@@ -198,7 +282,7 @@ function productCtrl ($scope, $state, $stateParams, appService) {
     $scope.loadPage = function() {
 
         // Load links to product images
-        $scope.productImages = generateListOfProductImgLinks($scope.$parent.basePath, $scope.product.id, $scope.product.numberOfImages);
+        $scope.productImages = generateListOfProductImgLinks($scope.$parent.basePath, $scope.$parent.fullProductImageSubPath, $scope.product.id, $scope.product.numberOfImages);
         $scope.activeImageIndex = 0;
 
         $scope.uncloak = true;
@@ -1187,12 +1271,12 @@ function findProductInCart(cart, productId) {
     return null;
 }
 
-function generateListOfProductImgLinks(basePath, productId, numImgs) {
+function generateListOfProductImgLinks(basePath, fullImageSubPath, productId, numImgs) {
 
     var imageLinks = [];
 
     for (var j = 1; j <= numImgs; j++) {
-        imageLinks.push(basePath + '/' + productId + '-' + j + '.png');
+        imageLinks.push(basePath + '/' + fullImageSubPath + '/' + productId + '-' + j + '.png');
     }
 
     return imageLinks;
