@@ -242,6 +242,17 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
         });
     });
 
+    app.get('/api/manufacturer/origin/list', function (req, res, next) {
+        manufacturerCtrl.listOrigins(dbConnPool, function(err, origins) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(origins);
+            }
+        });
+    });
+
     app.get('/api/shipping-cost', function (req, res, next) {
         var shippingCost = helpers.calculateShipping(req.query.province, req.query.country, req.query.amount);
         res.send({amount: shippingCost});
@@ -583,6 +594,17 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
                 res.send(products);
             }
         })
+    });
+
+    app.get('/api/product/origin/list', function (req, res, next) {
+        productCtrl.listCocoaOrigins(dbConnPool, function(err, origins) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(origins);
+            }
+        });
     });
 
     app.get('/api/product/profile', function (req, res, next) {

@@ -4,9 +4,13 @@ function appService($resource) {
     return {
         user: $resource('/api/user'),
 
+        productOrigins: $resource('/api/product/origin/list'),
+
         productProfile: $resource('/api/product/profile'),
 
         manufacturer: $resource('/api/manufacturer'),
+
+        manufacturerOrigins: $resource('/api/manufacturer/origin/list'),
 
         taxInfo: $resource('/api/tax-info',
             {},

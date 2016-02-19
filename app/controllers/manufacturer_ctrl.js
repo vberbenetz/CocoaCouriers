@@ -24,7 +24,7 @@ manufacturerCtrl.prototype = {
 
     },
 
-    listOrigin: function (dbConnPool, callback) {
+    listOrigins: function (dbConnPool, callback) {
 
         var query = {
             statement: 'SELECT DISTINCT origin FROM Manufacturer',

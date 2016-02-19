@@ -14,6 +14,9 @@ function mainCtrl ($scope, $cookies, $http, appService) {
     $scope.altShippingAddr = null;
     $scope.source = null;
 
+    $scope.cocoaOrigins = [];
+    $scope.manufacturerOrigins = [];
+
     $scope.productProfiles = {
         flavor: [],
         dietary: []
@@ -174,6 +177,40 @@ function storeCtrl ($scope, $state, appService) {
         ]
     }
 
+    if ($scope.$parent.cocoaOrigins.length === 0) {
+        appService.productOrigins.query(function(origins) {
+
+            origins.sort(function originSortingCompare(a, b) {
+                if (a.origin < b.origin) {
+                    return -1;
+                }
+                if (a.origin > b.origin) {
+                    return 1;
+                }
+                return 0;
+            });
+
+            $scope.$parent.cocoaOrigins = origins;
+        });
+    }
+
+    if ($scope.$parent.manufacturerOrigins.length === 0) {
+        appService.manufacturerOrigins.query(function(origins) {
+
+            origins.sort(function originSortingCompare(a, b) {
+                if (a.origin < b.origin) {
+                    return -1;
+                }
+                if (a.origin > b.origin) {
+                    return 1;
+                }
+                return 0;
+            });
+
+            $scope.$parent.manufacturerOrigins = origins;
+        });
+    }
+
     if ( ($scope.$parent.productProfiles.flavor.length === 0) || ($scope.$parent.productProfiles.dietary.length === 0) ) {
 
         // Reset product profiles
@@ -224,18 +261,16 @@ function storeCtrl ($scope, $state, appService) {
                 queryParams.mid.push($scope.$parent.manufacturers[i].id);
             }
         }
-        /*
         for (var j = 0; j < searchFilter.mo.length; j++) {
             if (searchFilter.mo[j]) {
-                queryParams.mo.push($scope.$parent.manufacturers[j].origin);
+                queryParams.mo.push($scope.$parent.manufacturerOrigins[j].origin);
             }
         }
         for (var k = 0; k < searchFilter.co.length; k++) {
             if (searchFilter.co[k]) {
-                queryParams.co.push($scope.$parent.product[k].cocoaOrigin);
+                queryParams.co.push($scope.$parent.cocoaOrigins[k].origin);
             }
         }
-        */
         for (var l = 0; l < searchFilter.fp.length; l++) {
             if (searchFilter.fp[l]) {
                 queryParams.fp.push($scope.$parent.productProfiles.flavor[l].name);
@@ -268,7 +303,8 @@ function storeCtrl ($scope, $state, appService) {
         appService.productListFilter.query({}, function(products) {
             $scope.$parent.products = products;
         });
-    }
+    };
+
 }
 
 function productCtrl ($scope, $state, $stateParams, appService) {

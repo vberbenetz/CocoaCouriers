@@ -91,7 +91,7 @@
                                 </uib-accordion-heading>
                                 <ul class="list-unstyled">
                                     <li class="row margin-left-5 margin-right-5" ng-repeat="mo in $parent.$parent.manufacturerOrigins">
-                                        <span class="pull-left">{{ mo }}</span>
+                                        <span class="pull-left">{{ mo.origin | isoCountryToName }}</span>
                                         <input class="pull-right" type="checkbox" ng-model="searchFilter.mo[$index]" />
                                     </li>
                                 </ul>
@@ -104,7 +104,7 @@
                                 </uib-accordion-heading>
                                 <ul class="list-unstyled">
                                     <li class="row margin-left-5 margin-right-5" ng-repeat="co in $parent.$parent.cocoaOrigins">
-                                        <span class="pull-left">{{ co }}</span>
+                                        <span class="pull-left">{{ co.origin | isoCountryToName }}</span>
                                         <input class="pull-right" type="checkbox" ng-model="searchFilter.co[$index]" />
                                     </li>
                                 </ul>

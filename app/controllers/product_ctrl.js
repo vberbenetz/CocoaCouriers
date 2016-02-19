@@ -301,7 +301,7 @@ productCtrl.prototype = {
 
     listCocoaOrigins: function (dbConnPool, callback) {
         var query = {
-            statement: 'SELECT DISTINCT cocoaOrigin FROM Product',
+            statement: 'SELECT DISTINCT cocoaOrigin as origin FROM Product',
             params: []
         };
 
