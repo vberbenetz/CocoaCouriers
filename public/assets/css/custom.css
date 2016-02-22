@@ -249,3 +249,9 @@ img.resize-shop-product {
     left: 50%;
     position: absolute;
 }
+
+.shop-thumbnail-fixed-size {
+    height :300px;
+    width :200px;
+    overflow :hidden;
+}
