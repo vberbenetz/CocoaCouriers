@@ -146,7 +146,7 @@ function mainCtrl ($scope, $cookies, $http, appService) {
 
 }
 
-function storeCtrl ($scope, $state, appService) {
+function storeCtrl ($scope, $state, $timeout, appService) {
 
     $scope.searchFilter = {
         mid: [],
@@ -234,6 +234,12 @@ function storeCtrl ($scope, $state, appService) {
     $scope.filterMenu = {};
 
     $scope.activeThumbnail = {};
+
+    $scope.changeActiveThumbnail = function(i, value) {
+        $timeout(function() {
+            $scope.activeThumbnail[i] = value;
+        }, 50);
+    };
 
     $scope.goToProduct = function (product) {
         $state.go('product', {urlSubPath: product.urlSubPath});

@@ -227,10 +227,8 @@ img.resize-shop-product {
     opacity: 0.8;
 }
 
-.shop-thumbnail-fixed-size {
-    height :300px;
-    width :200px;
-    overflow :hidden;
+.hide-overflow {
+    overflow: hidden !important;
 }
 
 .faded-panel {
