@@ -1,6 +1,6 @@
 'use strict';
 
-function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProvider, $provide) {
+function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProvider) {
     $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
     $urlRouterProvider.otherwise("/");
@@ -35,14 +35,6 @@ function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProv
 
     $locationProvider.html5Mode(true);
 
-    // Scroll to top on view change
-    $provide.decorator('$uiViewScroll', function($delegate) {
-        return function(uiViewElement) {
-            var top = uiViewElement.getBoundingClientRect().top;
-            window.scrollTo(0, (top-60));
-        }
-    });
-
 }
 angular
     .module('storeapp')
@@ -53,5 +45,10 @@ angular
                 evt.preventDefault();
                 $state.go(to.redirectTo, params);
             }
+        });
+        $rootScope.$on('$stateChangeSuccess', function() {
+
+            // Scroll to top of page on state change
+            $document[0].documentElement.scrollTop = 0;
         });
     });
