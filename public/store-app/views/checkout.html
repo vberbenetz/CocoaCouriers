@@ -327,20 +327,22 @@
                                 </div>
 
                                 <div class="panel-body">
-                                    <div class="clearfix" ng-repeat="i in $parent.cart">
-                                        <p class="pull-left">
-                                            <img ng-src="{{ $parent.basePath + '/' + $parent.thumbnailSubPath + '/' + i.product.id + '-' + 'T' + '-' + '1.png' }}" width="50" />
-                                            {{ i.product.name }}
-                                        </p>
-                                        <p class="pull-right">
-                                            <input style="width:50px;" type="number" ng-model="$parent.cart[$index].quantity" ng-change="calcCheckout()" maxlength="2" max="{{i.product.stockQuantity}}" min="1" />
-                                            &times;
-                                            <span ng-show="userCountry==='CA'">${{ (i.product.cadPrice / 100).toFixed(2) }}</span>
-                                            <span ng-show="userCountry==='US'">${{ (i.product.usPrice / 100).toFixed(2) }}</span>
-                                        </p>
-                                    </div>
+                                    <div ng-repeat="i in $parent.cart" ng-hide="$parent.products[i.product.id].stockQuantity < 1">
 
-                                    <div class="divider double-line margin-top-10 margin-bottom-10"></div>
+                                        <div class="clearfix" >
+                                            <p class="pull-left">
+                                                <img ng-src="{{ $parent.basePath + '/' + $parent.thumbnailSubPath + '/' + i.product.id + '-' + 'T' + '-' + '1.png' }}" width="50" />
+                                                {{ i.product.name }}
+                                            </p>
+                                            <p class="pull-right">
+                                                <input style="width:50px;" type="number" ng-model="$parent.cart[$index].quantity" ng-change="calcCheckout()" maxlength="2" max="{{i.product.stockQuantity}}" min="1" />
+                                                &times;
+                                                <span ng-show="userCountry==='CA'">${{ (i.product.cadPrice / 100).toFixed(2) }}</span>
+                                                <span ng-show="userCountry==='US'">${{ (i.product.usPrice / 100).toFixed(2) }}</span>
+                                            </p>
+                                        </div>
+
+                                        <div class="divider double-line margin-top-10 margin-bottom-10"></div>
 
                                     <span class="clearfix" ng-show="discount>0">
                                         <span class="pull-right">- $ {{ (discount/100).toFixed(2) }}</span>
@@ -357,7 +359,7 @@
                                         <span class="pull-left">Shipping:</span>
                                     </span>
 
-                                    <hr ng-show="tax.rate > 0" />
+                                        <hr ng-show="tax.rate > 0" />
 
                                     <span class="clearfix" ng-show="tax.rate > 0">
                                         <span class="pull-right">$ {{ (tax.amount / 100).toFixed(2) }}</span>
@@ -365,12 +367,14 @@
                                         <span class="pull-left">&nbsp;</span>
                                     </span>
 
-                                    <hr />
+                                        <hr />
 
                                     <span class="clearfix">
                                         <span class="pull-right size-20">$ {{ (total / 100).toFixed(2) }}</span>
                                         <strong class="pull-left">TOTAL:</strong>
                                     </span>
+
+                                    </div>
                                 </div>
                             </div>
 

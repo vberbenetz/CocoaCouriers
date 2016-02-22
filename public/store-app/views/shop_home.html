@@ -2,7 +2,7 @@
     <section class="page-header page-header-xs">
         <div class="container">
             <h1>STORE
-                <button class="btn btn-blue font-spin pull-right">
+                <button ui-sref="cart" class="btn btn-blue font-spin pull-right">
                     <span class="fa fa-shopping-cart"></span> View Cart <span class="badge badge-light"><strong>{{ $parent.cart.length }}</strong></span>
                 </button>
             </h1>
@@ -51,8 +51,7 @@
 
                                 <!-- buttons -->
                                 <div class="shop-item-buttons text-center">
-                                    <a ng-show="p.stockQuantity > 5" class="btn btn-flat-green" ng-click="addToCart(p)"><i class="fa fa-cart-plus"></i> Add to Cart</a>
-                                    <a ng-show="p.stockQuantity > 0 && p.stockQuantity <= 5" class="btn btn-flat-green" ng-click="addToCart(p)"><i class="fa fa-cart-plus"></i> Low Stock</a>
+                                    <a ng-show="p.stockQuantity > 0" class="btn btn-flat-green" ng-click="addToCart(p)"><i class="fa fa-cart-plus"></i> Add to Cart</a>
                                     <a ng-hide="p.stockQuantity > 0" class="btn btn-danger" ng-disabled="true"><i class="fa fa-times"></i> Out Of Stock</a>
                                 </div>
                                 <!-- /buttons -->

@@ -37,6 +37,12 @@ function mainCtrl ($scope, $cookies, $http, appService) {
         appService.productList.queryByIds({productIds: cartPidQs}, function(products) {
 
             for (var i = 0; i < products.length; i++) {
+
+                // Skip over sold out products
+                if (products[i].stockQuantity < 1) {
+                    continue;
+                }
+
                 for (var j = 0; j < cartPidQs.length; j++) {
                     if (products[i].id === cartPidQs[j].pid) {
                         var obj = {

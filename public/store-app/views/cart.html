@@ -62,9 +62,13 @@
                                 <a ui-sref="product({urlSubPath: i.product.urlSubPath})" class="product_name">
                                     <span>{{ i.product.m_name }} - {{ i.product.name }}</span>
                                     <small>{{ i.product.cocoaPercent }}% Cocoa</small>
+                                    <small ng-show="(i.product.stockQuantity <= 5) && (i.product.stockQuantity > 0)" class="text-danger margin-top-10">Low Stock {{ i.product.stockQuantity }} remaining</small>
+                                    <small ng-show="(i.product.stockQuantity == 0)" class="text-danger margin-top-10">Sold Out. More arriving shortly.</small>
                                 </a>
                                 <a ng-click="removeFromCart(i.product.id)" class="remove_item"><i class="fa fa-times"></i></a>
-                                <div class="total_price">$<span>{{ ( (i.product.cadPrice * i.quantity) / 100 ).toFixed(2) }}</span></div>
+                                <div class="total_price">
+                                    $<span>{{ ( (i.product.cadPrice * i.quantity) / 100 ).toFixed(2) }}</span>
+                                </div>
                                 <div class="qty"><input type="number" ng-model="$parent.cart[$index].quantity" maxlength="2" max="{{i.product.stockQuantity}}" min="1" /> &times; ${{ i.product.cadPrice / 100 }}</div>
                                 <div class="clearfix"></div>
                             </div>
