@@ -16,8 +16,22 @@
     <section>
         <div class="container">
 
-            <div class="row text-center margin-bottom-neg-50 margin-top-neg-50">
-                <h1>{{ product.m_name }} - {{ product.name }}</h1>
+            <div class="visible-lg visible-md row margin-bottom-neg-20 margin-top-neg-50">
+                <div class="col-lg-6 col-md-8">
+                    <h1 class="margin-right-20 margin-left-20">
+                        {{ product.m_name }} - {{ product.name }}
+                    </h1>
+                </div>
+                <div class="col-lg-6 col-md-4">
+                    <img ng-repeat="fp in thisProductProfiles" class="product-profile-thumbnail pull-right" ng-src="{{ $parent.basePath + '/' + $parent.flavorProfileImagePath + '/' + fp.productProfileId + '.png' }}" />
+                </div>
+            </div>
+
+            <div class="hidden-lg hidden-md row margin-bottom-neg-20 margin-top-neg-50 text-center">
+                <h1 class="margin-right-20 margin-left-20">
+                    {{ product.m_name }} - {{ product.name }}
+                </h1>
+                <img ng-repeat="fp in thisProductProfiles" class="product-profile-thumbnail margin-top-neg-30 " ng-src="{{ $parent.basePath + '/' + $parent.flavorProfileImagePath + '/' + fp.productProfileId + '.png' }}" />
             </div>
 
             <div class="divider double-line"></div>
@@ -25,23 +39,37 @@
             <div class="row">
 
                 <!-- IMAGE -->
-                <div class="col-md-4 col-sm-5 col-xs-7 text-center">
-                    <img class="resize-shop-product" ng-src="{{ productImages[activeImageIndex] }}" />
+                <div class="col-md-4 col-sm-5 col-xs-12 text-center">
+                    <a ng-click="openProductImage(productImages[activeImageIndex])">
+                        <img class="resize-shop-product" ng-src="{{ productImages[activeImageIndex] }}" />
+                    </a>
+
                     <div class="row text-center margin-top-30">
                         <a ng-repeat="pi in productImages" href="" ng-click="$parent.activeImageIndex=$index">
-                            <img class="resize-shop-item-thumbnail" ng-src="{{ productImages[$index] }}" />
+                            <img style="border: solid 1px;" class="resize-shop-item-thumbnail" ng-src="{{ productImages[$index] }}" ng-class="{'image-bw opacity-6' : $index!==activeImageIndex}" />
                         </a>
                     </div>
                 </div>
                 <!-- /IMAGE -->
 
+                <!-- IMAGE ZOOMED IN MODAL -->
+                <script type="text/ng-template" id="fullProductImage.html">
+                    <div class="modal-body">
+                        <button class="pull-right text-black" ng-click="cancel()"><span class="fa fa-times fa-2x"></span></button>
+                        <div class="text-center">
+                            <img class="img-responsive" ng-src="{{ imgUrl }}" width="650" />
+                        </div>
+                    </div>
+                </script>
+                <!-- /IMAGE ZOOMED IN MODAL -->
+
                 <!-- ITEM DESC -->
-                <div class="col-md-8 col-sm-7 col-xs-5">
+                <div class="col-md-8 col-sm-7 col-xs-12">
 
                     <!-- price -->
                     <div class="row">
-                        <div class="col-sm-6 col-xs-12 margin-bottom-10">
-                            <div class="col-xs-12 margin-left-10">
+                        <div class="col-sm-6 col-xs-12 margin-bottom-10 text-center-xs">
+                            <div class="col-xs-12">
                                 <div class="shop-item-price">
                                     <div ng-show="$parent.userCountry==='CA'">$ {{ (product.cadPrice / 100).toFixed(2) }} CAD</div>
                                     <div ng-show="$parent.userCountry==='US'">$ {{ (product.usPrice / 100).toFixed(2) }} USD</div>
@@ -51,7 +79,7 @@
                                 <span ng-if="(product.stockQuantity > 0) && (product.stockQuantity < 20)" class="text-danger"><strong>Low Stock</strong> ({{ product.stockQuantity }} remaining)</span>
                                 <span ng-if="product.stockQuantity < 1" class="text-danger"><i class="glyphicon glyphicon-remove"></i> Out of Stock</span>
                             </div>
-                            <div class="col-xs-12 margin-top-20 margin-left-10">
+                            <div class="col-xs-12 margin-top-20">
                                 <input class="product-qty-select" type="number" ng-model="quantity" maxlength="2" max="{{ product.stockQuantity }}" min="1" />
                             </div>
                         </div>
@@ -60,36 +88,42 @@
                             <button ng-hide="product.stockQuantity > 0" ng-disabled="true" class="btn btn-lg btn-danger pull-right noradius"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;&nbsp;OUT OF STOCK</button>
                         </div>
                         <div class="col-sm-6 col-xs-12 margin-bottom-30 margin-top-20 visible-xs">
-                            <button ng-show="product.stockQuantity > 0" ng-click="addToCart()" class="btn btn-green text-center noradius"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;&nbsp;ADD TO CART</button>
-                            <button ng-hide="product.stockQuantity > 0" ng-disabled="true" class="btn btn-danger text-center noradius"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;&nbsp;OUT OF STOCK</button>
+                            <button ng-show="product.stockQuantity > 0" ng-click="addToCart()" class="btn btn-green btn-block text-center noradius"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;&nbsp;ADD TO CART</button>
+                            <button ng-hide="product.stockQuantity > 0" ng-disabled="true" class="btn btn-danger btn-block text-center noradius"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;&nbsp;OUT OF STOCK</button>
                         </div>
                     </div>
                     <!-- /price -->
 
-                    <hr />
-
-                    <div class="row text-center">
-                        <img ng-repeat="fp in thisProductProfiles" class="product-profile-thumbnail" ng-src="{{ $parent.basePath + '/' + $parent.flavorProfileImagePath + '/' + fp.productProfileId + '.png' }}" />
-                    </div>
-
                     <hr class="hidden-xs"/>
 
-                    <!-- short description -->
-                    <div class="row margin-left-10 margin-right-10 margin-top-20 hidden-xs">
-                        <p class="margin-top-30">{{ product.description }}</p>
-                    </div>
-                    <!-- /short description -->
+                    <uib-tabset>
+                        <uib-tab heading="Description">
+                            {{ product.description }}
+                        </uib-tab>
+                        <uib-tab heading="Specifications">
+                            <div class="col-lg-4 col-xs-6">
+                                <strong>Maker</strong> <br/><br/>
+                                <strong>Maker Location</strong> <br/><br/>
+                                <strong>Cocoa Origin</strong> <br/><br/>
+                                <strong>Cocoa Percent</strong> <br /><br/>
+                                <strong>Weight</strong> <br /><br/>
+                            </div>
+                            <div class="col-lg-8 col-xs-6 text-left">
+                                {{ product.m_name }} <br/><br/>
+                                {{ product.m_origin | isoCountryToName }} <br/><br/>
+                                {{ product.cocoaOrigin | isoCountryToName }} <br/><br/>
+                                {{ product.cocoaPercent }}% <br/><br/>
+                                {{ product.weightImperial }} oz / {{ product.weightMetric }} grams <br/><br/>
+                            </div>
+                        </uib-tab>
+                        <uib-tab heading="Reviews">
+
+                        </uib-tab>
+                    </uib-tabset>
 
                 </div>
                 <!-- /ITEM DESC -->
 
-                <div class="col-xs-12 visible-xs">
-                    <hr class="margin-top-neg-20"/>
-                </div>
-
-                <div class="col-xs-12 margin-left-10 margin-right-10 margin-bottom-neg-20 visible-xs">
-                    <p>{{ product.description }}</p>
-                </div>
             </div>
 
         </div>

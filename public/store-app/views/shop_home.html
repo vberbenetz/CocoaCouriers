@@ -1,7 +1,11 @@
 <div>
     <section class="page-header page-header-xs">
         <div class="container">
-            <h1>STORE</h1>
+            <h1>STORE
+                <button class="btn btn-blue font-spin pull-right">
+                    <span class="fa fa-shopping-cart"></span> View Cart <span class="badge badge-light"><strong>{{ $parent.cart.length }}</strong></span>
+                </button>
+            </h1>
         </div>
     </section>
 
@@ -11,21 +15,21 @@
             <div class="row">
 
                 <!-- RIGHT -->
-                <div class="col-md-9 col-xs-12 col-md-push-3">
+                <div class="col-md-9 col-sm-8 col-xs-12 col-md-push-3 col-sm-push-4">
 
-                    <ul class="shop-item-list row list-inline nomargin">
+                    <ul class=" row list-inline nomargin">
 
                         <!-- ITEM -->
-                        <li class="col-md-3 col-sm-4 col-xs-6" ng-repeat="p in $parent.products" ng-init="activeThumbnail[$index]=1">
+                        <li class="col-lg-3 col-md-4 col-sm-6 col-xs-12" ng-repeat="p in $parent.products" ng-init="activeThumbnail[$index]=1">
 
                             <div class="shop-item">
 
                                 <a ng-click="goToProduct(p)">
-                                    <div class="thumbnail shop-thumbnail-fixed-size" ng-mouseover="activeThumbnail[$index]=2" ng-mouseleave="activeThumbnail[$index]=1">
+                                    <div class="thumbnail" ng-mouseover="activeThumbnail[$index]=2" ng-mouseleave="activeThumbnail[$index]=1">
                                         <!-- product image(s) -->
 
-                                            <img ng-show="activeThumbnail[$index]==1" ng-src="{{ $parent.basePath + '/' + $parent.thumbnailSubPath + '/' + p.id + '-' + 'T' + '-' + '1.png' }}" />
-                                            <img ng-hide="activeThumbnail[$index]==1" ng-src="{{ $parent.basePath + '/' + $parent.thumbnailSubPath + '/' + p.id + '-' + 'T' + '-' + '2.png' }}" />
+                                            <img class="img-responsive" ng-show="activeThumbnail[$index]==1" ng-src="{{ $parent.basePath + '/' + $parent.thumbnailSubPath + '/' + p.id + '-' + 'T' + '-' + '1.png' }}" />
+                                            <img class="img-responsive" ng-hide="activeThumbnail[$index]==1" ng-src="{{ $parent.basePath + '/' + $parent.thumbnailSubPath + '/' + p.id + '-' + 'T' + '-' + '2.png' }}" />
                                         <!-- /product image(s) -->
 
                                     </div>
@@ -64,97 +68,95 @@
                 </div>
 
                 <!-- LEFT -->
-                <div class="col-md-3 col-xs-12 col-md-pull-9 col-xs-pull-9">
+                <div class="col-md-3 col-sm-4 col-xs-12 col-md-pull-9 col-sm-pull-8">
 
                     <!-- CATEGORIES -->
-                    <div class="side-nav margin-bottom-60">
+                    <uib-accordion close-others="false">
+                        <uib-accordion-group class="no-border" is-open="filterMenu.g1">
+                            <uib-accordion-heading>
+                                Manufacturers
+                                <span ng-show="!filterMenu.g1" class="fa fa-plus shop-filter-side-button pull-right"></span>
+                                <span ng-show="filterMenu.g1" class="fa fa-minus shop-filter-side-button pull-right"></span>
+                            </uib-accordion-heading>
+                            <ul class="list-unstyled">
+                                <li class="row margin-left-5 margin-right-5" ng-repeat="m in $parent.$parent.manufacturers">
+                                    <span class="pull-left">{{ m.name }}</span>
+                                    <input class="pull-right" type="checkbox" ng-model="searchFilter.mid[$index]" />
+                                </li>
+                            </ul>
+                        </uib-accordion-group>
+                        <uib-accordion-group class="no-border" is-open="filterMenu.g2">
+                            <uib-accordion-heading>
+                                Chocolatier Location
+                                <span ng-show="!filterMenu.g2" class="fa fa-plus shop-filter-side-button pull-right"></span>
+                                <span ng-show="filterMenu.g2" class="fa fa-minus shop-filter-side-button pull-right"></span>
+                            </uib-accordion-heading>
+                            <ul class="list-unstyled">
+                                <li class="row margin-left-5 margin-right-5" ng-repeat="mo in $parent.$parent.manufacturerOrigins">
+                                    <span class="pull-left">{{ mo.origin | isoCountryToName }}</span>
+                                    <input class="pull-right" type="checkbox" ng-model="searchFilter.mo[$index]" />
+                                </li>
+                            </ul>
+                        </uib-accordion-group>
+                        <uib-accordion-group class="no-border" is-open="filterMenu.g3">
+                            <uib-accordion-heading>
+                                Cocoa Bean Origin
+                                <span ng-show="!filterMenu.g3" class="fa fa-plus shop-filter-side-button pull-right"></span>
+                                <span ng-show="filterMenu.g3" class="fa fa-minus shop-filter-side-button pull-right"></span>
+                            </uib-accordion-heading>
+                            <ul class="list-unstyled">
+                                <li class="row margin-left-5 margin-right-5" ng-repeat="co in $parent.$parent.cocoaOrigins">
+                                    <span class="pull-left">{{ co.origin | isoCountryToName }}</span>
+                                    <input class="pull-right" type="checkbox" ng-model="searchFilter.co[$index]" />
+                                </li>
+                            </ul>
+                        </uib-accordion-group>
+                        <uib-accordion-group class="no-border" is-open="filterMenu.g4">
+                            <uib-accordion-heading>
+                                Flavor Profiles
+                                <span ng-show="!filterMenu.g4" class="fa fa-plus shop-filter-side-button pull-right"></span>
+                                <span ng-show="filterMenu.g4" class="fa fa-minus shop-filter-side-button pull-right"></span>
+                            </uib-accordion-heading>
+                            <ul class="list-unstyled">
+                                <li class="row margin-left-5 margin-right-5" ng-repeat="fp in $parent.$parent.productProfiles.flavor">
+                                    <span class="pull-left">{{ fp.name }}</span>
+                                    <input class="pull-right" type="checkbox" ng-model="searchFilter.fp[$index]" />
+                                </li>
+                            </ul>
+                        </uib-accordion-group>
+                        <uib-accordion-group class="no-border" is-open="filterMenu.g5">
+                            <uib-accordion-heading>
+                                Dietary Preferences
+                                <span ng-show="!filterMenu.g5" class="fa fa-plus shop-filter-side-button pull-right"></span>
+                                <span ng-show="filterMenu.g5" class="fa fa-minus shop-filter-side-button pull-right"></span>
+                            </uib-accordion-heading>
+                            <ul class="list-unstyled">
+                                <li class="row margin-left-5 margin-right-5" ng-repeat="dp in $parent.$parent.productProfiles.dietary">
+                                    <span class="pull-left">{{ dp.name }}</span>
+                                    <input class="pull-right" type="checkbox" ng-model="searchFilter.dp[$index]" />
+                                </li>
+                            </ul>
+                        </uib-accordion-group>
+                        <uib-accordion-group class="no-border" is-open="filterMenu.g6">
+                            <uib-accordion-heading>
+                                Product Type
+                                <span ng-show="!filterMenu.g6" class="fa fa-plus shop-filter-side-button pull-right"></span>
+                                <span ng-show="filterMenu.g6" class="fa fa-minus shop-filter-side-button pull-right"></span>
+                            </uib-accordion-heading>
+                            <ul class="list-unstyled">
+                                <li class="row margin-left-5 margin-right-5">
+                                    <span class="pull-left">Bar</span>
+                                    <input class="pull-right" type="checkbox" ng-model="searchFilter.pt[0]" />
+                                </li>
+                                <li class="row margin-left-5 margin-right-5">
+                                    <span class="pull-left">Gift Box</span>
+                                    <input class="pull-right" type="checkbox" ng-model="searchFilter.pt[1]" />
+                                </li>
+                            </ul>
+                        </uib-accordion-group>
+                    </uib-accordion>
 
-                        <uib-accordion close-others="false">
-                            <uib-accordion-group class="no-border" is-open="filterMenu.g1">
-                                <uib-accordion-heading>
-                                    Manufacturers
-                                    <span ng-show="!filterMenu.g1" class="fa fa-plus shop-filter-side-button pull-right"></span>
-                                    <span ng-show="filterMenu.g1" class="fa fa-minus shop-filter-side-button pull-right"></span>
-                                </uib-accordion-heading>
-                                <ul class="list-unstyled">
-                                    <li class="row margin-left-5 margin-right-5" ng-repeat="m in $parent.$parent.manufacturers">
-                                        <span class="pull-left">{{ m.name }}</span>
-                                        <input class="pull-right" type="checkbox" ng-model="searchFilter.mid[$index]" />
-                                    </li>
-                                </ul>
-                            </uib-accordion-group>
-                            <uib-accordion-group class="no-border" is-open="filterMenu.g2">
-                                <uib-accordion-heading>
-                                    Chocolatier Location
-                                    <span ng-show="!filterMenu.g2" class="fa fa-plus shop-filter-side-button pull-right"></span>
-                                    <span ng-show="filterMenu.g2" class="fa fa-minus shop-filter-side-button pull-right"></span>
-                                </uib-accordion-heading>
-                                <ul class="list-unstyled">
-                                    <li class="row margin-left-5 margin-right-5" ng-repeat="mo in $parent.$parent.manufacturerOrigins">
-                                        <span class="pull-left">{{ mo.origin | isoCountryToName }}</span>
-                                        <input class="pull-right" type="checkbox" ng-model="searchFilter.mo[$index]" />
-                                    </li>
-                                </ul>
-                            </uib-accordion-group>
-                            <uib-accordion-group class="no-border" is-open="filterMenu.g3">
-                                <uib-accordion-heading>
-                                    Cocoa Bean Origin
-                                    <span ng-show="!filterMenu.g3" class="fa fa-plus shop-filter-side-button pull-right"></span>
-                                    <span ng-show="filterMenu.g3" class="fa fa-minus shop-filter-side-button pull-right"></span>
-                                </uib-accordion-heading>
-                                <ul class="list-unstyled">
-                                    <li class="row margin-left-5 margin-right-5" ng-repeat="co in $parent.$parent.cocoaOrigins">
-                                        <span class="pull-left">{{ co.origin | isoCountryToName }}</span>
-                                        <input class="pull-right" type="checkbox" ng-model="searchFilter.co[$index]" />
-                                    </li>
-                                </ul>
-                            </uib-accordion-group>
-                            <uib-accordion-group class="no-border" is-open="filterMenu.g4">
-                                <uib-accordion-heading>
-                                    Flavor Profiles
-                                    <span ng-show="!filterMenu.g4" class="fa fa-plus shop-filter-side-button pull-right"></span>
-                                    <span ng-show="filterMenu.g4" class="fa fa-minus shop-filter-side-button pull-right"></span>
-                                </uib-accordion-heading>
-                                <ul class="list-unstyled">
-                                    <li class="row margin-left-5 margin-right-5" ng-repeat="fp in $parent.$parent.productProfiles.flavor">
-                                        <span class="pull-left">{{ fp.name }}</span>
-                                        <input class="pull-right" type="checkbox" ng-model="searchFilter.fp[$index]" />
-                                    </li>
-                                </ul>
-                            </uib-accordion-group>
-                            <uib-accordion-group class="no-border" is-open="filterMenu.g5">
-                                <uib-accordion-heading>
-                                    Dietary Preferences
-                                    <span ng-show="!filterMenu.g5" class="fa fa-plus shop-filter-side-button pull-right"></span>
-                                    <span ng-show="filterMenu.g5" class="fa fa-minus shop-filter-side-button pull-right"></span>
-                                </uib-accordion-heading>
-                                <ul class="list-unstyled">
-                                    <li class="row margin-left-5 margin-right-5" ng-repeat="dp in $parent.$parent.productProfiles.dietary">
-                                        <span class="pull-left">{{ dp.name }}</span>
-                                        <input class="pull-right" type="checkbox" ng-model="searchFilter.dp[$index]" />
-                                    </li>
-                                </ul>
-                            </uib-accordion-group>
-                            <uib-accordion-group class="no-border" is-open="filterMenu.g6">
-                                <uib-accordion-heading>
-                                    Product Type
-                                    <span ng-show="!filterMenu.g6" class="fa fa-plus shop-filter-side-button pull-right"></span>
-                                    <span ng-show="filterMenu.g6" class="fa fa-minus shop-filter-side-button pull-right"></span>
-                                </uib-accordion-heading>
-                                <ul class="list-unstyled">
-                                    <li class="row margin-left-5 margin-right-5">
-                                        <span class="pull-left">Bar</span>
-                                        <input class="pull-right" type="checkbox" ng-model="searchFilter.pt[0]" />
-                                    </li>
-                                    <li class="row margin-left-5 margin-right-5">
-                                        <span class="pull-left">Gift Box</span>
-                                        <input class="pull-right" type="checkbox" ng-model="searchFilter.pt[1]" />
-                                    </li>
-                                </ul>
-                            </uib-accordion-group>
-                        </uib-accordion>
 
-                    </div>
                     <!-- /CATEGORIES -->
 
                     <button class="btn btn-default" ng-click="applyFilter()">Apply Filter</button>

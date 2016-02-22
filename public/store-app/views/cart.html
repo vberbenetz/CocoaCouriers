@@ -56,10 +56,12 @@
 
                             <!-- cart item -->
                             <div class="item" ng-repeat="i in $parent.cart">
-                                <div class="cart_img pull-left width-100 padding-10 text-left"><img src="/assets/media/thumbnails/p1.jpg" alt="" width="80" /></div>
+                                <div class="cart_img pull-left width-100 padding-10 text-left">
+                                    <img ng-src="{{ $parent.basePath + '/' + $parent.thumbnailSubPath + '/' + i.product.id + '-' + 'T' + '-' + '1.png' }}" width="80" />
+                                </div>
                                 <a ui-sref="product({urlSubPath: i.product.urlSubPath})" class="product_name">
-                                    <span>Dick Taylor - {{ i.product.name }}</span>
-                                    <small>75% Cocoa</small>
+                                    <span>{{ i.product.m_name }} - {{ i.product.name }}</span>
+                                    <small>{{ i.product.cocoaPercent }}% Cocoa</small>
                                 </a>
                                 <a ng-click="removeFromCart(i.product.id)" class="remove_item"><i class="fa fa-times"></i></a>
                                 <div class="total_price">$<span>{{ ( (i.product.cadPrice * i.quantity) / 100 ).toFixed(2) }}</span></div>
@@ -79,6 +81,10 @@
                 <div class="col-lg-3 col-sm-4">
 
                     <div class="margin-bottom-30">
+                        <a ui-sref="home" class="btn btn-blue btn-lg btn-block size-13"><i class="fa fa-reply"></i> Continue Shopping</a>
+
+                        <hr/>
+
                         <span class="clearfix">
                             <span class="pull-right">${{ calcSubtotal() }}</span>
                             <strong class="pull-left">Subtotal:</strong>
@@ -97,7 +103,7 @@
 
                         <hr />
 
-                        <a ui-sref="checkout" class="btn btn-green btn-lg btn-block size-15"><i class="fa fa-shopping-cart"></i> Proceed to Checkout</a>
+                        <a ui-sref="checkout" class="btn btn-flat-green btn-lg btn-block size-17 margin-top-20">Proceed to Checkout <i class="fa fa-shopping-cart"></i></a>
                     </div>
 
                     <div>

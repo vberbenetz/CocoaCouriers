@@ -308,7 +308,7 @@ function storeCtrl ($scope, $state, appService) {
 
 }
 
-function productCtrl ($scope, $state, $stateParams, appService) {
+function productCtrl ($scope, $state, $stateParams, $uibModal, appService) {
 
     // Flag indicating successful product retrieval
     $scope.productLoadFlag = null;
@@ -341,6 +341,27 @@ function productCtrl ($scope, $state, $stateParams, appService) {
     $scope.addToCart = function() {
         $scope.$parent.updateCart($scope.product, $scope.quantity);
         $state.go('cart');
+    };
+
+    $scope.openProductImage = function(imgUrl) {
+
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'fullProductImage.html',
+            controller: 'productImgModalCtrl',
+            size: 'lg',
+            resolve: {
+                imgUrl: function() {
+                    return imgUrl;
+                }
+            }
+        });
+
+        modalInstance.result.then(function (){});
+
+        $scope.$toggleAnimation = function() {
+            $scope.animationsEnabled = !$scope.animationsEnabled;
+        }
     };
 
 
@@ -377,6 +398,15 @@ function productCtrl ($scope, $state, $stateParams, appService) {
         }
     }
 
+}
+
+function productImgModalCtrl($scope, $uibModalInstance, imgUrl) {
+
+    $scope.imgUrl = imgUrl;
+
+    $scope.cancel = function (){
+        $uibModalInstance.dismiss('cancel');
+    }
 }
 
 function cartCtrl ($scope) {
@@ -1432,6 +1462,7 @@ angular
     .controller('mainCtrl', mainCtrl)
     .controller('storeCtrl', storeCtrl)
     .controller('productCtrl', productCtrl)
+    .controller('productImgModalCtrl', productImgModalCtrl)
     .controller('cartCtrl', cartCtrl)
     .controller('checkoutCtrl', checkoutCtrl)
     .controller('postCheckoutCtrl', postCheckoutCtrl);

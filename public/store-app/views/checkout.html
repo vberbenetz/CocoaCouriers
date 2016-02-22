@@ -38,7 +38,7 @@
                     <div class="col-md-7 col-xs-12">
 
                         <div class="heading-title text-center">
-                            <h4>Billing Address</h4>
+                            <h3>Billing Address</h3>
                         </div>
 
                         <hr />
@@ -238,7 +238,7 @@
 
                             <div class="panel" ng-class="chargeErr ? 'panel-danger' : 'panel-default'">
                                 <div class="panel-heading text-center">
-                                    <h4>Payment Method</h4>
+                                    <h3>Payment Method</h3>
                                 </div>
                                 <div class="panel-body">
                                     <div ng-show="$parent.loaded.source && $parent.source">
@@ -322,13 +322,16 @@
                             </div>
 
                             <div class="panel panel-default" ng-class="{'faded-panel': recalculatingTotal}">
-                                <div class="panel-heading text-center">
-                                    <h4>Order Details</h4>
+                                <div class="panel-heading">
+                                    <h3>Order Details <a class="btn btn-xs btn-default pull-right" ui-sref="cart">Update</a></h3>
                                 </div>
 
                                 <div class="panel-body">
                                     <div class="clearfix" ng-repeat="i in $parent.cart">
-                                        <p class="pull-left">{{ i.product.name }}</p>
+                                        <p class="pull-left">
+                                            <img ng-src="{{ $parent.basePath + '/' + $parent.thumbnailSubPath + '/' + i.product.id + '-' + 'T' + '-' + '1.png' }}" width="50" />
+                                            {{ i.product.name }}
+                                        </p>
                                         <p class="pull-right">
                                             <input style="width:50px;" type="number" ng-model="$parent.cart[$index].quantity" ng-change="calcCheckout()" maxlength="2" max="{{i.product.stockQuantity}}" min="1" />
                                             &times;
