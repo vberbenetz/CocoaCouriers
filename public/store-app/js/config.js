@@ -50,5 +50,6 @@ angular
 
             // Scroll to top of page on state change
             $document[0].documentElement.scrollTop = 0;
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
         });
     });
