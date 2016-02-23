@@ -175,6 +175,11 @@
     background-repeat: repeat;
 }
 
+.emb-bg {
+    background: url('../images/dark_embroidery.png');
+    background-repeat: repeat;
+}
+
 .bg-brown {
  background-color: #252525; !important;
 }
