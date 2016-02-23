@@ -14,64 +14,8 @@
 
             <div class="row">
 
-                <!-- RIGHT -->
-                <div class="col-md-9 col-sm-8 col-xs-12 col-md-push-3 col-sm-push-4">
-
-                    <ul class=" row list-inline nomargin">
-
-                        <!-- ITEM -->
-                        <li class="col-lg-3 col-md-4 col-sm-6 col-xs-8 col-sm-offset-0 col-xs-offset-2" ng-repeat="p in $parent.products" ng-init="activeThumbnail[$index]=1">
-
-                            <div class="shop-item">
-
-                                <a ng-click="goToProduct(p)">
-                                    <div class="thumbnail shop-thumbnail-fixed-size visible-md visible-lg" ng-mouseover="activeThumbnail[$index]=2" ng-mouseleave="activeThumbnail[$index]=1">
-                                        <!-- product image(s) -->
-                                            <img class="img-responsive" ng-show="activeThumbnail[$index]==1" ng-src="{{ $parent.basePath + '/' + $parent.thumbnailSubPath + '/' + p.id + '-' + 'T' + '-' + '1.png' }}" />
-                                            <img class="img-responsive" ng-hide="activeThumbnail[$index]==1" ng-src="{{ $parent.basePath + '/' + $parent.thumbnailSubPath + '/' + p.id + '-' + 'T' + '-' + '2.png' }}" />
-                                        <!-- /product image(s) -->
-                                    </div>
-                                    <div class="thumbnail visible-sm visible-xs" ng-mouseover="changeActiveThumbnail($index, 2)" ng-mouseleave="changeActiveThumbnail($index, 1)">
-                                        <!-- product image(s) -->
-                                        <img class="img-responsive" ng-show="activeThumbnail[$index]==1" ng-src="{{ $parent.basePath + '/' + $parent.thumbnailSubPath + '/' + p.id + '-' + 'T' + '-' + '1.png' }}" />
-                                        <img class="img-responsive" ng-hide="activeThumbnail[$index]==1" ng-src="{{ $parent.basePath + '/' + $parent.thumbnailSubPath + '/' + p.id + '-' + 'T' + '-' + '2.png' }}" />
-                                        <!-- /product image(s) -->
-                                    </div>
-                                </a>
-
-                                <a href="" ng-click="goToProduct(p)">
-                                    <div class="shop-item-summary text-center">
-
-                                        <h2 class="text-black size-15">{{ p.name }}</h2>
-
-                                        <!-- price -->
-                                        <div class="shop-item-price">
-                                            <div class="text-black" ng-show="$parent.userCountry==='CA'">$ {{ (p.cadPrice / 100).toFixed(2) }} CAD</div>
-                                            <div class="text-black" ng-show="$parent.userCountry==='US'">$ {{ (p.usPrice / 100).toFixed(2) }} USD</div>
-                                        </div>
-                                        <!-- /price -->
-                                    </div>
-                                </a>
-
-                                <!-- buttons -->
-                                <div class="shop-item-buttons text-center">
-                                    <a ng-show="p.stockQuantity > 0" class="btn btn-flat-green" ng-click="addToCart(p)"><i class="fa fa-cart-plus"></i> Add to Cart</a>
-                                    <a ng-hide="p.stockQuantity > 0" class="btn btn-danger" ng-disabled="true"><i class="fa fa-times"></i> Out Of Stock</a>
-                                </div>
-                                <!-- /buttons -->
-                            </div>
-
-                        </li>
-                        <!-- /ITEM -->
-
-                    </ul>
-
-                    <hr />
-
-                </div>
-
                 <!-- LEFT -->
-                <div class="col-md-3 col-sm-4 col-xs-12 col-md-pull-9 col-sm-pull-8">
+                <div class="col-md-3 col-sm-4 col-xs-12">
 
                     <!-- CATEGORIES -->
                     <uib-accordion close-others="false">
@@ -162,8 +106,95 @@
 
                     <!-- /CATEGORIES -->
 
-                    <button class="btn btn-default" ng-click="applyFilter()">Apply Filter</button>
-                    <button class="btn btn-default" ng-click="resetFilter()">Reset Filter</button>
+                    <div class="pull-right hidden-xs">
+                        <button class="btn btn-default" ng-click="applyFilter()">Apply Filter</button>
+                        <button class="btn btn-default" ng-click="resetFilter()">Reset Filter</button>
+                    </div>
+                    <div class="pull-right visible-xs">
+                        <button class="btn btn-lg btn-default" ng-click="applyFilter()">Apply Filter</button>
+                        <button class="btn btn-lg btn-default" ng-click="resetFilter()">Reset Filter</button>
+                    </div>
+
+                </div>
+
+                <!-- RIGHT -->
+                <div class="col-md-9 col-sm-8 col-xs-12">
+
+                    <ul class=" row list-inline nomargin">
+
+                        <!-- ITEM -->
+                        <li class="col-lg-3 col-md-4 col-sm-6 col-xs-8 col-sm-offset-0 col-xs-offset-2" ng-repeat="p in $parent.products" ng-init="activeThumbnail[$index]=1">
+
+                            <div class="shop-item">
+
+                                <a ng-click="goToProduct(p)">
+                                    <div class="thumbnail shop-thumbnail-fixed-size visible-md visible-lg" ng-mouseover="activeThumbnail[$index]=2" ng-mouseleave="activeThumbnail[$index]=1">
+                                        <!-- product image(s) -->
+                                            <img class="img-responsive" ng-show="activeThumbnail[$index]==1" ng-src="{{ $parent.basePath + '/' + $parent.thumbnailSubPath + '/' + p.id + '-' + 'T' + '-' + '1.png' }}" />
+                                            <img class="img-responsive" ng-hide="activeThumbnail[$index]==1" ng-src="{{ $parent.basePath + '/' + $parent.thumbnailSubPath + '/' + p.id + '-' + 'T' + '-' + '2.png' }}" />
+                                        <!-- /product image(s) -->
+                                    </div>
+                                    <div class="thumbnail visible-sm visible-xs" ng-mouseover="changeActiveThumbnail($index, 2)" ng-mouseleave="changeActiveThumbnail($index, 1)">
+                                        <!-- product image(s) -->
+                                        <img class="img-responsive" ng-show="activeThumbnail[$index]==1" ng-src="{{ $parent.basePath + '/' + $parent.thumbnailSubPath + '/' + p.id + '-' + 'T' + '-' + '1.png' }}" />
+                                        <img class="img-responsive" ng-hide="activeThumbnail[$index]==1" ng-src="{{ $parent.basePath + '/' + $parent.thumbnailSubPath + '/' + p.id + '-' + 'T' + '-' + '2.png' }}" />
+                                        <!-- /product image(s) -->
+                                    </div>
+                                </a>
+
+                                <div class="hidden-xs">
+                                    <a href="" ng-click="goToProduct(p)">
+                                        <div class="shop-item-summary text-center">
+
+                                            <h2 class="text-black size-15">{{ p.name }}</h2>
+
+                                            <!-- price -->
+                                            <div class="shop-item-price">
+                                                <div class="text-black" ng-show="$parent.userCountry==='CA'">$ {{ (p.cadPrice / 100).toFixed(2) }} CAD</div>
+                                                <div class="text-black" ng-show="$parent.userCountry==='US'">$ {{ (p.usPrice / 100).toFixed(2) }} USD</div>
+                                            </div>
+                                            <!-- /price -->
+                                        </div>
+                                    </a>
+
+                                    <!-- buttons -->
+                                    <div class="shop-item-buttons text-center">
+                                        <a ng-show="p.stockQuantity > 0" class="btn btn-flat-green" ng-click="addToCart(p)"><i class="fa fa-cart-plus"></i> Add to Cart</a>
+                                        <a ng-hide="p.stockQuantity > 0" class="btn btn-danger" ng-disabled="true"><i class="fa fa-times"></i> Out Of Stock</a>
+                                    </div>
+                                    <!-- /buttons -->
+                                </div>
+                                <div class="visible-xs">
+                                    <a href="" ng-click="goToProduct(p)">
+                                        <div class="shop-item-summary text-center">
+
+                                            <h2 class="text-black size-30">{{ p.name }}</h2>
+
+                                            <!-- price -->
+                                            <div class="shop-item-price">
+                                                <div class="text-black" ng-show="$parent.userCountry==='CA'">$ {{ (p.cadPrice / 100).toFixed(2) }} CAD</div>
+                                                <div class="text-black" ng-show="$parent.userCountry==='US'">$ {{ (p.usPrice / 100).toFixed(2) }} USD</div>
+                                            </div>
+                                            <!-- /price -->
+                                        </div>
+                                    </a>
+
+                                    <!-- buttons -->
+                                    <div class="shop-item-buttons text-center">
+                                        <a ng-show="p.stockQuantity > 0" class="btn btn-lg btn-flat-green" ng-click="addToCart(p)"><i class="fa fa-cart-plus"></i> Add to Cart</a>
+                                        <a ng-hide="p.stockQuantity > 0" class="btn btn-lg btn-danger" ng-disabled="true"><i class="fa fa-times"></i> Out Of Stock</a>
+                                    </div>
+                                    <!-- /buttons -->
+                                </div>
+
+                            </div>
+
+                        </li>
+                        <!-- /ITEM -->
+
+                    </ul>
+
+                    <hr />
 
                 </div>
 

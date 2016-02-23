@@ -4,8 +4,8 @@
 
             <!-- breadcrumbs -->
             <ol class="breadcrumb">
-                <li><a ui-sref="home">Store</a></li>
-                <li class="active">{{ product.name }}</li>
+                <li><a ui-sref="home" class="size-15">Store</a></li>
+                <li class="size-15 active">{{ product.name }}</li>
             </ol><!-- /breadcrumbs -->
 
         </div>
@@ -68,7 +68,7 @@
 
                     <!-- price -->
                     <div class="row">
-                        <div class="col-sm-6 col-xs-12 margin-bottom-10 text-center-xs">
+                        <div class="col-sm-6 col-xs-12 margin-bottom-10 text-center">
                             <div class="col-xs-12">
                                 <div class="shop-item-price">
                                     <div ng-show="$parent.userCountry==='CA'">$ {{ (product.cadPrice / 100).toFixed(2) }} CAD</div>
@@ -87,9 +87,9 @@
                             <button ng-show="product.stockQuantity > 0" ng-click="addToCart()" class="btn btn-lg btn-green pull-right noradius"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;&nbsp;ADD TO CART</button>
                             <button ng-hide="product.stockQuantity > 0" ng-disabled="true" class="btn btn-lg btn-danger pull-right noradius"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;&nbsp;OUT OF STOCK</button>
                         </div>
-                        <div class="col-sm-6 col-xs-12 margin-bottom-30 margin-top-20 visible-xs">
-                            <button ng-show="product.stockQuantity > 0" ng-click="addToCart()" class="btn btn-green btn-block text-center noradius"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;&nbsp;ADD TO CART</button>
-                            <button ng-hide="product.stockQuantity > 0" ng-disabled="true" class="btn btn-danger btn-block text-center noradius"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;&nbsp;OUT OF STOCK</button>
+                        <div class="col-sm-6 col-xs-12 margin-bottom-40 margin-top-40 text-center visible-xs">
+                            <button ng-show="product.stockQuantity > 0" ng-click="addToCart()" class="btn btn-green btn-xlg noradius size-20"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;&nbsp;ADD TO CART</button>
+                            <button ng-hide="product.stockQuantity > 0" ng-disabled="true" class="btn btn-danger btn-xlg noradius size-20"><span class="fa fa-shopping-cart"></span>&nbsp;&nbsp;&nbsp;OUT OF STOCK</button>
                         </div>
                     </div>
                     <!-- /price -->
