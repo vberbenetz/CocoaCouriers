@@ -73,7 +73,7 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
     // ================================================================================ //
 
     app.get('/', function(req, res) {
-        res.render('../index');
+        res.sendFile( path.join(__dirname, '..', '..', 'public', 'index.html') );
     });
 
     app.get('/signin', function(req, res) {
