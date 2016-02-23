@@ -5,6 +5,8 @@ var log = require('../utils/logger');
 
 var helpers = require('../utils/helpers');
 
+var dbUtils = require('../utils/db_utils');
+
 var stripe = require('stripe')(
     configPriv.sKey
 );
@@ -13,40 +15,24 @@ var subscriptionCtrl = function() {};
 
 subscriptionCtrl.prototype = {
 
-    get: function (customerId, subscriptionId, callback) {
+    get: function (stripeId, dbConnPool, callback) {
 
-        stripe.customers.retrieveSubscription(customerId, subscriptionId, function(err, subscription) {
+        var query = {
+            statement: 'SELECT s.*, p.* FROM Subscription s INNER JOIN Plan p ON s.plan_id=p.id WHERE s.stripeId = ?',
+            params: [stripeId]
+        };
+
+        dbUtils.query(dbConnPool, query, function(err, rows) {
             if (err) {
-                console.log(err);
-                return callback({
-                    status: 500,
-                    type: 'stripe',
-                    msg: {
-                        simplified: 'server_error',
-                        detailed: err
-                    }
-                }, null);
+                return callback(err, null);
             }
             else {
-                return callback(false, subscription);
+                return callback(false, rows[0]);
             }
         });
     },
 
-    create: function (customerId, planId, couponId, reqIP, callback) {
-
-        // Verify plan has been included in request
-        if (typeof planId === 'undefined') {
-            return callback({
-                status: 400,
-                type: 'app',
-                no_logging: true,
-                msg: {
-                    simplified: 'Missing plan value',
-                    detailed: 'subscriptionCtrl.create() no planId supplied'
-                }
-            }, null);
-        }
+    create: function (customer, userCountry, planId, altShippingId, couponId, dbConnPool, reqIP, callback) {
 
         var payload = {};
 
@@ -55,104 +41,96 @@ subscriptionCtrl.prototype = {
             payload.coupon = couponId;
         }
 
-        // Get customer data
-        stripe.customers.retrieve(customerId, function(err, customer) {
-            if (err) {
-                console.log(err);
+        // Switch plan to currency in which card originates from
+        payload.plan = helpers.sourceCountryPlanId(planId, userCountry);
+
+        var tax = {
+            rate: parseFloat(customer.metadata.taxRate),
+            desc: customer.metadata.taxDesc
+        };
+
+        // Attach tax rate to payload
+        payload.tax_percent = tax.rate;
+
+        // Check if subscription currently falls within cool-down period.
+        // Do not bill user until next cycle if currently in cool-down
+        if (helpers.isCoolDownPeriod()) {
+            payload.trial_end = helpers.getNextBillingDate(1);
+        }
+
+        // Create subscription
+        stripe.customers.createSubscription(customer.stripeId, payload, function(subErr, subscription) {
+            if (subErr) {
+
+                // Add card issue tag to customer
+                var cardErrorCode = 'processing_error';
+                if (subErr.rawType === 'card_error') {
+                    cardErrorCode = subErr.code;
+                }
+
                 return callback({
                     status: 500,
                     type: 'stripe',
                     msg: {
                         simplified: 'server_error',
-                        detailed: err
-                    }
+                        detailed: subErr
+                    },
+                    cardErrorCode: cardErrorCode
                 }, null);
             }
+            else {
+                log.info("Created new subscription", subscription, reqIP);
 
-            // Check if customer has a valid payment source attached
-            if (typeof customer.sources.data[0].country === 'undefined') {
-                return callback({
-                    status: 402,
-                    type: 'app',
-                    msg: {
-                        simplified: 'no_source',
-                        detailed: 'subscriptionCtrl.create() customer has no source'
+                var subscriptionInsertQuery = {
+                    statement: 'INSERT INTO Subscription SET ?',
+                    params: {
+                        stripeId: customer.stripeId,
+                        subscriptionId: subscription.id,
+                        taxPercent: subscription.tax_percent,
+                        plan_id: subscription.plan.id
                     }
-                }, null);
-            }
+                };
 
-            // Switch plan to currency in which card originates from
-            payload.plan = helpers.sourceCountryPlanId(planId, customer.sources.data[0].country);
+                if (altShippingId) {
+                    subscriptionInsertQuery.params.altShippingAddressId = altShippingId;
+                }
 
-            var tax = {
-                rate: parseFloat(customer.metadata.taxRate),
-                desc: customer.metadata.taxDesc
-            };
+                if (subscription.discount) {
+                    subscriptionInsertQuery.params.discountId = subscription.discount.coupon.id;
+                }
 
-            // Attach tax rate to payload
-            payload.tax_percent = tax.rate;
+                // Add subscription to local db
+                dbUtils.query(dbConnPool, subscriptionInsertQuery, function(err, result) {});
 
-            // Check if subscription currently falls within cool-down period.
-            // Do not bill user until next cycle if currently in cool-down
-            if (helpers.isCoolDownPeriod()) {
-                payload.trial_end = helpers.getNextBillingDate(1);
-            }
-
-            // Create subscription
-            stripe.customers.createSubscription(customerId, payload, function(subErr, subscription) {
-                if (subErr) {
-                    console.log(subErr);
-
-                    // Add card issue tag to customer
-                    var cardErrorCode = 'processing_error';
-                    if (subErr.rawType === 'card_error') {
-                        cardErrorCode = subErr.code;
-                    }
-
-                    return callback({
-                        status: 500,
-                        type: 'stripe',
-                        msg: {
-                            simplified: 'server_error',
-                            detailed: subErr
-                        },
-                        cardErrorCode: cardErrorCode
-                    }, null);
+                // Adjust billing period to fall on same as within config file
+                // -----------------------------------------------------------
+                // User registered within cool-down period and has already had their billing period synced with the config
+                if (subscription.trial_end != null) {
+                    return callback(false, subscription);
                 }
                 else {
-                    log.info("Created new subscription", subscription, reqIP);
+                    payload = {
+                        trial_end: helpers.getNextBillingDate(subscription.plan.interval_count),
+                        prorate: false
+                    };
 
-                    // Adjust billing period to fall on same as within config file
-                    // -----------------------------------------------------------
-                    // User registered within cool-down period and has already had their billing period synced with the config
-                    if (subscription.trial_end != null) {
-                        return callback(false, subscription);
-                    }
-                    else {
-                        payload = {
-                            trial_end: helpers.getNextBillingDate(subscription.plan.interval_count),
-                            prorate: false
-                        };
+                    stripe.customers.updateSubscription(customerId, subscription.id, payload, function(err, updatedSubscription) {
+                        if (err) {
+                            console.log(err);
+                            return callback({
+                                status: 500,
+                                type: 'stripe',
+                                msg: {
+                                    simplified: 'server_error',
+                                    detailed: err
+                                }
+                            }, null);
+                        }
 
-                        stripe.customers.updateSubscription(customerId, subscription.id, payload, function(err, updatedSubscription) {
-                            if (err) {
-                                console.log(err);
-                                return callback({
-                                    status: 500,
-                                    type: 'stripe',
-                                    msg: {
-                                        simplified: 'server_error',
-                                        detailed: err
-                                    }
-                                }, null);
-                            }
-
-                            return callback(false, updatedSubscription);
-                        });
-                    }
+                        return callback(false, updatedSubscription);
+                    });
                 }
-            });
-
+            }
         });
 
     },

@@ -701,6 +701,29 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
     });
 
     app.post('/api/subscription', auth, function (req, res, next) {
+        // Verify request body correct
+        if ( (!req.body.uc) || (!req.body.planId) ) {
+            res.status(400).send('bad_request');
+        }
+        else {
+            // Retrieve customer data
+            customerCtrl.get(req.user.stId, dbConnPool, function(err, customer) {
+                if (err) {
+                    errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                }
+                else {
+                    subscriptionCtrl.create(customer, req.body.uc, req.body.planId, req.body.altShippingId, req.body.couponId, dbConnPool, req.connection.remoteAddress, function(err, result) {
+                        if (err) {
+                            errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                        }
+                        else {
+                            res.send(result);
+                        }
+                    });
+                }
+            });
+        }
+
         subscriptionCtrl.create(req.user.stId, req.body.plan, req.body.coupon, req.connection.remoteAddress, function(err, result) {
             if (err) {
                 // Attach card error code to customer
