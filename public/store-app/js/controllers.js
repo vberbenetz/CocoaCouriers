@@ -246,10 +246,17 @@ function storeCtrl ($scope, $state, $timeout, appService) {
 
     $scope.activeThumbnail = {};
 
-    $scope.changeActiveThumbnail = function(i, value) {
-        $timeout(function() {
-            $scope.activeThumbnail[i] = value;
-        }, 50);
+    $scope.changeActiveThumbnail = function(i, value, numberOfImages, delay) {
+        if (numberOfImages > 1) {
+            if (delay) {
+                $timeout(function() {
+                    $scope.activeThumbnail[i] = value;
+                }, 50);
+            }
+            else {
+                $scope.activeThumbnail[i] = value;
+            }
+        }
     };
 
     $scope.goToProduct = function (product) {

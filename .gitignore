@@ -1,6 +1,6 @@
 .idea/
 node_modules/
 logs/
-
+/public/assets/store_media/
 app/configuration/config_priv.js
 *~

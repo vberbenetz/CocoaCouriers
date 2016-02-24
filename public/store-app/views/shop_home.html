@@ -128,13 +128,13 @@
                             <div class="shop-item">
 
                                 <a ng-click="goToProduct(p)">
-                                    <div class="thumbnail shop-thumbnail-fixed-size visible-md visible-lg" ng-mouseover="activeThumbnail[$index]=2" ng-mouseleave="activeThumbnail[$index]=1">
+                                    <div class="thumbnail shop-thumbnail-fixed-size visible-md visible-lg" ng-mouseover="changeActiveThumbnail($index, 2, p.numberOfImages, false)" ng-mouseleave="changeActiveThumbnail($index, 1, p.numberOfImages, true)">
                                         <!-- product image(s) -->
                                             <img class="img-responsive" ng-show="activeThumbnail[$index]==1" ng-src="{{ $parent.basePath + '/' + $parent.thumbnailSubPath + '/' + p.id + '-' + 'T' + '-' + '1.png' }}" />
                                             <img class="img-responsive" ng-hide="activeThumbnail[$index]==1" ng-src="{{ $parent.basePath + '/' + $parent.thumbnailSubPath + '/' + p.id + '-' + 'T' + '-' + '2.png' }}" />
                                         <!-- /product image(s) -->
                                     </div>
-                                    <div class="thumbnail visible-sm visible-xs" ng-mouseover="changeActiveThumbnail($index, 2)" ng-mouseleave="changeActiveThumbnail($index, 1)">
+                                    <div class="thumbnail visible-sm visible-xs" ng-mouseover="changeActiveThumbnail($index, 2, p.numberOfImages, true)" ng-mouseleave="changeActiveThumbnail($index, 1, p.numberOfImages, true)">
                                         <!-- product image(s) -->
                                         <img class="img-responsive" ng-show="activeThumbnail[$index]==1" ng-src="{{ $parent.basePath + '/' + $parent.thumbnailSubPath + '/' + p.id + '-' + 'T' + '-' + '1.png' }}" />
                                         <img class="img-responsive" ng-hide="activeThumbnail[$index]==1" ng-src="{{ $parent.basePath + '/' + $parent.thumbnailSubPath + '/' + p.id + '-' + 'T' + '-' + '2.png' }}" />
