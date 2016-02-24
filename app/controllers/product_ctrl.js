@@ -77,7 +77,7 @@ productCtrl.prototype = {
     getProductProfiles: function (dbConnPool, productId, callback) {
 
         var query = {
-            statement: 'SELECT * FROM ProductProfileMapping WHERE ?',
+            statement: 'SELECT ppm.*, pp.* FROM ProductProfileMapping ppm INNER JOIN ProductProfile pp ON ppm.productProfileId=pp.name WHERE ?',
             params: {
                 productId: productId
             }
