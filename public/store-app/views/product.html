@@ -31,7 +31,9 @@
                 <h1 class="margin-right-20 margin-left-20">
                     {{ product.m_name }} - {{ product.name }}
                 </h1>
-                <img ng-repeat="fp in thisProductProfiles" class="product-profile-thumbnail margin-top-neg-30 " ng-src="{{ $parent.basePath + '/' + $parent.flavorProfileImagePath + '/' + fp.productProfileId + '.png' }}" />
+                <div class="col-xs-12">
+                    <img ng-repeat="fp in thisProductProfiles" class="product-profile-thumbnail margin-top-neg-30 " ng-src="{{ $parent.basePath + '/' + $parent.flavorProfileImagePath + '/' + fp.productProfileId + '.png' }}" />
+                </div>
             </div>
 
             <div class="divider double-line"></div>

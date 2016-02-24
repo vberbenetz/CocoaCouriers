@@ -68,7 +68,7 @@ function mainCtrl ($scope, $cookies, $http, appService) {
         }).success(function(res) {
             var expireDate = new Date();
             expireDate.setDate(expireDate.getDate() + 1);
-            $cookies.put('uCrId', res.country, {'secure': true, 'expires': expireDate});
+            $cookies.put('uCrId', res.country, {'expires': expireDate});
             $scope.userCountry = res.country;
         }).error(function(err) {
         });
@@ -134,7 +134,12 @@ function mainCtrl ($scope, $cookies, $http, appService) {
                 quantity: cart[z].quantity
             });
         }
-        $cookies.putObject('cartPidQs', pidQs, [{secure:true}]);
+        var expireDate = new Date();
+        expireDate.setDate(expireDate.getDate() + 30);
+        $cookies.putObject('cartPidQs', pidQs, {expires: expireDate});
+
+        document.getElementById('top-bar-cart-item-count').innerHTML = cart.length;
+        console.log(document.cookie);
     };
 
     $scope.updateCart = function(product, quantity) {
@@ -747,9 +752,12 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
                                         $scope.processingOrder = false;
                                     }
                                     else {
+                                        var expireDate = new Date();
+                                        expireDate.setDate(expireDate.getDate() + 1);
+
                                         $scope.$parent.recentShipmentId = charge.metadata.shipmentId;
-                                        $cookies.put('recentShipmentId', charge.metadata.shipmentId, [{secure:true}]);
-                                        $cookies.remove('cartPidQs', [{secure:true}]);
+                                        $cookies.put('recentShipmentId', charge.metadata.shipmentId, {expires: expireDate});
+                                        $cookies.remove('cartPidQs');
                                         $scope.$parent.cart.length = 0;
                                         $state.go('orderFilled');
                                         $scope.processingOrder = false;
@@ -771,9 +779,12 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
                                 $scope.processingOrder = false;
                             }
                             else {
+                                var expireDate = new Date();
+                                expireDate.setDate(expireDate.getDate() + 1);
+
                                 $scope.$parent.recentShipmentId = charge.metadata.shipmentId;
-                                $cookies.put('recentShipmentId', charge.metadata.shipmentId, [{secure:true}]);
-                                $cookies.remove('cartPidQs', [{secure:true}]);
+                                $cookies.put('recentShipmentId', charge.metadata.shipmentId, {expires: expireDate});
+                                $cookies.remove('cartPidQs');
                                 $scope.$parent.cart.length = 0;
                                 $state.go('orderFilled');
                                 $scope.processingOrder = false;

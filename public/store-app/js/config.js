@@ -1,6 +1,6 @@
 'use strict';
 
-function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProvider) {
+function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProvider, $cookiesProvider) {
     $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
     $urlRouterProvider.otherwise("/");
@@ -34,6 +34,9 @@ function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProv
         });
 
     $locationProvider.html5Mode(true);
+
+    $cookiesProvider.defaults.path = '/';
+    $cookiesProvider.defaults.secure = true;
 
 }
 angular
