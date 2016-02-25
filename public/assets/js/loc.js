@@ -18,8 +18,9 @@ function popFeatured (c) {
 
 var uCrId = Cookies.get('uCrId');
 if (!uCrId) {
+
     $.getJSON('https://ipinfo.io/?token=039ebf07f4a8d2', function (res) {
-        Cookies.set('uCrId', res.country, {expires: 1, secure: true});
+        Cookies.set('uCrId', res.country, {domain: document.domain, path: '/', secure: true});
 
         uCrId = res.country;
 
