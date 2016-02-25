@@ -1,14 +1,9 @@
 #!/bin/bash
 
 # modify the following to suit your environment
-export DB_BACKUP="/www/backups/cocoacouriers"
+export DB_BACKUP="/backups/CocoaCouriers"
 export DB_USER="cocoauser"
 export DB_PASSWD="cocoauser"
-
-# title and version
-echo ""
-echo "Backup and rotate all mysql databases"
-echo "--------------------------"
 
 rm -rf $DB_BACKUP/30
 mv $DB_BACKUP/29 $DB_BACKUP/30
@@ -42,9 +37,6 @@ mv $DB_BACKUP/02 $DB_BACKUP/03
 mv $DB_BACKUP/01 $DB_BACKUP/02
 mkdir $DB_BACKUP/01
 
-echo "* Creating backup..."
 mysqldump -u $DB_USER -p$DB_PASSWD cocoacouriers | bzip2 > $DB_BACKUP/01/mysql-`date +%Y-%m-%d`.bz2
-echo "----------------------"
-echo "Done"
 exit 0
 
