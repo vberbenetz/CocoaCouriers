@@ -12,3 +12,10 @@
 5) Create product images folder /assets/product_images/thumbnails and /assets/product_images/full
 6) Import product images <product.id>-<number>.png
 7) Import product thumbnails <product.id>-T-<number>.png
+
+8) Create database backups:
+    - Create directory /backups/CocoaCouriers
+    - Install cocoacouriers_db_backup.sh in crontab
+        - crontab -e
+        - Add following line at the end of the file:
+            0 4 * * * username_goes_here /path/to/CocoaCouriers/cocoacouriers_db_backup.sh
