@@ -25,8 +25,7 @@ if (!uCrId) {
 
         if (uCrId === 'US') {
             $(document).ready(function() {
-                //var src = $('#top-bar-country-img').attr('src').replace('ca.png', 'us.png');
-                var a = document.getElementById('top-bar-country-img').getAttribute('src');
+                var src = $('#top-bar-country-img').attr('src').replace('ca.png', 'us.png');
                 $('#top-bar-country-img').attr('src', src);
                 $('#top-bar-country-text').value('USA');
                 popFeatured(uCrId);
