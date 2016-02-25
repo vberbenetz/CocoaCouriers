@@ -23,7 +23,7 @@ if (!uCrId) {
 
         uCrId = res.country;
 
-        if (uCrId.country === 'US') {
+        if (uCrId === 'US') {
             $(document).ready(function() {
                 //var src = $('#top-bar-country-img').attr('src').replace('ca.png', 'us.png');
                 var a = document.getElementById('top-bar-country-img').getAttribute('src');
