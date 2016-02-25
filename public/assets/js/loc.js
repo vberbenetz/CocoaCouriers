@@ -24,23 +24,19 @@ if (!uCrId) {
         uCrId = res.country;
 
         if (uCrId === 'US') {
-            $(document).ready(function() {
-                var src = $('#top-bar-country-img').attr('src').replace('ca.png', 'us.png');
-                $('#top-bar-country-img').attr('src', src);
-                $('#top-bar-country-text').text('USA');
-                popFeatured(uCrId);
-            });
+            var src = $('#top-bar-country-img').attr('src').replace('ca.png', 'us.png');
+            $('#top-bar-country-img').attr('src', src);
+            $('#top-bar-country-text').text('USA');
+            popFeatured(uCrId);
         }
     });
 }
 
 else if (uCrId && (uCrId === 'US')) {
-    $(document).ready(function() {
-        var src = $('#top-bar-country-img').attr('src').replace('ca.png', 'us.png');
-        $('#top-bar-country-img').attr('src', src);
-        $('#top-bar-country-text').text('USA');
-        popFeatured(uCrId);
-    });
+    var src = $('#top-bar-country-img').attr('src').replace('ca.png', 'us.png');
+    $('#top-bar-country-img').attr('src', src);
+    $('#top-bar-country-text').text('USA');
+    popFeatured(uCrId);
 }
 else if (uCrId) {
     popFeatured(uCrId);
