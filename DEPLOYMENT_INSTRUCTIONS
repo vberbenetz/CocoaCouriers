@@ -14,6 +14,9 @@
 7) Import product thumbnails <product.id>-T-<number>.png
 
 8) Add Stripe PROD publishable key to StripeProvider in Angular configs
+    - subscribe-app.js (top of signup controller)
+    - store-app.js (in the config)
+    - user-mgmt.js (in the config)
 
 9) Create database backups:
     - Create directory /backups/CocoaCouriers
