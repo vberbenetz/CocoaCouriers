@@ -240,7 +240,7 @@ chargeCtrl.prototype = {
                             // Decrement product stock quantity
                             for (var k = 0; k < cart.length; k++) {
                                 updateQuantityQueries.push({
-                                    statement: 'UPDATE Product SET stockQuantity = stockQuantity - ? WHERE id = ? AND stockQuantity > 1',
+                                    statement: 'UPDATE Product SET stockQuantity = (stockQuantity - ?) WHERE id = ? AND stockQuantity > 0',
                                     params : [
                                         cart[k].quantity,
                                         cart[k].id

@@ -2,7 +2,7 @@
 
 angular.module('subscribe', ['ui.bootstrap', 'angular-stripe'])
 
-.controller('signupCtrl', function ($scope, $http, $window, stripe, $location) {
+    .controller('signupCtrl', function ($scope, $http, $window, stripe, $location) {
 
         $scope.stPubKey = 'pk_test_BXtMsd315TBs4tBzqFVwRw2h';
 
@@ -823,21 +823,6 @@ angular.module('subscribe', ['ui.bootstrap', 'angular-stripe'])
                         handleStCCErr(err);
                         return callback(false);
                     });
-/*
-                $http({
-                    url: '/api/token',
-                    method: 'POST',
-                    data: $scope.userInfo.source
-                }).success(function(token) {
-                    $scope.userInfo.token = token.id;
-                    return callback(true);
-
-                }).error(function(err) {
-                    handleStCCErr(err);
-                    return callback(false);
-                });
-*/
-
             }
 
             else {
@@ -992,7 +977,7 @@ angular.module('subscribe', ['ui.bootstrap', 'angular-stripe'])
             // 300X 301X 302X 303X 304X 305X 309X
             else if ( (number.length >=3) && (number[0] === '3') && (number[1] === '0') &&
                 ( (number[2] === '0') || (number[2] === '1') || (number[2] === '2') || (number[2] === '3') || (number[2] === '4') ||
-                  (number[2] === '5') || (number[2]) === '9' ) ) {
+                (number[2] === '5') || (number[2]) === '9' ) ) {
                 return 'diners-club';
             }
 
@@ -1327,4 +1312,4 @@ angular.module('subscribe', ['ui.bootstrap', 'angular-stripe'])
             return str.indexOf(subStr);
         };
 
-});
+    });
