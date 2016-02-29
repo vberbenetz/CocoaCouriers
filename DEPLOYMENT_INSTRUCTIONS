@@ -13,7 +13,9 @@
 6) Import product images <product.id>-<number>.png
 7) Import product thumbnails <product.id>-T-<number>.png
 
-8) Create database backups:
+8) Add Stripe PROD publishable key to StripeProvider in Angular configs
+
+9) Create database backups:
     - Create directory /backups/CocoaCouriers
     - Install cocoacouriers_db_backup.sh in crontab
         - crontab -e

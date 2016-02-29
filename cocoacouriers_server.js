@@ -96,10 +96,6 @@ app.use(function (err, req, res, next) {
     }
 });
 
-log.info('================================');
-log.info('====     SERVER STARTED     ====');
-log.info('================================');
-
 // Launch =============================================================================================================/
 https.createServer({
     secureProtocol: 'SSLv23_method',
@@ -144,3 +140,30 @@ http.createServer(function (req, res) {
     res.writeHead(301, {'Location': 'https://' + req.headers['host'] + req.url});
     res.end();
 }).listen(80);
+
+
+// Test database and email services on startup
+var startupCtrl = require('./app/controllers/startup_ctrl');
+startupCtrl.testDbConn(pool, function(err, result) {
+    var dbErr = null;
+    if (err) {
+        dbErr = err;
+        log.error('Database Startup Connection Test Failed!!!');
+    }
+    else {
+        log.info('Database Startup Connection Test Successful');
+    }
+    startupCtrl.testEmail(emailUtils, dbErr, function(err, result) {
+        if (err) {
+            log.error('Email Startup Test Failed!!!');
+            console.log(err);
+        }
+        else {
+            log.info('Email Startup Test Successful');
+        }
+    });
+});
+
+log.info('================================');
+log.info('====     SERVER STARTED     ====');
+log.info('================================');

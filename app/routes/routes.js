@@ -54,11 +54,7 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
     app.post('/signup', passport.authenticate('local-signup'), function(req, res) {
 
         // Send user their auto generated password
-        emailUtils.sendNewPassword(req.user.email, req.user.rawPass, function(err, result) {
-            if (err) {
-                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-            }
-        });
+        emailUtils.sendNewPassword(req.user.email, req.user.rawPass, function(err, result) {});
 
         res.send(req.user);
     });
@@ -686,8 +682,8 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
     // ----------------- Subscription Related ------------------------ //
 
     /*
-    NEW SUBSCRIPTION ROUTES
-        -------------------------------------
+    NEW SUBSCRIPTION
+
     app.get('/api/subscription', auth, function (req, res, next) {
 
         var customerId = req.user.stId;
@@ -782,76 +778,6 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
     });
 
 */
-
-    app.get('/api/subscription', auth, function (req, res, next) {
-
-        var customerId = req.user.stId;
-        var subscriptionId = req.query.subscriptionId;
-
-        subscriptionCtrl.get(customerId, subscriptionId, function(err, result) {
-            if (err) {
-                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-            }
-            else {
-                res.send(result);
-            }
-        });
-    });
-
-    app.post('/api/subscription', auth, function (req, res, next) {
-        subscriptionCtrl.create(req.user.stId, req.body.plan, req.body.coupon, req.connection.remoteAddress, function(err, result) {
-            if (err) {
-                // Attach card error code to customer
-                if (typeof err.cardErrorCode !== 'undefined') {
-                    req.body.item = 'metadata';
-                    req.body.data = {
-                        card_error_code: err.cardErrorCode
-                    };
-                    customerCtrl.updateLegacy(req, res, function(customerErr, result) {
-                        errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-                    });
-                }
-                else {
-                    errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-                }
-            }
-            else {
-                // Remove card error code from user because the subscription was successful
-                req.body.item = 'metadata';
-                req.body.data = {
-                    card_error_code: null
-                };
-                customerCtrl.updateLegacy(req, res, function(customerErr, result) {
-                    res.send(result);
-                });
-            }
-        });
-    });
-
-    app.put('/api/subscription', auth, function (req, res, next) {
-        subscriptionCtrl.update(req.user.stId, req.query.newPlanId, req.connection.remoteAddress, function(err, result) {
-            if (err) {
-                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-            }
-            else {
-                res.send(result);
-            }
-        });
-    });
-
-    app.delete('/api/subscription', auth, function (req, res, next) {
-        var customerId = req.user.stId;
-        var subscriptionId = req.query.subscriptionId;
-
-        subscriptionCtrl.cancel(customerId, subscriptionId, req.connection.remoteAddress, function(err, result) {
-            if (err) {
-                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-            }
-            else {
-                res.send(result);
-            }
-        });
-    });
 
     // ----------------- Coupon Related ------------------------ //
     app.get('/api/coupon', function (req, res, next) {

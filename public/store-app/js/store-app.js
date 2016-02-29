@@ -6,6 +6,7 @@
         'ngResource',
         'ngCookies',
         'ui.router',                // Routing
-        'ui.bootstrap'
+        'ui.bootstrap',
+        'angular-stripe'
     ])
 })();

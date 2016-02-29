@@ -481,7 +481,7 @@ function cartCtrl ($scope) {
 
 }
 
-function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
+function checkoutCtrl ($scope, $http, $cookies, $state, stripe, appService) {
     $scope.subtotal = 0;
     $scope.tax = {
         rate: 0,
@@ -1249,19 +1249,15 @@ function checkoutCtrl ($scope, $http, $cookies, $state, appService) {
             // (Address line 1 check is currently not used)
             $scope.billing.source.address_zip = $scope.billing.address.postal_code;
 
-            $http({
-                url: '/api/token',
-                method: 'POST',
-                data: $scope.billing.source
-            }).success(function(token) {
-                $scope.billing.token = token.id;
-                $scope.chargeErr = false;
-                return callback(true);
-
-            }).error(function(err) {
-                handleStCCErr(err);
-                return callback(false);
-            });
+            stripe.card.createToken($scope.billing.source)
+                .then(function (token) {
+                    $scope.billing.token = token.id;
+                    $scope.chargeErr = false;
+                    return callback(true);
+                }).error(function(err) {
+                    handleStCCErr(err);
+                    return callback(false);
+                });
         }
 
         else {

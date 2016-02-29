@@ -18,6 +18,17 @@ helperTest.prototype = {
             var str = buf.toString('base64');
             str.substr(0, str.length-2);
         });
+    },
+
+    emailTest: function(emailUtils) {
+        emailUtils.sendNewPassword('val@cantangosolutions.com', 'TestPass', function(err, result) {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                console.log(result);
+            }
+        });
     }
 };
 

@@ -7,6 +7,43 @@ module.exports = function(mailTransporter) {
         mailer: mailTransporter
     };
 
+    module.checkEmailService = function (recipient, dbErr, callback) {
+
+        var subject = 'CocoaCouriers server started';
+        var body = 'CocoaCouriers server started.<br/>';
+
+        if (dbErr) {
+            subject += ' - Database Connection Test Failed!!';
+            body += ' Database connection test error: ' + dbErr;
+        }
+        else {
+            body += ' Database connection test Successful';
+        }
+
+        var mailTemplate = this.mailer.templateSender({
+            subject: config.mailOptionsTemplate.content.subject,
+            html: config.mailOptionsTemplate.content.html.start + body + config.mailOptionsTemplate.content.html.end
+        }, {
+            from: 'info@cocoacouriers.com',
+            attachments: config.mailOptionsTemplate.options.attachments
+        });
+
+        mailTemplate({
+            to: recipient
+        }, {
+            subject: subject,
+            htmlMsg: body
+        }, function(err, info){
+            if (err) {
+                return callback(err, false);
+            }
+            else {
+                return callback(false, true);
+            }
+        });
+
+    };
+
     module.sendNewPassword = function (recipient, newPass, callback) {
 
         var subject = 'Cocoa Couriers New Account Created';

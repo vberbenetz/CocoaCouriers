@@ -1,6 +1,6 @@
 'use strict';
 
-function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProvider, $cookiesProvider) {
+function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProvider, $cookiesProvider, stripeProvider) {
     $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
     $urlRouterProvider.otherwise("/");
@@ -37,6 +37,8 @@ function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProv
 
     $cookiesProvider.defaults.path = '/';
     $cookiesProvider.defaults.secure = true;
+
+    stripeProvider.setPublishableKey('pk_test_BXtMsd315TBs4tBzqFVwRw2h');
 
 }
 angular
