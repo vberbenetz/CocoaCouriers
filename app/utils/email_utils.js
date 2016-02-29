@@ -55,7 +55,7 @@ module.exports = function(mailTransporter) {
             '<p>' +
             'We have created a simple account for you where you can modify your information, and retrieve past orders.' +
             '<br/><br/>' +
-            'Your temporary password is: <b>'+ newPass + ' </b>' +
+            'Your temporary password is: <b>'+ newPass + '</b>' +
             '<br/><br/>' +
             'You can view your account here: <a href="https://cocoacouriers.com/My-Account">https://cocoacouriers.com/my-account</a><br/><br/>' +
             'You will receive an email shortly with information regarding your lasted order.<br/><br/>' +
