@@ -1,8 +1,10 @@
 'use strict';
 
-angular.module('subscribe', ['ui.bootstrap'])
+angular.module('subscribe', ['ui.bootstrap', 'angular-stripe'])
 
-.controller('signupCtrl', function ($scope, $http, $window, $location) {
+.controller('signupCtrl', function ($scope, $http, $window, stripe, $location) {
+
+        $scope.stPubKey = 'pk_test_BXtMsd315TBs4tBzqFVwRw2h';
 
         $scope.activeTab = 'plan';
 
@@ -812,6 +814,16 @@ angular.module('subscribe', ['ui.bootstrap'])
 
             // Attempt to generate token
             if (!validationFailed) {
+
+                stripe.card.createToken($scope.userInfo.source, {key: $scope.stPubKey})
+                    .then(function (token) {
+                        $scope.userInfo.token = token.id;
+                        return callback(true);
+                    }).error(function(err) {
+                        handleStCCErr(err);
+                        return callback(false);
+                    });
+/*
                 $http({
                     url: '/api/token',
                     method: 'POST',
@@ -824,6 +836,8 @@ angular.module('subscribe', ['ui.bootstrap'])
                     handleStCCErr(err);
                     return callback(false);
                 });
+*/
+
             }
 
             else {

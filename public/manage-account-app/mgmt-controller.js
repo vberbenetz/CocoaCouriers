@@ -466,21 +466,6 @@ function updateBillingCtrl ($scope, stripe, appService) {
                     handleStCCErr(err);
                     return callback(false);
                 });
-/*
-            $http({
-                url: '/api/token',
-                method: 'POST',
-                data: $scope.source
-            }).success(function(token) {
-                $scope.sourceToken = token.id;
-                $scope.chargeErr = false;
-                return callback(true);
-
-            }).error(function(err) {
-                handleStCCErr(err);
-                return callback(false);
-            });
-*/
 
         }
 
