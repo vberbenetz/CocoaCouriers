@@ -1,6 +1,6 @@
 'use strict';
 
-function config($routeProvider, $locationProvider) {
+function config($routeProvider, $locationProvider, stripeProvider) {
 
     $routeProvider
 
@@ -46,6 +46,8 @@ function config($routeProvider, $locationProvider) {
         });
 
     $locationProvider.html5Mode(true);
+
+    stripeProvider.setPublishableKey('pk_test_BXtMsd315TBs4tBzqFVwRw2h');
 
 }
 angular

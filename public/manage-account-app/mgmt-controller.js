@@ -58,7 +58,11 @@ function membershipCtrl($scope, appService) {
         newPasswordConfirm: ''
     };
 
+    $scope.successfullyChangedPassword = false;
+
     $scope.changePassword = function () {
+
+        $scope.successfullyChangedPassword = false;
 
         $scope.validationErrors = {};
 
@@ -99,14 +103,16 @@ function membershipCtrl($scope, appService) {
             };
 
             appService.user.updatePassword(payload, function(data) {
+                $scope.successfullyChangedPassword = true;
+
                 // Reset vars
                 $scope.validationErrors = {};
                 $scope.passwordData = {};
 
             }, function(err) {
                 if (err.data === 'invalid_new_password') {
-                    $scope.validationErrors.newPassword = 'Password must contain at least 8 characters long, 1 uppercase letter, 1 lowercase letter and 1 number';
-                    $scope.validationErrors.newPasswordConfirm = 'Password must contain at least 8 characters long, 1 uppercase letter, 1 lowercase letter and 1 number';
+                    $scope.validationErrors.newPassword = 'Password must contain at least 6 characters';
+                    $scope.validationErrors.newPasswordConfirm = 'Password must contain at least 6 characters';
                 }
                 else if (err.data === 'incorrect_password') {
                     $scope.validationErrors.currentPassword = 'Your password is incorrect';
@@ -121,7 +127,7 @@ function membershipCtrl($scope, appService) {
 
 }
 
-function updateBillingCtrl ($scope, $http, appService) {
+function updateBillingCtrl ($scope, stripe, appService) {
 
     $scope.billing = {
         address: {}
@@ -451,6 +457,16 @@ function updateBillingCtrl ($scope, $http, appService) {
             // (Address line 1 check is currently not used)
             $scope.source.address_zip = $scope.billing.address.postal_code;
 
+            stripe.card.createToken($scope.source)
+                .then(function (token) {
+                    $scope.sourceToken = token.id;
+                    $scope.chargeErr = false;
+                    return callback(true);
+                }).error(function(err) {
+                    handleStCCErr(err);
+                    return callback(false);
+                });
+/*
             $http({
                 url: '/api/token',
                 method: 'POST',
@@ -464,6 +480,8 @@ function updateBillingCtrl ($scope, $http, appService) {
                 handleStCCErr(err);
                 return callback(false);
             });
+*/
+
         }
 
         else {

@@ -228,21 +228,7 @@ userCtrl.prototype = {
                         else {
                             log.info('Updated user password', req.user, req.connection.remoteAddress);
 
-                            // Refresh session with new credentials
-                            req.login(updatedUser, function (err) {
-                                if (err) {
-                                    return callback({
-                                        status: 500,
-                                        type: 'app',
-                                        msg: {
-                                            simplified: 'server_error',
-                                            detailed: err
-                                        }
-                                    }, null);
-                                }
-
-                                return callback(false, updatedUser);
-                            });
+                            return callback(false, updatedUser);
                         }
                     })
                 });

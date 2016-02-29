@@ -4,7 +4,8 @@
     angular.module('account', [
         'ui.bootstrap',
         'ngRoute',
-        'ngResource'
+        'ngResource',
+        'angular-stripe'
     ])
 })();
 

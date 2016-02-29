@@ -218,7 +218,6 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
                 }
                 else {
                     res.sendStatus(200);
-                    res.sendStatus(200);
                 }
             });
         }

@@ -7,6 +7,9 @@
     <%- include templates/head.ejs %>
 
     <base href="/My-Account/"/>
+
+    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+
 </head>
 
 <body ng-app="account" class="smoothscroll enable-animation font-spin ng-cloak" ng-controller="mainCtrl" ng-cloak>
@@ -36,6 +39,7 @@
     <script src="/assets/plugins/angular/angular-route.min.js"></script>
     <script src="/assets/plugins/angular/angular-resource.min.js"></script>
     <script src="/assets/plugins/bootstrap/js/ui-bootstrap-tpls-0.14.3.min.js"></script>
+    <script src="/assets/plugins/stripe/angular-stripe.js"></script>
 
     <!-- App -->
     <script src="/manage-account-app/manager-account-app.js"></script>
