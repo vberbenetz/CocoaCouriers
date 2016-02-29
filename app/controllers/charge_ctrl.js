@@ -231,7 +231,7 @@ chargeCtrl.prototype = {
                             // Send receipt email
                             emailUtils.sendReceipt(customer.email, shipmentId, receiptProducts, subtotal, 0, shippingCost, {amount: taxAmount, rate: taxRate, desc: taxDesc}, amount, function(err, res) {
                                 if (err) {
-                                    log.error("Could not send receipt to customer", charge, reqIP);
+                                    log.error("Could not send receipt to customer", err, reqIP);
                                 }
                             });
 

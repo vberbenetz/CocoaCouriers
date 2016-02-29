@@ -52,8 +52,13 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
 
     app.post('/signup', passport.authenticate('local-signup'), function(req, res) {
 
+        var userEmail = req.user.email;
+        var reqIP = req.connection.remoteAddress;
+
         // Send user their auto generated password
-        emailUtils.sendNewPassword(req.user.email, req.user.rawPass, function(err, result) {});
+        emailUtils.sendNewPassword(req.user.email, req.user.rawPass, function(err, result) {
+            log.error('Could not send new password to user ' + userEmail, err, reqIP);
+        });
 
         res.send(req.user);
     });

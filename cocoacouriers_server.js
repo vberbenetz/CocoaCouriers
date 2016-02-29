@@ -156,7 +156,7 @@ startupCtrl.testDbConn(pool, function(err, result) {
     startupCtrl.testEmail(emailUtils, dbErr, function(err, result) {
         if (err) {
             log.error('Email Startup Test Failed!!!');
-            console.log(err);
+            log.error(err);
         }
         else {
             log.info('Email Startup Test Successful');
