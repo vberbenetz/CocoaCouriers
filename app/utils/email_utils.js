@@ -91,7 +91,7 @@ module.exports = function(mailTransporter) {
         var now = new Date();
         var formattedDate = now.getDate() + '/' + (now.getMonth()+1) + '/' + now.getFullYear();
 
-        var subject = 'Cocoa Couriers Receipt - ' + shipmentId;
+        var subject = 'Cocoa Couriers Order - ' + shipmentId;
         var body =
             '<div style="text-align:right;margin-bottom:20px;">' +
             '<small>' + formattedDate + '</small>' +
