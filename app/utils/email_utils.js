@@ -92,7 +92,7 @@ module.exports = function(mailTransporter) {
         var body =
             '<p>A password reset request was issued for your account with this email.<br/>' +
             'Please follow the link below to reset your password.<br/><br/>' +
-            '<a href="https://cocoacouriers.com/pass_reset?tk=' + resetToken + '">https://cocoacouriers.com/password-reset?tk=' + resetToken + '</a><br/><br/>' +
+            '<a href="https://cocoacouriers.com/password-reset?tk=' + resetToken + '">https://cocoacouriers.com/password-reset?tk=' + resetToken + '</a><br/><br/>' +
             'If you did not request a password reset, please contact us immediately at <a href="mailto:info@cocoacouriers.com">info@cocoacouriers.com</a>';
 
         var mailTemplate = this.mailer.templateSender({
