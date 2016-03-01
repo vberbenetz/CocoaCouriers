@@ -18,7 +18,15 @@ log.prototype = {
             logger.info(msg, {RequestorIP: requestorIP});
         }
         else {
-            data.requestorIP = requestorIP;
+            if (typeof data === 'object') {
+                data.requestorIP = requestorIP;
+            }
+            else {
+                data = {
+                    data: data,
+                    requestorIP: requestorIP
+                }
+            }
             logger.info(msg, data);
         }
     },
@@ -27,7 +35,15 @@ log.prototype = {
             logger.warn(msg, {RequestorIP: requestorIP});
         }
         else {
-            data.requestorIP = requestorIP;
+            if (typeof data === 'object') {
+                data.requestorIP = requestorIP;
+            }
+            else {
+                data = {
+                    data: data,
+                    requestorIP: requestorIP
+                }
+            }
             logger.warn(msg, data);
         }
     },
@@ -36,7 +52,15 @@ log.prototype = {
             logger.error(msg, {RequestorIP: requestorIP});
         }
         else {
-            data.requestorIP = requestorIP;
+            if (typeof data === 'object') {
+                data.requestorIP = requestorIP;
+            }
+            else {
+                data = {
+                    data: data,
+                    requestorIP: requestorIP
+                }
+            }
             logger.error(msg, data);
         }
     }

@@ -86,6 +86,38 @@ module.exports = function(mailTransporter) {
         });
     };
 
+    module.sendPasswordReset = function (recipient, resetToken, callback) {
+
+        var subject = 'Password reset request - Cocoa Couriers';
+        var body =
+            '<p>A password reset request was issued for your account with this email.<br/>' +
+            'Please follow the link below to reset your password.<br/><br/>' +
+            '<a href="https://cocoacouriers.com/pass_reset?tk="' + resetToken + '>https://cocoacouriers.com/password-reset?tk=' + resetToken + '</a><br/><br/>' +
+            'If you did not request a password reset, please contact us immediately at <a href="mailto:info@cocoacouriers.com">info@cocoacouriers.com</a>';
+
+        var mailTemplate = this.mailer.templateSender({
+            subject: config.mailOptionsTemplate.content.subject,
+            html: config.mailOptionsTemplate.content.html.start + body + config.mailOptionsTemplate.content.html.end
+        }, {
+            from: 'info@cocoacouriers.com',
+            attachments: config.mailOptionsTemplate.options.attachments
+        });
+
+        mailTemplate({
+            to: recipient
+        }, {
+            subject: subject,
+            htmlMsg: body
+        }, function(err, info){
+            if (err) {
+                return callback(err, false);
+            }
+            else {
+                return callback(false, true);
+            }
+        });
+    };
+
     module.sendReceipt = function (recipient, shipmentId, products, subtotal, discount, shipping, tax, total, callback) {
 
         var now = new Date();

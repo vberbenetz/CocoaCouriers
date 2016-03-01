@@ -2,6 +2,7 @@
 
 var path = require('path');
 
+var log = require('../utils/logger');
 var customerCtrl = require('../controllers/customer_ctrl');
 var productCtrl = require('../controllers/product_ctrl');
 var couponCtrl = require('../controllers/coupon_ctrl');
@@ -63,7 +64,57 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
         res.send(req.user);
     });
 
+    app.post('/pass-reset-request', function(req, res) {
 
+        if (!req.body.email) {
+            res.status(400).send('invalid_email');
+        }
+
+        else {
+            userCtrl.genPasswordResetToken(req.body.email, dbConnPool, emailUtils, req.connection.remoteAddress, function(err, result) {
+                if (err) {
+                    errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                }
+                else {
+                    res.status(200).send();
+                }
+            });
+        }
+    });
+
+    app.post('/pr', function(req, res) {
+        if (!req.body.email) {
+            res.status(400).send('invalid_email');
+        }
+        else if (!req.body.token) {
+            res.status(400).send('invalid_token');
+        }
+        else if (!req.body.newPassword) {
+            res.status(400).send('invalid_newPassword');
+        }
+        else if ( (req.body.newPassword.length > 200) || (req.body.newPassword.length < 6) ) {
+            res.status(400).send('invalid_newPassword');
+        }
+
+        else {
+            userCtrl.resetPassword(req.body.email, req.body.token, req.body.newPassword, dbConnPool, req.connection.remoteAddress, function(err, result) {
+                if (err) {
+                    if (err === 'invalid_token') {
+                        var reqIP = req.connection.remoteAddress;
+                        var token = req.body.token;
+                        log.error('Invalid reset token', token, reqIP);
+                        res.status(400).send(err);
+                    }
+                    else {
+                        errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                    }
+                }
+                else {
+                    res.status(200).send();
+                }
+            });
+        }
+    });
 
 
 
@@ -83,6 +134,10 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
         else {
             res.render('signin');
         }
+    });
+
+    app.get('/password-reset', function(req, res) {
+        res.render('password_reset');
     });
 
     app.get('/partners', function(req, res) {

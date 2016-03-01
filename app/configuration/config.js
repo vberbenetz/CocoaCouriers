@@ -51,8 +51,11 @@ config.mailOptionsTemplate = {
             end: '</div>' +
                     '</div>' +
                     '<hr style="margin-top:40px;margin-bottom:40px;opacity:0.4;"/>' +
+                    '<div style=text-align:center;margin-bottom:30px;>' +
+                    '<h4>Have Questions or need help? Please contact us <a href="mailto:info@cocoacouriers.com" style="text-decoration:none;">info@cocoacouriers.com</a></h4>' +
+                    '</div>' +
                     '<div style="text-align:center;margin-bottom:30px;">' +
-                    '<h5>Follow Us on Social Media</h5>' +
+                    '<h4>Follow Us on Social Media</h4>' +
                     '</div>' +
                     '<div style="text-align:center">' +
                     '<a href="https://instagram.com/cocoacouriers">' +
@@ -64,14 +67,12 @@ config.mailOptionsTemplate = {
                     '<a href="https://twitter.com/CocoaCouriers">' +
                     '<img src="cid:twitter_logo" style="margin-left:35px;margin-right:35px;"/>' +
                     '</a>' +
-                    '<a href="https://pinterest.com/c_couriers">' +
+                    '<a href="https://pinterest.com/cocoacouriers">' +
                     '<img src="cid:pinterest_logo" style="margin-left:35px;margin-right:35px;"/>' +
                     '</a>' +
                     '</div>' +
                     '<div style="text-align:center;margin-top:30px;">' +
-                    '<a href="https://cocoacouriers.com">' +
-                    '<small style="opacity:0.5;">Cocoa Couriers</small>' +
-                    '</a>' +
+                    '<a href="https://cocoacouriers.com" style="text-decoration:none;">Cocoa Couriers</a>' +
                     '</div>' +
                     '</div>'
         }

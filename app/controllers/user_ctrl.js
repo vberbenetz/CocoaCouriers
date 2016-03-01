@@ -5,6 +5,8 @@ var helpers = require('../utils/helpers');
 
 var dbUtils = require('../utils/db_utils');
 
+var crypto = require('crypto');
+
 var userCtrl = function() {};
 
 userCtrl.prototype = {
@@ -51,6 +53,86 @@ userCtrl.prototype = {
 
     getUserDetails: function (req) {
         return { email: req.user.email, stId: req.user.stId }
+    },
+
+    genPasswordResetToken: function(email, dbConnPool, emailUtils, reqIP, callback) {
+
+        this.checkEmailExists(email, dbConnPool, function(err, result) {
+            if (err) {
+                return callback(err, null);
+            }
+            else if (!result.exists) {
+                return callback(null, true);
+            }
+            else {
+                // Generate a new pass reset token
+                crypto.randomBytes(32, function(ex, buf) {
+                    var token = buf.toString('base64');
+                    token = token.replace(/\W/g, '');
+
+                    var tokenInsertQuery = {
+                        statement: 'INSERT INTO ResetToken (email, token) VALUES (?, ?) ON DUPLICATE KEY UPDATE token = ?',
+                        params: [
+                            email,
+                            token,
+                            token
+                        ]
+                    };
+
+                    dbUtils.query(dbConnPool, tokenInsertQuery, function(err, result) {
+                        if (err) {
+                            return callback(err, null);
+                        }
+                        else {
+                            emailUtils.sendPasswordReset(email, token, function(err, result) {
+                                if (err) {
+                                    log.error('Password reset token email failed', email, reqIP);
+                                }
+                            });
+
+                            return callback(null, true);
+                        }
+                    });
+
+                });
+            }
+        });
+    },
+
+    resetPassword: function(email, token, newPassword, dbConnPool, reqIP, callback) {
+        var verifyAndRemoveTokenQuery = {
+            statement: 'DELETE FROM ResetToken WHERE email = ? and token = ?',
+            params: [email, token]
+        };
+
+        dbUtils.query(dbConnPool, verifyAndRemoveTokenQuery, function(err, result) {
+            if (err) {
+                return callback(err, null);
+            }
+            else if (result.affectedRows == 0) {
+                return callback('invalid_token', null);
+            }
+            else {
+                var hashedPass = helpers.hashPasswordSync(newPassword);
+
+                var changePasswordQuery = {
+                    statement: 'UPDATE users SET password = ? where email = ?',
+                    params: [
+                        hashedPass,
+                        email
+                    ]
+                };
+
+                dbUtils.query(dbConnPool, changePasswordQuery, function(err, result) {
+                    if (err) {
+                        return callback(err, null);
+                    }
+                    else {
+                        return callback(null, true);
+                    }
+                });
+            }
+        });
     },
 
     updateEmail: function (req, dbConnPool, callback) {
