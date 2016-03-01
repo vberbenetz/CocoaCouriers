@@ -3,6 +3,8 @@
 var path = require('path');
 
 var log = require('../utils/logger');
+var configPriv = require('../configuration/config_priv');
+
 var customerCtrl = require('../controllers/customer_ctrl');
 var productCtrl = require('../controllers/product_ctrl');
 var couponCtrl = require('../controllers/coupon_ctrl');
@@ -319,6 +321,13 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
 
 
     // ==================== STRIPE ROUTES ======================= //
+
+    // ----------------- Retrieve Stripe Publishable Key ---------------- //
+    app.get('/api/st-pk', function (req, res, next) {
+        res.send({
+            stPubKey: configPriv.stPubKey
+        });
+    });
 
     // ----------------- Charge Related -------------------- //
     app.post('/api/charge', auth, function (req, res, next) {

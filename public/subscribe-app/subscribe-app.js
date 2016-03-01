@@ -4,7 +4,16 @@ angular.module('subscribe', ['ui.bootstrap', 'angular-stripe'])
 
     .controller('signupCtrl', function ($scope, $http, $window, stripe, $location) {
 
-        $scope.stPubKey = 'pk_test_BXtMsd315TBs4tBzqFVwRw2h';
+        $http({
+            url: '/api/st-pk',
+            method: 'GET'
+        })
+        .success(function(data) {
+            $scope.stPubKey = data.stPubKey;
+        })
+        .error(function(error) {
+            $scope.stPubKey = '';
+        });
 
         $scope.activeTab = 'plan';
 

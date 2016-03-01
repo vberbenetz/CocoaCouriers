@@ -1,6 +1,12 @@
 'use strict';
 
-function mainCtrl($scope, $window, appService) {
+function mainCtrl($scope, $rootScope, $window, appService) {
+
+    appService.stPubKey.get(function(data) {
+        $rootScope.stPubKey = data.stPubKey;
+    }, function(err) {
+        $rootScope.stPubKey = '';
+    });
 
     $scope.account = {
         email: '',
@@ -127,7 +133,7 @@ function membershipCtrl($scope, appService) {
 
 }
 
-function updateBillingCtrl ($scope, stripe, appService) {
+function updateBillingCtrl ($scope, $rootScope, stripe, appService) {
 
     $scope.billing = {
         address: {}
@@ -457,7 +463,7 @@ function updateBillingCtrl ($scope, stripe, appService) {
             // (Address line 1 check is currently not used)
             $scope.source.address_zip = $scope.billing.address.postal_code;
 
-            stripe.card.createToken($scope.source)
+            stripe.card.createToken($scope.source, {key: $rootScope.stPubKey})
                 .then(function (token) {
                     $scope.sourceToken = token.id;
                     $scope.chargeErr = false;

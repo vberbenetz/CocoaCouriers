@@ -38,8 +38,6 @@ function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProv
     $cookiesProvider.defaults.path = '/';
     $cookiesProvider.defaults.secure = true;
 
-    stripeProvider.setPublishableKey('pk_test_BXtMsd315TBs4tBzqFVwRw2h');
-
 }
 angular
     .module('storeapp')

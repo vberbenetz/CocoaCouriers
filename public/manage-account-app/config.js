@@ -47,8 +47,6 @@ function config($routeProvider, $locationProvider, stripeProvider) {
 
     $locationProvider.html5Mode(true);
 
-    stripeProvider.setPublishableKey('pk_test_BXtMsd315TBs4tBzqFVwRw2h');
-
 }
 angular
     .module('account')

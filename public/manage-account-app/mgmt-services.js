@@ -2,6 +2,8 @@
 
 function appService($resource) {
     return {
+        stPubKey: $resource('/api/st-pk'),
+
         user: $resource('/api/user',
             {},
             {

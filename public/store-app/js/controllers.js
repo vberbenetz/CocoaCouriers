@@ -1,6 +1,12 @@
 'use strict';
 
-function mainCtrl ($scope, $cookies, $http, appService) {
+function mainCtrl ($scope, $rootScope, $cookies, $http, appService) {
+
+    appService.stPubKey.get(function(data) {
+        $rootScope.stPubKey = data.stPubKey;
+    }, function(err) {
+        $rootScope.stPubKey = '';
+    });
 
     $scope.basePath = '/assets/store_media';
     $scope.thumbnailSubPath = 'thumbnails';
@@ -481,7 +487,7 @@ function cartCtrl ($scope) {
 
 }
 
-function checkoutCtrl ($scope, $http, $cookies, $state, stripe, appService) {
+function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appService) {
     $scope.subtotal = 0;
     $scope.tax = {
         rate: 0,
@@ -1249,7 +1255,7 @@ function checkoutCtrl ($scope, $http, $cookies, $state, stripe, appService) {
             // (Address line 1 check is currently not used)
             $scope.billing.source.address_zip = $scope.billing.address.postal_code;
 
-            stripe.card.createToken($scope.billing.source)
+            stripe.card.createToken($scope.billing.source, {key: $rootScope.stPubKey})
                 .then(function (token) {
                     $scope.billing.token = token.id;
                     $scope.chargeErr = false;
