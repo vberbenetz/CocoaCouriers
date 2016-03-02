@@ -403,7 +403,7 @@ customerCtrl.prototype = {
                 payload.shipping = data;
                 var tax = helpers.calculateTaxPercentage(data.address.state);
                 payload.metadata.taxRate = tax.rate;
-                payload.metadata.taxRate = tax.desc;
+                payload.metadata.taxDesc = tax.desc;
                 break;
             case 'source':
                 payload.source = data;

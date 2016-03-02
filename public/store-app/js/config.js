@@ -1,6 +1,6 @@
 'use strict';
 
-function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProvider, $cookiesProvider, stripeProvider) {
+function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProvider, $cookiesProvider) {
     $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
     $urlRouterProvider.otherwise("/");
@@ -11,6 +11,11 @@ function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProv
             templateUrl: '../store-app/views/shop_home.html',
             controller: storeCtrl,
             url: "/"
+        })
+        .state('subscribe', {
+            templateUrl: '../store-app/views/subscription.html',
+            controller: subscriptionCtrl,
+            url: "/subscribe"
         })
         .state('product', {
             templateUrl: '../store-app/views/product.html',
@@ -30,7 +35,10 @@ function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProv
         .state('orderFilled', {
             templateUrl: '../store-app/views/post_checkout.html',
             controller: postCheckoutCtrl,
-            url: '/order-filled'
+            url: '/order-filled',
+            params: {
+                recentSub: null
+            }
         });
 
     $locationProvider.html5Mode(true);

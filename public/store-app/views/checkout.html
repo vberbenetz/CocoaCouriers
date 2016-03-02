@@ -3,7 +3,7 @@
     <section class="page-header page-header-xs">
         <div class="container">
 
-            <h1>CHECKOUT</h1>
+            <h1><span class="text-black" ng-show="$parent.planToSub">SUBSCRIPTION - </span>CHECKOUT</h1>
 
             <!-- breadcrumbs -->
             <ol class="breadcrumb">
@@ -20,7 +20,7 @@
         <div class="container">
 
             <!-- EMPTY CART -->
-            <div class="panel panel-default" ng-show="$parent.cart.length==0">
+            <div class="panel panel-default" ng-show="($parent.cart.length==0 && !$parent.planToSub)">
                 <div class="panel-body">
                     <div class="text-center">
                         <h4>Shopping cart is empty!</h4>
@@ -33,7 +33,7 @@
             </div>
             <!-- /EMPTY CART -->
 
-            <div ng-show="$parent.cart.length > 0">
+            <div ng-show="($parent.cart.length > 0) || $parent.planToSub">
                 <form class="row clearfix" novalidate>
                     <div class="col-md-7 col-xs-12">
 
@@ -326,7 +326,57 @@
                                     <h3>Order Details <a class="btn btn-xs btn-default pull-right" ui-sref="cart">Update</a></h3>
                                 </div>
 
-                                <div class="panel-body">
+                                <div class="panel-body" ng-show="$parent.planToSub">
+                                    <div class="clearfix">
+                                        <p class="pull-left">
+                                            {{ $parent.planToSub.name }}
+                                        </p>
+                                        <p class="pull-right">
+                                            $ {{ ($parent.planToSub.amount/100).toFixed(2) }}
+                                            <span ng-show="userCountry==='CA'"> CAD</span>
+                                            <span ng-show="userCountry==='US'"> USD</span>
+                                            <br/>
+                                            <small>{{ ($parent.planToSub.amount/$parent.planToSub.intervalCount/100).toFixed(2) }} / Month</small>
+                                        </p>
+                                    </div>
+
+                                    <div class="divider double-line margin-top-10 margin-bottom-10"></div>
+
+                                    <span class="clearfix" ng-show="discount>0">
+                                        <span class="pull-right">- $ {{ (discount/100).toFixed(2) }}</span>
+                                        <span class="pull-left">Coupon Discount:  <em class="text-green">Discount Applied</em></span>
+                                    </span>
+
+                                    <span class="clearfix">
+                                        <span class="pull-right">$ {{ (subtotal/100).toFixed(2) }}</span>
+                                        <strong class="pull-left">Subtotal:</strong>
+                                    </span>
+
+                                    <hr ng-show="tax.rate > 0" />
+
+                                    <span class="clearfix" ng-show="tax.rate > 0">
+                                        <span class="pull-right">$ {{ (tax.amount / 100).toFixed(2) }}</span>
+                                        <span class="pull-left">{{ tax.desc }}:</span>
+                                        <span class="pull-left">&nbsp;</span>
+                                    </span>
+
+                                    <hr />
+
+                                    <span class="clearfix">
+                                        <span class="pull-right size-20">
+                                            $ {{ (total / 100).toFixed(2) }}
+                                            <span ng-show="userCountry==='CA'"> CAD</span>
+                                            <span ng-show="userCountry==='US'"> USD</span>
+                                        </span>
+                                        <strong class="pull-left">TOTAL:</strong>
+                                    </span>
+                                    <span class="clearfix">
+                                        <small class="pull-right margin-top-10" ng-show="$parent.planToSub.intervalCount===1">* Automatically re-billed on the 15th, every month</small>
+                                        <small class="pull-right margin-top-10" ng-show="$parent.planToSub.intervalCount>1">* Automatically re-billed on the 15th, every {{ $parent.planToSub.intervalCount }} months</small>
+                                    </span>
+                                </div>
+
+                                <div class="panel-body" ng-show="!$parent.planToSub">
                                     <div ng-repeat="i in $parent.cart" ng-hide="$parent.products[i.product.id].stockQuantity < 1">
 
                                         <div class="clearfix" >
@@ -342,7 +392,9 @@
                                             </p>
                                         </div>
 
-                                        <div class="divider double-line margin-top-10 margin-bottom-10"></div>
+                                    </div>
+
+                                    <div class="divider double-line margin-top-10 margin-bottom-10"></div>
 
                                     <span class="clearfix" ng-show="discount>0">
                                         <span class="pull-right">- $ {{ (discount/100).toFixed(2) }}</span>
@@ -374,12 +426,16 @@
                                         <strong class="pull-left">TOTAL:</strong>
                                     </span>
 
-                                    </div>
                                 </div>
                             </div>
 
-                            <button type="submit" ng-disabled="processingOrder || recalculatingTotal" class="btn btn-green btn-xlg btn-featured" ng-click="placeOrder()">
+                            <button ng-hide="$parent.planToSub" type="submit" ng-disabled="processingOrder || recalculatingTotal" class="btn btn-green btn-xlg btn-featured" ng-click="placeOrder(false)">
                                 <span class="size-25 margin-top-20">Place Order </span>
+                                <i ng-show="processingOrder" class="three-quarters-loader margin-top-20"></i>
+                                <i ng-hide="processingOrder" class="fa fa-chevron-circle-right"></i>
+                            </button>
+                            <button ng-show="$parent.planToSub" type="submit" ng-disabled="processingOrder || recalculatingTotal" class="btn btn-green btn-xlg btn-featured" ng-click="placeOrder(true)">
+                                <span class="size-25 margin-top-20">Subscribe </span>
                                 <i ng-show="processingOrder" class="three-quarters-loader margin-top-20"></i>
                                 <i ng-hide="processingOrder" class="fa fa-chevron-circle-right"></i>
                             </button>

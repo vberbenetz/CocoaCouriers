@@ -1,0 +1,89 @@
+<div class="row heading-title heading-dotted text-center margin-top-60">
+    <h1 ng-hide="$parent.customerSubscription" class="pricing-head">
+        Select the Package That Fits You
+    </h1>
+    <h1 ng-show="$parent.customerSubscription" class="pricing-head">
+        Current Subscription
+    </h1>
+</div>
+
+<div class="row">
+
+    <!-- Choose a plan -->
+    <div class="container" ng-show="formPlans && $parent.loadedCustomerSubscription">
+
+        <div ng-show="$parent.customerSubscription">
+            <div class="col-md-4 col-sm-4 col-xs-8 col-sm-push-4 col-xs-push-2 margin-bottom-100">
+                <div class="price-clean">
+                    <h3 class="pricing-head" ng-show="$parent.customerSubscription.intervalCount>1">{{ $parent.customerSubscription.intervalCount }} Month Plan</h3>
+                    <h3 class="pricing-head" ng-show="$parent.customerSubscription.intervalCount===1">
+                        Monthly
+                        <span class="text-black" ng-show="indexOf($parent.customerSubscription.plan_id, 'starter')>-1">
+                            Starter Plan
+                        </span>
+                        <span class="text-black" ng-show="indexOf($parent.customerSubscription.plan_id, 'starter')<0">
+                            Plan
+                        </span>
+                    </h3>
+                    <h4>
+                        <sup>$</sup>{{ ($parent.customerSubscription.amount/$parent.customerSubscription.intervalCount/100).toFixed(2) }}<em> / Box</em>
+                    </h4>
+                    <h5 ng-if="$parent.customerSubscription.intervalCount===12"> ${{ $parent.customerSubscription.amount/100 }} ANNUALLY </h5>
+                    <h5 ng-if="$parent.customerSubscription.intervalCount===3"> ${{ $parent.customerSubscription.amount/100 }} QUARTERLY </h5>
+                    <h5 ng-if="$parent.customerSubscription.intervalCount===1"> ${{ $parent.customerSubscription.amount/100 }} MONTHLY </h5>
+                    <p ng-show="indexOf($parent.customerSubscription.plan_id, 'starter')>-1" class="text-gray">3 Premium Artisan Bars</p>
+                    <p ng-show="indexOf($parent.customerSubscription.plan_id, 'starter')<0" class="text-gray">4 Premium Artisan Bars</p>
+                    <hr />
+
+                    <p class="margin-top-20 margin-bottom-20 text-gray">
+                        <small>* Automatically re-bills every
+                            <span ng-if="$parent.customerSubscription.intervalCount===1">Month</span>
+                            <span ng-if="$parent.customerSubscription.intervalCount>1">{{ $parent.customerSubscription.intervalCount }} Months</span>
+                            on the 15th
+                        </small>
+                    </p>
+                    <a href="/My-Account" class="btn btn-3d btn-success btn-block btn-lg">Update Subscription</a>
+                </div>
+            </div>
+        </div>
+
+        <div ng-hide="$parent.customerSubscription">
+            <div class="col-md-3 col-sm-3" ng-repeat="plan in formPlans">
+                <div class="price-clean">
+                    <h3 class="pricing-head" ng-if="plan.intervalCount>1">{{ plan.intervalCount }} Month Plan</h3>
+                    <h3 class="pricing-head" ng-if="plan.intervalCount===1">
+                        Monthly
+                        <span class="text-black" ng-if="indexOf(plan.id, 'starter')>-1">
+                            Starter Plan
+                        </span>
+                        <span class="text-black" ng-if="indexOf(plan.id, 'starter')<0">
+                            Plan
+                        </span>
+                    </h3>
+                    <h4>
+                        <sup>$</sup>{{ (plan.amount/plan.intervalCount/100).toFixed(2) }}<em> / Box</em>
+                    </h4>
+                    <h5 ng-if="plan.intervalCount===12"> ${{ plan.amount/100 }} ANNUALLY </h5>
+                    <h5 ng-if="plan.intervalCount===3"> ${{ plan.amount/100 }} QUARTERLY </h5>
+                    <h5 ng-if="plan.intervalCount===1"> ${{ plan.amount/100 }} MONTHLY </h5>
+                    <p ng-show="indexOf(plan.id, 'starter')>-1" class="text-gray">3 Premium Artisan Bars</p>
+                    <p ng-show="indexOf(plan.id, 'starter')<0" class="text-gray">4 Premium Artisan Bars</p>
+                    <hr />
+
+                    <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan(plan)" class="btn btn-3d btn-success btn-block btn-lg">CHOOSE PLAN</a>
+
+                    <p class="margin-top-20 text-gray">
+                        <small>* Automatically re-bills every
+                            <span ng-if="plan.intervalCount===1">Month</span>
+                            <span ng-if="plan.intervalCount>1">{{ plan.intervalCount }} Months</span>
+                        </small>
+                    </p>
+                </div>
+            </div>
+
+            <h5 class="col-md-12 margin-top-40 margin-bottom-100">Choose an ongoing subscription for automatic monthly delivery of premium artisan chocolate to your door! Packaged and shipped after the 15th of each month. Cancel at anytime, no strings attached.</h5>
+        </div>
+
+    </div>
+
+</div>

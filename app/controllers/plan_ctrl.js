@@ -3,10 +3,57 @@
 var configPriv = require('../configuration/config_priv');
 var log = require('../utils/logger');
 
+var dbUtils = require('../utils/db_utils');
+
 var stripe = require('stripe')(
     configPriv.sKey
 );
 
+// NEW VERSION
+// ---------------------------
+
+var planCtrl = function() {};
+
+planCtrl.prototype = {
+
+    get: function (planId, dbConnPool, callback) {
+        var query = {
+            statement: 'SELECT * from Plan WHERE ?',
+            params: {
+                id: planId
+            }
+        };
+
+        dbUtils.query(dbConnPool, query, function(err, rows) {
+            if (err) {
+                return callback(err, null);
+            }
+            else {
+                return callback(null, rows[0]);
+            }
+        });
+    },
+
+    list: function (dbConnPool, callback) {
+
+        var query = {
+            statement: 'SELECT * from Plan',
+            params: []
+        };
+
+        dbUtils.query(dbConnPool, query, function(err, rows) {
+            if (err) {
+                return callback(err, null);
+            }
+            else {
+                return callback(null, rows);
+            }
+        });
+    }
+
+};
+
+/*
 var planCtrl = function() {};
 
 planCtrl.prototype = {
@@ -95,5 +142,6 @@ planCtrl.prototype = {
     }
 
 };
+*/
 
 module.exports = new planCtrl();

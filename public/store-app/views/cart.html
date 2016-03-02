@@ -20,7 +20,7 @@
         <div class="container">
 
             <!-- EMPTY CART -->
-            <div class="panel panel-default" ng-if="$parent.cart.length==0">
+            <div class="panel panel-default" ng-if="$parent.cart.length==0 && !$parent.planToSub">
                 <div class="panel-body">
                     <div class="text-center">
                         <h4>Shopping cart is empty!</h4>
@@ -34,7 +34,7 @@
             <!-- /EMPTY CART -->
 
             <!-- CART -->
-            <div class="row" ng-if="$parent.cart.length>0">
+            <div class="row" ng-if="$parent.cart.length>0 || $parent.planToSub">
 
                 <!-- LEFT -->
                 <div class="col-lg-9 col-sm-8">
@@ -53,6 +53,24 @@
                                 <span class="qty size-13 bold">QUANTITY</span>
                             </div>
                             <!-- /cart header -->
+
+                            <!-- subscription -->
+                            <div class="item" ng-show="$parent.planToSub">
+                                <div class="cart_img pull-left width-100 padding-10 text-left">
+                                    <img ng-src="{{ $parent.basePath + '/' + $parent.thumbnailSubPath + '/' + i.product.id + '-' + 'T' + '-' + '1.png' }}" width="80" />
+                                </div>
+                                <a ui-sref="subscribe" class="product_name">
+                                    <span>{{ $parent.planToSub.name }}</span>
+                                    <br/>
+                                    <small>{{ ($parent.planToSub.amount / $parent.planToSub.intervalCount / 100).toFixed(2) }} / Month</small>
+                                </a>
+                                <a ng-click="removeSubscriptionFromCart()" class="remove_item"><i class="fa fa-times"></i></a>
+                                <div class="total_price">
+                                    $ <span>{{ ( $parent.planToSub.amount / 100 ).toFixed(2) }}</span>
+                                </div>
+                                <div class="qty">1</div>
+                                <div class="clearfix"></div>
+                            </div>
 
                             <!-- cart item -->
                             <div class="item" ng-repeat="i in $parent.cart">

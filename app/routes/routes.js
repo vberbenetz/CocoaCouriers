@@ -654,8 +654,8 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
     // ----------------- Plan Related ------------------------ //
     app.get('/api/plan', function(req, res, next) {
 
-        if (typeof req.query.id !== 'undefined') {
-            planCtrl.get(req.query.id, function(err, result) {
+        if (req.query.id) {
+            planCtrl.get(req.query.id, dbConnPool, function(err, result) {
                 if (err) {
                     errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
                 }
@@ -665,7 +665,7 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
             });
         }
         else {
-            planCtrl.list(req, res, function(err, result) {
+            planCtrl.list(dbConnPool, function(err, result) {
                 if (err) {
                     errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
                 }
@@ -711,15 +711,14 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
 
     // ----------------- Subscription Related ------------------------ //
 
-    /*
-    NEW SUBSCRIPTION
+
+    // NEW SUBSCRIPTION
 
     app.get('/api/subscription', auth, function (req, res, next) {
 
         var customerId = req.user.stId;
-        var subscriptionId = req.query.subscriptionId;
 
-        subscriptionCtrl.get(customerId, subscriptionId, function(err, result) {
+        subscriptionCtrl.get(customerId, dbConnPool, function(err, result) {
             if (err) {
                 errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
             }
@@ -752,7 +751,51 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
                 }
             });
         }
+    });
 
+    app.put('/api/subscription', auth, function (req, res, next) {
+        subscriptionCtrl.update(req.user.stId, req.query.newPlanId, req.connection.remoteAddress, function(err, result) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(result);
+            }
+        });
+    });
+
+    app.delete('/api/subscription', auth, function (req, res, next) {
+        var customerId = req.user.stId;
+        var subscriptionId = req.query.subscriptionId;
+
+        subscriptionCtrl.cancel(customerId, subscriptionId, req.connection.remoteAddress, function(err, result) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(result);
+            }
+        });
+    });
+
+
+/*
+    app.get('/api/subscription', auth, function (req, res, next) {
+
+        var customerId = req.user.stId;
+        var subscriptionId = req.query.subscriptionId;
+
+        subscriptionCtrl.get(customerId, subscriptionId, function(err, result) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(result);
+            }
+        });
+    });
+
+    app.post('/api/subscription', auth, function (req, res, next) {
         subscriptionCtrl.create(req.user.stId, req.body.plan, req.body.coupon, req.connection.remoteAddress, function(err, result) {
             if (err) {
                 // Attach card error code to customer
@@ -808,78 +851,6 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
     });
 
 */
-
-    app.get('/api/subscription', auth, function (req, res, next) {
-
-        var customerId = req.user.stId;
-        var subscriptionId = req.query.subscriptionId;
-
-        subscriptionCtrl.get(customerId, subscriptionId, function(err, result) {
-            if (err) {
-                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-            }
-            else {
-                res.send(result);
-            }
-        });
-    });
-
-    app.post('/api/subscription', auth, function (req, res, next) {
-        subscriptionCtrl.create(req.user.stId, req.body.plan, req.body.coupon, req.connection.remoteAddress, function(err, result) {
-            if (err) {
-                // Attach card error code to customer
-                if (typeof err.cardErrorCode !== 'undefined') {
-                    req.body.item = 'metadata';
-                    req.body.data = {
-                        card_error_code: err.cardErrorCode
-                    };
-                    customerCtrl.updateLegacy(req, res, function(customerErr, result) {
-                        errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-                    });
-                }
-                else {
-                    errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-                }
-            }
-            else {
-                // Remove card error code from user because the subscription was successful
-                req.body.item = 'metadata';
-                req.body.data = {
-                    card_error_code: null
-                };
-                customerCtrl.updateLegacy(req, res, function(customerErr, result) {
-                    res.send(result);
-                });
-            }
-        });
-    });
-
-    app.put('/api/subscription', auth, function (req, res, next) {
-        subscriptionCtrl.update(req.user.stId, req.query.newPlanId, req.connection.remoteAddress, function(err, result) {
-            if (err) {
-                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-            }
-            else {
-                res.send(result);
-            }
-        });
-    });
-
-    app.delete('/api/subscription', auth, function (req, res, next) {
-        var customerId = req.user.stId;
-        var subscriptionId = req.query.subscriptionId;
-
-        subscriptionCtrl.cancel(customerId, subscriptionId, req.connection.remoteAddress, function(err, result) {
-            if (err) {
-                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-            }
-            else {
-                res.send(result);
-            }
-        });
-    });
-
-
     // ----------------- Coupon Related ------------------------ //
     app.get('/api/coupon', function (req, res, next) {
 

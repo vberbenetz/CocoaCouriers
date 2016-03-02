@@ -67,6 +67,8 @@ function appService($resource) {
 
         altShippingAddress: $resource('/api/customer/altShippingAddr'),
 
+        plan: $resource('/api/plan'),
+
         product: $resource('/api/product',
             {},
             {
@@ -143,6 +145,8 @@ function appService($resource) {
                 }
             }
         ),
+
+        subscription: $resource('/api/subscription'),
 
         charge: $resource('/api/charge')
     }

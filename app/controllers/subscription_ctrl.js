@@ -12,8 +12,8 @@ var stripe = require('stripe')(
 );
 
 
-/* NEW VERSION
- -----------------------------------------
+// NEW VERSION
+// -----------------------------------------
 var subscriptionCtrl = function() {};
 
 subscriptionCtrl.prototype = {
@@ -48,8 +48,8 @@ subscriptionCtrl.prototype = {
         payload.plan = helpers.sourceCountryPlanId(planId, userCountry);
 
         var tax = {
-            rate: parseFloat(customer.metadata.taxRate),
-            desc: customer.metadata.taxDesc
+            rate: parseInt(customer.taxRate),
+            desc: customer.taxDesc
         };
 
         // Attach tax rate to payload
@@ -98,7 +98,7 @@ subscriptionCtrl.prototype = {
                     subscriptionInsertQuery.params.altShippingAddressId = altShippingId;
                 }
 
-                if (subscription.discount) {
+                if ( (subscription.discount) && (subscription.discount.coupon) ) {
                     subscriptionInsertQuery.params.discountId = subscription.discount.coupon.id;
                 }
 
@@ -117,7 +117,7 @@ subscriptionCtrl.prototype = {
                         prorate: false
                     };
 
-                    stripe.customers.updateSubscription(customerId, subscription.id, payload, function(err, updatedSubscription) {
+                    stripe.customers.updateSubscription(customer.stripeId, subscription.id, payload, function(err, updatedSubscription) {
                         if (err) {
                             console.log(err);
                             return callback({
@@ -237,8 +237,8 @@ subscriptionCtrl.prototype = {
     }
 };
 
-*/
 
+/*
 var subscriptionCtrl = function() {};
 
 subscriptionCtrl.prototype = {
@@ -485,6 +485,6 @@ subscriptionCtrl.prototype = {
         })
     }
 };
-
+*/
 
 module.exports = new subscriptionCtrl();

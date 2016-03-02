@@ -4,13 +4,19 @@
 
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <h3>Congratulations!</h3>
+                    <h3>Thank You For Your Order</h3>
 
-                    <p>
+                    <p ng-show="recentSub">
+                        You have successfully subscribed to the {{ recentSub.name }}<br/>
+                        <span ng-if="$parent.cart.length>0">Please visit your <a ui-sref="cart"><strong>CART</strong></a> to checkout the remainder of your order.</span><br/><br/>
+
+                        If you would like to check on the status of your order, or modify your information, please go to the <a href="/My-Account">Management Panel</a><br />
+                    </p>
+                    <p ng-hide="recentSub">
                         Your order has been successfully placed. <br/>
                         <span ng-if="$parent.recentShipmentId">Order Number: <strong>{{ $parent.recentShipmentId }}</strong> <br/><br/></span>
 
-                        If you would like to check on the status of your order, or modify your information, please go to the <a href="/My-Account">management panel</a><br />
+                        If you would like to check on the status of your order, or modify your information, please go to the <a href="/My-Account">Management Panel</a><br />
                     </p>
 
                     <hr />

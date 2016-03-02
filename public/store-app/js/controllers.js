@@ -37,6 +37,15 @@ function mainCtrl ($scope, $rootScope, $cookies, $http, appService) {
 
     $scope.loaded = {};
 
+    // Retrieve subscription cart cookie
+    var subPid = $cookies.getObject('subPid');
+    if ( (typeof subPid !== 'undefined') && (subPid.length > 0)) {
+        appService.plan.get({id: subPid}, function (plan) {
+            $scope.planToSub = plan;
+            document.getElementById('top-bar-cart-item-count').innerHTML = '1';
+        });
+    }
+
     // Retrieve cart from cookie
     var cartPidQs = $cookies.getObject('cartPidQs');
     if ( (typeof cartPidQs !== 'undefined') && (cartPidQs.length > 0) ) {
@@ -82,6 +91,9 @@ function mainCtrl ($scope, $rootScope, $cookies, $http, appService) {
     else if ( (c == 'CA') || (c == 'US') ) {
         $scope.userCountry = c;
     }
+    else {
+        $scope.userCountry = 'CA';
+    }
 
     // Retrieve user object (check if logged in)
     appService.user.get(function(user) {
@@ -123,12 +135,24 @@ function mainCtrl ($scope, $rootScope, $cookies, $http, appService) {
             $scope.loaded.altShippingAddr = true;
         });
 
+        // Retrieve subscription if user has one
+        appService.subscription.get(function(subscription) {
+            // Subscription exists
+            if (subscription.subscriptionId) {
+                $scope.customerSubscription = subscription;
+            }
+            $scope.loadedCustomerSubscription = true;
+        }, function(err) {
+            $scope.loadedCustomerSubscription = true;
+        });
+
     }, function(err) {
         $scope.user = null;
         $scope.loaded.customer = true;
         $scope.loaded.billingAddr = true;
         $scope.loaded.source = true;
         $scope.loaded.altShippingAddr = true;
+        $scope.loadedCustomerSubscription = true;
     });
 
     $scope.updateCartCookie = function() {
@@ -144,8 +168,12 @@ function mainCtrl ($scope, $rootScope, $cookies, $http, appService) {
         expireDate.setDate(expireDate.getDate() + 30);
         $cookies.putObject('cartPidQs', pidQs, {expires: expireDate});
 
-        document.getElementById('top-bar-cart-item-count').innerHTML = cart.length;
-        console.log(document.cookie);
+        if ($scope.planToSub) {
+            document.getElementById('top-bar-cart-item-count').innerHTML = (cart.length + 1);
+        }
+        else {
+            document.getElementById('top-bar-cart-item-count').innerHTML = cart.length;
+        }
     };
 
     $scope.updateCart = function(product, quantity) {
@@ -161,6 +189,56 @@ function mainCtrl ($scope, $rootScope, $cookies, $http, appService) {
         }
     }
 
+}
+
+function subscriptionCtrl ($scope, $cookies, $state, $window, appService) {
+
+    // Retrieve plans
+    appService.plan.query(function(plans) {
+        var filteredPlans = [];
+        var userRegion = $scope.$parent.userCountry;
+
+        plans.forEach(function(p) {
+            if (p.id.split('_')[1].toUpperCase().indexOf(userRegion)) {
+                filteredPlans.push(p);
+            }
+        });
+        filteredPlans.sort(function(a, b) {
+            if ( (a.amount/a.intervalCount) > (b.amount/b.intervalCount) ) {
+                return 1;
+            }
+            if ( (a.amount/a.intervalCount) < (b.amount/b.intervalCount) ) {
+                return -1;
+            }
+            return 0;
+        });
+        $scope.formPlans = filteredPlans;
+    });
+
+    $scope.selectPlan = function(plan) {
+        $scope.$parent.planToSub = plan;
+        var expireDate = new Date();
+        expireDate.setDate(expireDate.getDate() + 30);
+        $cookies.putObject('subPid', plan.id, {expires: expireDate});
+
+        document.getElementById('top-bar-cart-item-count').innerHTML = '1';
+
+        $state.go('checkout');
+    };
+
+    // Expose indexOf function to view
+    $scope.indexOf = function(str, subStr) {
+        if (!str || !subStr) {
+            return false;
+        }
+        else {
+            return str.indexOf(subStr);
+        }
+    };
+
+    function redirect(subPath) {
+        $window.open(subPath, '_self');
+    }
 }
 
 function storeCtrl ($scope, $state, $timeout, appService) {
@@ -439,7 +517,7 @@ function productImgModalCtrl($scope, $uibModalInstance, imgUrl) {
     }
 }
 
-function cartCtrl ($scope) {
+function cartCtrl ($scope, $cookies) {
 
     $scope.Math = window.Math;
 
@@ -461,6 +539,12 @@ function cartCtrl ($scope) {
         $scope.$parent.updateCartCookie();
     };
 
+    $scope.removeSubscriptionFromCart = function() {
+        $scope.$parent.planToSub = null;
+        $cookies.remove('subPid');
+        $scope.$parent.updateCartCookie();
+    };
+
     $scope.calcSubtotal = function() {
         var cart = $scope.$parent.cart;
         var subtotal = 0;
@@ -476,7 +560,7 @@ function cartCtrl ($scope) {
 
         $scope.subtotal = subtotal;
 
-        $scope.updateCartCookie();
+        $scope.$parent.updateCartCookie();
 
         return (subtotal / 100).toFixed(2);
     };
@@ -511,37 +595,12 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
     $scope.calcCheckout = function() {
         $scope.recalculatingTotal = true;
 
-        var cart = $scope.$parent.cart;
         var subtotal = 0;
-        for (var s = 0; s < cart.length; s++) {
 
-            var priceOfItem = cart[s].product.cadPrice;
-            if ($scope.userCountry === 'US') {
-                priceOfItem = cart[s].product.usPrice;
-            }
-
-            subtotal += (cart[s].quantity * priceOfItem);
-        }
-
-        $scope.subtotal = subtotal;
-
-        var shippingProvince = $scope.billing.address.state;
-        var shippingCountry = $scope.billing.address.country;
-
-        // Use a new alternate shipping address as per the form
-        if ($scope.newAltShipping) {
-            shippingProvince = $scope.shipping.address.state;
-            shippingCountry = $scope.shipping.address.country;
-        }
-
-        // Use the existing saved alternate shipping address
-        else if ($scope.altShippingReq) {
-            shippingProvince = $scope.altShippingAddr.state;
-            shippingCountry = $scope.altShippingAddr.country;
-        }
-
-        calcShipping(shippingProvince, shippingCountry, subtotal, appService, function(shippingCost) {
-            $scope.shippingCost = shippingCost;
+        if ($scope.$parent.planToSub) {
+            subtotal = $scope.$parent.planToSub.amount;
+            $scope.subtotal = subtotal;
+            $scope.shippingCost = 0;
 
             var taxState = $scope.billing.address.state;
             if ($scope.$parent.fullyLoggedIn) {
@@ -549,16 +608,65 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
             }
 
             calcTaxPercentage(taxState, appService, function(tax) {
-                tax.amount = Math.ceil((tax.rate * (subtotal - $scope.discount + shippingCost)) / 100);
+                tax.amount = Math.ceil((tax.rate * subtotal) / 100);
                 $scope.tax = tax;
 
-                $scope.updateCartCookie();
-
-                $scope.total = subtotal + shippingCost - $scope.discount + tax.amount;
+                $scope.total = subtotal + tax.amount;
 
                 $scope.recalculatingTotal = false;
             });
-        });
+        }
+
+        else {
+            var cart = $scope.$parent.cart;
+            for (var s = 0; s < cart.length; s++) {
+
+                var priceOfItem = cart[s].product.cadPrice;
+                if ($scope.userCountry === 'US') {
+                    priceOfItem = cart[s].product.usPrice;
+                }
+
+                subtotal += (cart[s].quantity * priceOfItem);
+            }
+
+            $scope.subtotal = subtotal;
+
+            var shippingProvince = $scope.billing.address.state;
+            var shippingCountry = $scope.billing.address.country;
+
+            // Use a new alternate shipping address as per the form
+            if ($scope.newAltShipping) {
+                shippingProvince = $scope.shipping.address.state;
+                shippingCountry = $scope.shipping.address.country;
+            }
+
+            // Use the existing saved alternate shipping address
+            else if ($scope.altShippingReq) {
+                shippingProvince = $scope.altShippingAddr.state;
+                shippingCountry = $scope.altShippingAddr.country;
+            }
+
+            calcShipping(shippingProvince, shippingCountry, subtotal, appService, function(shippingCost) {
+                $scope.shippingCost = shippingCost;
+
+                var taxState = $scope.billing.address.state;
+                if ($scope.$parent.fullyLoggedIn) {
+                    taxState = $scope.$parent.customer.state;
+                }
+
+                calcTaxPercentage(taxState, appService, function(tax) {
+                    tax.amount = Math.ceil((tax.rate * (subtotal - $scope.discount + shippingCost)) / 100);
+                    $scope.tax = tax;
+
+                    $scope.updateCartCookie();
+
+                    $scope.total = subtotal + shippingCost - $scope.discount + tax.amount;
+
+                    $scope.recalculatingTotal = false;
+                });
+            });
+        }
+
     };
 
     $scope.billing = {
@@ -656,11 +764,6 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
     $scope.ccExpYear = expiryYears;
 
 
-    // Initial calculation
-    //$scope.calcCheckout();
-
-
-
     // Calculate subtotal initally
     $scope.$watch('$parent.loaded.customer', function(newVal, oldVal) {
         if (newVal) {
@@ -723,7 +826,7 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
     });
 
 
-    $scope.placeOrder = function() {
+    $scope.placeOrder = function(isSubscription) {
 
         $scope.globalError = false;
         $scope.validationErrors = {};
@@ -749,7 +852,14 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
             validateAccount(function(result) {
                 if (result) {
 
-                    var chargeMetadata = stringifyCartMetadata($scope.$parent.cart);
+                    var chargeMetadata = null;
+
+                    if (isSubscription) {
+                        chargeMetadata = stringifyCartMetadata($scope.$parent.cart);
+                    }
+                    else {
+                        chargeMetadata = JSON.stringify({plan: $scope.$parent.planToSub.id});
+                    }
 
                     // Case where customer is not yet registered on St or locally
                     if ( (!$scope.$parent.user) || (!$scope.$parent.user.stId) ) {
@@ -759,8 +869,8 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
 
                                 $scope.$parent.user = updatedUser;
 
-                                chargeCustomer(chargeMetadata, function(charge) {
-                                    if (!charge) {
+                                chargeCustomer(chargeMetadata, isSubscription, function(result) {
+                                    if (!result) {
                                         $scope.globalError = true;
                                         $scope.processingOrder = false;
                                     }
@@ -768,12 +878,20 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
                                         var expireDate = new Date();
                                         expireDate.setDate(expireDate.getDate() + 1);
 
-                                        $scope.$parent.recentShipmentId = charge.metadata.shipmentId;
-                                        $cookies.put('recentShipmentId', charge.metadata.shipmentId, {expires: expireDate});
-                                        $cookies.remove('cartPidQs');
-                                        $scope.$parent.cart.length = 0;
-                                        $state.go('orderFilled');
-                                        $scope.processingOrder = false;
+                                        if (isSubscription) {
+                                            $cookies.remove('subPid');
+                                            $scope.$parent.planToSub = null;
+                                            $scope.processingOrder = false;
+                                            $state.go('orderFilled', {recentSub: result});
+                                        }
+                                        else {
+                                            $scope.$parent.recentShipmentId = result.metadata.shipmentId;
+                                            $cookies.put('recentShipmentId', result.metadata.shipmentId, {expires: expireDate});
+                                            $cookies.remove('cartPidQs');
+                                            $scope.$parent.cart.length = 0;
+                                            $scope.processingOrder = false;
+                                            $state.go('orderFilled');
+                                        }
                                     }
                                 });
                             }
@@ -786,8 +904,8 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
 
                     // Customer already logged in
                     else {
-                        chargeCustomer(chargeMetadata, function(charge) {
-                            if (!charge) {
+                        chargeCustomer(chargeMetadata, isSubscription, function(result) {
+                            if (!result) {
                                 $scope.globalError = true;
                                 $scope.processingOrder = false;
                             }
@@ -795,12 +913,20 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
                                 var expireDate = new Date();
                                 expireDate.setDate(expireDate.getDate() + 1);
 
-                                $scope.$parent.recentShipmentId = charge.metadata.shipmentId;
-                                $cookies.put('recentShipmentId', charge.metadata.shipmentId, {expires: expireDate});
-                                $cookies.remove('cartPidQs');
-                                $scope.$parent.cart.length = 0;
-                                $state.go('orderFilled');
-                                $scope.processingOrder = false;
+                                if (isSubscription) {
+                                    $cookies.remove('subPid');
+                                    $scope.$parent.planToSub = null;
+                                    $scope.processingOrder = false;
+                                    $state.go('orderFilled', {recentSub: true});
+                                }
+                                else {
+                                    $scope.$parent.recentShipmentId = result.metadata.shipmentId;
+                                    $cookies.put('recentShipmentId', result.metadata.shipmentId, {expires: expireDate});
+                                    $cookies.remove('cartPidQs');
+                                    $scope.$parent.cart.length = 0;
+                                    $scope.processingOrder = false;
+                                    $state.go('orderFilled');
+                                }
                             }
                         });
                     }
@@ -821,7 +947,9 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
     };
 
     /**
-     * Create charge payload.
+     * Method performs a charge or subscription registration.
+     * It determines which address is the recipient based on parameters.
+     *
      * Determine if an alternate shipping address is required.
      *
      * If required:
@@ -833,21 +961,29 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
      *
      *
      * @param chargeMetadata
+     * @param isSubscription
      * @param callback
      */
-    function chargeCustomer (chargeMetadata, callback) {
+    function chargeCustomer (chargeMetadata, isSubscription, callback) {
         var payload = {
-            cart: [],
-            metadata: chargeMetadata,
             uc: $scope.userCountry
         };
 
-        var detailedCart = $scope.$parent.cart;
-        for (var i = 0; i < detailedCart.length; i++) {
-            payload.cart.push({
-                id: detailedCart[i].product.id,
-                quantity: detailedCart[i].quantity
-            });
+        // Alter payload based on subscription or charge
+        if (isSubscription) {
+            payload.planId = $scope.$parent.planToSub.id
+        }
+        else {
+            payload.cart = [];
+            payload.metadata = chargeMetadata;
+
+            var detailedCart = $scope.$parent.cart;
+            for (var i = 0; i < detailedCart.length; i++) {
+                payload.cart.push({
+                    id: detailedCart[i].product.id,
+                    quantity: detailedCart[i].quantity
+                });
+            }
         }
 
         // Alternate shipping address which the user has not yet used before
@@ -863,39 +999,30 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
                 // If charge failed new token is required (user may have changed their card)
                 // Option to modify card in the form is only available on first ever checkout
                 if ( ($scope.billing.source.number) && ($scope.chargeErr) ) {
-                    validateUserPayment(function(result) {
-                        if (result) {
-                            payload.source = $scope.billing.token;
-
-                            // Update customer with new card
-                            appService.customer.update({item: 'source', data: payload.source}, function(customer) {
-
-                                // Create charge
-                                appService.charge.save(payload, function(charge) {
-                                    return callback(charge);
-                                }, function(err) {
-                                    handleStCCErr(err);
-                                    return callback(false);
-                                });
-
-                            }, function(err) {
-                                handleStCCErr(err);
-                                return callback(false);
-                            });
-                        }
-                        else {
-                            return callback(false);
-                        }
+                    revalidateSourceAndCharge(payload, isSubscription, function(result) {
+                        return callback(result);
                     });
                 }
                 else {
+                    // Create subscription
+                    if (isSubscription) {
+                        appService.subscription.save(payload, function(subscription) {
+                            return callback(subscription);
+                        }, function(err) {
+                            handleStCCErr(err);
+                            return callback(false);
+                        });
+                    }
+
                     // Create charge
-                    appService.charge.save(payload, function(charge) {
-                        return callback(charge);
-                    }, function(err) {
-                        handleStCCErr(err);
-                        return callback(false);
-                    });
+                    else {
+                        appService.charge.save(payload, function(charge) {
+                            return callback(charge);
+                        }, function(err) {
+                            handleStCCErr(err);
+                            return callback(false);
+                        });
+                    }
                 }
 
             }, function(err) {
@@ -914,42 +1041,74 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
             // If charge failed new token is required (user may have changed their card)
             // Option to modify card in the form is only available on first ever checkout
             if ( ($scope.billing.source.number) && ($scope.chargeErr) ) {
-                validateUserPayment(function(result) {
-                    if (result) {
+                revalidateSourceAndCharge(payload, isSubscription, function(result) {
+                    return callback(result);
+                });
+            }
+            else {
+                // Create subscription
+                if (isSubscription) {
+                    appService.subscription.save(payload, function(subscription) {
+                        return callback(subscription);
+                    }, function(err) {
+                        handleStCCErr(err);
+                        return callback(false);
+                    });
+                }
 
-                        // Update customer with new card
-                        appService.customer.update({item: 'source', data: $scope.billing.token}, function(customer) {
+                // Create charge
+                else {
+                    appService.charge.save(payload, function(charge) {
+                        return callback(charge);
+                    }, function(err) {
+                        handleStCCErr(err);
+                        return callback(false);
+                    });
+                }
+            }
 
-                            // Create charge
-                            appService.charge.save(payload, function(charge) {
-                                return callback(charge);
-                            }, function(err) {
-                                handleStCCErr(err);
-                                return callback(false);
-                            });
+        }
 
+    }
+
+    // If a charge fails initially.
+    // Function generates a new card token, updates customer with new card, and retries the charge
+    function revalidateSourceAndCharge (payload, isSubscription, callback) {
+        validateUserPayment(function(result) {
+            if (result) {
+                payload.source = $scope.billing.token;
+
+                // Update customer with new card
+                appService.customer.update({item: 'source', data: payload.source}, function(customer) {
+
+                    // Create subscription
+                    if (isSubscription) {
+                        appService.subscription.save(payload, function(subscription) {
+                            return callback(subscription);
                         }, function(err) {
                             handleStCCErr(err);
                             return callback(false);
                         });
                     }
+                    // Create charge
                     else {
-                        return callback(false);
+                        appService.charge.save(payload, function(charge) {
+                            return callback(charge);
+                        }, function(err) {
+                            handleStCCErr(err);
+                            return callback(false);
+                        });
                     }
-                });
-            }
-            else {
-                // Create charge
-                appService.charge.save(payload, function(charge) {
-                    return callback(charge);
+
                 }, function(err) {
                     handleStCCErr(err);
                     return callback(false);
                 });
             }
-
-        }
-
+            else {
+                return callback(false);
+            }
+        });
     }
 
     /**
@@ -1339,7 +1498,12 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
     }
 }
 
-function postCheckoutCtrl ($scope) {
+function postCheckoutCtrl ($scope, $stateParams) {
+    $scope.recentSub = $stateParams.recentSub;
+
+    if ($scope.recentSub) {
+        document.getElementById('top-bar-cart-item-count').innerHTML = $scope.$parent.cart.length.toString();
+    }
 }
 
 /* ----------------- UTILS -------------------- */
@@ -1492,6 +1656,7 @@ function stringifyCartMetadata(cart) {
 angular
     .module('storeapp')
     .controller('mainCtrl', mainCtrl)
+    .controller('subscriptionCtrl', subscriptionCtrl)
     .controller('storeCtrl', storeCtrl)
     .controller('productCtrl', productCtrl)
     .controller('productImgModalCtrl', productImgModalCtrl)
