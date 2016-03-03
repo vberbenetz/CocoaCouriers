@@ -39,7 +39,7 @@ config.mailOptionsTemplate = {
         subject: '{{subject}}',
         html: {
             start: '<div style="font-family: Arial,Helvetica Neue,Helvetica,sans-serif;">' +
-                    '<div style="background:#bdc3c7;width:800px;margin:0 auto;text-align:center;">' +
+                    '<div style="background:#ecf0f1;width:800px;margin:0 auto;text-align:center;">' +
                     '<a href="https://cocoacouriers.com">' +
                     '<img src="cid:cocoa_email_logo" />' +
                     '</a>' +
