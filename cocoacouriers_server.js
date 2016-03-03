@@ -141,7 +141,7 @@ http.createServer(function (req, res) {
     res.end();
 }).listen(80);
 
-/*
+
 // Test database and email services on startup
 var startupCtrl = require('./app/controllers/startup_ctrl');
 startupCtrl.testDbConn(pool, function(err, result) {
@@ -163,7 +163,7 @@ startupCtrl.testDbConn(pool, function(err, result) {
         }
     });
 });
-*/
+
 log.info('================================');
 log.info('====     SERVER STARTED     ====');
 log.info('================================');
