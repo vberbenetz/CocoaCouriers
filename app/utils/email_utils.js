@@ -124,14 +124,16 @@ module.exports = function(mailTransporter) {
             '<p>Thank you for signing up for the ' + plan.name + ' subscription.<br/><br/> ';
 
         if (plan.interval_count > 1) {
-            body += 'You will be billed every ' + plan.interval_count + 'months on the ' + config.coolDownPeriod.end + 'th of that month.<br/>';
+            body += 'You will be billed every ' + plan.interval_count + ' months on the ' + config.coolDownPeriod.end + 'th of that month.<br/><br/>';
         }
         else {
             body += 'You will be billed every month on the ' + config.coolDownPeriod.end + 'th of that month.<br/>';
         }
 
         body +=
-            'Your box will be shipped shortly afterwards, usually on the following Monday, to avoid spending the weekend at the shipping warehouse.';
+            'Your box will be shipped shortly afterwards, usually on the following Monday, to avoid spending the weekend at the shipping warehouse.<br/><br/>' +
+            'Best Regards,<br/>' +
+            'Cocoa Couriers';
 
         var mailTemplate = this.mailer.templateSender({
             subject: config.mailOptionsTemplate.content.subject,
