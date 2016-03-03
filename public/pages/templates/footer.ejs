@@ -71,11 +71,17 @@
 
 <script type="text/javascript">
     var cart = Cookies.get('cartPidQs');
+    var subInCart = Cookies.get('subPid');
     $(document).ready( function() {
+        var cartLen = 0;
         if (cart) {
             var cartObj = jQuery.parseJSON(cart);
-            $( '#top-bar-cart-item-count' ).text(cartObj.length);
+            cartLen += cartObj.length;
         }
+        if (subInCart) {
+            cartLen += 1;
+        }
+        $( '#top-bar-cart-item-count' ).text(cartLen);
     });
 
 </script>
