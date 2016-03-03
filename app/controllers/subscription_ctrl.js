@@ -33,7 +33,7 @@ subscriptionCtrl.prototype = {
         });
     },
 
-    create: function (customer, userCountry, planId, altShipping, couponId, dbConnPool, reqIP, callback) {
+    create: function (customer, userCountry, planId, altShipping, couponId, dbConnPool, emailUtils, reqIP, callback) {
 
         var payload = {};
 
@@ -99,6 +99,12 @@ subscriptionCtrl.prototype = {
                 if ( (subscription.discount) && (subscription.discount.coupon) ) {
                     subscriptionInsertQuery.params.discountId = subscription.discount.coupon.id;
                 }
+
+                emailUtils.sendSubscriptionRegistration(customer.email, subscription.plan, function(err, result) {
+                    if (err) {
+                        log.error('Failed to send subscription purchase email to customer', {stId: customer.stripeId}, reqIP);
+                    }
+                });
 
                 // Add subscription to local db
                 dbUtils.query(dbConnPool, subscriptionInsertQuery, function(err, result) {

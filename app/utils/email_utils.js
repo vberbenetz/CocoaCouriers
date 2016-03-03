@@ -118,6 +118,45 @@ module.exports = function(mailTransporter) {
         });
     };
 
+    module.sendSubscriptionRegistration = function (recipient, plan, callback) {
+        var subject = 'Cocoa Couriers - Subscription Purchase';
+        var body =
+            '<p>Thank you for signing up for the ' + plan.name + ' subscription.<br/><br/> ';
+
+        if (plan.interval_count > 1) {
+            body += 'You will be billed every ' + plan.interval_count + 'months on the ' + config.coolDownPeriod.end + 'th of that month.<br/>';
+        }
+        else {
+            body += 'You will be billed every month on the ' + config.coolDownPeriod.end + 'th of that month.<br/>';
+        }
+
+        body +=
+            'Your box will be shipped shortly afterwards, usually on the following Monday, to avoid spending the weekend at the shipping warehouse.';
+
+        var mailTemplate = this.mailer.templateSender({
+            subject: config.mailOptionsTemplate.content.subject,
+            html: config.mailOptionsTemplate.content.html.start + body + config.mailOptionsTemplate.content.html.end
+        }, {
+            from: 'info@cocoacouriers.com',
+            attachments: config.mailOptionsTemplate.options.attachments
+        });
+
+        mailTemplate({
+            to: recipient
+        }, {
+            subject: subject,
+            htmlMsg: body
+        }, function(err, info){
+            if (err) {
+                return callback(err, false);
+            }
+            else {
+                return callback(false, true);
+            }
+        });
+
+    };
+
     module.sendReceipt = function (recipient, shipmentId, products, subtotal, discount, shipping, tax, total, callback) {
 
         var now = new Date();
