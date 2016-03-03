@@ -146,10 +146,6 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
         res.render('partners');
     });
 
-    app.get('/subscribe', function(req, res) {
-        res.render('subscribe');
-    });
-
     app.get('/store*', function(req, res) {
         res.render('store_index');
     });
@@ -443,19 +439,6 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
 
     });
 
-    app.post('/api/legacy/customer', function (req, res, next) {
-
-        // Create customer within Stripe
-        customerCtrl.createLegacy(req, res, dbConnPool, function (err, newCustomer) {
-            if (err) {
-                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-            }
-            else {
-                res.send(newCustomer);
-            }
-        });
-    });
-
     app.post('/api/customer/altShippingAddr', auth, function (req, res, next) {
 
         customerCtrl.addAltShippingAddress (req.body.shipping, req.user.stId, dbConnPool, req.connection.remoteAddress, function(err, result) {
@@ -711,9 +694,6 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
 
     // ----------------- Subscription Related ------------------------ //
 
-
-    // NEW SUBSCRIPTION
-
     app.get('/api/subscription', auth, function (req, res, next) {
 
         var customerId = req.user.stId;
@@ -752,79 +732,7 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
             });
         }
     });
-
-    app.put('/api/subscription', auth, function (req, res, next) {
-        subscriptionCtrl.update(req.user.stId, req.query.newPlanId, req.connection.remoteAddress, function(err, result) {
-            if (err) {
-                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-            }
-            else {
-                res.send(result);
-            }
-        });
-    });
-
-    app.delete('/api/subscription', auth, function (req, res, next) {
-        var customerId = req.user.stId;
-        var subscriptionId = req.query.subscriptionId;
-
-        subscriptionCtrl.cancel(customerId, subscriptionId, req.connection.remoteAddress, function(err, result) {
-            if (err) {
-                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-            }
-            else {
-                res.send(result);
-            }
-        });
-    });
-
-
 /*
-    app.get('/api/subscription', auth, function (req, res, next) {
-
-        var customerId = req.user.stId;
-        var subscriptionId = req.query.subscriptionId;
-
-        subscriptionCtrl.get(customerId, subscriptionId, function(err, result) {
-            if (err) {
-                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-            }
-            else {
-                res.send(result);
-            }
-        });
-    });
-
-    app.post('/api/subscription', auth, function (req, res, next) {
-        subscriptionCtrl.create(req.user.stId, req.body.plan, req.body.coupon, req.connection.remoteAddress, function(err, result) {
-            if (err) {
-                // Attach card error code to customer
-                if (typeof err.cardErrorCode !== 'undefined') {
-                    req.body.item = 'metadata';
-                    req.body.data = {
-                        card_error_code: err.cardErrorCode
-                    };
-                    customerCtrl.updateLegacy(req, res, function(customerErr, result) {
-                        errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-                    });
-                }
-                else {
-                    errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-                }
-            }
-            else {
-                // Remove card error code from user because the subscription was successful
-                req.body.item = 'metadata';
-                req.body.data = {
-                    card_error_code: null
-                };
-                customerCtrl.updateLegacy(req, res, function(customerErr, result) {
-                    res.send(result);
-                });
-            }
-        });
-    });
-
     app.put('/api/subscription', auth, function (req, res, next) {
         subscriptionCtrl.update(req.user.stId, req.query.newPlanId, req.connection.remoteAddress, function(err, result) {
             if (err) {
@@ -849,7 +757,6 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
             }
         });
     });
-
 */
     // ----------------- Coupon Related ------------------------ //
     app.get('/api/coupon', function (req, res, next) {
@@ -876,49 +783,6 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
             });
         }
     });
-/*
-    app.post('/api/coupon', function (req, res, next) {
-
-        var payload = {
-            id: req.body.id,
-            duration: req.body.duration,
-            percent_off: req.body.percentOff
-        };
-
-        // Check if expiry date for coupon passed in
-        if (typeof req.body.reedemBy !== 'undefined') {
-            payload.redeem_by = req.body.redeemBy;
-        }
-
-        // Check if redemption frequency passed in
-        if (typeof req.body.maxRedemptions !== 'undefined') {
-            payload.max_redemptions = req.body.maxRedemptions;
-        }
-
-        couponCtrl.create(payload, req.connection.remoteAddress, function(err, result) {
-            if (err) {
-                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-            }
-            else {
-                res.send(result);
-            }
-        });
-    });
-
-    app.delete('/api/coupon', function (req, res, next) {
-
-        var couponId = req.query.id;
-
-        couponCtrl.remove(couponId, req.connection.remoteAddress, function(err, result) {
-            if (err) {
-                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-            }
-            else {
-                res.send(result);
-            }
-        });
-    });
-*/
 
     // ==================================================================================== //
     // ================================== ERROR HANDLING ================================== //
