@@ -44,6 +44,13 @@ function mainCtrl($scope, $rootScope, $window, appService) {
         }, function (err) {
         });
 
+        // Retrieve active subscription
+        appService.subscription.get(function(subscription) {
+            if (subscription) {
+                $scope.customerSubscription = subscription;
+            }
+        });
+
     }, function (error) {
     });
 

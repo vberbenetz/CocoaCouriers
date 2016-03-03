@@ -42,6 +42,8 @@ function appService($resource) {
 
         altShippingAddress: $resource('/api/customer/altShippingAddr'),
 
+        subscription: $resource('/api/subscription'),
+
         logout: $resource('/logout')
     }
 }

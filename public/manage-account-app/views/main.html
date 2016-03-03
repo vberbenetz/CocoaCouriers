@@ -55,7 +55,7 @@
                         </div>
                         <hr />
                         <div ng-show="source">
-                            <h5>
+                            <h5 class="hidden-xs">
                                 <i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i>&nbsp;
                                 <i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i>&nbsp;
                                 <i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i><i class="fa fa-asterisk"></i>&nbsp;
@@ -67,13 +67,20 @@
                                 <span ng-if="source.brand=='Diners Club'" class="fa fa-3x fa-cc-diners-club color-diners-club pull-right"></span>
                                 <span ng-if="source.brand=='JCB'" class="fa fa-3x fa-cc-jcb color-jcb pull-right"></span>
                             </h5>
-                            <h4>
-
-                            </h4>
+                            <h5 class="visible-xs">
+                                **** **** ****
+                                <strong>{{ source.lastFour }}</strong>
+                                <span ng-if="source.brand=='Visa'" class="fa fa-2x fa-cc-visa color-visa pull-right"></span>
+                                <span ng-if="source.brand=='MasterCard'" class="fa fa-2x fa-cc-mastercard color-mastercard pull-right"></span>
+                                <span ng-if="source.brand=='American Express'" class="fa fa-2x fa-cc-amex color-amex pull-right"></span>
+                                <span ng-if="source.brand=='Discover'" class="fa fa-2x fa-cc-discover color-discover pull-right"></span>
+                                <span ng-if="source.brand=='Diners Club'" class="fa fa-2x fa-cc-diners-club color-diners-club pull-right"></span>
+                                <span ng-if="source.brand=='JCB'" class="fa fa-2x fa-cc-jcb color-jcb pull-right"></span>
+                            </h5>
                         </div>
                     </div>
                     <div class="col-md-5">
-                        <strong class="margin-top-20 pull-right"><a class="btn btn-default" ng-href="/My-Account/update-billing">Update Billing Information</a></strong>
+                        <strong class="margin-top-20 pull-right"><a class="btn btn-default" ng-href="/My-Account/update-billing">Update</a></strong>
                     </div>
                 </div>
             </div>
@@ -128,8 +135,12 @@
                         </div>
                     </div>
                     <div class="col-md-5">
-                        <strong class="margin-top-20 pull-right"><a class="btn btn-default" ng-href="/My-Account/update-shipping">Add / Update Shipping Address</a></strong><br/>
-                        <small class="pull-right">* If different from billing address</small>
+                        <div class="row">
+                            <strong class="margin-top-20 pull-right"><a class="btn btn-default" ng-href="/My-Account/update-shipping">Add / Update</a></strong>
+                        </div>
+                        <div class="row">
+                            <small class="pull-right">* If different from billing address</small>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -144,12 +155,21 @@
             <div class="col-md-7 col-lg-9">
                 <div class="row">
                     <div class="col-md-7">
-                        <p>
-                            Applies only to recurring subscriptions
-                        </p>
+                        <h5 class="text-center" ng-show="customerSubscription">
+                            Currently subscribed to: <strong>{{ customerSubscription.name }}</strong>
+                        </h5>
+                        <div class="text-center" ng-hide="customerSubscription">
+                            <div class="row">
+                                <h5 class="visible-xs">Plans start as low as <strong>$26.99/month !</strong></h5>
+                                <h4 class="hidden-xs">Plans start as low as <strong>$26.99/month !</strong></h4>
+                            </div>
+                            <div class="row">
+                                <a href="/store/subscribe" class="btn btn-3d btn-lg bg-emerald-green text-white">Subscribe Now!</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-5">
-                        <strong><a class="pull-right btn btn-default" ng-href="/My-Account/update-subscription">Update / Cancel Plan</a></strong>
+                        <strong ng-show="customerSubscription"><a class="pull-right btn btn-default" ng-href="/My-Account/update-subscription">Update / Cancel Plan</a></strong>
                     </div>
                 </div>
             </div>
