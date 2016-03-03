@@ -7,10 +7,11 @@
                     <h3>Thank You For Your Order</h3>
 
                     <p ng-show="recentSub">
-                        You have successfully subscribed to the {{ recentSub.name }}<br/>
-                        <span ng-if="$parent.cart.length>0">Please visit your <a ui-sref="cart"><strong>CART</strong></a> to checkout the remainder of your order.</span><br/><br/>
-
-                        If you would like to check on the status of your order, or modify your information, please go to the <a href="/My-Account">Management Panel</a><br />
+                        You have successfully subscribed to the <strong>{{ recentSub.plan.name }}</strong><br/><br/>
+                        <span ng-show="cartStillFull">The remainder of your items are ready for checkout.</span><br/>
+                        <a ng-show="cartStillFull" href="/store/checkout" class="btn btn-sm bg-emerald-green text-white margin-top-20"><span class="fa fa-reply"></span> Return To Checkout <span class="fa fa-shopping-cart"></span></a>
+                        <span ng-show="!cartStillFull">If you would like to check on the status of your order, or modify your information, please go to the <a href="/My-Account">Management Panel</a></span><br />
+                        <br/>
                     </p>
                     <p ng-hide="recentSub">
                         Your order has been successfully placed. <br/>

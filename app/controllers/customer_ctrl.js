@@ -125,7 +125,7 @@ customerCtrl.prototype = {
 
         // Move company to metadata from billing for stripe payload
         var company = null;
-        if (billing.company) {
+        if (typeof billing.company !== 'undefined') {
             company = billing.company;
             delete billing.company;
         }

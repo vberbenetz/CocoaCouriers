@@ -42,7 +42,7 @@ function mainCtrl ($scope, $rootScope, $cookies, $http, appService) {
     if ( (typeof subPid !== 'undefined') && (subPid.length > 0)) {
         appService.plan.get({id: subPid}, function (plan) {
             $scope.planToSub = plan;
-            document.getElementById('top-bar-cart-item-count').innerHTML = '1';
+            document.getElementById('top-bar-cart-item-count').innerHTML = ($scope.cart.length + 1).toString();
         });
     }
 
@@ -67,6 +67,13 @@ function mainCtrl ($scope, $rootScope, $cookies, $http, appService) {
                         $scope.cart.push(obj);
                     }
                 }
+            }
+
+            if ($scope.planToSub) {
+                document.getElementById('top-bar-cart-item-count').innerHTML = ($scope.cart.length + 1).toString();
+            }
+            else {
+                document.getElementById('top-bar-cart-item-count').innerHTML = ($scope.cart.length).toString();
             }
 
         });
@@ -191,7 +198,7 @@ function mainCtrl ($scope, $rootScope, $cookies, $http, appService) {
 
 }
 
-function subscriptionCtrl ($scope, $cookies, $state, $window, appService) {
+function subscriptionCtrl ($scope, $cookies, $state, appService) {
 
     // Retrieve plans
     appService.plan.query(function(plans) {
@@ -221,7 +228,7 @@ function subscriptionCtrl ($scope, $cookies, $state, $window, appService) {
         expireDate.setDate(expireDate.getDate() + 30);
         $cookies.putObject('subPid', plan.id, {expires: expireDate});
 
-        document.getElementById('top-bar-cart-item-count').innerHTML = '1';
+        document.getElementById('top-bar-cart-item-count').innerHTML = ($scope.$parent.cart.length + 1).toString();
 
         $state.go('checkout');
     };
@@ -235,10 +242,6 @@ function subscriptionCtrl ($scope, $cookies, $state, $window, appService) {
             return str.indexOf(subStr);
         }
     };
-
-    function redirect(subPath) {
-        $window.open(subPath, '_self');
-    }
 }
 
 function storeCtrl ($scope, $state, $timeout, appService) {
@@ -855,10 +858,10 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
                     var chargeMetadata = null;
 
                     if (isSubscription) {
-                        chargeMetadata = stringifyCartMetadata($scope.$parent.cart);
+                        chargeMetadata = JSON.stringify({plan: $scope.$parent.planToSub.id});
                     }
                     else {
-                        chargeMetadata = JSON.stringify({plan: $scope.$parent.planToSub.id});
+                        chargeMetadata = stringifyCartMetadata($scope.$parent.cart);
                     }
 
                     // Case where customer is not yet registered on St or locally
@@ -882,6 +885,11 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
                                             $cookies.remove('subPid');
                                             $scope.$parent.planToSub = null;
                                             $scope.processingOrder = false;
+                                            $scope.$parent.customerSubscription = {
+                                                plan_id: result.plan.id,
+                                                amount: result.plan.amount,
+                                                intervalCount: result.plan.interval_count
+                                            };
                                             $state.go('orderFilled', {recentSub: result});
                                         }
                                         else {
@@ -917,7 +925,12 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
                                     $cookies.remove('subPid');
                                     $scope.$parent.planToSub = null;
                                     $scope.processingOrder = false;
-                                    $state.go('orderFilled', {recentSub: true});
+                                    $scope.$parent.customerSubscription = {
+                                        plan_id: result.plan.id,
+                                        amount: result.plan.amount,
+                                        intervalCount: result.plan.interval_count
+                                    };
+                                    $state.go('orderFilled', {recentSub: result});
                                 }
                                 else {
                                     $scope.$parent.recentShipmentId = result.metadata.shipmentId;
@@ -1500,9 +1513,16 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
 
 function postCheckoutCtrl ($scope, $stateParams) {
     $scope.recentSub = $stateParams.recentSub;
+    $scope.cartStillFull = false;
 
     if ($scope.recentSub) {
         document.getElementById('top-bar-cart-item-count').innerHTML = $scope.$parent.cart.length.toString();
+    }
+    else {
+        document.getElementById('top-bar-cart-item-count').innerHTML = '0';
+    }
+    if ($scope.$parent.cart.length > 0) {
+        $scope.cartStillFull = true;
     }
 }
 

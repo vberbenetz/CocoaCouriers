@@ -740,7 +740,7 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
                     errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
                 }
                 else {
-                    subscriptionCtrl.create(customer, req.body.uc, req.body.planId, req.body.altShippingId, req.body.couponId, dbConnPool, req.connection.remoteAddress, function(err, result) {
+                    subscriptionCtrl.create(customer, req.body.uc, req.body.planId, req.body.altShipping, req.body.couponId, dbConnPool, req.connection.remoteAddress, function(err, result) {
                         if (err) {
                             errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
                         }
