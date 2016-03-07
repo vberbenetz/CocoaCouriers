@@ -150,7 +150,7 @@ chargeCtrl.prototype = {
                 var shipmentQuery = {
                     statement: 'INSERT INTO Shipment SET ?',
                     params: {
-                        stripeCustomerId: customer.id,
+                        stripeCustomerId: customer.stripeId,
                         altShippingAddressId: altShippingAddressId,
                         status: 'pending_charge',
                         isSubscriptionBox: false,
