@@ -37,6 +37,11 @@ subscriptionCtrl.prototype = {
 
         var payload = {};
 
+        // Attach altShippingId
+        payload.metadata = {
+            altShippingId: altShipping
+        };
+
         // Attach coupon code if supplied
         if ( (typeof couponId !== 'undefined') && (couponId !== null) && (couponId.length !== 0) && (couponId !== '') ) {
             payload.coupon = couponId;
@@ -82,8 +87,9 @@ subscriptionCtrl.prototype = {
             else {
                 log.info("Created new subscription", subscription, reqIP);
 
+                // Statement has on duplicate IGNORE because the Invoice.payment_success webhook might trigger before this query
                 var subscriptionInsertQuery = {
-                    statement: 'INSERT INTO Subscription SET ?',
+                    statement: 'INSERT INTO Subscription SET ? ON DUPLICATE KEY UPDATE stripeId=stripeId',
                     params: {
                         stripeId: customer.stripeId,
                         subscriptionId: subscription.id,
