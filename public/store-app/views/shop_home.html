@@ -119,11 +119,11 @@
                     <ul class=" row list-inline nomargin">
 
                         <!-- ITEM -->
-                        <li class="col-lg-3 col-md-4 col-sm-6 col-xs-8 col-sm-offset-0 col-xs-offset-2" ng-repeat="p in $parent.products" ng-init="activeThumbnail[$index]=1">
+                        <li class="col-md-4 col-sm-6 col-xs-8 col-sm-offset-0 col-xs-offset-2" ng-repeat="p in $parent.products" ng-init="activeThumbnail[$index]=1">
 
                             <div class="shop-item">
 
-                                <div class="shop-thumbnail-fixed-size">
+                                <div class="shop-thumbnail-fixed-size" style="margin:0 auto;">
                                     <a ng-click="goToProduct(p)">
                                         <div class="thumbnail visible-md visible-lg" ng-mouseover="changeActiveThumbnail($index, 2, p.numberOfImages, false)" ng-mouseleave="changeActiveThumbnail($index, 1, p.numberOfImages, true)">
                                             <!-- product image(s) -->
@@ -144,7 +144,7 @@
                                     <a href="" ng-click="goToProduct(p)">
                                         <div class="shop-item-summary text-center">
 
-                                            <h2 class="text-black size-15">{{ p.name }}</h2>
+                                            <h2 class="text-black">{{ p.name }}</h2>
 
                                             <!-- price -->
                                             <div class="shop-item-price">
@@ -166,7 +166,7 @@
                                     <a href="" ng-click="goToProduct(p)">
                                         <div class="shop-item-summary text-center">
 
-                                            <h2 class="text-black size-30">{{ p.name }}</h2>
+                                            <h2 class="text-black">{{ p.name }}</h2>
 
                                             <!-- price -->
                                             <div class="shop-item-price">

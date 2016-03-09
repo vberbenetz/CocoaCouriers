@@ -132,7 +132,7 @@ productCtrl.prototype = {
     list: function (dbConnPool, callback) {
 
         var query = {
-            statement: 'SELECT p.*, m.name as m_name, m.description as m_description, m.origin as m_origin, m.website as m_website FROM Product p INNER JOIN Manufacturer m ON p.manufacturer_id=m.id ORDER BY p.displayPriority DESC Limit 100',
+            statement: 'SELECT p.*, m.name as m_name, m.description as m_description, m.origin as m_origin, m.website as m_website FROM Product p INNER JOIN Manufacturer m ON p.manufacturer_id=m.id ORDER BY IF(p.stockQuantity>0, 1, 0) DESC, p.displayPriority DESC Limit 100',
             params: []
         };
 

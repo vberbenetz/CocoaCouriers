@@ -81,10 +81,10 @@
                                     <div itemprop="price">$ {{ ($parent.product.usPrice / 100).toFixed(2) }} USD</div>
                                 </div>
 
-                                <span ng-if="product.stockQuantity > 20" class="text-success">
+                                <span ng-if="product.stockQuantity >= 3" class="text-success">
                                     <i class="fa fa-check"></i><link itemprop="availability" href="https://schema.org/InStock" /> In Stock
                                 </span>
-                                <span ng-if="(product.stockQuantity > 0) && (product.stockQuantity < 20)" class="text-danger">
+                                <span ng-if="(product.stockQuantity > 0) && (product.stockQuantity < 3)" class="text-danger">
                                     <strong><link itemprop="availability" href="https://schema.org/LimitedAvailability" /> Low Stock</strong> ({{ $parent.product.stockQuantity }} remaining)
                                 </span>
                                 <span ng-if="product.stockQuantity < 1" class="text-danger">
