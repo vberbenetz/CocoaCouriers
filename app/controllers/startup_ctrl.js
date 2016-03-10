@@ -23,8 +23,8 @@ startupCtrl.prototype = {
 
     },
 
-    testEmail: function (emailUtils, dbErr, callback) {
-        emailUtils.checkEmailService('val@cantangosolutions.com', dbErr, function(err, res) {
+    testEmail: function (emailUtils, dbErr, domain, callback) {
+        emailUtils.checkEmailService('val@cantangosolutions.com', dbErr, domain, function(err, res) {
             if (err) {
                 return callback(err, null);
             }
