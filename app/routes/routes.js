@@ -368,24 +368,6 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
         });
     });
 
-    app.get('/api/legacy/customer', auth, function (req, res, next) {
-        var customerId = req.user.stId;
-
-        // Customer has no information associated with them
-        if (customerId === null) {
-            res.status(404).send();
-        }
-
-        customerCtrl.getLegacy(customerId, function (err, result) {
-            if (err) {
-                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-            }
-            else {
-                res.send(result);
-            }
-        });
-    });
-
     app.get('/api/customer/source', auth, function (req, res, next) {
         var stId = req.user.stId;
 
