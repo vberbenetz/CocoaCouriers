@@ -153,18 +153,14 @@ startupCtrl.testDbConn(pool, function(err, result) {
     else {
         log.info('Database Startup Connection Test Successful');
     }
-
-    require('dns').lookup(require('os').hostname(), function (err, domain, fam) {
-
-        startupCtrl.testEmail(emailUtils, dbErr, domain, function(err, result) {
-            if (err) {
-                log.error('Email Startup Test Failed!!!');
-                log.error(err);
-            }
-            else {
-                log.info('Email Startup Test Successful');
-            }
-        });
+    startupCtrl.testEmail(emailUtils, dbErr, configPriv.env, function(err, result) {
+        if (err) {
+            log.error('Email Startup Test Failed!!!');
+            log.error(err);
+        }
+        else {
+            log.info('Email Startup Test Successful');
+        }
     });
 });
 

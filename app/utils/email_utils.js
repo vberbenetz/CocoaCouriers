@@ -7,17 +7,17 @@ module.exports = function(mailTransporter) {
         mailer: mailTransporter
     };
 
-    module.checkEmailService = function (recipient, dbErr, domain, callback) {
+    module.checkEmailService = function (recipient, dbErr, env, callback) {
 
-        var subject = 'CocoaCouriers server started - ' + domain;
+        var subject = 'CocoaCouriers server started - ' + env;
         var body = 'CocoaCouriers server started.<br/>';
 
         if (dbErr) {
             subject += ' - Database Connection Test Failed!!';
-            body += 'Domain: ' + domain + '<br/><br/>Database connection test error: ' + dbErr;
+            body += 'Domain: ' + env + '<br/><br/>Database connection test error: ' + dbErr;
         }
         else {
-            body += 'Domain: ' + domain + '<br/><br/>Database connection test Successful';
+            body += 'Domain: ' + env + '<br/><br/>Database connection test Successful';
         }
 
         var mailTemplate = this.mailer.templateSender({
