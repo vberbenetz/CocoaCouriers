@@ -481,10 +481,14 @@ function productCtrl ($scope, $state, $stateParams, $uibModal, appService) {
     // Load product if parent list was not populated
     if (!$scope.$parent.products) {
         appService.product.getByUrlSubPath({urlSubPath: $stateParams.urlSubPath}, function(product) {
-            $scope.product = product;
+            if (!product.id) {
+                $state.go('home');
+            }
+            else {
+                $scope.product = product;
 
-            $scope.productLoadFlag = true;
-
+                $scope.productLoadFlag = true;
+            }
         }, function(err) {
             $state.go('home');
         });
@@ -496,10 +500,14 @@ function productCtrl ($scope, $state, $stateParams, $uibModal, appService) {
         // Not in parent cache
         if ($scope.product === null) {
             appService.product.getByUrlSubPath({urlSubPath: $stateParams.urlSubPath}, function(product) {
-                $scope.product = product;
+                if (!product) {
+                    $state.go('home');
+                }
+                else {
+                    $scope.product = product;
 
-                $scope.productLoadFlag = true;
-
+                    $scope.productLoadFlag = true;
+                }
             }, function(err) {
                 $state.go('home');
             });
