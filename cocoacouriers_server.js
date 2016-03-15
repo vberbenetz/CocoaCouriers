@@ -86,7 +86,17 @@ app.use(function(req, res, next) {
 app.use(passport.initialize());
 app.use(passport.session());
 
-// REST api routes
+// Redirect all www to non-www
+app.set('trust proxy', true);
+app.use( function (req, res, next) {
+    if (req.headers.host.slice(0, 4) === 'www.') {
+        var newHost = req.headers.host.slice(4);
+        return res.redirect(301, req.protocol + '://' + newHost + req.originalUrl);
+    }
+    next();
+});
+
+// Web routes
 require('./app/routes/routes')(app, passport, pool, emailUtils);
 
 // Error Handler

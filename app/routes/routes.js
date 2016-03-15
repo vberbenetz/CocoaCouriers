@@ -21,17 +21,6 @@ var errorHandler = require('../utils/error_handler');
 
 module.exports = function(app, passport, dbConnPool, emailUtils) {
 
-    // ================== REDIRECT ALL www to non-www ================== //
-
-    app.all('/*', function(req, res, next) {
-        if (req.headers && (req.headers.host.match(/^www/) !== null) ) {
-            res.redirect('https://' + req.headers.host.replace(/^www\./, '') + req.url);
-        }
-        else {
-            next();
-        }
-    });
-
     // ======================= AUTHENTICATION ========================== //
 
     var auth = function (req, res, next) {
