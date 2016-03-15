@@ -19,7 +19,7 @@
             <div class="visible-lg visible-md row margin-bottom-neg-20 margin-top-neg-50">
                 <div class="col-lg-6 col-md-8">
                     <h1 class="margin-right-20 margin-left-20">
-                        <span class="text-black" itemprop="brand">{{ product.m_name }}</span> - <span class="text-black" itemprop="name">{{ product.name }}</span>
+                        <span ng-hide="product.productType==='gift-box'" class="text-black" itemprop="brand">{{ product.m_name }} - </span><span class="text-black" itemprop="name">{{ product.name }}</span>
                     </h1>
                 </div>
                 <div class="col-lg-6 col-md-4">
