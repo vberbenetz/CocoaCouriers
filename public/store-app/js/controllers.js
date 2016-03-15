@@ -569,6 +569,10 @@ function cartCtrl ($scope, $cookies) {
             subtotal += cart[s].quantity * priceOfItem;
         }
 
+        if ($scope.$parent.planToSub) {
+            subtotal += $scope.$parent.planToSub.amount;
+        }
+
         $scope.subtotal = subtotal;
 
         $scope.$parent.updateCartCookie();

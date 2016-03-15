@@ -28,7 +28,7 @@
                     <h4>
                         <sup>$</sup>{{ ($parent.customerSubscription.amount/$parent.customerSubscription.intervalCount/100).toFixed(2) }}<em> / Box</em>
                     </h4>
-                    <h5 ng-if="$parent.customerSubscription.intervalCount===12"> ${{ $parent.customerSubscription.amount/100 }} ANNUALLY </h5>
+                    <h5 ng-if="$parent.customerSubscription.intervalCount===6"> ${{ $parent.customerSubscription.amount/100 }} SEMI-ANNUALLY </h5>
                     <h5 ng-if="$parent.customerSubscription.intervalCount===3"> ${{ $parent.customerSubscription.amount/100 }} QUARTERLY </h5>
                     <h5 ng-if="$parent.customerSubscription.intervalCount===1"> ${{ $parent.customerSubscription.amount/100 }} MONTHLY </h5>
                     <p ng-show="indexOf($parent.customerSubscription.plan_id, 'starter')>-1" class="text-gray">3 Premium Artisan Bars</p>
@@ -48,22 +48,15 @@
         </div>
 
         <div ng-hide="$parent.customerSubscription">
-            <div class="col-md-3 col-sm-3" ng-repeat="plan in formPlans">
+            <div class="col-md-3 col-sm-6 margin-bottom-40" ng-repeat="plan in formPlans">
                 <div class="price-clean">
-                    <h3 class="pricing-head" ng-if="plan.intervalCount>1">{{ plan.intervalCount }} Month Plan</h3>
-                    <h3 class="pricing-head" ng-if="plan.intervalCount===1">
-                        Monthly
-                        <span class="text-black" ng-if="indexOf(plan.id, 'starter')>-1">
-                            Starter Plan
-                        </span>
-                        <span class="text-black" ng-if="indexOf(plan.id, 'starter')<0">
-                            Plan
-                        </span>
+                    <h3 class="pricing-head">
+                        {{ plan.name }}
                     </h3>
                     <h4>
                         <sup>$</sup>{{ (plan.amount/plan.intervalCount/100).toFixed(2) }}<em> / Box</em>
                     </h4>
-                    <h5 ng-if="plan.intervalCount===12"> ${{ plan.amount/100 }} ANNUALLY </h5>
+                    <h5 ng-if="plan.intervalCount===6"> ${{ plan.amount/100 }} HALF-YEAR </h5>
                     <h5 ng-if="plan.intervalCount===3"> ${{ plan.amount/100 }} QUARTERLY </h5>
                     <h5 ng-if="plan.intervalCount===1"> ${{ plan.amount/100 }} MONTHLY </h5>
                     <p ng-show="indexOf(plan.id, 'starter')>-1" class="text-gray">3 Premium Artisan Bars</p>
@@ -81,7 +74,18 @@
                 </div>
             </div>
 
-            <h5 class="col-md-12 margin-top-40 margin-bottom-100">Choose an ongoing subscription for automatic monthly delivery of premium artisan chocolate to your door! Packaged and shipped after the 15th of each month. Cancel at anytime, no strings attached.</h5>
+            <div class="row">
+                <div class="col-md-6 col-xs-10 col-md-offset-3 col-xs-offset-1 margin-bottom-40">
+                    <img class="img-responsive" src="/assets/images/subscription_box.png" />
+                </div>
+                <div class="col-xs-10 col-xs-offset-1 margin-bottom-40">
+                    <p>
+                        No matter what the occasion, Cocoa Couriers gift boxes are the perfect treat for the chocolate lover in your life. Our standard gift boxes are available in 3 and 4 bar sizes. The specific bar combination will change throughout the year as our stock rotates so we can make sure you always get the freshest products. Whether your recipient is a craft chocolate lover or has never tried it this gift serves as the perfect introduction to fine, craft artisan chocolate. Looking to buy corporate gifts? Cocoa Courier gift boxes serve as the ultimate thank you for your clients, especially ones with a taste for the finer things in life. Remember this is the best chocolate in the world, and where else can you get the world’s best anything so easily?
+                    </p>
+                    <small class="margin-top-40 text-center"><strong>* Automatically Re-billed on the 15th of each period. Boxes are packaged and shipped on or shortly after the 15th each month.</strong></small>
+                </div>
+            </div>
+
         </div>
 
     </div>
