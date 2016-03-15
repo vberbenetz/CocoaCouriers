@@ -466,6 +466,9 @@ function updateBillingCtrl ($scope, $rootScope, stripe, appService) {
         // Attempt to generate token
         if (!validationFailed) {
 
+            // Append name for additional CC verification
+            $scope.source.name = $scope.billing.name;
+
             // Append postal code for additional CC verification
             // (Address line 1 check is currently not used)
             $scope.source.address_zip = $scope.billing.address.postal_code;
