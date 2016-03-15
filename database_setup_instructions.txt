@@ -7,27 +7,3 @@ password VARCHAR(255),
 stId VARCHAR(255),
 PRIMARY KEY (id)
 );
-
-CREATE TABLE ProductProfile (
-name VARCHAR(255) NOT NULL,
-description TEXT,
-profileType VARCHAR(255),
-PRIMARY KEY (name)
-);
-
-CREATE TABLE ProductProfileMapping (
-productId VARCHAR(255) NOT NULL,
-productProfileId VARCHAR(255) NOT NULL
-PRIMARY KEY (productId, productProfileId)
-);
-
-MANUFACTURER (
-id BIGINT NOT NULL AUTO_INCREMENT,
-name VARCHAR(255),
-description TEXT,
-origin VARCHAR(10),
-website VARCHAR(255)
-);
-
-CREATE USER '<USERNAME>'@'localhost' identified by '<PASSWORD>';
-GRANT ALL PRIVILEGES ON cocoacouriers.* TO '<USERNAME>'@'localhost';
