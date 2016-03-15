@@ -124,7 +124,9 @@
                                 {{ product.m_name }} <br/><br/>
                                 {{ product.m_origin | isoCountryToName }} <br/><br/>
                                 {{ product.cocoaOrigin | isoCountryToName }} <br/><br/>
-                                {{ product.cocoaPercent }}% <br/><br/>
+                                <span ng-if="product.productType!=='gift-box'">{{ product.cocoaPercent }}% </span>
+                                <span ng-if="product.productType==='gift-box'">Varies</span>
+                                <br/><br/>
                                 {{ product.weightImperial }} oz / {{ product.weightMetric }} grams <br/><br/>
                             </div>
                         </uib-tab>
