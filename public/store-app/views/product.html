@@ -76,7 +76,7 @@
                                     <meta itemprop="priceCurrency" content="CAD" />
                                     <div itemprop="price">$ {{ ($parent.product.cadPrice / 100).toFixed(2) }} CAD</div>
                                 </div>
-                                <div class="shop-item-price" ng-if="$parent.userCountry==='US'">
+                                <div class="shop-item-price" ng-if="$parent.userCountry!=='CA'">
                                     <meta itemprop="priceCurrency" content="USD" />
                                     <div itemprop="price">$ {{ ($parent.product.usPrice / 100).toFixed(2) }} USD</div>
                                 </div>
