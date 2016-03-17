@@ -206,7 +206,7 @@ function subscriptionCtrl ($scope, $cookies, $state, appService) {
         var userRegion = $scope.$parent.userCountry;
 
         plans.forEach(function(p) {
-            if (p.id.split('_')[1].toUpperCase().indexOf(userRegion)) {
+            if (p.id.split('_')[1].toUpperCase().indexOf(userRegion) > -1) {
                 filteredPlans.push(p);
             }
         });
