@@ -60,7 +60,9 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
 
         // Send user their auto generated password
         emailUtils.sendNewPassword(req.user.email, req.user.rawPass, function(err, result) {
-            log.error('Could not send new password to user ' + userEmail, err, reqIP);
+            if (err) {
+                log.error('Could not send new password to user ' + userEmail, err, reqIP);
+            }
         });
 
         res.send(req.user);
