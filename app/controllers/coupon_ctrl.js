@@ -74,25 +74,31 @@ couponCtrl.prototype = {
                     }
 
                     // Is not restricted to a specific plan
-                    if (!coupon.metadata.validPlanIds) {
+                    if (!coupon.metadata.applicable_plan_ids) {
                         return callback(false, coupon);
                     }
                     else {
-                        var strIds = coupon.metadata.validPlanIds.split(',');
+                        var idFound = false;
+                        var strIds = coupon.metadata.applicable_plan_ids.split(',');
                         strIds.forEach(function(id) {
                             if (id === planId) {
-                                return callback(false, coupon);
+                                idFound = true;
                             }
                         });
 
-                        return callback({
-                            status: 404,
-                            type: 'stripe',
-                            msg: {
-                                simplified: 'not_found',
-                                detailed: err
-                            }
-                        });
+                        if (idFound) {
+                            return callback(false, coupon);
+                        }
+                        else {
+                            return callback({
+                                status: 404,
+                                type: 'stripe',
+                                msg: {
+                                    simplified: 'not_found',
+                                    detailed: err
+                                }
+                            });
+                        }
                     }
                 }
             }

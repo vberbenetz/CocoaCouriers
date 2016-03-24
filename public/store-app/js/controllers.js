@@ -226,6 +226,11 @@ function subscriptionCtrl ($scope, $cookies, $state, appService) {
     });
 
     $scope.selectPlan = function(plan) {
+
+        // Reset coupons
+        $scope.$parent.subscriptionDiscount = 0;
+        $scope.$parent.subscriptionCouponId = '';
+
         $scope.$parent.planToSub = plan;
         var expireDate = new Date();
         expireDate.setDate(expireDate.getDate() + 30);
@@ -562,6 +567,8 @@ function cartCtrl ($scope, $cookies, appService) {
 
     $scope.removeSubscriptionFromCart = function() {
         $scope.$parent.planToSub = null;
+        $scope.$parent.subscriptionDiscount = 0;
+        $scope.$parent.subscriptionCouponId = '';
         $cookies.remove('subPid');
         $scope.$parent.updateCartCookie();
     };
