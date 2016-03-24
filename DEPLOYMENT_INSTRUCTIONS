@@ -1,13 +1,67 @@
 1) npm install all packages
 2) Complete database_setup_instructions.txt
-3) Update config_priv:
-    - ssl
-    - session
-    - cookie
-    - mySqlConfig
-    - gmailXOAuth2
-    - stPubKey (Stripe Prod publishable key)
-    - sKey (Stripe Prod key)
+3) Update config_priv. Local development configuration shown.
+    - Update ssl keys and locations
+    - Update redis sessionKey (create a random string)
+    - Update cookie secret (create a random string)
+    - Update gmailXOAuth2 config if token information changes (http://masashi-k.blogspot.ca/2013/06/sending-mail-with-gmail-using-xoauth2.html)
+    - Update mysqlConfig with environment values
+    - Update Stripe keys for respective environment
+
+    {
+        env: 'LOCAL_DEV',
+
+        ssl: {
+            key: '/etc/ssl/localcerts/cocoacouriers.key',
+            cert: '/etc/ssl/localcerts/cocoacouriers.crt',
+            ca: {
+                root: '/etc/ssl/certs/AddTrust_Public_Services_Root.pem',
+                int1: '/etc/ssl/certs/AddTrust_Public_Services_Root.pem',
+                int2: '/etc/ssl/certs/AddTrust_Public_Services_Root.pem'
+            },
+            passphrase: 'C0c0C0ur13r$'
+        },
+
+        session: {
+            redis: {
+                host: '127.0.0.1',
+                port: 6379
+            },
+            resave: false,
+            saveUninitialized: false,
+            sessionKey: '2z1H5mEYmtgPt6eINlxb6aADGxyXgjk2ld5zcTQ3CjU1mwDo87Wro11yqyWxS16'
+        },
+
+        cookie: {
+            secret: '1QUB3dykj7HAwvw3uiRrszA7VVXlniLvsEvgRX0BIjY8lLu3j5aEX8z0o4NOV01'
+        },
+
+        gmailXOAuth2: {
+            user: 'info@cocoacouriers.com',
+            clientId: '31133796344-0de2kchia2n2jdmogpldb3pp0nkqmvfa.apps.googleusercontent.com',
+            clientSecret: 'sOMwt2kl4brw9VLOiS9ffMmd',
+            refreshToken: '1/EVqdgEfTVLO_uitWL_FjAJuPgGRoJn_NiqSdCoREXjg',
+            accessToken: 'ya29.lwJE87PsGJ6g6B_3ccSqIjwrhAwQIcd1YZAsiDCM-oXyyIp2pm2tEWFYoAKPQbHNQg'
+        },
+
+        mysqlConfig: {
+            connectionLimit: 50,
+            host: 'localhost',
+            port: 3306,
+            user: 'cocoauser',
+            password: 'cocoauser',
+            database: 'cocoacouriers'
+        },
+
+        // STRIPE RELATED
+        stPubKey: 'pk_test_BXtMsd315TBs4tBzqFVwRw2h',
+        sKey: 'sk_test_ib7crlzj4GXD7qg10rH9cRHU'
+
+    }
+
+
+
+
 
 4) Create log folder /logs
 5) Create product images folder /assets/product_images/thumbnails and /assets/product_images/full

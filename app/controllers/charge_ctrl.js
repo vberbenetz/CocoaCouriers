@@ -20,7 +20,7 @@ var chargeCtrl = function() {};
 
 chargeCtrl.prototype = {
 
-    oneTimeCharge: function (customer, userCountry, source, altShipping, cart, metadata, dbConnPool, emailUtils, reqIP, callback) {
+    oneTimeCharge: function (customer, userCountry, source, altShipping, cart, metadata, couponId, dbConnPool, emailUtils, reqIP, callback) {
 
 // TODO: ADD SHIPPING RATE FOR FUTURE CUSTOMERS OUTSIDE OF CANADA AND LOWER 48 STATES
         var shippingCost = 0;

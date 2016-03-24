@@ -341,7 +341,7 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
                     errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
                 }
                 else {
-                    chargeCtrl.oneTimeCharge(customer, req.body.uc, req.body.source, req.body.altShipping, req.body.cart, req.body.metadata, dbConnPool, emailUtils, req.connection.remoteAddress, function(err, result) {
+                    chargeCtrl.oneTimeCharge(customer, req.body.uc, req.body.source, req.body.altShipping, req.body.cart, req.body.metadata, req.body.couponId, dbConnPool, emailUtils, req.connection.remoteAddress, function(err, result) {
                         if (err) {
                             errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
                         }
@@ -748,9 +748,14 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
 
         // Check if getting one coupon or list
         if (typeof req.query.id !== 'undefined') {
-            couponCtrl.get(req.query.id, function(err, result) {
+            couponCtrl.verifySubscriptionCoupon(req.query.id, req.query.planId, req.query.uc, function(err, result) {
                 if (err) {
-                    errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                    if (err.status === 404) {
+                        res.status(err.status).send(err.msg.simplified);
+                    }
+                    else {
+                        errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                    }
                 }
                 else {
                     res.send(result);
@@ -758,14 +763,7 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
             });
         }
         else {
-            couponCtrl.getAll(req.query.limit, req.query.cursor, function(err, result) {
-                if (err) {
-                    errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-                }
-                else {
-                    res.send(result);
-                }
-            });
+            res.status(400).send("bad_request");
         }
     });
 

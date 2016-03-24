@@ -81,6 +81,21 @@ helpers.prototype = {
         return newPlanId;
     },
 
+    currencyToCountry: function(currency) {
+        if (!currency) {
+            return null;
+        }
+        currency = currency.toUpperCase();
+        switch(currency) {
+            case 'CAD':
+                return 'CA';
+            case 'USD':
+                return 'US';
+            default:
+                return null;
+        }
+    },
+
     filterRecurringSubscriptions: function (subscriptions) {
         for (var i = 0; i < subscriptions.data.length; i++) {
             if (subscriptions.data[i].plan.metadata.is_gift === 'false') {

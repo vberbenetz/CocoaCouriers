@@ -143,15 +143,15 @@ https.createServer({
         '!CAMELLIA'
     ].join(':'),
     honorCipherOrder: true
-}, app).listen(443);
+}, app).listen(8443);
 
 // Needed for redirect to HTTPS
 http.createServer(function (req, res) {
     res.writeHead(301, {'Location': 'https://' + req.headers['host'] + req.url});
     res.end();
-}).listen(80);
+}).listen(8080);
 
-
+/*
 // Test database and email services on startup
 var startupCtrl = require('./app/controllers/startup_ctrl');
 startupCtrl.testDbConn(pool, function(err, result) {
@@ -173,7 +173,7 @@ startupCtrl.testDbConn(pool, function(err, result) {
         }
     });
 });
-
+*/
 log.info('================================');
 log.info('====     SERVER STARTED     ====');
 log.info('================================');

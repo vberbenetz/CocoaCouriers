@@ -37,6 +37,9 @@ function mainCtrl ($scope, $rootScope, $cookies, $http, appService) {
 
     $scope.loaded = {};
 
+    $scope.subscriptionDiscount = 0;
+    $scope.subscriptionCouponId = null;
+
     // Retrieve subscription cart cookie
     var subPid = $cookies.getObject('subPid');
     if ( (typeof subPid !== 'undefined') && (subPid.length > 0)) {
@@ -528,14 +531,21 @@ function productImgModalCtrl($scope, $uibModalInstance, imgUrl) {
     }
 }
 
-function cartCtrl ($scope, $cookies) {
+function cartCtrl ($scope, $cookies, appService) {
 
     $scope.Math = window.Math;
 
     $scope.userCountry = $scope.$parent.userCountry;
 
     $scope.subtotal = 0;
-    $scope.discount = 0;
+    $scope.discount = {
+        amount: 0,
+        code: ''
+    };
+
+    $scope.form = {
+        userCouponCode: ''
+    };
 
     $scope.removeFromCart = function(productId) {
         var cart = $scope.$parent.cart;
@@ -575,13 +585,36 @@ function cartCtrl ($scope, $cookies) {
 
         $scope.subtotal = subtotal;
 
+        $scope.discount.amount = $scope.$parent.subscriptionDiscount;
+        $scope.discount.code = $scope.$parent.subscriptionCouponId;
+
         $scope.$parent.updateCartCookie();
 
         return (subtotal / 100).toFixed(2);
     };
 
-    $scope.applyDiscount = function() {
+    // ONLY HANDLES SUBSCRIPTION COUPONS NOW
+    $scope.applyCoupon = function() {
+        if ($scope.$parent.planToSub) {
+            appService.coupon.get({
+                id: $scope.form.userCouponCode,
+                planId: $scope.$parent.planToSub.id,
+                uc: $scope.userCountry
+            }, function(coupon) {
+                if (coupon) {
+                    $scope.$parent.subscriptionCouponId = coupon.id;
 
+                    if (coupon.amount_off) {
+                        $scope.$parent.subscriptionDiscount = coupon.amount_off;
+                    }
+                    else if (coupon.percent_off) {
+                        $scope.$parent.subscriptionDiscount = Math.round(($scope.$parent.planToSub.amount * coupon.percent_off) / 100);
+                    }
+
+                    $scope.calcSubtotal();
+                }
+            });
+        }
     };
 
 }
@@ -594,7 +627,13 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
         amount: 0
     };
     $scope.shippingCost = 0;
-    $scope.discount = 0;
+    $scope.discount = {
+        amount: 0,
+        code: ''
+    };
+    $scope.form = {
+        userCouponCode: ''
+    };
     $scope.total = 0;
 
     $scope.chargeErr = null;
@@ -613,9 +652,11 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
         var subtotal = 0;
 
         if ($scope.$parent.planToSub) {
-            subtotal = $scope.$parent.planToSub.amount;
+            subtotal = $scope.$parent.planToSub.amount - $scope.$parent.subscriptionDiscount;
             $scope.subtotal = subtotal;
             $scope.shippingCost = 0;
+            $scope.discount.amount = $scope.$parent.subscriptionDiscount;
+            $scope.discount.code = $scope.$parent.subscriptionCouponId;
 
             var taxState = $scope.billing.address.state;
             if ($scope.$parent.fullyLoggedIn) {
@@ -633,6 +674,7 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
         }
 
         else {
+
             var cart = $scope.$parent.cart;
             for (var s = 0; s < cart.length; s++) {
 
@@ -670,18 +712,42 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
                 }
 
                 calcTaxPercentage(taxState, appService, function(tax) {
-                    tax.amount = Math.ceil((tax.rate * (subtotal - $scope.discount + shippingCost)) / 100);
+                    tax.amount = Math.ceil((tax.rate * (subtotal - $scope.discount.amount + shippingCost)) / 100);
                     $scope.tax = tax;
 
                     $scope.updateCartCookie();
 
-                    $scope.total = subtotal + shippingCost - $scope.discount + tax.amount;
+                    $scope.total = subtotal + shippingCost - $scope.discount.amount + tax.amount;
 
                     $scope.recalculatingTotal = false;
                 });
             });
         }
 
+    };
+
+    // ONLY HANDLES SUBSCRIPTION COUPONS NOW
+    $scope.applyCoupon = function() {
+        if ($scope.$parent.planToSub) {
+            appService.coupon.get({
+                id: $scope.form.userCouponCode,
+                planId: $scope.$parent.planToSub.id,
+                uc: $scope.$parent.userCountry
+            }, function(coupon) {
+                if (coupon) {
+                    $scope.$parent.subscriptionCouponId = coupon.id;
+
+                    if (coupon.amount_off) {
+                        $scope.$parent.subscriptionDiscount = coupon.amount_off;
+                    }
+                    else if (coupon.percent_off) {
+                        $scope.$parent.subscriptionDiscount = Math.round(($scope.$parent.planToSub.amount * coupon.percent_off) / 100);
+                    }
+
+                    $scope.calcCheckout();
+                }
+            });
+        }
     };
 
     $scope.billing = {
@@ -896,12 +962,17 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
                                         if (isSubscription) {
                                             $cookies.remove('subPid');
                                             $scope.$parent.planToSub = null;
-                                            $scope.processingOrder = false;
+                                            $scope.$parent.subscriptionDiscount = 0;
+                                            $scope.$parent.subscriptionCouponId = null;
+
                                             $scope.$parent.customerSubscription = {
                                                 plan_id: result.plan.id,
                                                 amount: result.plan.amount,
                                                 intervalCount: result.plan.interval_count
                                             };
+
+                                            $scope.processingOrder = false;
+
                                             $state.go('orderFilled', {recentSub: result});
                                         }
                                         else {
@@ -936,12 +1007,17 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
                                 if (isSubscription) {
                                     $cookies.remove('subPid');
                                     $scope.$parent.planToSub = null;
-                                    $scope.processingOrder = false;
+                                    $scope.$parent.subscriptionDiscount = 0;
+                                    $scope.$parent.subscriptionCouponId = null;
+
                                     $scope.$parent.customerSubscription = {
                                         plan_id: result.plan.id,
                                         amount: result.plan.amount,
                                         intervalCount: result.plan.interval_count
                                     };
+
+                                    $scope.processingOrder = false;
+
                                     $state.go('orderFilled', {recentSub: result});
                                 }
                                 else {
@@ -996,7 +1072,8 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
 
         // Alter payload based on subscription or charge
         if (isSubscription) {
-            payload.planId = $scope.$parent.planToSub.id
+            payload.planId = $scope.$parent.planToSub.id;
+            payload.couponId = $scope.$parent.subscriptionCouponId;
         }
         else {
             payload.cart = [];
@@ -1447,7 +1524,7 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
                     $scope.billing.token = token.id;
                     $scope.chargeErr = false;
                     return callback(true);
-                }).error(function(err) {
+                }).catch(function(err) {
                     handleStCCErr(err);
                     return callback(false);
                 });

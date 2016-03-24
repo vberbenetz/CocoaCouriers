@@ -321,6 +321,19 @@
                                 </div>
                             </div>
 
+                            <div>
+                                <uib-accordion>
+                                    <uib-accordion-group>
+                                        <uib-accordion-heading>
+                                            <span class="fa fa-plus"></span> Coupon Code
+                                        </uib-accordion-heading>
+                                        <p>Enter your discount coupon code.</p>
+                                        <input type="text" class="form-control text-center margin-bottom-10" ng-model="form.userCouponCode" placeholder="Coupon Code" />
+                                        <button class="btn btn-primary pull-right" ng-click="applyCoupon()">Apply</button>
+                                    </uib-accordion-group>
+                                </uib-accordion>
+                            </div>
+
                             <div class="panel panel-default" ng-class="{'faded-panel': recalculatingTotal}">
                                 <div class="panel-heading">
                                     <h3>Order Details <a class="btn btn-xs btn-default pull-right" ui-sref="cart">Update</a></h3>
@@ -342,9 +355,9 @@
 
                                     <div class="divider double-line margin-top-10 margin-bottom-10"></div>
 
-                                    <span class="clearfix" ng-show="discount>0">
-                                        <span class="pull-right">- $ {{ (discount/100).toFixed(2) }}</span>
-                                        <span class="pull-left">Coupon Discount:  <em class="text-green">Discount Applied</em></span>
+                                    <span class="clearfix" ng-show="discount.amount>0">
+                                        <span class="pull-right">- $ {{ (discount.amount/100).toFixed(2) }}</span>
+                                        <span class="pull-left">Coupon Discount:  <em class="text-green">{{ discount.code }}</em></span>
                                     </span>
 
                                     <span class="clearfix">
