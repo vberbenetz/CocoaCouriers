@@ -61,6 +61,10 @@ chargeCtrl.prototype = {
             metadata: metadata
         };
 
+        if (altShipping.id) {
+            chargePayload.altShippingId = altShipping.id
+        }
+
         // Link all charge metadata into single string (separation was required to accommodate Stripe restrictions)
         var metadataString = '';
         for (var property in metadata) {

@@ -128,7 +128,9 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
     // ================================================================================ //
 
     app.get('/', function(req, res) {
-        res.render('../index');
+        res.render('../index', {
+            pixelEventType: 'ViewContent'
+        });
     });
 
     app.get('/signin', function(req, res) {
@@ -153,7 +155,9 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
     });
 
     app.get('/blog', function(req, res) {
-        res.render('blog_home');
+        res.render('blog_home', {
+            pixelEventType: 'ViewContent'
+        });
     });
 
     app.get('/My-Account' , auth, function(req, res) {
@@ -170,7 +174,8 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
     app.get('/blog/Cocoa-Couriers-First-Annual-Tasting-Event', function(req, res) {
         res.render('blog/Cocoa-Couriers-First-Annual-Tasting-Event', {
             title: 'Cocoa Couriers First Annual Tasting Event',
-            description: 'Cocoa Courier first annual chocolate tasting event'
+            description: 'Cocoa Courier first annual chocolate tasting event',
+            pixelEventType: 'ViewContent'
         });
     });
     app.get('/blog/valentines-day-gift', function(req, res) {
@@ -180,24 +185,28 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
             keywords: [
                 'valentine\'s day',
                 'gift box'
-            ]
+            ],
+            pixelEventType: 'ViewContent'
         });
     });
     app.get('/blog/free-chocolate-giveaway', function(req, res) {
         res.render('blog/free-chocolate-giveaway-contest', {
             title: 'Free chocolate givaway contest',
-            description: 'A Monthly Box of Artisan Chocolate | Fair Trade | Bean to Bar | Enter for a chance to win a free box of chocolate delivered right to your door!'
+            description: 'A Monthly Box of Artisan Chocolate | Fair Trade | Bean to Bar | Enter for a chance to win a free box of chocolate delivered right to your door!',
+            pixelEventType: 'ViewContent'
         });
     });
     app.get('/blog/Why-Does-Chocolate-Cost-So-Much', function(req, res) {
         res.render('blog/why-does-chocolate-cost-so-much', {
-            title: 'Why Does Chocolate Cost So Much'
+            title: 'Why Does Chocolate Cost So Much',
+            pixelEventType: 'ViewContent'
         });
     });
     app.get('/blog/what-is-fair-trade', function(req, res) {
         res.render('blog/what-is-fair-trade', {
             title: 'Cocoa Couriers What Is Fair Trade',
-            description: 'Learn about what fair trade means and why it\'s so important to support the fair trade cacao market! Fair Tastes Better!'
+            description: 'Learn about what fair trade means and why it\'s so important to support the fair trade cacao market! Fair Tastes Better!',
+            pixelEventType: 'ViewContent'
         });
     });
     app.get('/blog/whats-the-deal-with-chocolate-infusions', function(req, res) {
@@ -211,12 +220,14 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
                 'Craft Chocolate',
                 'Chocolate Box',
                 'Chocolate Subscription'
-            ]
+            ],
+            pixelEventType: 'ViewContent'
         });
     });
     app.get('/blog/month-1-box', function(req, res) {
         res.render('blog/month-1-box', {
-            title: 'December 2015 Box Review'
+            title: 'December 2015 Box Review',
+            pixelEventType: 'ViewContent'
         });
     });
 

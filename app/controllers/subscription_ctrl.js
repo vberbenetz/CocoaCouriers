@@ -39,9 +39,11 @@ subscriptionCtrl.prototype = {
         var payload = {};
 
         // Attach altShippingId
-        payload.metadata = {
-            altShippingId: altShipping
-        };
+        if (altShipping.id) {
+            payload.metadata = {
+                altShippingId: altShipping.id
+            };
+        }
 
         // Apply coupon
         couponCtrl.verifySubscriptionCoupon(couponId, planId, userCountry, function(err, coupon) {
