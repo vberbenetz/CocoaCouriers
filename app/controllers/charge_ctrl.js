@@ -61,7 +61,7 @@ chargeCtrl.prototype = {
             metadata: metadata
         };
 
-        if (altShipping.id) {
+        if (altShipping) {
             chargePayload.altShippingId = altShipping.id
         }
 
