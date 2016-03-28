@@ -39,7 +39,7 @@ subscriptionCtrl.prototype = {
         var payload = {};
 
         // Attach altShippingId
-        if (altShipping.id) {
+        if (altShipping) {
             payload.metadata = {
                 altShippingId: altShipping.id
             };
