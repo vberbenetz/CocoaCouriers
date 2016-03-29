@@ -134,7 +134,7 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
 
     app.get('/', function(req, res) {
         res.render('../index', {
-            pixelFct: "fbq('init'," + FBPixelId + ");fbq('track', 'PageView');fbq('track', 'ViewContent');"
+            pixelFct: "fbq('init','" + FBPixelId + "');fbq('track', 'PageView');fbq('track', 'ViewContent');"
         });
     });
 
@@ -151,13 +151,13 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
 
     app.get('/password-reset', function(req, res) {
         res.render('password_reset', {
-            pixelFct: "fbq('init'," + FBPixelId + ");fbq('track', 'PageView');fbq('track', 'ViewContent');"
+            pixelFct: "fbq('init','" + FBPixelId + "');fbq('track', 'PageView');fbq('track', 'ViewContent');"
         });
     });
 
     app.get('/partners', function(req, res) {
         res.render('partners', {
-            pixelFct: "fbq('init'," + FBPixelId + ");fbq('track', 'PageView');fbq('track', 'ViewContent');"
+            pixelFct: "fbq('init','" + FBPixelId + "');fbq('track', 'PageView');fbq('track', 'ViewContent');"
         });
     });
 
@@ -169,7 +169,7 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
 
     app.get('/blog', function(req, res) {
         res.render('blog_home', {
-            pixelFct: "fbq('init'," + FBPixelId + ");fbq('track', 'PageView');fbq('track', 'ViewContent');"
+            pixelFct: "fbq('init','" + FBPixelId + "');fbq('track', 'PageView');fbq('track', 'ViewContent');"
         });
     });
 
@@ -190,7 +190,7 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
         res.render('blog/Cocoa-Couriers-First-Annual-Tasting-Event', {
             title: 'Cocoa Couriers First Annual Tasting Event',
             description: 'Cocoa Courier first annual chocolate tasting event',
-            pixelFct: "fbq('init'," + FBPixelId + ");fbq('track', 'PageView');fbq('track', 'ViewContent');"
+            pixelFct: "fbq('init','" + FBPixelId + "');fbq('track', 'PageView');fbq('track', 'ViewContent');"
         });
     });
     app.get('/blog/valentines-day-gift', function(req, res) {
@@ -201,27 +201,27 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
                 'valentine\'s day',
                 'gift box'
             ],
-            pixelFct: "fbq('init'," + FBPixelId + ");fbq('track', 'PageView');fbq('track', 'ViewContent');"
+            pixelFct: "fbq('init','" + FBPixelId + "');fbq('track', 'PageView');fbq('track', 'ViewContent');"
         });
     });
     app.get('/blog/free-chocolate-giveaway', function(req, res) {
         res.render('blog/free-chocolate-giveaway-contest', {
             title: 'Free chocolate givaway contest',
             description: 'A Monthly Box of Artisan Chocolate | Fair Trade | Bean to Bar | Enter for a chance to win a free box of chocolate delivered right to your door!',
-            pixelFct: "fbq('init'," + FBPixelId + ");fbq('track', 'PageView');fbq('track', 'ViewContent');"
+            pixelFct: "fbq('init','" + FBPixelId + "');fbq('track', 'PageView');fbq('track', 'ViewContent');"
         });
     });
     app.get('/blog/Why-Does-Chocolate-Cost-So-Much', function(req, res) {
         res.render('blog/why-does-chocolate-cost-so-much', {
             title: 'Why Does Chocolate Cost So Much',
-            pixelFct: "fbq('init'," + FBPixelId + ");fbq('track', 'PageView');fbq('track', 'ViewContent')"
+            pixelFct: "fbq('init','" + FBPixelId + "');fbq('track', 'PageView');fbq('track', 'ViewContent');"
         });
     });
     app.get('/blog/what-is-fair-trade', function(req, res) {
         res.render('blog/what-is-fair-trade', {
             title: 'Cocoa Couriers What Is Fair Trade',
             description: 'Learn about what fair trade means and why it\'s so important to support the fair trade cacao market! Fair Tastes Better!',
-            pixelFct: "fbq('init'," + FBPixelId + ");fbq('track', 'PageView');fbq('track', 'ViewContent');"
+            pixelFct: "fbq('init','" + FBPixelId + "');fbq('track', 'PageView');fbq('track', 'ViewContent');"
         });
     });
     app.get('/blog/whats-the-deal-with-chocolate-infusions', function(req, res) {
@@ -236,13 +236,13 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
                 'Chocolate Box',
                 'Chocolate Subscription'
             ],
-            pixelFct: "fbq('init'," + FBPixelId + ");fbq('track', 'PageView');fbq('track', 'ViewContent');"
+            pixelFct: "fbq('init','" + FBPixelId + "');fbq('track', 'PageView');fbq('track', 'ViewContent');"
         });
     });
     app.get('/blog/month-1-box', function(req, res) {
         res.render('blog/month-1-box', {
             title: 'December 2015 Box Review',
-            pixelFct: "fbq('init'," + FBPixelId + ");fbq('track', 'PageView');fbq('track', 'ViewContent');"
+            pixelFct: "fbq('init','" + FBPixelId + "');fbq('track', 'PageView');fbq('track', 'ViewContent');"
         });
     });
 
