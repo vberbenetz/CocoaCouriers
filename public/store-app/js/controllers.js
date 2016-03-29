@@ -201,7 +201,7 @@ function mainCtrl ($scope, $rootScope, $cookies, $http, appService) {
 
 }
 
-function subscriptionCtrl ($scope, $cookies, $state, appService) {
+function subscriptionCtrl ($scope, $window, $cookies, $state, appService) {
 
     // Retrieve plans
     appService.plan.query(function(plans) {
@@ -238,6 +238,8 @@ function subscriptionCtrl ($scope, $cookies, $state, appService) {
 
         document.getElementById('top-bar-cart-item-count').innerHTML = ($scope.$parent.cart.length + 1).toString();
 
+        $window._fbq.push(['track', 'AddToCart', {content_name: plan.name, value: plan.amount, currency: plan.currency}]);
+
         $state.go('checkout');
     };
 
@@ -252,7 +254,7 @@ function subscriptionCtrl ($scope, $cookies, $state, appService) {
     };
 }
 
-function storeCtrl ($scope, $state, $timeout, appService) {
+function storeCtrl ($scope, $window, $state, $timeout, appService) {
 
     $scope.searchFilter = {
         mid: [],
@@ -360,6 +362,18 @@ function storeCtrl ($scope, $state, $timeout, appService) {
 
     $scope.addToCart = function(product) {
         $scope.$parent.updateCart(product, 1);
+
+        var value = 0;
+        var currency = 'CAD';
+        if ($scope.$parent.userCountry === 'US') {
+            currency = 'USD';
+            value = (product.usPrice/100).toFixed(2);
+        }
+        else {
+            value = (product.cadPrice/100).toFixed(2);
+        }
+
+        $window._fbq.push(['track', 'AddToCart', {content_name: product.name, value: value, currency: currency}]);
         $state.go('cart');
     };
 
@@ -427,7 +441,7 @@ function storeCtrl ($scope, $state, $timeout, appService) {
 
 }
 
-function productCtrl ($scope, $state, $stateParams, $uibModal, appService) {
+function productCtrl ($scope, $window, $state, $stateParams, $uibModal, appService) {
 
     // Flag indicating successful product retrieval
     $scope.productLoadFlag = null;
@@ -459,6 +473,18 @@ function productCtrl ($scope, $state, $stateParams, $uibModal, appService) {
 
     $scope.addToCart = function() {
         $scope.$parent.updateCart($scope.product, $scope.quantity);
+
+        var value = 0;
+        var currency = 'CAD';
+        if ($scope.$parent.userCountry === 'US') {
+            currency = 'USD';
+            value = ($scope.product.usPrice/100 * $scope.quantity).toFixed(2);
+        }
+        else {
+            value = ($scope.product.cadPrice/100 * $scope.quantity).toFixed(2);
+        }
+
+        $window._fbq.push(['track', 'AddToCart', {content_name: $scope.product.name, value: value, currency: currency}]);
         $state.go('cart');
     };
 
@@ -626,7 +652,7 @@ function cartCtrl ($scope, $cookies, appService) {
 
 }
 
-function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appService) {
+function checkoutCtrl ($scope, $rootScope, $http, $window, $cookies, $state, stripe, appService) {
     $scope.subtotal = 0;
     $scope.tax = {
         rate: 0,
@@ -980,7 +1006,9 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
 
                                             $scope.processingOrder = false;
 
-                                            $state.go('orderFilled', {recentSub: result});
+                                            updateFBPixel(function(result) {
+                                                $state.go('orderFilled', {recentSub: result});
+                                            });
                                         }
                                         else {
                                             $scope.$parent.recentShipmentId = result.metadata.shipmentId;
@@ -988,7 +1016,10 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
                                             $cookies.remove('cartPidQs');
                                             $scope.$parent.cart.length = 0;
                                             $scope.processingOrder = false;
-                                            $state.go('orderFilled');
+
+                                            updateFBPixel(function(result) {
+                                                $state.go('orderFilled');
+                                            });
                                         }
                                     }
                                 });
@@ -1025,7 +1056,9 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
 
                                     $scope.processingOrder = false;
 
-                                    $state.go('orderFilled', {recentSub: result});
+                                    updateFBPixel(function(result) {
+                                        $state.go('orderFilled', {recentSub: result});
+                                    });
                                 }
                                 else {
                                     $scope.$parent.recentShipmentId = result.metadata.shipmentId;
@@ -1033,7 +1066,10 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
                                     $cookies.remove('cartPidQs');
                                     $scope.$parent.cart.length = 0;
                                     $scope.processingOrder = false;
-                                    $state.go('orderFilled');
+
+                                    updateFBPixel(function(result) {
+                                        $state.go('orderFilled');
+                                    });
                                 }
                             }
                         });
@@ -1606,6 +1642,22 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
             default:
                 $scope.validationErrors.source.number = 'There was an issue processing your payment. Please try again or contact our support team';
                 break;
+        }
+    }
+
+    function updateFBPixel(callback) {
+        // Update FB Pixel
+        if ($scope.total) {
+            var currency = 'CAD';
+            if ($scope.$parent.userCountry === 'US') {
+                currency = 'USD';
+            }
+            $window._fbq.push(['track', 'Purchase', {value: ($scope.total/100).toFixed(2), currency: currency}]);
+
+            return callback(true);
+        }
+        else {
+            return callback(false);
         }
     }
 }

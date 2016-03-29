@@ -1,36 +1,62 @@
 'use strict';
 
-function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProvider, $cookiesProvider) {
+function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProvider, $cookiesProvider, $windowProvider) {
     $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
     $urlRouterProvider.otherwise("/");
+
+    var $window = $windowProvider.$get();
 
     $stateProvider
 
         .state('home', {
             templateUrl: '../store-app/views/shop_home.html',
             controller: storeCtrl,
-            url: "/"
+            url: "/",
+            onEnter: function(){
+                $window._fbq.push(['track', 'PixelInitialized', {}]);
+                $window._fbq.push(['track', 'PageView', {}]);
+                $window._fbq.push(['track', 'Search', {}]);
+            }
         })
         .state('subscribe', {
             templateUrl: '../store-app/views/subscription.html',
             controller: subscriptionCtrl,
-            url: "/subscribe"
+            url: "/subscribe",
+            onEnter: function(){
+                $window._fbq.push(['track', 'PixelInitialized', {}]);
+                $window._fbq.push(['track', 'PageView', {}]);
+                $window._fbq.push(['track', 'Search', {}]);
+            }
         })
         .state('product', {
             templateUrl: '../store-app/views/product.html',
             controller: productCtrl,
-            url: '/item/:urlSubPath'
+            url: '/item/:urlSubPath',
+            onEnter: function($stateParams){
+                $window._fbq.push(['track', 'PixelInitialized', {}]);
+                $window._fbq.push(['track', 'PageView', {}]);
+                $window._fbq.push(['track', 'Lead', {content_name: $stateParams.urlSubPath}]);
+            }
         })
         .state('cart', {
             templateUrl: '../store-app/views/cart.html',
             controller: cartCtrl,
-            url: '/cart'
+            url: '/cart',
+            onEnter: function(){
+                $window._fbq.push(['track', 'PixelInitialized', {}]);
+                $window._fbq.push(['track', 'PageView', {}]);
+            }
         })
         .state('checkout', {
             templateUrl: '../store-app/views/checkout.html',
             controller: checkoutCtrl,
-            url: '/checkout'
+            url: '/checkout',
+            onEnter: function(){
+                $window._fbq.push(['track', 'PixelInitialized', {}]);
+                $window._fbq.push(['track', 'PageView', {}]);
+                $window._fbq.push(['track', 'InitiateCheckout', {}]);
+            }
         })
         .state('orderFilled', {
             templateUrl: '../store-app/views/post_checkout.html',
