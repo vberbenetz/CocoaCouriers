@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<!--[if IE 8]>			<html class="ie ie8"> <![endif]-->
+<!--[if IE 9]>			<html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
+	<head>
+		<meta charset="utf-8" />
+		<title>Smarty - Multipurpose + Admin</title>
+		<meta name="keywords" content="HTML5,CSS3,Template" />
+		<meta name="description" content="" />
+		<meta name="Author" content="Dorin Grigoras [www.stepofweb.com]" />
+
+		<!-- mobile settings -->
+		<meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=0" />
+		<!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
+
+		<!-- WEB FONTS : use %7C instead of | (pipe) -->
+        <link href="http://fonts.googleapis.com/css?family=Dancing+Script:700|EB+Garamond" rel="stylesheet" type="text/css" />
+
+
+        <!-- CORE CSS -->
+		<link href="../../assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+		
+		<!-- THEME CSS -->
+		<link href="../../assets/css/essentials.css" rel="stylesheet" type="text/css" />
+		<link href="../../assets/css/layout.css" rel="stylesheet" type="text/css" />
+        <link href="../../assets/css/custom.css" rel="stylesheet" type="text/css" />
+
+		<!-- PAGE LEVEL SCRIPTS -->
+		<link href="../../assets/css/header-1.css" rel="stylesheet" type="text/css" />
+		<link href="../../assets/css/color_scheme/green.css" rel="stylesheet" type="text/css" id="color_scheme" />
+	</head>
+
+	<!--
+		AVAILABLE BODY CLASSES:
+		
+		smoothscroll 			= create a browser smooth scroll
+		enable-animation		= enable WOW animations
+
+		bg-grey					= grey background
+		grain-grey				= grey grain background
+		grain-blue				= blue grain background
+		grain-green				= green grain background
+		grain-blue				= blue grain background
+		grain-orange			= orange grain background
+		grain-yellow			= yellow grain background
+		
+		boxed 					= boxed layout
+		pattern1 ... patern11	= pattern background
+		menu-vertical-hide		= hidden, open on click
+		
+		BACKGROUND IMAGE [together with .boxed class]
+		data-background="assets/images/boxed_background/1.jpg"
+	-->
+	<body class="smoothscroll enable-animation">
+
+		<!-- wrapper -->
+		<div id="wrapper">
+
+		<div class="container border-black bordered">
+            <!--
+                 AVAILABLE HEADER CLASSES
+
+                 Default nav height: 96px
+                 .header-md 		= 70px nav height
+                 .header-sm 		= 60px nav height
+
+                 .noborder 		= remove bottom border (only with transparent use)
+                 .transparent	= transparent header
+                 .translucent	= translucent header
+                 .sticky			= sticky header
+                 .static			= static header
+                 .dark			= dark header
+                 .bottom			= header on bottom
+
+                 shadow-before-1 = shadow 1 header top
+                 shadow-after-1 	= shadow 1 header bottom
+                 shadow-before-2 = shadow 2 header top
+                 shadow-after-2 	= shadow 2 header bottom
+                 shadow-before-3 = shadow 3 header top
+                 shadow-after-3 	= shadow 3 header bottom
+
+                 .clearfix		= required for mobile menu, do not remove!
+
+                 Example Usage:  class="clearfix sticky header-sm transparent noborder"
+             -->
+            <div id="header" class="sticky transparent noborder clearfix">
+
+                <!-- TOP NAV -->
+                <header id="topNav">
+                    <div class="container"><!-- add .full-container for fullwidth -->
+
+                        <!-- Mobile Menu Button -->
+                        <button class="btn btn-mobile" data-toggle="collapse" data-target=".nav-main-collapse">
+                            <i class="fa fa-bars"></i>
+                        </button>
+
+
+                        <!-- Logo -->
+                        <a class="logo pull-left" href="index.html">
+                            <img src="../../assets/images/black-logo.png" alt="" />
+                        </a>
+
+                        <!--
+                            Top Nav
+
+                            AVAILABLE CLASSES:
+                            submenu-dark = dark sub menu
+                        -->
+                        <div class="navbar-collapse pull-right nav-main-collapse collapse submenu-dark">
+                            <nav class="nav-main">
+
+                                <!--
+                                    NOTE
+
+                                    For a regular link, remove "dropdown" class from LI tag and "dropdown-toggle" class from the href.
+                                    Direct Link Example:
+
+                                    <li>
+                                        <a href="#">HOME</a>
+                                    </li>
+                                -->
+                                <ul id="topMain" class="nav nav-pills nav-main ">
+                                    <li class=""><!-- HOME -->
+                                        <a class="text-black moms-h2" href="#">
+                                            WHY CRAFT CHOCOLATE
+                                        </a>
+                                    </li>
+                                    <li class=""><!-- PAGES -->
+                                        <a class="text-black moms-h2" href="#">
+                                            LEARN MORE
+                                        </a>
+                                    </li>
+                                    <li class="">
+                                        <button class="btn btn-yellow margin-top-30">
+                                            <a class="text-white moms-h2" href="#">
+                                                GET STARTED
+                                            </a>
+                                        </button>
+                                    </li>
+                                </ul>
+
+                            </nav>
+                        </div>
+
+                    </div>
+                </header>
+                <!-- /Top Nav -->
+            </div>
+
+
+            <div class="row margin-top-150">
+                 <div class="col-sm-12 bg-mom height-1000  ">
+                    <!--Heading-->
+                    <div class="col-md-8 text-center col-md-offset-2">
+                        <h1 class="moms-h1 size-80 margin-bottom-6 margin-top-20">Happy <span class="text-red">Mother's</span> Day</h1>
+                        <h2 class="moms-h2">THIS YEAR SURPRISE MOM WITH THE BEST CHOCOLATE ON THE PLANET</h2>
+
+
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="col-sm-6 col-xs-6">
+                            <img class="img-responsive" src="../../assets/images/ladies.png" alt=""/>
+                        </div>
+                        <div class="col-sm-6 col-xs-6">
+                            <img class="img-responsive" src="../../assets/images/lady2.png" alt=""/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                    <div class="row margin-top-10">
+                        <div class="col-sm-12 text-center">
+                            <button class="btn btn-yellow margin-top-30 height-100 padding-top-20">
+                                <a class="text-white" href="#">
+                                    <div class="row"><span class="size-25 bold moms-h2 ">SEND A GIFT</span></div>
+                                    <div class="row padding-20 padding-top-10">The Classic Gift Box Starting at Just $29.99</div>
+                                </a>
+                            </button>
+
+                        </div>
+                    </div>
+
+               <!--END Heading-->
+
+               <!--picture blocks-->
+               <div class="col-sm-12">
+                   <!--Picture block 1-->
+                   <div class="col-sm-6">
+                       <div class="col-sm-12 blockhead bg-alizan text-white margin-top-20 padding-10">
+                           <h1 class="text-white moms-h2"><span class="size-40 text-white moms-h2">"</span> WE'VE TRIED HUNDREDS OF BRANDS</h1>
+                       </div>
+                       <div class="col-sm-12 padding-0">
+                           <img class="img-responsive" src="../../assets/images/moms-block-1.png" alt=""/>
+                       </div>
+                       <div class="col-sm-12 bg-alizan">
+                           <div class="col-sm-6 text-left padding-10">
+                               <button type="button" class="btn btn-danger">Shop the Store</button>
+                           </div>
+                           <div class="col-sm-6 text-right padding-10">
+                               <button type="button" class="btn btn-danger">Get a Gift Box</button>
+                           </div>
+                       </div>
+                   </div>
+                   <!--Picture block 1-->
+
+                   <!--Picture block 2-->
+                   <div class="col-sm-6">
+                       <div class="col-sm-12 blockhead bg-alizan text-white margin-top-20 padding-10">
+                           <h1 class="text-white moms-h2"><span class="size-40 text-white moms-h2">"</span> TONS OF MIND BLOWING INFUSIONS</h1>
+                           <p class="moms-h2-small padding-0"> - Toasted Coconut | Madecasse Chocolate</p>
+                       </div>
+                       <div class="col-sm-12 padding-0">
+                           <img class="img-responsive" src="../../assets/images/coconut-vert.png" alt=""/>
+                       </div>
+                       <div class="col-sm-12 bg-alizan">
+                           <div class="col-sm-6 text-left padding-10">
+                               <button type="button" class="btn btn-danger">Shop the Store</button>
+                           </div>
+                           <div class="col-sm-6 text-right padding-10">
+                               <button type="button" class="btn btn-danger">Get a Gift Box</button>
+                           </div>
+                       </div>
+                   </div>
+                   <!--Picture block 2-->
+                   <!--Picture block 2-->
+                   <div class="col-sm-6">
+                       <div class="col-sm-12 blockhead bg-alizan text-white margin-top-20 padding-10">
+                           <h1 class="text-white moms-h2"><span class="size-40 text-white moms-h2">"</span> "TONS OF MIND BLOWING INFUSIONS</h1>
+                       </div>
+                       <div class="col-sm-12 padding-0">
+                           <img class="img-responsive" src="../../assets/images/coconut-vert.png" alt=""/>
+                       </div>
+                       <div class="col-sm-12 bg-ameth">
+                           <div class="col-sm-6 text-left padding-10">
+                               <button type="button" class="btn btn-danger">Shop the Store</button>
+                           </div>
+                           <div class="col-sm-6 text-right padding-10">
+                               <button type="button" class="btn btn-danger">Get a Gift Box</button>
+                           </div>
+                       </div>
+                   </div>
+                   <!--Picture block 2-->
+               </div>
+               <!--END picture blocks-->
+
+        </div>
+
+		</div>
+		<!-- /wrapper -->
+
+
+		<!-- SCROLL TO TOP -->
+		<a href="#" id="toTop"></a>
+
+
+		<!-- PRELOADER -->
+		<div id="preloader">
+			<div class="inner">
+				<span class="loader"></span>
+			</div>
+		</div><!-- /PRELOADER -->
+
+
+		<!-- JAVASCRIPT FILES -->
+		<script type="text/javascript">var plugin_path = 'assets/plugins/';</script>
+		<script type="text/javascript" src="../../assets/plugins/jquery/jquery-2.1.4.min.js"></script>
+
+		<script type="text/javascript" src="../../assets/js/scripts.js"></script>
+		
+
+	</body>
+</html>

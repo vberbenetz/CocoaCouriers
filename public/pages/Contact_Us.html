@@ -4,31 +4,31 @@
 <!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
 	<head>
 		<meta charset="utf-8" />
-		<title>Raaka Chocolate | Cocoa Couriers | Company Profile</title>
-		<meta name="keywords" content="Cocoa Couriers, Cocoa, Raaka Chocolate, Chocolate, Chocolate Box, Artisan Chocolate, Craft Chocolate, Cacao, Bean to Bar, Bean to Bar Chocolate" />
-		<meta name="description" content="Raaka Chocolate company profile" />
-		<meta name="Author" content="Cocoa Couriers" />
+		<title>Smarty - Multipurpose + Admin</title>
+		<meta name="keywords" content="HTML5,CSS3,Template" />
+		<meta name="description" content="" />
+		<meta name="Author" content="Dorin Grigoras [www.stepofweb.com]" />
 
 		<!-- mobile settings -->
 		<meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=0" />
 		<!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
 
+		<!-- WEB FONTS : use %7C instead of | (pipe) -->
+        <link href="http://fonts.googleapis.com/css?family=Dancing+Script:700|EB+Garamond" rel="stylesheet" type="text/css" />
+        <link href='https://fonts.googleapis.com/css?family=Muli' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Playfair+Display' rel='stylesheet' type='text/css'>
 
-        <!-- WEB FONTS : use %7C instead of | (pipe) -->
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400%7CRaleway:300,400,500,600,700%7CLato:300,400,400italic,600,700" rel="stylesheet" type="text/css" />
-        <link href='https://fonts.googleapis.com/css?family=Playball' rel='stylesheet' type='text/css'>
-        <link href='https://fonts.googleapis.com/css?family=Spinnaker' rel='stylesheet' type='text/css'>
 
-		<!-- CORE CSS -->
+        <!-- CORE CSS -->
 		<link href="../assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 		
 		<!-- THEME CSS -->
 		<link href="../assets/css/essentials.css" rel="stylesheet" type="text/css" />
 		<link href="../assets/css/layout.css" rel="stylesheet" type="text/css" />
+        <link href="../assets/css/custom.css" rel="stylesheet" type="text/css" />
 
 		<!-- PAGE LEVEL SCRIPTS -->
 		<link href="../assets/css/header-1.css" rel="stylesheet" type="text/css" />
-        <link href="../assets/css/custom.css" rel="stylesheet" type="text/css" />
 		<link href="../assets/css/color_scheme/green.css" rel="stylesheet" type="text/css" id="color_scheme" />
 	</head>
 
@@ -55,395 +55,152 @@
 	-->
 	<body class="smoothscroll enable-animation">
 
-    <!-- Top Bar -->
-    <div id="topBar" class="dark">
-        <div class="container">
-
-            <ul class="top-links list-inline">
-                <li><a href="/">HOME</a></li>
-                <li><a href="/My-Account">ACCOUNT</a></li>
-            </ul>
-
-            <div class="social-icons pull-right hidden-xs">
-                <a href="https://www.facebook.com/cocoacouriers" class="social-icon social-icon-sm social-icon-transparent social-facebook" data-toggle="tooltip" data-placement="bottom" title="Facebook">
-                    <i class="icon-facebook"></i>
-                    <i class="icon-facebook"></i>
-                </a>
-                <a href="https://twitter.com/CocoaCouriers" class="social-icon social-icon-sm social-icon-transparent social-twitter" data-toggle="tooltip" data-placement="bottom" title="Twitter">
-                    <i class="icon-twitter"></i>
-                    <i class="icon-twitter"></i>
-                </a>
-                <a href="https://instagram.com/cocoacouriers" class="social-icon social-icon-sm social-icon-transparent social-gplus" data-toggle="tooltip" data-placement="bottom" title="Instagram">
-                    <i class="icon-instagram"></i>
-                    <i class="icon-instagram"></i>
-                </a>
-                <a href="https://www.pinterest.com/c_couriers/" class="social-icon social-icon-sm social-icon-transparent social-linkedin" data-toggle="tooltip" data-placement="bottom" title="Pintrest">
-                    <i class="icon-pinterest"></i>
-                    <i class="icon-pinterest"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-    <!-- /Top Bar -->
-
-
-    <!--
-        AVAILABLE HEADER CLASSES
-
-        Default nav height: 96px
-        .header-md 		= 70px nav height
-        .header-sm 		= 60px nav height
-
-        .noborder 		= remove bottom border (only with transparent use)
-        .transparent	= transparent header
-        .translucent	= translucent header
-        .sticky			= sticky header
-        .static			= static header
-        .dark			= dark header
-        .bottom			= header on bottom
-
-        shadow-before-1 = shadow 1 header top
-        shadow-after-1 	= shadow 1 header bottom
-        shadow-before-2 = shadow 2 header top
-        shadow-after-2 	= shadow 2 header bottom
-        shadow-before-3 = shadow 3 header top
-        shadow-after-3 	= shadow 3 header bottom
-
-        .clearfix		= required for mobile menu, do not remove!
-
-        Example Usage:  class="clearfix sticky header-sm transparent noborder"
-    -->
-    <div id="header" class="sticky clearfix dark">
-
-        <!-- TOP NAV -->
-        <header id="topNav">
-            <div class="container">
-
-                <!-- Mobile Menu Button -->
-                <button class="btn btn-mobile" data-toggle="collapse" data-target=".nav-main-collapse">
-                    <i class="fa fa-bars"></i>
-                </button>
-
-                <!-- BUTTONS -->
-                <!-- <ul class="pull-right nav nav-pills nav-second-main">
-
-                <!--     <!-- SEARCH -->
-                <!--    <li class="search">
-                        <a href="javascript:;">
-                            <i class="fa fa-search"></i>
-                        </a>
-                        <div class="search-box">
-                            <form action="page-search-result-1.html" method="get">
-                                <div class="input-group">
-                                    <input type="text" name="src" placeholder="Search" class="form-control" />
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-primary" type="submit">Search</button>
-                                            </span>
-                                </div>
-                            </form>
-                        </div>
-                    </li>
-                    <!-- /SEARCH -->
-
-                <!-- QUICK SHOP CART -->
-                <!--  <li class="quick-cart">
-                      <a href="#">
-                          <span class="badge badge-aqua btn-xs badge-corner">2</span>
-                          <i class="fa fa-shopping-cart"></i>
-                      </a>
-                      <div class="quick-cart-box">
-                          <h4>Shop Cart</h4>
-
-                          <div class="quick-cart-wrapper">
-
-                     <!--         <a href="#"><!-- cart item -->
-                <!--         <img src="assets/images/demo/people/300x300/4-min.jpg" width="45" height="45" alt="" />
-                         <h6><span>2x</span> RED BAG WITH HUGE POCKETS</h6>
-                         <small>$37.21</small>
-                     </a><!-- /cart item -->
-
-                <!--      <a href="#"><!-- cart item -->
-                <!--           <img src="assets/images/demo/people/300x300/5-min.jpg" width="45" height="45" alt="" />
-                           <h6><span>2x</span> THIS IS A VERY LONG TEXT AND WILL BE TRUNCATED</h6>
-                           <small>$17.18</small>
-                       </a><!-- /cart item -->
-
-                <!-- cart no items example -->
-                <!--
-                <a class="text-center" href="#">
-                    <h6>0 ITEMS ON YOUR CART</h6>
-                </a>
-                -->
-
-                <!--      </div>
-
-                <!--      <!-- quick cart footer -->
-                <!--   <div class="quick-cart-footer clearfix">
-                       <a href="shop-cart.html" class="btn btn-primary btn-xs pull-right">VIEW CART</a>
-                       <span class="pull-left"><strong>TOTAL:</strong> $54.39</span>
-                   </div>
-                   <!-- /quick cart footer -->
-
-                <!--  </div>
-              </li>
-              <!-- /QUICK SHOP CART -->
-
-                <!-- </ul>
-                 <!-- /BUTTONS -->
-
-
-                <!-- Logo -->
-                <a class="logo pull-left" href="index.html">
-                    <img src="../assets/images/Logo-full.png" alt="" />
-                </a>
-
-
-                <!--
-                    Top Nav
-
-                    AVAILABLE CLASSES:
-                    submenu-dark = dark sub menu
-                -->
-                <div class="navbar-collapse pull-right nav-main-collapse collapse submenu-dark">
-                    <nav class="nav-main">
-
-                        <!--
-                            NOTE
-
-                            For a regular link, remove "dropdown" class from LI tag and "dropdown-toggle" class from the href.
-                            Direct Link Example:
-
-                            <li>
-                                <a href="#">HOME</a>
-                            </li>
-                        -->
-                        <ul id="topMain" class="nav nav-pills nav-main">
-                            <li class=""><!-- HOME -->
-                                <a class="" href="/">
-                                    HOME
-                                </a>
-                            </li>
-                            <li class=""><!-- HOME -->
-                                <a class="" href="/blog">
-                                    LEARN
-                                </a>
-                            </li>
-                            <li class=""><!-- HOME -->
-                                <a class="" href="subscribe">
-                                    SUBSCRIBE
-                                </a>
-                            </li>
-                            <li class=""><!-- HOME -->
-                                <a class="" href="/partners">
-                                    OUR PARTNERS
-                                </a>
-                            </li>
-                            <li class=""><!-- HOME -->
-                                <a class="" hre="/subscribe?gift">
-                                    GIFTS
-                                </a>
-                            </li>
-
-
-                        </ul>
-
-                    </nav>
-                </div>
-
-            </div>
-        </header>
-        <!-- /Top Nav -->
-    </div>
-
-    <!-- wrapper -->
+		<!-- wrapper -->
 		<div id="wrapper">
+            <!-- Top Bar -->
+            <div id="topBar" class="dark emb-bg">
+                <div class="container">
 
-            <!-- All container contents-->
-<div class="container margin-top-60">
-    <!--title bar -->
-                <div class="col-sm-9 text-center">
-                    <h1 class="pricing-head font-cursive">Raaka Chocolate</h1>
-                    <ul class="blog-post-info list-inline">
+                    <!-- right -->
+                    <ul class="top-links list-inline pull-right">
+                        <li class="text-welcome hidden-xs">Welcome to Cocoa Couriers!</li>
                         <li>
-                            <i class="fa fa-globe"></i>
-                            <span class="font-lato">Factory Location: New York | Country: United States</span>
-                        </li>
-                        <li>
-                            <!-- AddToAny BEGIN -->
-                            <div class="a2a_kit a2a_default_style">
-                                <a class="a2a_dd" href="https://www.addtoany.com/share">Share</a>
-                                <span class="a2a_divider"></span>
-                                <a class="a2a_button_facebook"></a>
-                                <a class="a2a_button_twitter"></a>
-                                <a class="a2a_button_google_plus"></a>
-                                <a class="a2a_button_google_gmail"></a>
-                                <a class="a2a_button_linkedin"></a>
-                                <a class="a2a_button_whatsapp"></a>
-                            </div>
-                            <script type="text/javascript" src="//static.addtoany.com/menu/page.js"></script>
-                            <!-- AddToAny END -->
+                            <a class="no-text-underline" href="/My-Account"><i class="fa fa-user hidden-xs"></i> MY ACCOUNT</a>
                         </li>
                     </ul>
 
-                    <div class="col-sm-12">
-                        <img src="../assets/images/partner_images/raaka.png" class="img-responsive" alt="Raaka Chocolate">
-                    </div>
-                    <div class="col-sm-12 margin-top-60 text-left">
-                        <p><span class="bold">Raaka Chocolate</span> is a bean to bar maker located in Brooklyn, New York.</p>
+                    <!-- left -->
+                    <ul class="top-links list-inline">
+                        <li class=""><a href="/blog">FAQ</a></li>
+                        <li>
+                            <div class="dropdown-toggle no-text-underline margin-left-10"><img class="flag-lang" id="top-bar-country-img" src="" width="16" height="11" alt="lang" /> <span id="top-bar-country-text"></span></div>
+                        </li>
 
-                        <p>The company came together when Nate Hodge and Ryan Cheney teamed up to start producing some amazing flavor profiles in their micro-batch chocolate grinders.
-                        The two have built a much bigger team and are now producing a wide range of different flavors infused into their Virgin Chocolate bars.</p>
-
-                        <h3>What's Virgin Chocolate You Ask?</h3>
-
-                        <p>Most chocolate is made from cacao beans which are roasted in a bean roaster (much like a turning oven) and then are ground and made in the final chocolate product.
-                        Virgin Chocolate is made from the un-roasted beans. Raaka touts that Virgin chocolate allows the natural flavor of the bean to be made more prevalent.</p>
-                        <div class="col-sm-12">
-                            <div class="col-sm-7">
-                                <img class="img-responsive" src="../assets/images/partner_images/raaka2.png">
-                            </div>
-                            <blockquote>
-                                At Raaka, we skip roasting to preserve flavors that are often lost in traditional chocolate making. Most chocolate available today is made with roasted cacao beans. Roasting can be used to develop flavor or to mask flavors from low quality cacao
-                                <small>Raaka Chocolate</small>
-                            </blockquote>
-                        </div>
-                            <div class="col-sm-12 margin-top-20">
-                                <p>Raaka is always expanding our taste buds with new inventive flavor profiles mixed with their virgin chocolate. Some of their staple product lines
-                                include infusions with Mint, Salt, Maple, Cask Aged Bourbon, Vanilla, and Smoked Chai! </p>
-                            </div>
-<div class="col-sm-12">
-    <h3>Growing Ethical Cacao</h3>
-    <!-- YOUTUBE VIDEO -->
-    <div class="embed-responsive embed-responsive-16by9">
-        <iframe class="embed-responsive-item" width="560" height="315" src="http://www.youtube.com/embed/oCNrn3wC8II"></iframe>
-    </div>
-</div>
-
-                    </div>
-
-                    <div class="col-sm-12">
-                    <!-- -->
-                    <section>
-                        <div class="container">
-
-                            <div class="heading-title heading-border">
-                                <h3>Products From <span>Raaka</span></h3>
-                                <p class="font-lato size-14">Shop More Products From Raaka</p>
-                            </div>
-
-                        </div>
-                    </section>
-                    <!-- / -->
-                    </div>
+                    </ul>
 
                 </div>
-    <!--title bar -->
+            </div>
+            <!-- /Top Bar -->
 
-            <div class="col-sm-3 customStroke">
-                <h4 class="text-center"> Other Makers</h4>
-                <ul class="list-unstyled text-center">
-                    <li>
-                        <h4>Test Maker</h4>
-                    </li>
-                    <hr>
-                    <li>
-                        <h4>Test Maker</h4>
-                    </li>
-                    <hr>
-                    <li>
-                        <h4>Test Maker</h4>
-                    </li>
-                    <hr>
-                    <li>
-                        <h4>Test Maker</h4>
-                    </li>
-                    <hr>
-                    <li>
-                        <h4>Test Maker</h4>
-                    </li>
-                    <hr>
-                    <li>
-                        <h4>Test Maker</h4>
-                    </li>
-                    <hr>
+            <!-- Include the header template -->
+            <div id="header" class="sticky clearfix dark">
 
-                    <li>
-                        <h4>Test Maker</h4>
-                    </li>
-                    <hr>
+                <!-- TOP NAV -->
+                <header id="topNav">
+                    <div class="container">
+
+                        <!-- Mobile Menu Button -->
+                        <button class="btn btn-mobile" data-toggle="collapse" data-target=".nav-main-collapse">
+                            <i class="fa fa-bars"></i>
+                        </button>
+
+                        <!-- BUTTONS -->
+                        <ul class="pull-right nav nav-pills nav-second-main">
 
 
-                    <li>
-                        <h4>Test Maker</h4>
-                    </li>
-                    <hr>
 
-                </ul>
+                            <!-- QUICK SHOP CART -->
+                            <li>
+                                <a href="/store/cart">
+                                    <span id="top-bar-cart-item-count" class="badge badge-aqua badge-corner">0</span>
+                                    <i class="fa size-20 fa-shopping-cart"></i>
+                                </a>
+                            </li>
+                            <!-- /QUICK SHOP CART -->
 
+                        </ul>
+                        <!-- /BUTTONS -->
+
+                        <!-- Logo -->
+                        <a class="logo pull-left" href="/">
+                            <img src="../assets/images/Logo-full.png" alt="" />
+                        </a>
+
+                        <div class="navbar-collapse pull-right nav-main-collapse collapse submenu-dark">
+                            <nav class="nav-main">
+
+                                <ul id="topMain" class="nav nav-pills nav-main">
+                                    <!--
+                                    <li class="">
+                                        <a class="" href="/">
+                                            HOME
+                                        </a>
+                                    </li>
+                                    -->
+                                    <li class="">
+                                        <a class="padding-top-10" href="/store" alt="Shop the store for chocolate bar favorites">
+                                            SHOP
+                                        </a>
+                                    </li>
+                                    <li class="">
+                                        <a class="padding-top-10" href="/store/subscribe" alt="Subscribe">
+                                            SUBSCRIBE
+                                        </a>
+                                    </li>
+                                    <li class="">
+                                        <a class="padding-top-10" href="/store/item/classic-gift-box" alt="Chocolate Gifts">
+                                            GIFTS
+                                        </a>
+                                    </li>
+                                    <li class="">
+                                        <a class="padding-top-10" href="/blog" alt="Learn More about chocolate">
+                                            LEARN
+                                        </a>
+                                    </li>
+                                    <li class="">
+                                        <a class="padding-top-10" href="/partners" alt="Our Chocolate making partners">
+                                            OUR PARTNERS
+                                        </a>
+                                    </li>
+                                </ul>
+
+                            </nav>
+                        </div>
+
+                    </div>
+                </header>
+                <!-- /Top Nav -->
             </div>
 
 
-</div>
-            <!-- All container contents-->
+            <div class="col-md-6 padding-0">
+                <img class="img-responsive"src="../assets/images/typewriter.png" alt="contactus typewriter"/>
+            </div>
 
-
-            <!--paralax section-->
-            <section class="parallax parallax-2" style="background-image: url('../assets/images/bg.png');">
-                <div class="overlay dark-8"><!-- dark overlay [1 to 9 opacity] --></div>
-
-                <div class="container center-block">
-
-                    <div class="text-center">
-                        <h3 class="nomargin">Share Us With Friends, Follow Us on Social Media!</h3>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-sm-4 col-sm-offset-4">
+                        <h1 class="margin-top-60 text-center font-muli">Hit us Up!</h1>
+                        <h3 class="text-center font-playfair">Send us a message, or just say Hi! at <a href="mailto:info@cocoacouriers.com"><span class="color-emerald-green">Info@cocoacouriers.com</span></a></h3>
                     </div>
-                    <div class="col-sm-10 col-sm-offset-2">
-                        <ul class="margin-top-80 social-icons list-unstyled">
-                            <li>
-                                <a target="_blank" href="https://www.facebook.com/cocoacouriers">
-                                    <i class="fa fa-facebook"></i>
-                                    <h4>Facebook</h4>
-                                    <span>Be Our Friend</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a target="_blank" href="https://twitter.com/CocoaCouriers">
-                                    <i class="fa fa-twitter"></i>
-                                    <h4>Twitter</h4>
-                                    <span>Follow Us</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a target="_blank" href="https://instagram.com/cocoacouriers">
-                                    <i class="fa fa-instagram"></i>
-                                    <h4>Instagram</h4>
-                                    <span>See Our Images</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a target="_blank" href="https://www.pinterest.com/c_couriers/">
-                                    <i class="fa fa-pinterest"></i>
-                                    <h4>Pinterest</h4>
-                                    <span>Visual Discovery</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <!--   <div class="col-sm-12">
-                             <div class="divider divider-circle divider-center color-emerald-green"><!-- divider -->
-                    <!--         <i class="fa fa-info"></i>
-                         </div>
-                        <div class="col-sm-8 col-sm-offset-2 font-cursive text-center">
-                             <a><div class="col-sm-4"><p class="size-20">Terms and Conditions</p></div></a>
-                             <a><div class="col-sm-4"> <p class="size-20">Privacy Policy</p></div></a>
-                             <a><div class="col-sm-4"><p class="size-20">Contact Us</p></div></a>
-                         </div>
-                     </div> -->
                 </div>
-            </section>
+                <div class="row">
+                    <div class="col-sm-offset-3 col-sm-12 col-md-6 margin-top-60 text-center">
+                        <h2 class="font-muli">The Social Stuff!</h2>
+                        <div class="col-xs-12 col-sm-3 text-center">
+                            <a href="https://www.pinterest.com/Cocoa_Couriers/"><i class="icon icon-pinterest icon-5x"></i></a>
+                        </div>
+                        <div class="col-xs-12 col-sm-3 text-center">
+                            <a href="https://www.facebook.com/cocoacouriers/"><i class="icon icon-facebook icon-5x"></i></a>
+                        </div>
+                        <div class="col-xs-12 col-sm-3 text-center">
+                            <a href="https://twitter.com/CocoaCouriers"> <i class="icon icon-twitter icon-5x"></i></a>
+                        </div>
+                        <div class="col-xs-12 col-sm-3 text-center">
+                            <a href="https://www.instagram.com/cocoacouriers/"><i class="icon icon-instagram icon-5x"></i></a>
+                        </div>
+                    </div>
+                </div>
 
-            <!--paralax section-->
+            </div>
+            <div class="col-sm-12 padding-0">
+                <!-- INSTANSIVE WIDGET --><script src="//instansive.com/widget/js/instansive.js"></script><iframe src="//instansive.com/widgets/6f7d16825aa28a488bdef2ebe62af4b98bc0eff1.html" id="instansive_6f7d16825a" name="instansive_6f7d16825a" scrolling="no" allowtransparency="true" class="instansive-widget" style="width: 100%; border: 0; overflow: hidden;"></iframe>
+            </div>
 
-		</div>
+
+
+            </div>
+
 		<!-- /wrapper -->
 
 
@@ -466,19 +223,5 @@
 		<script type="text/javascript" src="../assets/js/scripts.js"></script>
 		
 
-
-		<!-- PAGE LEVEL SCRIPTS -->
-		<script type="text/javascript" src="../assets/js/view/shop.js"></script>
-    <script type="text/javascript">
-        (function() {
-            window._pa = window._pa || {};
-            // _pa.orderId = "myOrderId"; // OPTIONAL: attach unique conversion identifier to conversions
-            // _pa.revenue = "19.99"; // OPTIONAL: attach dynamic purchase values to conversions
-            // _pa.productId = "myProductId"; // OPTIONAL: Include product ID for use with dynamic ads
-            var pa = document.createElement('script'); pa.type = 'text/javascript'; pa.async = true;
-            pa.src = ('https:' == document.location.protocol ? 'https:' : 'http:') + "//tag.marinsm.com/serve/56b8e3ecd1db8fef59000194.js";
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(pa, s);
-        })();
-    </script>
 	</body>
 </html>

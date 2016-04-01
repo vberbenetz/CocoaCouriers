@@ -126,9 +126,7 @@
     height: 100px;
 }
 
-.font-arvo {
-     font-family: 'Arvo', serif;
- }
+
 
 .font-spin {
      font-family: 'Spinnaker', sans-serif;
@@ -260,3 +258,74 @@ img.resize-shop-product {
     width :200px;
     overflow :hidden;
 }
+
+
+
+.font-nixie {
+font-family: 'Nixie One', cursive;
+}
+
+.font-arvo {
+    font-family: 'Arvo', serif;
+}
+
+.font-arimo {
+    font-family: 'Arimo', sans-serif;
+}
+
+.bg-golden {
+    background-color: #f39c12 ;
+}
+
+.bg-alizan {
+    background-color: #e74c3c;
+}
+.moms-h1 {
+    font-family: 'Dancing Script', cursive;
+    font-weight: 700;
+    line-height: 46px;
+    font-size: 42px;
+    margin: 0 0 23px 0;
+}
+.moms-h2 {
+    font-family: 'EB Garamond', serif;
+    font-weight: normal;
+    text-transform: uppercase;
+    font-size: 18px;
+    line-height: 18px;
+    letter-spacing: 2px;
+    margin: 0 0 23px 0;
+}
+.moms-p {
+    font-family: 'EB Garamond', serif;
+    font-size: 16px;
+    line-height: 23px;
+    margin: 0 0 23px 0;
+}
+
+.bg-mom {
+    background-color: white;
+}
+
+.bg-ameth {
+    background-color: #9b59b6;
+}
+
+.moms-h2-small {
+    font-family: 'EB Garamond', serif;
+    font-weight: normal;
+    text-transform: uppercase;
+    font-size: 12px;
+    line-height: 12px;
+    letter-spacing: 1px;
+    margin: 0 0 13px 0;
+}
+
+.font-muli {
+    font-family: 'Muli', sans-serif;
+}
+
+.font-playfair {
+    font-family: 'Playfair Display', serif;
+}
+
