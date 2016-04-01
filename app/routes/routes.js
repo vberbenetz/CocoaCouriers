@@ -37,6 +37,11 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
         }
     };
 
+
+    var FBPixelId = '1093957247322989';
+
+
+
     app.get('/isloggedin', function(req, res) {
         res.send(req.isAuthenticated());
     });
@@ -128,7 +133,9 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
     // ================================================================================ //
 
     app.get('/', function(req, res) {
-        res.render('../index');
+        res.render('../index', {
+            pixelFct: "fbq('init','" + FBPixelId + "');fbq('track', 'PageView');fbq('track', 'ViewContent');"
+        });
     });
 
     app.get('/signin', function(req, res) {
@@ -136,28 +143,40 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
             res.redirect('/My-Account');
         }
         else {
-            res.render('signin');
+            res.render('signin', {
+                pixelFct: ''
+            });
         }
     });
 
     app.get('/password-reset', function(req, res) {
-        res.render('password_reset');
+        res.render('password_reset', {
+            pixelFct: "fbq('init','" + FBPixelId + "');fbq('track', 'PageView');fbq('track', 'ViewContent');"
+        });
     });
 
     app.get('/partners', function(req, res) {
-        res.render('partners');
+        res.render('partners', {
+            pixelFct: "fbq('init','" + FBPixelId + "');fbq('track', 'PageView');fbq('track', 'ViewContent');"
+        });
     });
 
     app.get('/store*', function(req, res) {
-        res.render('store_index');
+        res.render('store_index', {
+            pixelFct: ''
+        });
     });
 
     app.get('/blog', function(req, res) {
-        res.render('blog_home');
+        res.render('blog_home', {
+            pixelFct: "fbq('init','" + FBPixelId + "');fbq('track', 'PageView');fbq('track', 'ViewContent');"
+        });
     });
 
     app.get('/My-Account' , auth, function(req, res) {
-        res.render('user_mgmt');
+        res.render('user_mgmt', {
+            pixelFct: ''
+        });
     });
     app.get('/My-Account*' , auth, function(req, res) {
         res.redirect('/My-Account');
@@ -170,7 +189,8 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
     app.get('/blog/Cocoa-Couriers-First-Annual-Tasting-Event', function(req, res) {
         res.render('blog/Cocoa-Couriers-First-Annual-Tasting-Event', {
             title: 'Cocoa Couriers First Annual Tasting Event',
-            description: 'Cocoa Courier first annual chocolate tasting event'
+            description: 'Cocoa Courier first annual chocolate tasting event',
+            pixelFct: "fbq('init','" + FBPixelId + "');fbq('track', 'PageView');fbq('track', 'ViewContent');"
         });
     });
     app.get('/blog/valentines-day-gift', function(req, res) {
@@ -180,24 +200,28 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
             keywords: [
                 'valentine\'s day',
                 'gift box'
-            ]
+            ],
+            pixelFct: "fbq('init','" + FBPixelId + "');fbq('track', 'PageView');fbq('track', 'ViewContent');"
         });
     });
     app.get('/blog/free-chocolate-giveaway', function(req, res) {
         res.render('blog/free-chocolate-giveaway-contest', {
             title: 'Free chocolate givaway contest',
-            description: 'A Monthly Box of Artisan Chocolate | Fair Trade | Bean to Bar | Enter for a chance to win a free box of chocolate delivered right to your door!'
+            description: 'A Monthly Box of Artisan Chocolate | Fair Trade | Bean to Bar | Enter for a chance to win a free box of chocolate delivered right to your door!',
+            pixelFct: "fbq('init','" + FBPixelId + "');fbq('track', 'PageView');fbq('track', 'ViewContent');"
         });
     });
     app.get('/blog/Why-Does-Chocolate-Cost-So-Much', function(req, res) {
         res.render('blog/why-does-chocolate-cost-so-much', {
-            title: 'Why Does Chocolate Cost So Much'
+            title: 'Why Does Chocolate Cost So Much',
+            pixelFct: "fbq('init','" + FBPixelId + "');fbq('track', 'PageView');fbq('track', 'ViewContent');"
         });
     });
     app.get('/blog/what-is-fair-trade', function(req, res) {
         res.render('blog/what-is-fair-trade', {
             title: 'Cocoa Couriers What Is Fair Trade',
-            description: 'Learn about what fair trade means and why it\'s so important to support the fair trade cacao market! Fair Tastes Better!'
+            description: 'Learn about what fair trade means and why it\'s so important to support the fair trade cacao market! Fair Tastes Better!',
+            pixelFct: "fbq('init','" + FBPixelId + "');fbq('track', 'PageView');fbq('track', 'ViewContent');"
         });
     });
     app.get('/blog/whats-the-deal-with-chocolate-infusions', function(req, res) {
@@ -211,12 +235,14 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
                 'Craft Chocolate',
                 'Chocolate Box',
                 'Chocolate Subscription'
-            ]
+            ],
+            pixelFct: "fbq('init','" + FBPixelId + "');fbq('track', 'PageView');fbq('track', 'ViewContent');"
         });
     });
     app.get('/blog/month-1-box', function(req, res) {
         res.render('blog/month-1-box', {
-            title: 'December 2015 Box Review'
+            title: 'December 2015 Box Review',
+            pixelFct: "fbq('init','" + FBPixelId + "');fbq('track', 'PageView');fbq('track', 'ViewContent');"
         });
     });
 
@@ -341,7 +367,7 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
                     errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
                 }
                 else {
-                    chargeCtrl.oneTimeCharge(customer, req.body.uc, req.body.source, req.body.altShipping, req.body.cart, req.body.metadata, dbConnPool, emailUtils, req.connection.remoteAddress, function(err, result) {
+                    chargeCtrl.oneTimeCharge(customer, req.body.uc, req.body.source, req.body.altShipping, req.body.cart, req.body.metadata, req.body.couponId, dbConnPool, emailUtils, req.connection.remoteAddress, function(err, result) {
                         if (err) {
                             errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
                         }
@@ -748,9 +774,14 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
 
         // Check if getting one coupon or list
         if (typeof req.query.id !== 'undefined') {
-            couponCtrl.get(req.query.id, function(err, result) {
+            couponCtrl.verifySubscriptionCoupon(req.query.id, req.query.planId, req.query.uc, function(err, result) {
                 if (err) {
-                    errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                    if (err.status === 404) {
+                        res.status(err.status).send(err.msg.simplified);
+                    }
+                    else {
+                        errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                    }
                 }
                 else {
                     res.send(result);
@@ -758,14 +789,7 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
             });
         }
         else {
-            couponCtrl.getAll(req.query.limit, req.query.cursor, function(err, result) {
-                if (err) {
-                    errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-                }
-                else {
-                    res.send(result);
-                }
-            });
+            res.status(400).send("bad_request");
         }
     });
 

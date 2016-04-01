@@ -20,7 +20,7 @@ var chargeCtrl = function() {};
 
 chargeCtrl.prototype = {
 
-    oneTimeCharge: function (customer, userCountry, source, altShipping, cart, metadata, dbConnPool, emailUtils, reqIP, callback) {
+    oneTimeCharge: function (customer, userCountry, source, altShipping, cart, metadata, couponId, dbConnPool, emailUtils, reqIP, callback) {
 
 // TODO: ADD SHIPPING RATE FOR FUTURE CUSTOMERS OUTSIDE OF CANADA AND LOWER 48 STATES
         var shippingCost = 0;
@@ -60,6 +60,10 @@ chargeCtrl.prototype = {
             currency: chargeCurrency,
             metadata: metadata
         };
+
+        if (altShipping) {
+            chargePayload.metadata.altShippingId = altShipping.id
+        }
 
         // Link all charge metadata into single string (separation was required to accommodate Stripe restrictions)
         var metadataString = '';

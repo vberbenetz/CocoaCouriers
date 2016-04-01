@@ -62,11 +62,11 @@
                                 <a ui-sref="subscribe" class="product_name">
                                     <span>{{ $parent.planToSub.name }}</span>
                                     <br/>
-                                    <small>{{ ($parent.planToSub.amount / $parent.planToSub.intervalCount / 100).toFixed(2) }} / Month</small>
+                                    <small>{{ ( ($parent.planToSub.amount - $parent.subscriptionDiscount) / $parent.planToSub.intervalCount / 100).toFixed(2) }} / Month</small>
                                 </a>
                                 <a ng-click="removeSubscriptionFromCart()" class="remove_item"><i class="fa fa-times"></i></a>
                                 <div class="total_price">
-                                    $ <span>{{ ( $parent.planToSub.amount / 100 ).toFixed(2) }}</span>
+                                    $ <span>{{ ( ($parent.planToSub.amount - $parent.subscriptionDiscount) / 100 ).toFixed(2) }}</span>
                                 </div>
                                 <div class="qty">1</div>
                                 <div class="clearfix"></div>
@@ -112,14 +112,16 @@
                             <strong class="pull-left">Subtotal:</strong>
                         </span>
                         <span class="clearfix">
-                            <span class="pull-right">${{ discount / 100 }}</span>
+                            <span class="pull-right">- ${{ (discount.amount / 100).toFixed(2) }}</span>
                             <span class="pull-left">Discount:</span>
+                            <br />
+                            <em class="text-green">{{ discount.code }}</em>
                         </span>
 
                         <hr />
 
                         <span class="clearfix">
-                            <span class="pull-right size-20">${{ ( (subtotal - discount) / 100).toFixed(2) }}</span>
+                            <span class="pull-right size-20">${{ ( (subtotal - discount.amount) / 100).toFixed(2) }}</span>
                             <strong class="pull-left">TOTAL:</strong>
                         </span>
 
@@ -135,8 +137,8 @@
                                     <span class="fa fa-chevron-down"></span> Discount Code
                                 </uib-accordion-heading>
                                 <p>Enter your discount coupon code.</p>
-                                <input type="text" class="form-control text-center margin-bottom-10" placeholder="Coupon Code" />
-                                <button class="btn btn-primary pull-right">Apply</button>
+                                <input type="text" class="form-control text-center margin-bottom-10" ng-model="form.userCouponCode" placeholder="Coupon Code" />
+                                <button class="btn btn-primary pull-right" ng-click="applyCoupon()">Apply</button>
                             </uib-accordion-group>
                         </uib-accordion>
                     </div>

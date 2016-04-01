@@ -42,6 +42,8 @@ function appService($resource) {
             }
         ),
 
+        coupon: $resource('/api/coupon/'),
+
         customer: $resource('/api/customer',
             {},
             {

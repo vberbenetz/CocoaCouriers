@@ -37,6 +37,9 @@ function mainCtrl ($scope, $rootScope, $cookies, $http, appService) {
 
     $scope.loaded = {};
 
+    $scope.subscriptionDiscount = 0;
+    $scope.subscriptionCouponId = null;
+
     // Retrieve subscription cart cookie
     var subPid = $cookies.getObject('subPid');
     if ( (typeof subPid !== 'undefined') && (subPid.length > 0)) {
@@ -198,7 +201,7 @@ function mainCtrl ($scope, $rootScope, $cookies, $http, appService) {
 
 }
 
-function subscriptionCtrl ($scope, $cookies, $state, appService) {
+function subscriptionCtrl ($scope, $window, $cookies, $state, appService) {
 
     // Retrieve plans
     appService.plan.query(function(plans) {
@@ -223,12 +226,19 @@ function subscriptionCtrl ($scope, $cookies, $state, appService) {
     });
 
     $scope.selectPlan = function(plan) {
+
+        // Reset coupons
+        $scope.$parent.subscriptionDiscount = 0;
+        $scope.$parent.subscriptionCouponId = '';
+
         $scope.$parent.planToSub = plan;
         var expireDate = new Date();
         expireDate.setDate(expireDate.getDate() + 30);
         $cookies.putObject('subPid', plan.id, {expires: expireDate});
 
         document.getElementById('top-bar-cart-item-count').innerHTML = ($scope.$parent.cart.length + 1).toString();
+
+        $window._fbq.push(['track', 'AddToCart', {content_name: plan.name, value: plan.amount, currency: plan.currency}]);
 
         $state.go('checkout');
     };
@@ -244,7 +254,7 @@ function subscriptionCtrl ($scope, $cookies, $state, appService) {
     };
 }
 
-function storeCtrl ($scope, $state, $timeout, appService) {
+function storeCtrl ($scope, $window, $state, $timeout, appService) {
 
     $scope.searchFilter = {
         mid: [],
@@ -352,6 +362,18 @@ function storeCtrl ($scope, $state, $timeout, appService) {
 
     $scope.addToCart = function(product) {
         $scope.$parent.updateCart(product, 1);
+
+        var value = 0;
+        var currency = 'CAD';
+        if ($scope.$parent.userCountry === 'US') {
+            currency = 'USD';
+            value = (product.usPrice/100).toFixed(2);
+        }
+        else {
+            value = (product.cadPrice/100).toFixed(2);
+        }
+
+        $window._fbq.push(['track', 'AddToCart', {content_name: product.name, value: value, currency: currency}]);
         $state.go('cart');
     };
 
@@ -419,7 +441,7 @@ function storeCtrl ($scope, $state, $timeout, appService) {
 
 }
 
-function productCtrl ($scope, $state, $stateParams, $uibModal, appService) {
+function productCtrl ($scope, $window, $state, $stateParams, $uibModal, appService) {
 
     // Flag indicating successful product retrieval
     $scope.productLoadFlag = null;
@@ -451,6 +473,18 @@ function productCtrl ($scope, $state, $stateParams, $uibModal, appService) {
 
     $scope.addToCart = function() {
         $scope.$parent.updateCart($scope.product, $scope.quantity);
+
+        var value = 0;
+        var currency = 'CAD';
+        if ($scope.$parent.userCountry === 'US') {
+            currency = 'USD';
+            value = ($scope.product.usPrice/100 * $scope.quantity).toFixed(2);
+        }
+        else {
+            value = ($scope.product.cadPrice/100 * $scope.quantity).toFixed(2);
+        }
+
+        $window._fbq.push(['track', 'AddToCart', {content_name: $scope.product.name, value: value, currency: currency}]);
         $state.go('cart');
     };
 
@@ -528,14 +562,21 @@ function productImgModalCtrl($scope, $uibModalInstance, imgUrl) {
     }
 }
 
-function cartCtrl ($scope, $cookies) {
+function cartCtrl ($scope, $cookies, appService) {
 
     $scope.Math = window.Math;
 
     $scope.userCountry = $scope.$parent.userCountry;
 
     $scope.subtotal = 0;
-    $scope.discount = 0;
+    $scope.discount = {
+        amount: 0,
+        code: ''
+    };
+
+    $scope.form = {
+        userCouponCode: ''
+    };
 
     $scope.removeFromCart = function(productId) {
         var cart = $scope.$parent.cart;
@@ -552,6 +593,8 @@ function cartCtrl ($scope, $cookies) {
 
     $scope.removeSubscriptionFromCart = function() {
         $scope.$parent.planToSub = null;
+        $scope.$parent.subscriptionDiscount = 0;
+        $scope.$parent.subscriptionCouponId = '';
         $cookies.remove('subPid');
         $scope.$parent.updateCartCookie();
     };
@@ -575,18 +618,41 @@ function cartCtrl ($scope, $cookies) {
 
         $scope.subtotal = subtotal;
 
+        $scope.discount.amount = $scope.$parent.subscriptionDiscount;
+        $scope.discount.code = $scope.$parent.subscriptionCouponId;
+
         $scope.$parent.updateCartCookie();
 
         return (subtotal / 100).toFixed(2);
     };
 
-    $scope.applyDiscount = function() {
+    // ONLY HANDLES SUBSCRIPTION COUPONS NOW
+    $scope.applyCoupon = function() {
+        if ($scope.$parent.planToSub) {
+            appService.coupon.get({
+                id: $scope.form.userCouponCode,
+                planId: $scope.$parent.planToSub.id,
+                uc: $scope.userCountry
+            }, function(coupon) {
+                if (coupon) {
+                    $scope.$parent.subscriptionCouponId = coupon.id;
 
+                    if (coupon.amount_off) {
+                        $scope.$parent.subscriptionDiscount = coupon.amount_off;
+                    }
+                    else if (coupon.percent_off) {
+                        $scope.$parent.subscriptionDiscount = Math.round(($scope.$parent.planToSub.amount * coupon.percent_off) / 100);
+                    }
+
+                    $scope.calcSubtotal();
+                }
+            });
+        }
     };
 
 }
 
-function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appService) {
+function checkoutCtrl ($scope, $rootScope, $http, $window, $cookies, $state, stripe, appService) {
     $scope.subtotal = 0;
     $scope.tax = {
         rate: 0,
@@ -594,7 +660,13 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
         amount: 0
     };
     $scope.shippingCost = 0;
-    $scope.discount = 0;
+    $scope.discount = {
+        amount: 0,
+        code: ''
+    };
+    $scope.form = {
+        userCouponCode: ''
+    };
     $scope.total = 0;
 
     $scope.chargeErr = null;
@@ -613,9 +685,11 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
         var subtotal = 0;
 
         if ($scope.$parent.planToSub) {
-            subtotal = $scope.$parent.planToSub.amount;
+            subtotal = $scope.$parent.planToSub.amount - $scope.$parent.subscriptionDiscount;
             $scope.subtotal = subtotal;
             $scope.shippingCost = 0;
+            $scope.discount.amount = $scope.$parent.subscriptionDiscount;
+            $scope.discount.code = $scope.$parent.subscriptionCouponId;
 
             var taxState = $scope.billing.address.state;
             if ($scope.$parent.fullyLoggedIn) {
@@ -633,6 +707,7 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
         }
 
         else {
+
             var cart = $scope.$parent.cart;
             for (var s = 0; s < cart.length; s++) {
 
@@ -670,18 +745,42 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
                 }
 
                 calcTaxPercentage(taxState, appService, function(tax) {
-                    tax.amount = Math.ceil((tax.rate * (subtotal - $scope.discount + shippingCost)) / 100);
+                    tax.amount = Math.ceil((tax.rate * (subtotal - $scope.discount.amount + shippingCost)) / 100);
                     $scope.tax = tax;
 
                     $scope.updateCartCookie();
 
-                    $scope.total = subtotal + shippingCost - $scope.discount + tax.amount;
+                    $scope.total = subtotal + shippingCost - $scope.discount.amount + tax.amount;
 
                     $scope.recalculatingTotal = false;
                 });
             });
         }
 
+    };
+
+    // ONLY HANDLES SUBSCRIPTION COUPONS NOW
+    $scope.applyCoupon = function() {
+        if ($scope.$parent.planToSub) {
+            appService.coupon.get({
+                id: $scope.form.userCouponCode,
+                planId: $scope.$parent.planToSub.id,
+                uc: $scope.$parent.userCountry
+            }, function(coupon) {
+                if (coupon) {
+                    $scope.$parent.subscriptionCouponId = coupon.id;
+
+                    if (coupon.amount_off) {
+                        $scope.$parent.subscriptionDiscount = coupon.amount_off;
+                    }
+                    else if (coupon.percent_off) {
+                        $scope.$parent.subscriptionDiscount = Math.round(($scope.$parent.planToSub.amount * coupon.percent_off) / 100);
+                    }
+
+                    $scope.calcCheckout();
+                }
+            });
+        }
     };
 
     $scope.billing = {
@@ -896,13 +995,20 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
                                         if (isSubscription) {
                                             $cookies.remove('subPid');
                                             $scope.$parent.planToSub = null;
-                                            $scope.processingOrder = false;
+                                            $scope.$parent.subscriptionDiscount = 0;
+                                            $scope.$parent.subscriptionCouponId = null;
+
                                             $scope.$parent.customerSubscription = {
                                                 plan_id: result.plan.id,
                                                 amount: result.plan.amount,
                                                 intervalCount: result.plan.interval_count
                                             };
-                                            $state.go('orderFilled', {recentSub: result});
+
+                                            $scope.processingOrder = false;
+
+                                            updateFBPixel(function(result) {
+                                                $state.go('orderFilled', {recentSub: result});
+                                            });
                                         }
                                         else {
                                             $scope.$parent.recentShipmentId = result.metadata.shipmentId;
@@ -910,7 +1016,10 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
                                             $cookies.remove('cartPidQs');
                                             $scope.$parent.cart.length = 0;
                                             $scope.processingOrder = false;
-                                            $state.go('orderFilled');
+
+                                            updateFBPixel(function(result) {
+                                                $state.go('orderFilled');
+                                            });
                                         }
                                     }
                                 });
@@ -936,13 +1045,20 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
                                 if (isSubscription) {
                                     $cookies.remove('subPid');
                                     $scope.$parent.planToSub = null;
-                                    $scope.processingOrder = false;
+                                    $scope.$parent.subscriptionDiscount = 0;
+                                    $scope.$parent.subscriptionCouponId = null;
+
                                     $scope.$parent.customerSubscription = {
                                         plan_id: result.plan.id,
                                         amount: result.plan.amount,
                                         intervalCount: result.plan.interval_count
                                     };
-                                    $state.go('orderFilled', {recentSub: result});
+
+                                    $scope.processingOrder = false;
+
+                                    updateFBPixel(function(result) {
+                                        $state.go('orderFilled', {recentSub: result});
+                                    });
                                 }
                                 else {
                                     $scope.$parent.recentShipmentId = result.metadata.shipmentId;
@@ -950,7 +1066,10 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
                                     $cookies.remove('cartPidQs');
                                     $scope.$parent.cart.length = 0;
                                     $scope.processingOrder = false;
-                                    $state.go('orderFilled');
+
+                                    updateFBPixel(function(result) {
+                                        $state.go('orderFilled');
+                                    });
                                 }
                             }
                         });
@@ -996,7 +1115,8 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
 
         // Alter payload based on subscription or charge
         if (isSubscription) {
-            payload.planId = $scope.$parent.planToSub.id
+            payload.planId = $scope.$parent.planToSub.id;
+            payload.couponId = $scope.$parent.subscriptionCouponId;
         }
         else {
             payload.cart = [];
@@ -1447,7 +1567,7 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
                     $scope.billing.token = token.id;
                     $scope.chargeErr = false;
                     return callback(true);
-                }).error(function(err) {
+                }).catch(function(err) {
                     handleStCCErr(err);
                     return callback(false);
                 });
@@ -1522,6 +1642,22 @@ function checkoutCtrl ($scope, $rootScope, $http, $cookies, $state, stripe, appS
             default:
                 $scope.validationErrors.source.number = 'There was an issue processing your payment. Please try again or contact our support team';
                 break;
+        }
+    }
+
+    function updateFBPixel(callback) {
+        // Update FB Pixel
+        if ($scope.total) {
+            var currency = 'CAD';
+            if ($scope.$parent.userCountry === 'US') {
+                currency = 'USD';
+            }
+            $window._fbq.push(['track', 'Purchase', {value: ($scope.total/100).toFixed(2), currency: currency}]);
+
+            return callback(true);
+        }
+        else {
+            return callback(false);
         }
     }
 }

@@ -3,6 +3,8 @@
 var configPriv = require('../configuration/config_priv');
 var log = require('../utils/logger');
 
+var helpers = require('../utils/helpers');
+
 var stripe = require('stripe')(
     configPriv.sKey
 );
@@ -11,99 +13,117 @@ var couponCtrl = function() {};
 
 couponCtrl.prototype = {
 
-    get: function(couponId, callback) {
+    verifySubscriptionCoupon: function(couponId, planId, userCountry, callback) {
+
+        if (!couponId || !planId || !userCountry) {
+            return callback({
+                status: 404,
+                type: 'stripe',
+                msg: {
+                    simplified: 'not_found',
+                    detailed: 'No couponId supplied'
+                }
+            });
+        }
 
         stripe.coupons.retrieve(couponId, function(err, coupon) {
             if (err) {
-                console.log(err);
-                return callback({
-                    status: 500,
-                    type: 'stripe',
-                    msg: {
-                        simplified: 'server_error',
-                        detailed: err
-                    }
-                }, null);
+                if (err.rawType === 'invalid_request_error') {
+                    return callback({
+                        status: 404,
+                        type: 'stripe',
+                        msg: {
+                            simplified: 'not_found',
+                            detailed: err
+                        }
+                    });
+                }
+                else {
+                    return callback({
+                        status: 500,
+                        type: 'stripe',
+                        msg: {
+                            simplified: 'server_error',
+                            detailed: err
+                        }
+                    }, null);
+                }
             }
             else {
-                return callback(false, coupon);
+                if (!coupon.valid) {
+                    return callback({
+                        status: 404,
+                        type: 'stripe',
+                        msg: {
+                            simplified: 'not_found',
+                            detailed: err
+                        }
+                    });
+                }
+                else {
+                    // Applied to wrong country
+                    if (coupon.metadata.applicable_country !== userCountry) {
+                        return callback({
+                            status: 404,
+                            type: 'stripe',
+                            msg: {
+                                simplified: 'not_found',
+                                detailed: err
+                            }
+                        });
+                    }
+
+                    // Is not restricted to a specific plan
+                    if (!coupon.metadata.applicable_plan_ids) {
+                        return callback(false, coupon);
+                    }
+                    else {
+                        var idFound = false;
+                        var strIds = coupon.metadata.applicable_plan_ids.split(',');
+                        strIds.forEach(function(id) {
+                            if (id === planId) {
+                                idFound = true;
+                            }
+                        });
+
+                        if (idFound) {
+                            return callback(false, coupon);
+                        }
+                        else {
+                            return callback({
+                                status: 404,
+                                type: 'stripe',
+                                msg: {
+                                    simplified: 'not_found',
+                                    detailed: err
+                                }
+                            });
+                        }
+                    }
+                }
             }
         })
-    },
+    }
 
-    getAll: function(limit, cursor, callback) {
-
-        if (typeof limit === 'undefined') {
-            limit = 100;
-        }
-
-        var params = {
-            limit: limit
-        };
-
-        if (typeof cursor !== 'undefined') {
-            params.starting_after = cursor;
-        }
-
-        stripe.coupons.list(params, function(err, coupons) {
+/*
+    applyCouponToCharge: function(couponId, shipmentItems, subTotal, callback) {
+        this.verifyCoupon(couponId, function(err, coupon) {
             if (err) {
-                console.log(err);
-                return callback({
-                    status: 500,
-                    type: 'stripe',
-                    msg: {
-                        simplified: 'server_error',
-                        detailed: err
-                    }
-                }, null, null);
+                if (err.status !== 404) {
+                    log.error(err.msg.detailed, null, null);
+                }
+                return null;
             }
             else {
-                return callback(false, coupons, (cursor + limit) );
-            }
-        })
-    },
 
-    create: function (payload, reqIP, callback) {
+                // Is not restricted to a specific product
+                if (coupon.metadata.ids === null) {}
 
-        stripe.coupons.create(payload, function(err, coupon) {
-            if (err) {
-                console.log(err);
-                return callback({
-                    status: 500,
-                    type: 'stripe',
-                    msg: {
-                        simplified: 'server_error',
-                        detailed: err
-                    }
-                }, null);
-            }
-            else {
-                log.info("Created new coupon", coupon, reqIP);
-                return callback(false, coupon);
-            }
-        });
-    },
-
-    remove: function (couponId, reqIP, callback) {
-
-        stripe.coupons.del(couponId, function(err, result) {
-            if (err) {
-                console.log(err);
-                return callback({
-                    status: 500,
-                    type: 'stripe',
-                    msg: {
-                        simplified: 'server_error',
-                        detailed: err
-                    }
-                }, null);
-            }
-            else {
-                log.info("Removed coupon with id: ", reqIP);
-                return callback(false, result);
             }
         });
     }
+*/
+
 };
 
 module.exports = new couponCtrl();
