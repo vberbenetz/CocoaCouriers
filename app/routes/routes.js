@@ -182,6 +182,12 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
         res.redirect('/My-Account');
     });
 
+    app.get('/contact', function(req, res) {
+        res.render('contact_us', {
+            pixelFct: ''
+        });
+    });
+
 
 
     // ========================= BLOG PAGES ============================== //
@@ -249,8 +255,19 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
     // -------------------------------------------------------------------- //
 
 
+    // ================================ Landing Pages ================================= //
+/*
+    app.get('/mothers-day', function(req, res) {
+        res.render('landing_pages/mothers-day-landing', {
+            title: '',
+            description: '',
+            keywords: [
 
-
+            ],
+            pixelFct: ''
+        });
+    });
+*/
 
 
 
