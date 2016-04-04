@@ -41,6 +41,26 @@
         </div>
 
     </div>
+
+    <div class="row margin-left-20 margin-right-20">
+        <div class="text-center">
+            <div class="pull-left">
+                <span class="text-white size-11" id="copyrightDate"></span>
+            </div>
+
+            <a class="text-white size-11" href="/terms">Terms & Conditions | Privacy Policy</a>
+
+            <div class="pull-right">
+                <span class="fa fa-cc-visa text-white"></span>
+                <span class="fa fa-cc-mastercard text-white"></span>
+                <span class="fa fa-cc-amex text-white"></span>
+                <span class="fa fa-cc-discover text-white"></span>
+                <span class="fa fa-cc-diners-club text-white"></span>
+                <span class="fa fa-cc-jcb text-white"></span>
+                <span class="size-11 text-white">&nbsp;&nbsp;&nbsp;Accepted</span>
+            </div>
+        </div>
+    </div>
 </section>
 
 <!-- SCROLL TO TOP -->
@@ -78,4 +98,8 @@
         $( '#top-bar-cart-item-count' ).text(cartLen);
     });
 
+</script>
+
+<script>
+    jQuery(document).ready(function() {var currentYear = new Date().getFullYear();jQuery('#copyrightDate').text('\u00A9 ' + currentYear + ', CocoaCouriers.com')});
 </script>

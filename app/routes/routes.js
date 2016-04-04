@@ -188,6 +188,12 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
         });
     });
 
+    app.get('/terms', function(req, res) {
+        res.render('terms_and_conditions', {
+            pixelFct: ''
+        })
+    });
+
 
 
     // ========================= BLOG PAGES ============================== //
