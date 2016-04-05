@@ -863,11 +863,20 @@ function checkoutCtrl ($scope, $rootScope, $http, $window, $cookies, $state, str
         ]
     };
 
-    // Set Default to Canada until region loaded
-    $scope.billing.address.country = 'CA';
-    $scope.shipping.address.country = 'CA';
-    $scope.activeProvinceSelect = $scope.formProvinces.canada;
-    $scope.activeShippingProvinceSelect = $scope.formProvinces.canada;
+    // Set Default to user's country
+    if ( ($scope.$parent.userCountry) && ($scope.$parent.userCountry === 'US') ) {
+        $scope.billing.address.country = 'US';
+        $scope.shipping.address.country = 'US';
+        $scope.activeProvinceSelect = $scope.formProvinces.us;
+        $scope.activeShippingProvinceSelect = $scope.formProvinces.us;
+    }
+    else {
+        $scope.billing.address.country = 'CA';
+        $scope.shipping.address.country = 'CA';
+        $scope.activeProvinceSelect = $scope.formProvinces.canada;
+        $scope.activeShippingProvinceSelect = $scope.formProvinces.canada;
+    }
+
 
     // Populate the expiry years for the form
     var currentYear = new Date().getFullYear();
@@ -882,18 +891,6 @@ function checkoutCtrl ($scope, $rootScope, $http, $window, $cookies, $state, str
     $scope.$watch('$parent.loaded.customer', function(newVal, oldVal) {
         if (newVal) {
             $scope.calcCheckout();
-        }
-    });
-
-    // Update on load user region
-    $scope.$watch('$parent.userCountry', function(newVal, oldVal) {
-        if (newVal !== oldVal) {
-            if ( (newVal) && (newVal === 'US') ) {
-                $scope.billing.address.country = 'US';
-                $scope.shipping.address.country = 'US';
-                $scope.activeProvinceSelect = $scope.formProvinces.us;
-                $scope.activeShippingProvinceSelect = $scope.formProvinces.us;
-            }
         }
     });
 
