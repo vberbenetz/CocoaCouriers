@@ -170,93 +170,100 @@ chargeCtrl.prototype = {
                 };
 
                 dbUtils.query(dbConnPool, shipmentQuery, function(err, rows) {
-                    var shipmentId = rows.insertId;
+                    if (err) {
 
-                    // Append shipmentId
-                    for (var i = 0; i < shipmentItems.length; i++) {
-                        shipmentItems[i].push(shipmentId);
                     }
+                    else {
 
-                    var shipmentItemsQuery = {
-                        statement: 'INSERT INTO ShipmentItem (product_id, quantity, pricePaid, shipmentId) VALUES ?',
-                        params: [shipmentItems]
-                    };
+                        var shipmentId = rows.insertId;
 
-                    // Add shipmentId (orderId to charge)
-                    chargePayload.metadata.shipmentId = shipmentId;
-
-                    // Async insert ShipmentItems relating to this Shipment
-                    dbUtils.query(dbConnPool, shipmentItemsQuery, function(err, result) {});
-
-                    // Charge the customer and update the shipment
-                    stripe.charges.create(chargePayload, function(err, charge) {
-                        if (err) {
-                            return callback({
-                                status: 500,
-                                type: 'stripe',
-                                msg: {
-                                    simplified: 'server_error',
-                                    detailed: err
-                                }
-                            }, null);
+                        // Append shipmentId
+                        for (var i = 0; i < shipmentItems.length; i++) {
+                            shipmentItems[i].push(shipmentId);
                         }
-                        else {
-                            log.info("Created new charge", charge, reqIP);
 
-                            var shipmentUpdateQuery = {
-                                statement: 'UPDATE Shipment SET chargeId = ?, status = ? WHERE id = ?',
-                                params: [charge.id, 'new', shipmentId]
-                            };
+                        var shipmentItemsQuery = {
+                            statement: 'INSERT INTO ShipmentItem (product_id, quantity, pricePaid, shipmentId) VALUES ?',
+                            params: [shipmentItems]
+                        };
 
-                            var chargeInsertQuery = {
-                                statement: 'INSERT INTO Charge SET ?',
-                                params: {
-                                    id: charge.id,
-                                    altShippingAddressId: altShippingAddressId,
-                                    created: new Date(charge.created * 1000),
-                                    amount: charge.amount,
-                                    taxAmount: taxAmount,
-                                    shippingCost: shippingCost,
-                                    currency: charge.currency,
-                                    customerId: charge.customer,
-                                    failureCode: charge.failureCode,
-                                    failureMessage: charge.failureMessage,
-                                    invoiceId: charge.invoice,
-                                    paid: charge.paid,
-                                    serializedChargeData: metadataString
-                                }
-                            };
+                        // Add shipmentId (orderId to charge)
+                        chargePayload.metadata.shipmentId = shipmentId;
 
-                            // Update Shipment with chargeId
-                            dbUtils.query(dbConnPool, shipmentUpdateQuery, function(err, result) {});
+                        // Async insert ShipmentItems relating to this Shipment
+                        dbUtils.query(dbConnPool, shipmentItemsQuery, function(err, result) {});
 
-                            // Save charge information
-                            dbUtils.query(dbConnPool, chargeInsertQuery, function(err, result) {});
-
-                            // Send receipt email
-                            emailUtils.sendReceipt(customer.email, shipmentId, receiptProducts, subtotal, 0, shippingCost, {amount: taxAmount, rate: taxRate, desc: taxDesc}, amount, function(err, res) {
-                                if (err) {
-                                    log.error("Could not send receipt to customer", err, reqIP);
-                                }
-                            });
-
-                            var updateQuantityQueries = [];
-
-                            // Decrement product stock quantity
-                            for (var k = 0; k < cart.length; k++) {
-                                updateQuantityQueries.push({
-                                    statement: 'UPDATE Product SET stockQuantity = (stockQuantity - ?) WHERE id = ? AND stockQuantity > 0',
-                                    params : [
-                                        cart[k].quantity,
-                                        cart[k].id
-                                    ]
-                                });
-                                dbUtils.query(dbConnPool, updateQuantityQueries[k], function(err, result){});
+                        // Charge the customer and update the shipment
+                        stripe.charges.create(chargePayload, function(err, charge) {
+                            if (err) {
+                                return callback({
+                                    status: 500,
+                                    type: 'app',
+                                    msg: {
+                                        simplified: 'server_error',
+                                        detailed: err
+                                    }
+                                }, null);
                             }
+                            else {
+                                log.info("Created new charge", charge, reqIP);
 
-                            return callback(null, charge);
-                        }
-                    });
+                                var shipmentUpdateQuery = {
+                                    statement: 'UPDATE Shipment SET chargeId = ?, status = ? WHERE id = ?',
+                                    params: [charge.id, 'new', shipmentId]
+                                };
+
+                                var chargeInsertQuery = {
+                                    statement: 'INSERT INTO Charge SET ?',
+                                    params: {
+                                        id: charge.id,
+                                        altShippingAddressId: altShippingAddressId,
+                                        created: new Date(charge.created * 1000),
+                                        amount: charge.amount,
+                                        taxAmount: taxAmount,
+                                        shippingCost: shippingCost,
+                                        currency: charge.currency,
+                                        customerId: charge.customer,
+                                        failureCode: charge.failureCode,
+                                        failureMessage: charge.failureMessage,
+                                        invoiceId: charge.invoice,
+                                        paid: charge.paid,
+                                        serializedChargeData: metadataString
+                                    }
+                                };
+
+                                // Update Shipment with chargeId
+                                dbUtils.query(dbConnPool, shipmentUpdateQuery, function(err, result) {});
+
+                                // Save charge information
+                                dbUtils.query(dbConnPool, chargeInsertQuery, function(err, result) {});
+
+                                // Send receipt email
+                                emailUtils.sendReceipt(customer.email, shipmentId, receiptProducts, subtotal, 0, shippingCost, {amount: taxAmount, rate: taxRate, desc: taxDesc}, amount, function(err, res) {
+                                    if (err) {
+                                        log.error("Could not send receipt to customer", err, reqIP);
+                                    }
+                                });
+
+                                var updateQuantityQueries = [];
+
+                                // Decrement product stock quantity
+                                for (var k = 0; k < cart.length; k++) {
+                                    updateQuantityQueries.push({
+                                        statement: 'UPDATE Product SET stockQuantity = (stockQuantity - ?) WHERE id = ? AND stockQuantity > 0',
+                                        params : [
+                                            cart[k].quantity,
+                                            cart[k].id
+                                        ]
+                                    });
+                                    dbUtils.query(dbConnPool, updateQuantityQueries[k], function(err, result){});
+                                }
+
+                                return callback(null, charge);
+                            }
+                        });
+
+                    }
 
                 });
 
