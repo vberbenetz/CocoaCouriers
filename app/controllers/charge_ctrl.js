@@ -171,7 +171,7 @@ chargeCtrl.prototype = {
 
                 dbUtils.query(dbConnPool, shipmentQuery, function(err, rows) {
                     if (err) {
-
+                        return callback(err, null);
                     }
                     else {
 
@@ -198,7 +198,7 @@ chargeCtrl.prototype = {
                             if (err) {
                                 return callback({
                                     status: 500,
-                                    type: 'app',
+                                    type: 'stripe',
                                     msg: {
                                         simplified: 'server_error',
                                         detailed: err
