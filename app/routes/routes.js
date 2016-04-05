@@ -390,7 +390,7 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
                     errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
                 }
                 else {
-                    chargeCtrl.oneTimeCharge(customer, req.body.uc, req.body.source, req.body.altShipping, req.body.cart, req.body.metadata, req.body.couponId, dbConnPool, emailUtils, req.connection.remoteAddress, function(err, result) {
+                    chargeCtrl.oneTimeCharge(customer, req.body.uc, req.body.source, req.body.altShipping, req.body.cart, req.body.metadata, req.body.couponId, req.body.orderMessage, dbConnPool, emailUtils, req.connection.remoteAddress, function(err, result) {
                         if (err) {
                             errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
                         }
@@ -754,7 +754,7 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
                     errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
                 }
                 else {
-                    subscriptionCtrl.create(customer, req.body.uc, req.body.planId, req.body.altShipping, req.body.couponId, dbConnPool, emailUtils, req.connection.remoteAddress, function(err, result) {
+                    subscriptionCtrl.create(customer, req.body.uc, req.body.planId, req.body.altShipping, req.body.couponId, req.body.orderMessage, dbConnPool, emailUtils, req.connection.remoteAddress, function(err, result) {
                         if (err) {
                             errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
                         }

@@ -788,6 +788,8 @@ function checkoutCtrl ($scope, $rootScope, $http, $window, $cookies, $state, str
         source: {}
     };
 
+    $scope.orderMessage = {};
+
     $scope.shipping = {
         address: {}
     };
@@ -1109,6 +1111,9 @@ function checkoutCtrl ($scope, $rootScope, $http, $window, $cookies, $state, str
         var payload = {
             uc: $scope.userCountry
         };
+
+        // Add order message if one was entered
+        payload.orderMessage = $scope.orderMessage.message;
 
         // Alter payload based on subscription or charge
         if (isSubscription) {

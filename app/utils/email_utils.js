@@ -9,38 +9,45 @@ module.exports = function(mailTransporter) {
 
     module.checkEmailService = function (recipient, dbErr, env, callback) {
 
-        var subject = 'CocoaCouriers server started - ' + env;
-        var body = 'CocoaCouriers server started.<br/>';
-
-        if (dbErr) {
-            subject += ' - Database Connection Test Failed!!';
-            body += 'Domain: ' + env + '<br/><br/>Database connection test error: ' + dbErr;
+        // Skip sending email in dev testing
+        if (env === 'LOCAL_DEV') {
+            return callback(false, true);
         }
         else {
-            body += 'Domain: ' + env + '<br/><br/>Database connection test Successful';
-        }
 
-        var mailTemplate = this.mailer.templateSender({
-            subject: config.mailOptionsTemplate.content.subject,
-            html: config.mailOptionsTemplate.content.html.start + body + config.mailOptionsTemplate.content.html.end
-        }, {
-            from: 'info@cocoacouriers.com',
-            attachments: config.mailOptionsTemplate.options.attachments
-        });
+            var subject = 'CocoaCouriers server started - ' + env;
+            var body = 'CocoaCouriers server started.<br/>';
 
-        mailTemplate({
-            to: recipient
-        }, {
-            subject: subject,
-            htmlMsg: body
-        }, function(err, info){
-            if (err) {
-                return callback(err, false);
+            if (dbErr) {
+                subject += ' - Database Connection Test Failed!!';
+                body += 'Domain: ' + env + '<br/><br/>Database connection test error: ' + dbErr;
             }
             else {
-                return callback(false, true);
+                body += 'Domain: ' + env + '<br/><br/>Database connection test Successful';
             }
-        });
+
+            var mailTemplate = this.mailer.templateSender({
+                subject: config.mailOptionsTemplate.content.subject,
+                html: config.mailOptionsTemplate.content.html.start + body + config.mailOptionsTemplate.content.html.end
+            }, {
+                from: 'info@cocoacouriers.com',
+                attachments: config.mailOptionsTemplate.options.attachments
+            });
+
+            mailTemplate({
+                to: recipient
+            }, {
+                subject: subject,
+                htmlMsg: body
+            }, function(err, info){
+                if (err) {
+                    return callback(err, false);
+                }
+                else {
+                    return callback(false, true);
+                }
+            });
+        }
 
     };
 

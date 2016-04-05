@@ -126,6 +126,12 @@
                                        type="text" ng-model="billing.address.postal_code" required autocomplete="postal-code" />
                                 <p class="text-danger" ng-show="validationErrors.billing.address.postal_code">{{ validationErrors.billing.address.postal_code }}</p>
                             </div>
+
+                            <div class="col-xs-12 form-group">
+                                <label for="order_message"><small>Optional Gift Message To Include In Your Package</small></label>
+                                <textarea class="form-control required" id="order_message" name="order_message" maxlength="200" rows="4" ng-model="orderMessage.message"></textarea>
+                                <p ng-if="orderMessage.message" class="pull-right"><small>{{ 200 - $parent.orderMessage.message.length }} characters remaining</small></p>
+                            </div>
                         </fieldset>
 
                         <p class="margin-bottom-40 margin-top-30" ng-show="$parent.loaded.altShippingAddr && !$parent.altShippingAddr">

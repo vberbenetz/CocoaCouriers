@@ -34,15 +34,20 @@ subscriptionCtrl.prototype = {
         });
     },
 
-    create: function (customer, userCountry, planId, altShipping, couponId, dbConnPool, emailUtils, reqIP, callback) {
+    create: function (customer, userCountry, planId, altShipping, couponId, orderMessage, dbConnPool, emailUtils, reqIP, callback) {
 
-        var payload = {};
+        var payload = {
+            metadata: {}
+        };
 
         // Attach altShippingId
         if (altShipping) {
-            payload.metadata = {
-                altShippingId: altShipping.id
-            };
+            payload.metadata.altShippingId = altShipping.id
+        }
+
+        // Attach order message for package
+        if (orderMessage) {
+            payload.metadata.orderMessage = orderMessage;
         }
 
         // Apply coupon
