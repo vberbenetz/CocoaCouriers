@@ -932,6 +932,13 @@ function checkoutCtrl ($scope, $rootScope, $http, $window, $cookies, $state, $ui
         }
     });
 
+    // Watch for cart updates and recalculate
+    $scope.$watch('$parent.cart', function(newVal, oldVal) {
+        if (newVal !== oldVal) {
+            $scope.calcCheckout();
+        }
+    }, true);
+
     $scope.$watch('billing.address.country', function(newVal, oldVal) {
         if (newVal !== oldVal) {
             if (newVal) {
