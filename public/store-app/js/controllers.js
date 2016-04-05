@@ -1,6 +1,6 @@
 'use strict';
 
-function mainCtrl ($scope, $rootScope, $cookies, $http, appService) {
+function mainCtrl ($scope, $rootScope, $window, $location, $cookies, $http, appService) {
 
     appService.stPubKey.get(function(data) {
         $rootScope.stPubKey = data.stPubKey;
@@ -51,7 +51,34 @@ function mainCtrl ($scope, $rootScope, $cookies, $http, appService) {
 
     // Retrieve cart from cookie
     var cartPidQs = $cookies.getObject('cartPidQs');
+    var aPid = $location.search().p;
+    var isCart = ($window.location.href.indexOf('cart') > -1);
     if ( (typeof cartPidQs !== 'undefined') && (cartPidQs.length > 0) ) {
+        if (aPid && isCart) {
+            if (aPid.constructor === Array) {
+                for (var i = 0; i < aPid.length; i++) {
+                    cartPidQs.push({pid: aPid[i], quantity: 1});
+                }
+            }
+            else {
+                cartPidQs.push({pid: aPid, quantity: 1});
+            }
+        }
+    }
+    else if (aPid && isCart) {
+        cartPidQs = [];
+        if (aPid.constructor === Array) {
+            for (var j = 0; j < aPid.length; j++) {
+                cartPidQs.push({pid: aPid[j], quantity: 1});
+            }
+        }
+        else {
+            cartPidQs.push({pid: aPid, quantity: 1});
+        }
+    }
+
+    if ( (typeof cartPidQs !== 'undefined') && (cartPidQs.length > 0) ) {
+
         appService.productList.queryByIds({productIds: cartPidQs}, function(products) {
 
             for (var i = 0; i < products.length; i++) {
@@ -79,6 +106,9 @@ function mainCtrl ($scope, $rootScope, $cookies, $http, appService) {
                 document.getElementById('top-bar-cart-item-count').innerHTML = ($scope.cart.length).toString();
             }
 
+            if (aPid && isCart) {
+                $scope.updateCartCookie();
+            }
         });
     }
 
@@ -197,7 +227,7 @@ function mainCtrl ($scope, $rootScope, $cookies, $http, appService) {
             });
             $scope.updateCartCookie();
         }
-    }
+    };
 
 }
 
@@ -652,7 +682,13 @@ function cartCtrl ($scope, $cookies, appService) {
 
 }
 
-function checkoutCtrl ($scope, $rootScope, $http, $window, $cookies, $state, stripe, appService) {
+function cvcHelpCtrl($scope, $uibModalInstance) {
+    $scope.cancel = function (){
+        $uibModalInstance.dismiss('cancel');
+    }
+}
+
+function checkoutCtrl ($scope, $rootScope, $http, $window, $cookies, $state, $uibModal, stripe, appService) {
     $scope.subtotal = 0;
     $scope.tax = {
         rate: 0,
@@ -937,6 +973,21 @@ function checkoutCtrl ($scope, $rootScope, $http, $window, $cookies, $state, str
             }
         }
     });
+
+    $scope.openCvcHelpModal = function() {
+
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'cvcHelpModal.html',
+            controller: 'cvcHelpCtrl'
+        });
+
+        modalInstance.result.then(function (){});
+
+        $scope.$toggleAnimation = function() {
+            $scope.animationsEnabled = !$scope.animationsEnabled;
+        }
+    };
 
 
     $scope.placeOrder = function(isSubscription) {
@@ -1834,5 +1885,6 @@ angular
     .controller('productCtrl', productCtrl)
     .controller('productImgModalCtrl', productImgModalCtrl)
     .controller('cartCtrl', cartCtrl)
+    .controller('cvcHelpCtrl', cvcHelpCtrl)
     .controller('checkoutCtrl', checkoutCtrl)
     .controller('postCheckoutCtrl', postCheckoutCtrl);

@@ -108,12 +108,12 @@
                         <hr/>
 
                         <span class="clearfix">
-                            <span class="pull-right">${{ calcSubtotal() }}</span>
+                            <span class="pull-right size-18">{{ calcSubtotal() }}</span>
                             <strong class="pull-left">Subtotal:</strong>
                         </span>
                         <span class="clearfix">
-                            <span class="pull-right">- ${{ (discount.amount / 100).toFixed(2) }}</span>
-                            <span class="pull-left">Discount:</span>
+                            <span class="pull-right size-18">- {{ (discount.amount / 100).toFixed(2) }}</span>
+                            <strong class="pull-left">Discount:</strong>
                             <br />
                             <em class="text-green">{{ discount.code }}</em>
                         </span>
@@ -121,8 +121,8 @@
                         <hr />
 
                         <span class="clearfix">
-                            <span class="pull-right size-20">${{ ( (subtotal - discount.amount) / 100).toFixed(2) }}</span>
-                            <strong class="pull-left">TOTAL:</strong>
+                            <span class="pull-right size-18">{{ ( (subtotal - discount.amount) / 100).toFixed(2) }}</span>
+                            <strong class="pull-left">Total:</strong>
                         </span>
 
                         <hr />

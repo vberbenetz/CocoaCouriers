@@ -34,6 +34,19 @@
             <!-- /EMPTY CART -->
 
             <div ng-show="($parent.cart.length > 0) || $parent.planToSub">
+
+                <!-- CVC HELP MODAL -->
+                <script type="text/ng-template" id="cvcHelpModal.html">
+                    <div class="modal-body">
+                        <button class="pull-right text-black" ng-click="cancel()"><span class="fa fa-times fa-2x"></span></button>
+                        <div class="text-center">
+                            <h1>Card Verification Code</h1>
+                            <img class="img-responsive" src="/assets/images/cvc_help.png" />
+                        </div>
+                    </div>
+                </script>
+                <!-- /CVC HELP MODAL -->
+
                 <form class="row clearfix" novalidate>
                     <div class="col-md-7 col-xs-12">
 
@@ -96,7 +109,7 @@
 
                                 <label for="billing_address2"><small>Apartment, Suite, Floor, etc...</small></label>
                                 <input class="form-control" id="billing_address2" name="address-line2"
-                                       type="text" ng-model="billing.address.line2" placeholder="(Optional) Ex: Apt 123" autocomplete="address-line2" />
+                                       type="text" ng-model="billing.address.line2" placeholder="(Optional) Ex: Apt 123, Suite 350" autocomplete="address-line2" />
                                 <p class="text-danger" ng-show="validationErrors.billing.address.line2">{{ validationErrors.billing.address.line2 }}</p>
                             </div>
                             <div class="col-md-6 col-xs-12" ng-class="{ 'has-error' : validationErrors.billing.address.country }">
@@ -128,8 +141,9 @@
                             </div>
 
                             <div class="col-xs-12 form-group">
-                                <label for="order_message"><small>Optional Gift Message To Include In Your Package</small></label>
-                                <textarea class="form-control required" id="order_message" name="order_message" maxlength="200" rows="4" ng-model="orderMessage.message"></textarea>
+                                <label for="order_message"><small>Gift Message</small></label>
+                                <textarea class="form-control required" id="order_message" name="order_message"
+                                          placeholder="Optional gift message to include in your order" maxlength="200" rows="4" ng-model="orderMessage.message"></textarea>
                                 <p ng-if="orderMessage.message" class="pull-right"><small>{{ 200 - $parent.orderMessage.message.length }} characters remaining</small></p>
                             </div>
                         </fieldset>
@@ -203,7 +217,7 @@
 
                                         <label for="shipping_address2"><small>Apartment, Suite, Floor, etc...</small></label>
                                         <input class="form-control" id="shipping_address2" name="shipping-address-line2"
-                                               type="text" ng-model="shipping.address.line2" placeholder="(Optional) Ex: Apt 123" autocomplete="off" />
+                                               type="text" ng-model="shipping.address.line2" placeholder="(Optional) Ex: Apt 123, Suite 300" autocomplete="off" />
                                         <p class="text-danger" ng-show="validationErrors.shipping.address.line2">{{ validationErrors.shipping.address.line2 }}</p>
                                     </div>
                                     <div class="col-md-6 col-xs-12" ng-class="{ 'has-error' : validationErrors.shipping.address.country }">
@@ -319,7 +333,12 @@
                                             <p class="text-danger" ng-show="validationErrors.source.exp_year">{{ validationErrors.source.exp_year }}</p>
                                         </div>
                                         <div class="col-md-6 col-xs-12 form-group" ng-class="{ 'has-error' : validationErrors.source.cvc }">
-                                            <label for="cc_cvc"><small>* CVC</small></label>
+                                            <label for="cc_cvc">
+                                                <small>
+                                                    <span>* CVC</span>
+                                                    <span class="pull-right"><a class="btn btn-blue btn-xs" ng-click="openCvcHelpModal()"><span class=" fa fa-question text-white"></span></a></span>
+                                                </small>
+                                            </label>
                                             <input id="cc_cvc" type="text" name="cvc" class="form-control required" ng-model="billing.source.cvc" required />
                                             <p class="text-danger" ng-show="validationErrors.source.cvc">{{ validationErrors.source.cvc }}</p>
                                         </div>
