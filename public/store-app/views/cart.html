@@ -85,9 +85,13 @@
                                 </a>
                                 <a ng-click="removeFromCart(i.product.id)" class="remove_item"><i class="fa fa-times"></i></a>
                                 <div class="total_price">
-                                    $<span>{{ ( (i.product.cadPrice * i.quantity) / 100 ).toFixed(2) }}</span>
+                                    <span ng-show="$parent.userCountry=='CA'">${{ ( (i.product.cadPrice * i.quantity) / 100 ).toFixed(2) }}</span>
+                                    <span ng-show="$parent.userCountry=='US'">${{ ( (i.product.usPrice * i.quantity) / 100 ).toFixed(2) }}</span>
                                 </div>
-                                <div class="qty"><input type="number" ng-model="$parent.cart[$index].quantity" maxlength="2" max="{{i.product.stockQuantity}}" min="1" /> &times; ${{ i.product.cadPrice / 100 }}</div>
+                                <div class="qty"><input type="number" ng-model="$parent.cart[$index].quantity" maxlength="2" max="{{i.product.stockQuantity}}" min="1" /> &times;
+                                    <span ng-show="$parent.userCountry=='CA'">${{ i.product.cadPrice / 100 }}</span>
+                                    <span ng-show="$parent.userCountry=='US'">${{ i.product.usPrice / 100 }}</span>
+                                </div>
                                 <div class="clearfix"></div>
                             </div>
                             <!-- /cart item -->
