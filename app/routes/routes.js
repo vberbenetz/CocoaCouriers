@@ -262,7 +262,7 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
 
 
     // ================================ Landing Pages ================================= //
-/*
+
     app.get('/mothers-day-gift', function(req, res) {
         res.render('landing_pages/landing_mothers_day', {
             title: 'Mother\'s Day Gift' ,
@@ -281,7 +281,7 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
             pixelFct: ''
         });
     });
-*/
+
 
 
 
