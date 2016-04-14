@@ -132,6 +132,34 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
     // ================================= Static Pages ================================= //
     // ================================================================================ //
 
+    /**
+     * ADDING A NEW PAGE GUIDE:
+     *
+     * The route path must always start with '/' and can't be the same as something existing.
+     *
+     * You need to inject the head, header, and footer into your pages (use index.ejs as an example, and Ctrl+F for: <%- include
+     * There are 3 includes only, and it automatically places those templates into your page on load.
+     * Remember the paths to these templates is relative.
+     * Example: You add a page in the blog folder, your path will be "../templates/head.ejs"
+     *          because it will need to go up one directory to the parent, then back into templates.
+     *
+     *          For any pages added directly into the pages folder, it will just be "templates/head.ejs"
+     *
+     * Remember that these are strings, so any ' (apostrophe characters) need to be escaped with the \ (backslash character).
+     * Example: "Wouldn't can't don't"  needs to look like this:  "Wouldn\'t can\'t don\'t"
+     *
+     *
+     * Format for res.render when adding a new page:
+     *
+     * All of these parameters are optional, meaning that you can exclude one or all of them for your pages.
+     * If item is excluded, default values will be loaded.
+     *
+     * title (String) - This is the web page title (The words that appear on the tab in your browser)
+     * description (String) - This is the description that is put into the "meta" tag in the page head
+     * keywords (Comma separated array of String) - These are the keywords that get injected into the "meta" tag in the page head
+     * pixelFct (String representation of JS code) - This is the Facebook pixel function that gets injected into the page head
+     */
+
     app.get('/', function(req, res) {
         res.render('../index', {
             pixelFct: "fbq('init','" + FBPixelId + "');fbq('track', 'PageView');fbq('track', 'ViewContent');"
