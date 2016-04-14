@@ -143,13 +143,13 @@ https.createServer({
         '!CAMELLIA'
     ].join(':'),
     honorCipherOrder: true
-}, app).listen(443);
+}, app).listen(configPriv.server.ssl_port);
 
 // Needed for redirect to HTTPS
 http.createServer(function (req, res) {
     res.writeHead(301, {'Location': 'https://' + req.headers['host'] + req.url});
     res.end();
-}).listen(80);
+}).listen(configPriv.server.http_port);
 
 
 // Test database and email services on startup
