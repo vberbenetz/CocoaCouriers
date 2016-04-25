@@ -338,3 +338,72 @@ font-family: 'Nixie One', cursive;
     font-family: 'Playfair Display', serif;
 }
 
+.font-patua {
+    font-family: 'Patua One', cursive;
+}
+
+.font-oswald {
+    font-family: 'Oswald', sans-serif;
+}
+
+.color-cocoa-brown {
+    color: #3B2314;
+}
+
+.color-cocoa-secondary {
+    color: #754C28
+}
+
+.landing-header {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-size: 45px;
+}
+
+.bg-yellow {
+    background-color:#D78F00 ;
+}
+
+.bg-soft-green {
+    background-color: #A2C563;
+}
+
+.bg-soft-purple {
+    background-color: #CD88AF;
+}
+
+.bg-soft-blue {
+    background-color: #8FA6DA;
+}
+
+.sub-para {
+    font-size: 15px;
+    font-family: 'Oswald', sans-serif;
+}
+
+
+.landing-sub {
+    font-size: 50px;
+    margin-bottom: 20px;
+    line-height: 50px;
+}
+
+/* Media Queries for Lander */
+
+@media screen and (max-width:480px) {
+#chocolate-gift {
+ width: 250px;
+    height: 175px;
+}  
+    
+    #theobromo {
+        width: 250px;
+        height: 300px;
+    }
+
+    #theobromocontainer {
+        margin-top: 2px;
+    }
+    
+    
+}
