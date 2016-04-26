@@ -291,27 +291,12 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
 
     // ================================ Landing Pages ================================= //
 
-    app.get('/mothers-day-gift', function(req, res) {
-        res.render('landing_pages/landing_mothers_day', {
-            title: 'Mother\'s Day Gift' ,
-            description: 'Show mom how much she means to you this mother\'s day. Give her the unique gift of the best chocolate this world has to offer. Four of the finest artisan bars, made in small batches from only the best organic cocoa beans, harvested all around the globe. All bars contain only all natural ingredients, and pure cocoa solids. No fillers guaranteed. The included bars have been customely catered for this special mother\'s day gift, to offer a variety of flavor infusions, keeping your palette guessing and wanting more smooth taste after each bite. The infusions include black fig, blueberry, toasted coconut, and mint, which are sure to please any chocolate loving mom out there.',
-            keywords: [
-                'Mother\'s Day Gift',
-                'Mother\'s Day Present',
-                'Mothers Day Present',
-                'Mothers Day Gift',
-                'Best Chocolate',
-                'Unique Gift',
-                'Unique Present',
-                'Finest Chocolate',
-                'Unique Mother\'s Day Gift'
-            ],
-            pixelFct: ''
-        });
+    app.get('/best-mothers-day-gift', function(req, res) {
+        res.render('landing_pages/best-mothers-day-gift', {});
     });
 
 
-
+    
 
     // ================================================================================ //
     // ================================== API ROUTES ================================== //

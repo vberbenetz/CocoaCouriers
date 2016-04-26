@@ -19,5 +19,10 @@
     "nodemailer": "~2.1.0",
     "xoauth2": "~1.1.0",
     "stripe": "~4.4.0"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "chai": "*",
+    "supertest": "*"
   }
 }
