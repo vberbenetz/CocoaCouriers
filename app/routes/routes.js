@@ -292,11 +292,25 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
     // ================================ Landing Pages ================================= //
 
     app.get('/best-mothers-day-gift', function(req, res) {
-        res.render('landing_pages/best-mothers-day-gift', {});
+        res.render('landing_pages/best-mothers-day-gift', {
+            title: 'Cocoa Couriers Best Mothers Day Gift',
+            description: 'Cocoa couriers gifts for mothers day, the gift of chocolate delivered right to your mother!',
+            keywords: [
+                'Gift',
+                'Mothers Day',
+                'Chocolate Gift',
+                'Best Gift',
+                'Nice Mothers Day gift',
+                'Easy mothers day gift',
+                'cheap mothers day gift',
+                'unique mothers day gift'
+            ],
+            pixelFct: ""
+        });
     });
 
 
-    
+
 
     // ================================================================================ //
     // ================================== API ROUTES ================================== //
