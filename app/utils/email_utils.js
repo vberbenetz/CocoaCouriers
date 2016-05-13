@@ -10,7 +10,7 @@ module.exports = function(mailTransporter) {
     module.checkEmailService = function (recipient, dbErr, env, callback) {
 
         // Skip sending email in dev testing
-        if (env === 'LOCAL_DEV') {
+        if (env !== 'PROD') {
             return callback(false, true);
         }
         else {

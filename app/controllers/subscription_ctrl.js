@@ -104,7 +104,8 @@ subscriptionCtrl.prototype = {
                             stripeId: customer.stripeId,
                             subscriptionId: subscription.id,
                             taxPercent: subscription.tax_percent,
-                            plan_id: subscription.plan.id
+                            plan_id: subscription.plan.id,
+                            lastSubscriptionPackageId: 0
                         }
                     };
 
