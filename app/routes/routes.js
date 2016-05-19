@@ -816,21 +816,39 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
     // ----------------- Coupon Related ------------------------ //
     app.get('/api/coupon', function (req, res, next) {
 
-        // Check if getting one coupon or list
         if (typeof req.query.id !== 'undefined') {
-            couponCtrl.verifySubscriptionCoupon(req.query.id, req.query.planId, req.query.uc, function(err, result) {
-                if (err) {
-                    if (err.status === 404) {
-                        res.status(err.status).send(err.msg.simplified);
+
+            // Verifying subscription plan coupon
+            if (req.query.planId) {
+                couponCtrl.verifySubscriptionCoupon(req.query.id, req.query.planId, req.query.uc, function(err, result) {
+                    if (err) {
+                        if (err.status === 404) {
+                            res.status(err.status).send(err.msg.simplified);
+                        }
+                        else {
+                            errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                        }
                     }
                     else {
-                        errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                        res.send(result);
                     }
-                }
-                else {
-                    res.send(result);
-                }
-            });
+                });
+            }
+            else {
+                couponCtrl.verifyOtherCoupon(req.query.id, req.query.uc, dbConnPool, function(err, result) {
+                    if (err) {
+                        if (err.status === 404) {
+                            res.status(err.status).send(err.msg.simplified);
+                        }
+                        else {
+                            errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                        }
+                    }
+                    else {
+                        res.send(result);
+                    }
+                });
+            }
         }
         else {
             res.status(400).send("bad_request");
