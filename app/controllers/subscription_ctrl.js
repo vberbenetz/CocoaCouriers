@@ -34,6 +34,23 @@ subscriptionCtrl.prototype = {
         });
     },
 
+    getAltShippingAddress: function (subscriptionId, dbConnPool, callback) {
+
+        var query = {
+            statement: 'SELECT * FROM AltShippingAddress WHERE id = (SELECT altShippingAddressId FROM Subscription WHERE subscriptionId = ?)',
+            params: [subscriptionId]
+        };
+
+        dbUtils.query(dbConnPool, query, function(err, rows) {
+            if (err) {
+                return callback(err, null);
+            }
+            else {
+                return callback(false, rows[0]);
+            }
+        });
+    },
+
     create: function (customer, userCountry, planId, altShipping, couponId, orderMessage, dbConnPool, emailUtils, reqIP, callback) {
 
         var payload = {
@@ -144,7 +161,6 @@ subscriptionCtrl.prototype = {
 
                                 stripe.customers.updateSubscription(customer.stripeId, subscription.id, payload, function(err, updatedSubscription) {
                                     if (err) {
-                                        console.log(err);
                                         return callback({
                                             status: 500,
                                             type: 'stripe',
@@ -247,6 +263,53 @@ subscriptionCtrl.prototype = {
 
     },
 
+    updateAltShippingAddress: function(stripeCustomerId, subscriptionId, altShippingAddressId, dbConnPool, callback) {
+
+        var subAddrUpdateQuery = {
+            statement: 'UPDATE Subscription SET ? WHERE ? AND ?',
+            params: [
+                {
+                    altShippingAddressId: altShippingAddressId
+                },
+                {
+                    stripeId: stripeCustomerId
+                },
+                {
+                    subscriptionId: subscriptionId
+                }
+            ]
+        };
+
+        dbUtils.query(dbConnPool, subAddrUpdateQuery, function(err, result) {
+            if (err) {
+                return callback(err, null);
+            }
+            else {
+
+                // Update subscription metadata
+                stripe.customers.updateSubscription(
+                    stripeCustomerId,
+                    subscriptionId,
+                    {
+                        metadata: {
+                            altShippingId: altShippingAddressId.toString()
+                        }
+                    },
+                    function (err, subscription) {
+                        if (err) {
+                            log.error('Could not update subscription altShippingAddr', {
+                                stripeId: stripeCustomerId,
+                                subscriptionId: subscriptionId,
+                                altShippingAddrId: altShippingAddressId
+                            }, null);
+                        }
+                    }
+                );
+
+                return callback(null, result);
+            }
+        });
+    },
 
     cancel: function (customerId, subscriptionId, reqIP, callback) {
 

@@ -763,6 +763,17 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
         });
     });
 
+    app.get('/api/subscription/shipping-address', auth, function (req, res, next) {
+        subscriptionCtrl.getAltShippingAddress(req.query.subId, dbConnPool, function(err, result) {
+            if (err) {
+                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+            }
+            else {
+                res.send(result);
+            }
+        });
+    });
+
     app.post('/api/subscription', auth, function (req, res, next) {
         // Verify request body correct
         if ( (!req.body.uc) || (!req.body.planId) ) {
@@ -787,8 +798,22 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
             });
         }
     });
-/*
+
     app.put('/api/subscription', auth, function (req, res, next) {
+        if (req.query.subId && req.query.altShippingAddrId) {
+            subscriptionCtrl.updateAltShippingAddress(req.user.stId, req.query.subId, req.query.altShippingAddrId, dbConnPool, function(err, result) {
+                if (err) {
+                    errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                }
+                else {
+                    res.status(200).send('{}');
+                }
+            });
+        }
+        else {
+            res.status(400).send("bad_request");
+        }
+/*
         subscriptionCtrl.update(req.user.stId, req.query.newPlanId, req.connection.remoteAddress, function(err, result) {
             if (err) {
                 errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
@@ -797,8 +822,9 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
                 res.send(result);
             }
         });
+*/
     });
-
+/*
     app.delete('/api/subscription', auth, function (req, res, next) {
         var customerId = req.user.stId;
         var subscriptionId = req.query.subscriptionId;

@@ -42,7 +42,21 @@ function appService($resource) {
 
         altShippingAddress: $resource('/api/customer/altShippingAddr'),
 
-        subscription: $resource('/api/subscription'),
+        subscription: $resource('/api/subscription',
+            {},
+            {
+                updateShippingAddress: {
+                    method: 'PUT',
+                    params: {
+                        subId: '@subId',
+                        altShippingAddrId: '@altShippingAddrId'
+                    },
+                    isArray: false
+                }
+            }
+        ),
+
+        subscriptionAltShippingAddress: $resource('/api/subscription/shipping-address'),
 
         logout: $resource('/logout')
     }

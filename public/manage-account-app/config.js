@@ -32,8 +32,8 @@ function config($routeProvider, $locationProvider, stripeProvider) {
             controller: 'updateBillingCtrl',
             templateUrl: '/manage-account-app/views/update_billing.html'
         })
-        .when('/update-shipping', {
-            controller: 'updateShippingCtrl',
+        .when('/update-subscription-shipping', {
+            controller: 'updateSubShippingCtrl',
             templateUrl: '/manage-account-app/views/update_shipping.html'
         })
 

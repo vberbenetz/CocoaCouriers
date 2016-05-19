@@ -33,21 +33,17 @@ function mainCtrl($scope, $rootScope, $window, appService) {
         }, function (err) {
         });
 
-        // Retrieve alt shipping addrs
-        appService.altShippingAddress.get(function(altShippingAddr) {
-
-            // If and alternate address exists
-            if (altShippingAddr.hasOwnProperty('name')) {
-                $scope.altShippingAddr = altShippingAddr;
-            }
-
-        }, function (err) {
-        });
-
         // Retrieve active subscription
         appService.subscription.get(function(subscription) {
             if (subscription) {
                 $scope.customerSubscription = subscription;
+
+                // Retrieve associated shipping address if exists
+                appService.subscriptionAltShippingAddress.get({subId: subscription.subscriptionId}, function(altShippingAddr) {
+                    if (altShippingAddr.hasOwnProperty('name')) {
+                        $scope.altShippingAddr = altShippingAddr;
+                    }
+                });
             }
         });
 
@@ -493,7 +489,7 @@ function updateBillingCtrl ($scope, $rootScope, stripe, appService) {
 
 }
 
-function updateShippingCtrl ($scope, appService) {
+function updateSubShippingCtrl ($scope, appService) {
 
     $scope.shipping = {
         address: {}
@@ -613,24 +609,36 @@ function updateShippingCtrl ($scope, appService) {
 
         $scope.updateInProgress = true;
 
-        var shippingAddrValiadtion = validateAddress($scope.shipping);
+        var shippingAddrValidation = validateAddress($scope.shipping);
 
-        if (shippingAddrValiadtion.valid) {
+        if (shippingAddrValidation.valid) {
 
-            // Update customer with new shipping address
+            // Create new shipping address
             appService.altShippingAddress.save({shipping: $scope.shipping}, function(altShippingAddr) {
-                $scope.$parent.altShippingAddr = altShippingAddr;
-                $scope.successfullyUpdated = true;
-                $scope.shipping = {
-                    address: {}
-                };
+
+                // Update subscription with new shipping address
+                appService.subscription.updateShippingAddress({
+                    subId: $scope.customerSubscription.subscriptionId,
+                    altShippingAddrId: altShippingAddr.id
+                }, function(result) {
+                    $scope.$parent.altShippingAddr = altShippingAddr;
+                    $scope.successfullyUpdated = true;
+                    $scope.shipping = {
+                        address: {}
+                    };
+
+                }, function(err) {
+                    $scope.updateInProgress = false;
+                    $scope.successfullyUpdated = false;
+                });
+
             }, function(err) {
                 $scope.updateInProgress = false;
                 $scope.successfullyUpdated = false;
             });
         }
         else {
-            $scope.validationErrors.shipping = shippingAddrValiadtion.errors;
+            $scope.validationErrors.shipping = shippingAddrValidation.errors;
             $scope.updateInProgress = false;
             $scope.successfullyUpdated = false;
         }
@@ -842,5 +850,5 @@ angular
     .controller('mainCtrl', mainCtrl)
     .controller('membershipCtrl', membershipCtrl)
     .controller('updateBillingCtrl', updateBillingCtrl)
-    .controller('updateShippingCtrl', updateShippingCtrl)
+    .controller('updateSubShippingCtrl', updateSubShippingCtrl)
     .controller('updatePlanCtrl', updatePlanCtrl);
