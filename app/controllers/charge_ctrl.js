@@ -92,7 +92,11 @@ chargeCtrl.prototype = {
                 var shipmentItems = [];
                 var receiptProducts = [];
 
+                // Default to 5oz for just packaging
+                var shipmentWeight = 5;
+
                 // Tabulate subtotal of products and add to ShipmentItems
+                // Sum up total weight of box
                 for (var i = 0; i < products.length; i++) {
                     for (var j = 0; j < cart.length; j++) {
                         if (products[i].id === cart[j].id) {
@@ -117,7 +121,9 @@ chargeCtrl.prototype = {
                                 name: products[i].name,
                                 quantity: cart[j].quantity,
                                 price: price
-                            })
+                            });
+
+                            shipmentWeight += products[i].weightImperial;
                         }
                     }
                 }
@@ -159,10 +165,10 @@ chargeCtrl.prototype = {
                         status: 'pending_charge',
                         isSubscriptionBox: false,
                         creationDate: now,
-                        pkgWeight: 0,
-                        pkgLength: 0,
-                        pkgWidth: 0,
-                        pkgHeight: 0,
+                        pkgWeight: shipmentWeight,
+                        pkgLength: 8.5,
+                        pkgWidth: 8.5,
+                        pkgHeight: 2,
                         shippingRequired: true,
                         shipmentCost: shippingCost,
                         orderMessage: orderMessage
