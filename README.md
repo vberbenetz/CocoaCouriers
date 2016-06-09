@@ -1,11 +1,11 @@
 # Cocoa Couriers
 
-### Installation and Deployment
+## Installation and Deployment
 If in cluster mode, deploy to an instance that has enough resources to support at least 200MB x NUMBER_OF_CORES
 
-### Maintenance & Upgrades
+## Maintenance & Upgrades
 
-##### NodeJS
+#### NodeJS
 Use n to upgrade NodeJS. Choose the relevant command below to update Node on the server:
 ```
     sudo n latest
@@ -14,7 +14,7 @@ Use n to upgrade NodeJS. Choose the relevant command below to update Node on the
 ```
 
 
-### Networking & Firewall
+## Networking & Firewall
 #####
 
 Allow NodeJS to listen on ports 80 and 443:
@@ -22,9 +22,9 @@ Allow NodeJS to listen on ports 80 and 443:
     sudo setcap cap_net_bind_service=+ep `readlink -f \`which node \``
 ```
 
-### Operation
+## Operation
 
-### Start, Stop, Restart
+#### Start, Stop, Restart
 PM2 is used to run the server. This service makes sure the app has 0 downtime and is always available.
 Additionally, it provides the ability to "cluster" the app (spread it across all available CPU cores).
 Start the server with the following command (navigate to root of project directory):
