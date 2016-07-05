@@ -104,4 +104,73 @@ config.mailOptionsTemplate = {
     }
 };
 
+config.sendGridTemplate = {
+    sender: {
+        name: 'CocoaCouriers Team',
+        email: 'team@cocoacouriers.com'
+    },
+    html: {
+        header: '<div style="font-family: Arial,Helvetica Neue,Helvetica,sans-serif;">' +
+                '<div style="background:#ecf0f1;width:800px;margin:0 auto;text-align:center;">' +
+                '<a href="https://cocoacouriers.com">' +
+                '<img src="cid:cocoa_email_logo" />' +
+                '</a>' +
+                '</div>' +
+                '<br />' +
+                '<div style="text-align:center;">' +
+                '<div style="margin-top:30px;width:500px;text-align:left;display:inline-block;overflow:auto;word-wrap:normal">',
+
+        footer: '</div>' +
+                '</div>' +
+                '<hr style="margin-top:40px;margin-bottom:40px;opacity:0.4;"/>' +
+                '<div style=text-align:center;margin-bottom:30px;>' +
+                '<h4>Have Questions or need help? Please contact us <a href="mailto:info@cocoacouriers.com" style="text-decoration:none;">info@cocoacouriers.com</a></h4>' +
+                '</div>' +
+                '<div style="text-align:center;margin-bottom:30px;">' +
+                '<h4>Follow Us on Social Media</h4>' +
+                '</div>' +
+                '<div style="text-align:center">' +
+                '<a href="https://instagram.com/cocoacouriers">' +
+                '<img src="cid:instagram_logo" style="margin-left:35px;margin-right:35px;"/>' +
+                '</a>' +
+                '<a href="https://facebook.com/cocoacouriers">' +
+                '<img src="cid:facebook_logo" style="margin-left:35px;margin-right:35px;"/>' +
+                '</a>' +
+                '<a href="https://twitter.com/CocoaCouriers">' +
+                '<img src="cid:twitter_logo" style="margin-left:35px;margin-right:35px;"/>' +
+                '</a>' +
+                '<a href="https://pinterest.com/cocoacouriers">' +
+                '<img src="cid:pinterest_logo" style="margin-left:35px;margin-right:35px;"/>' +
+                '</a>' +
+                '</div>' +
+                '<div style="text-align:center;margin-top:30px;">' +
+                '<a href="https://cocoacouriers.com" style="text-decoration:none;">Cocoa Couriers</a>' +
+                '</div>' +
+                '</div>',
+
+        attachments: [
+            {
+                path: __dirname + '/../../public/assets/images/email-logo.png',
+                cid: 'cocoa_email_logo'
+            },
+            {
+                path: __dirname + '/../../public/assets/images/social_logos/instagram_logo_30.png',
+                cid: 'instagram_logo'
+            },
+            {
+                path: __dirname + '/../../public/assets/images/social_logos/facebook_logo_30.png',
+                cid: 'facebook_logo'
+            },
+            {
+                path: __dirname + '/../../public/assets/images/social_logos/twitter_logo_30.png',
+                cid: 'twitter_logo'
+            },
+            {
+                path: __dirname + '/../../public/assets/images/social_logos/pinterest_logo_30.png',
+                cid: 'pinterest_logo'
+            }
+        ]
+    }
+};
+
 module.exports = config;

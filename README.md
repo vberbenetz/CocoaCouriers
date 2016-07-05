@@ -6,6 +6,7 @@ If in cluster mode, deploy to an instance that has enough resources to support a
 ## Maintenance & Upgrades
 
 #### NodeJS
+**Imporant - Must intstall Node version 5.0.0 or higher due to use of ES6 version of JS**
 Use n to upgrade NodeJS. Choose the relevant command below to update Node on the server:
 ```
     sudo n latest

@@ -12,13 +12,10 @@ var passport = require('passport');
 var session = require('express-session');
 var csurf = require('csurf');
 var redisStore = require('connect-redis')(session);
-var nodemailer = require('nodemailer');
 
 var config = require('./app/configuration/config');
 var configPriv = require('./app/configuration/config_priv');
 var log = require('./app/utils/logger');
-
-var xoauth2Generator = require('xoauth2').createXOAuth2Generator(configPriv.gmailXOAuth2);
 
 var app = express();
 
@@ -47,8 +44,11 @@ var pool = mysql.createPool({
 });
 
 // ------------------------------------
-// Mailer Setup
+// Mailer Setup - GMAIL OAUTH
 // ------------------------------------
+/*
+var nodemailer = require('nodemailer');
+var xoauth2Generator = require('xoauth2').createXOAuth2Generator(configPriv.gmailXOAuth2);
 var mailTransporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -56,7 +56,15 @@ var mailTransporter = nodemailer.createTransport({
     }
 });
 
-var emailUtils = require('./app/utils/email_utils')(mailTransporter);
+var emailUtils = require('./app/utils/email_utils_legacy')(mailTransporter);
+*/
+
+// ------------------------------------
+// SendGrid Mail Service Setup
+// ------------------------------------
+var sendgrid = require('sendgrid')(configPriv.sendGridKey);
+var MailService = require('./app/utils/mail_service');
+var mailService = new MailService(sendgrid);
 
 // ------------------------------------
 // Passport auth
@@ -97,7 +105,7 @@ app.use( function (req, res, next) {
 });
 
 // Web routes
-require('./app/routes/routes')(app, passport, pool, emailUtils);
+require('./app/routes/routes')(app, passport, pool, mailService);
 
 // Error Handler
 app.use(function (err, req, res, next) {
@@ -163,7 +171,7 @@ startupCtrl.testDbConn(pool, function(err, result) {
     else {
         log.info('Database Startup Connection Test Successful');
     }
-    startupCtrl.testEmail(emailUtils, dbErr, configPriv.env, function(err, result) {
+    startupCtrl.testEmail(mailService, dbErr, configPriv.env, function(err, result) {
         if (err) {
             log.error('Email Startup Test Failed!!!');
             log.error(err);
