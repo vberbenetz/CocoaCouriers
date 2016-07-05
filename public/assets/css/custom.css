@@ -3,20 +3,81 @@
     src: url(../fonts/journal.ttf);
 }
 
+
+
+.img-wrapper {
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+}
+.img-wrapper img {
+    position: relative;
+    left: 300%;
+    margin-left: -600%;
+}
+
+
 .font-journal {
     font-family: journal;
 }
 
+.font-amatica {
+    font-family: 'Amatica SC', cursive;
+}
+
+.font-maven-pro {
+    font-family: 'Maven Pro', sans-serif;
+}
+
+.font-nixie {
+    font-family: 'Nixie One', cursive;
+}
+
+.font-arvo {
+    font-family: 'Arvo', serif;
+}
+
+.font-arimo {
+    font-family: 'Arimo', sans-serif;
+}
+
+.font-spin {
+    font-family: 'Spinnaker', sans-serif;
+}
+
+.font-muli {
+    font-family: 'Muli', sans-serif;
+}
+
+.font-playfair {
+    font-family: 'Playfair Display', serif;
+}
+
+.font-patua {
+    font-family: 'Patua One', cursive;
+}
+
+.font-oswald {
+    font-family: 'Oswald', sans-serif;
+}
+
+
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak .ng-hide {
     display: none !important;
+}
+
+
+
+.margin-top-5 {
+    margin-top: 5px !important;
 }
 
 .margin-bottom-5 {
     margin-bottom: 5px !important;
 }
 
-.margin-top-5 {
-    margin-top: 5px !important;
+.margin-bottom-100 {
+    margin-bottom: 100px !important;
 }
 
 .margin-bottom-neg-10 {
@@ -58,6 +119,10 @@
 .margin-right-5 {
     margin-right: 5px !important;
 }
+
+
+
+
 
 .color-visa {
     color: #0157A2;
@@ -135,11 +200,6 @@
     height: 100px;
 }
 
-
-
-.font-spin {
-     font-family: 'Spinnaker', sans-serif;
- }
 
 .white-maker {
     height: 40px;
@@ -268,20 +328,6 @@ img.resize-shop-product {
     overflow :hidden;
 }
 
-
-
-.font-nixie {
-font-family: 'Nixie One', cursive;
-}
-
-.font-arvo {
-    font-family: 'Arvo', serif;
-}
-
-.font-arimo {
-    font-family: 'Arimo', sans-serif;
-}
-
 .bg-golden {
     background-color: #f39c12 ;
 }
@@ -328,22 +374,6 @@ font-family: 'Nixie One', cursive;
     line-height: 12px;
     letter-spacing: 1px;
     margin: 0 0 13px 0;
-}
-
-.font-muli {
-    font-family: 'Muli', sans-serif;
-}
-
-.font-playfair {
-    font-family: 'Playfair Display', serif;
-}
-
-.font-patua {
-    font-family: 'Patua One', cursive;
-}
-
-.font-oswald {
-    font-family: 'Oswald', sans-serif;
 }
 
 .color-cocoa-brown {
