@@ -222,12 +222,6 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
         })
     });
 
-    app.get('/vacation', function(req, res) {
-        res.render('vacation', {
-            pixelFct: ''
-        })
-    });
-
 
     // ========================= BLOG PAGES ============================== //
 

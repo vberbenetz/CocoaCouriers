@@ -48,6 +48,7 @@ function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProv
                 $window._fbq.push(['track', 'PageView', {}]);
             }
         })
+        /*
         .state('checkout', {
             templateUrl: '../store-app/views/checkout.html',
             controller: checkoutCtrl,
@@ -57,6 +58,13 @@ function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProv
                 $window._fbq.push(['track', 'PageView', {}]);
                 $window._fbq.push(['track', 'InitiateCheckout', {}]);
             }
+        })
+        */
+
+        // Temporary vacation redirect page
+        .state('checkout', {
+            templateUrl: '../store-app/views/vacation_template.html',
+            url: '/vacation'
         })
         .state('orderFilled', {
             templateUrl: '../store-app/views/post_checkout.html',
