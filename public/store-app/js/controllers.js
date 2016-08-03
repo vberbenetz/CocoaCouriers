@@ -689,6 +689,12 @@ function cvcHelpCtrl($scope, $uibModalInstance) {
 }
 
 function checkoutCtrl ($scope, $rootScope, $http, $window, $cookies, $state, $uibModal, stripe, appService) {
+
+    // Redirect during vacation if subscription
+    if ($scope.$parent.planToSub) {
+        $state.go('summer-vacation');
+    }
+
     $scope.subtotal = 0;
     $scope.tax = {
         rate: 0,
@@ -1722,6 +1728,10 @@ function checkoutCtrl ($scope, $rootScope, $http, $window, $cookies, $state, $ui
     }
 }
 
+
+function summerVacationCtrl ($scope) {}
+
+
 function postCheckoutCtrl ($scope, $stateParams) {
     $scope.recentSub = $stateParams.recentSub;
     $scope.cartStillFull = false;
@@ -1894,4 +1904,5 @@ angular
     .controller('cartCtrl', cartCtrl)
     .controller('cvcHelpCtrl', cvcHelpCtrl)
     .controller('checkoutCtrl', checkoutCtrl)
+    .controller('summerVacationCtrl', summerVacationCtrl)
     .controller('postCheckoutCtrl', postCheckoutCtrl);

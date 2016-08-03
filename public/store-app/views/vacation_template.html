@@ -16,11 +16,23 @@
         <div class="col-xs-12 margin-left-10, margin-right-10">
             <p class="font-maven-pro">
                 As you hit pause to enjoy the outdoors this summer, your Cocoa Couriers subscription will hit the pause button too. You appreciate the finer things in life, and to make sure your chocolate selection continues to be of the highest quality, shipping will resume when it gets cooler.
-                <br/><br/>
-                If you have purchased a monthly subscription, you will be not be charged for July and August. For multi-month plans, the remaining month deliveries will be pushed until after summer. Your artisan chocolate cravings will be satisfied again in September.
-                <br/><br/>
-                New members are always welcome to join the Cocoa Couriers club, and you can pre-order to guarantee your September subscription.
             </p>
+            <div ng-if="$parent.planToSub">
+                <p class="font-maven-pro">
+                    New members are always welcome to join the Cocoa Couriers club by signing up for the Waitlist.
+                </p>
+                <div class="text-center">
+                    <a href="http://blog.cocoacouriers.com/" target="_self" class="btn btn-success btn-lg">Join The Waitlist !!!</a>
+                </div>
+            </div>
+            <div ng-if="!$parent.planToSub">
+                <p class="font-maven-pro">
+                    If you wish to proceed and have your order ship this September when the temperature cools down, please do so below.
+                </p>
+                <div class="text-center">
+                    <button ui-sref="checkout" class="btn btn-success btn-lg">Checkout Anyways !!!</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
