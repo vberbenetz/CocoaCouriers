@@ -23,7 +23,7 @@ chargeCtrl.prototype = {
     oneTimeCharge: function (customer, userCountry, source, altShipping, cart, metadata, couponId, orderMessage, dbConnPool, emailUtils, reqIP, callback) {
 
 // TODO: ADD SHIPPING RATE FOR FUTURE CUSTOMERS OUTSIDE OF CANADA AND LOWER 48 STATES
-        var shippingCost = 0;
+        var chargedShipping = 0;
 
         var chargeCurrency = 'CAD';
         if ((userCountry) && (userCountry === 'US')) {
@@ -130,12 +130,12 @@ chargeCtrl.prototype = {
 
                 var subtotal = amount;
 
-                shippingCost = helpers.calculateShipping(shipping.address.state, shipping.address.country, subtotal);
-                if (!shippingCost) {
-                    shippingCost = 0;
+                chargedShipping = helpers.calculateShipping(shipping.address.state, shipping.address.country, subtotal);
+                if (!chargedShipping) {
+                    chargedShipping = 0;
                 }
 
-                amount += shippingCost;
+                amount += chargedShipping;
 
                 /**
                  * Amount + Amount*Tax
@@ -157,6 +157,7 @@ chargeCtrl.prototype = {
                 var now = new Date();
 
                 // Create Shipment Obj
+                /*
                 var shipmentQuery = {
                     statement: 'INSERT INTO Shipment SET ?',
                     params: {
@@ -170,8 +171,25 @@ chargeCtrl.prototype = {
                         pkgWidth: 8.5,
                         pkgHeight: 2,
                         shippingRequired: true,
-                        shipmentCost: shippingCost,
+                        shipmentCost: chargedShipping,
                         orderMessage: orderMessage
+                    }
+                };
+                */
+                var shipmentQuery = {
+                    statement: 'INSERT INTO Shipment SET ?',
+                    params: {
+                        stripeCustomerId: customer.stripeId,
+                        status: 'pending_charge',
+                        isSubscriptionBox: false,
+                        creationDate: now,
+                        pkgWeight: shipmentWeight,
+                        pkgLength: 8.5,
+                        pkgWidth: 8.5,
+                        pkgHeight: 2,
+                        altShippingAddressId: altShippingAddressId,
+                        orderMessage: orderMessage,
+                        shippingRequired: true
                     }
                 };
 
@@ -214,11 +232,7 @@ chargeCtrl.prototype = {
                             else {
                                 log.info("Created new charge", charge, reqIP);
 
-                                var shipmentUpdateQuery = {
-                                    statement: 'UPDATE Shipment SET chargeId = ?, status = ? WHERE id = ?',
-                                    params: [charge.id, 'new', shipmentId]
-                                };
-
+                                /*
                                 var chargeInsertQuery = {
                                     statement: 'INSERT INTO Charge SET ?',
                                     params: {
@@ -237,15 +251,38 @@ chargeCtrl.prototype = {
                                         serializedChargeData: metadataString
                                     }
                                 };
+                                */
 
-                                // Update Shipment with chargeId
-                                dbUtils.query(dbConnPool, shipmentUpdateQuery, function(err, result) {});
+                                var chargeInsertQuery = {
+                                    statement: 'INSERT INTO Charge SET ?',
+                                    params: {
+                                        id: charge.id,
+                                        created: new Date(charge.created * 1000),
+                                        subtotal: subtotal,
+                                        discount: 0,     // TODO: ADD DISCOUNT AMOUNT FROM COUPON PROVIDED
+                                        chargedTax: taxAmount,
+                                        chargedShipping: chargedShipping,
+                                        total: charge.amount,
+                                        currency: charge.currency,
+                                        failureMessage: charge.failureMessage,
+                                        paid: charge.paid,
+                                        serializedChargeData: metadataString,
+                                        altShippingAddressId: altShippingAddressId,
+                                        invoiceId: charge.invoice,
+                                        customerId: charge.customer,
+                                        shipment_id: shipmentId
+                                    }
+                                };
 
                                 // Save charge information
-                                dbUtils.query(dbConnPool, chargeInsertQuery, function(err, result) {});
+                                dbUtils.query(dbConnPool, chargeInsertQuery, function(err, result) {
+                                    if (err) {
+                                        log.error("Could not insert charge", err, reqIP);
+                                    }
+                                });
 
                                 // Send receipt email
-                                emailUtils.sendReceipt(customer.email, shipmentId, receiptProducts, subtotal, 0, shippingCost, {amount: taxAmount, rate: taxRate, desc: taxDesc}, amount, function(err, res) {
+                                emailUtils.sendReceipt(customer.email, shipmentId, receiptProducts, subtotal, 0, chargedShipping, {amount: taxAmount, rate: taxRate, desc: taxDesc}, amount, function(err, res) {
                                     if (err) {
                                         log.error("Could not send receipt to customer", err, reqIP);
                                     }
@@ -262,7 +299,11 @@ chargeCtrl.prototype = {
                                             cart[k].id
                                         ]
                                     });
-                                    dbUtils.query(dbConnPool, updateQuantityQueries[k], function(err, result){});
+                                    dbUtils.query(dbConnPool, updateQuantityQueries[k], function(err, result){
+                                        if (err) {
+                                            log.error("Could not update Quantity", err, reqIP);
+                                        }
+                                    });
                                 }
 
                                 return callback(null, charge);
