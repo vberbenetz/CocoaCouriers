@@ -1,91 +1,125 @@
-<div class="row heading-title heading-dotted text-center margin-top-60">
-    <h1 ng-hide="$parent.customerSubscription" class="pricing-head">
-        Select the Package That Fits You
-    </h1>
-    <h1 ng-show="$parent.customerSubscription" class="pricing-head">
-        Current Subscription
-    </h1>
-</div>
+<div class="row margin-top-50">
 
-<div class="row">
+    <div class="container" ng-hide="formPlans && $parent.loadedCustomerSubscription">
+        <div class="cs-loader" style="height:30%;">
+            <div class="cs-loader-inner">
+                <label class="color-cocoa-brown">	●</label>
+                <label class="color-cocoa-brown">	●</label>
+                <label class="color-cocoa-brown">	●</label>
+                <label class="color-cocoa-brown">	●</label>
+                <label class="color-cocoa-brown">	●</label>
+                <label class="color-cocoa-brown">	●</label>
+            </div>
+        </div>
+        <div class="full-height"></div>
+    </div>
 
     <!-- Choose a plan -->
     <div class="container" ng-show="formPlans && $parent.loadedCustomerSubscription">
 
-        <div ng-show="$parent.customerSubscription">
-            <div class="col-md-4 col-sm-4 col-xs-8 col-sm-push-4 col-xs-push-2 margin-bottom-100">
-                <div class="price-clean">
-                    <h3 class="pricing-head" ng-show="$parent.customerSubscription.intervalCount>1">{{ $parent.customerSubscription.intervalCount }} Month Plan</h3>
-                    <h3 class="pricing-head" ng-show="$parent.customerSubscription.intervalCount===1">
-                        Monthly
-                        <span class="text-black" ng-show="indexOf($parent.customerSubscription.plan_id, 'starter')>-1">
-                            Starter Plan
-                        </span>
-                        <span class="text-black" ng-show="indexOf($parent.customerSubscription.plan_id, 'starter')<0">
-                            Plan
-                        </span>
-                    </h3>
-                    <h4>
-                        <sup>$</sup>{{ ($parent.customerSubscription.amount/$parent.customerSubscription.intervalCount/100).toFixed(2) }}<em> / Box</em>
-                    </h4>
-                    <h5 ng-if="$parent.customerSubscription.intervalCount===6"> ${{ $parent.customerSubscription.amount/100 }} SEMI-ANNUALLY </h5>
-                    <h5 ng-if="$parent.customerSubscription.intervalCount===3"> ${{ $parent.customerSubscription.amount/100 }} QUARTERLY </h5>
-                    <h5 ng-if="$parent.customerSubscription.intervalCount===1"> ${{ $parent.customerSubscription.amount/100 }} MONTHLY </h5>
-                    <p ng-show="indexOf($parent.customerSubscription.plan_id, 'starter')>-1" class="text-gray">3 Premium Artisan Bars</p>
-                    <p ng-show="indexOf($parent.customerSubscription.plan_id, 'starter')<0" class="text-gray">4 Premium Artisan Bars</p>
-                    <hr />
+        <div class="row margin-bottom-100">
+            <div ng-show="$parent.customerSubscription">
+                <div class="col-md-4 col-sm-4 col-xs-8 col-sm-push-4 col-xs-push-2 margin-bottom-100">
+                    <div class="price-clean">
+                        <h3 class="pricing-head" ng-show="$parent.customerSubscription.intervalCount>1">{{ $parent.customerSubscription.intervalCount }} Month Plan</h3>
+                        <h3 class="pricing-head" ng-show="$parent.customerSubscription.intervalCount===1">
+                            Monthly
+                            <span class="text-black" ng-show="indexOf($parent.customerSubscription.plan_id, 'starter')>-1">
+                                Starter Plan
+                            </span>
+                            <span class="text-black" ng-show="indexOf($parent.customerSubscription.plan_id, 'starter')<0">
+                                Plan
+                            </span>
+                        </h3>
+                        <h4>
+                            <sup>$</sup>{{ ($parent.customerSubscription.amount/$parent.customerSubscription.intervalCount/100).toFixed(2) }}<em> / Box</em>
+                        </h4>
+                        <h5 ng-if="$parent.customerSubscription.intervalCount===6"> ${{ $parent.customerSubscription.amount/100 }} SEMI-ANNUALLY </h5>
+                        <h5 ng-if="$parent.customerSubscription.intervalCount===3"> ${{ $parent.customerSubscription.amount/100 }} QUARTERLY </h5>
+                        <h5 ng-if="$parent.customerSubscription.intervalCount===1"> ${{ $parent.customerSubscription.amount/100 }} MONTHLY </h5>
+                        <p ng-show="indexOf($parent.customerSubscription.plan_id, 'starter')>-1" class="text-gray">3 Premium Artisan Bars</p>
+                        <p ng-show="indexOf($parent.customerSubscription.plan_id, 'starter')<0" class="text-gray">4 Premium Artisan Bars</p>
+                        <hr />
 
-                    <p class="margin-top-20 margin-bottom-20 text-gray">
-                        <small>* Automatically re-bills every
-                            <span ng-if="$parent.customerSubscription.intervalCount===1">Month</span>
-                            <span ng-if="$parent.customerSubscription.intervalCount>1">{{ $parent.customerSubscription.intervalCount }} Months</span>
-                            on the 15th
-                        </small>
-                    </p>
-                    <a href="/My-Account" class="btn btn-3d btn-success btn-block btn-lg">Update Subscription</a>
+                        <p class="margin-top-20 margin-bottom-20 text-gray">
+                            <small>* Automatically re-bills every
+                                <span ng-if="$parent.customerSubscription.intervalCount===1">Month</span>
+                                <span ng-if="$parent.customerSubscription.intervalCount>1">{{ $parent.customerSubscription.intervalCount }} Months</span>
+                                on the 15th
+                            </small>
+                        </p>
+                        <a href="/My-Account" class="btn btn-3d btn-success btn-block btn-lg">Update Subscription</a>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-hide="$parent.customerSubscription">
+                <div class="col-sm-4 col-xs-12 margin-bottom-40" ng-repeat="plan in formPlans">
+                    <div class="price-clean">
+                        <h3 class="pricing-head size-40">
+                            {{ plan.name }}
+                        </h3>
+
+                        <div class="row margin-left-20 margin-right-20">
+                            <img class="img-responsive" src="/assets/images/subscription_box.png" />
+                        </div>
+
+                        <h4 class="margin-top-20 size-50">
+                            <sup>$</sup>{{ (plan.amount/plan.intervalCount/100).toFixed(2) }}<em> / Box</em>
+                        </h4>
+                        <p ng-show="indexOf(plan.id, 'starter')>-1" class="text-gray">3 Premium Artisan Bars</p>
+                        <p ng-show="indexOf(plan.id, 'starter')<0" class="text-gray">4 Premium Artisan Bars</p>
+                        <hr />
+
+                        <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan(plan)" class="btn btn-3d btn-success btn-success btn-block btn-lg">
+                            BUY
+                        </a>
+
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div ng-hide="$parent.customerSubscription">
-            <div class="col-md-3 col-sm-6 margin-bottom-40" ng-repeat="plan in formPlans">
-                <div class="price-clean">
-                    <h3 class="pricing-head">
-                        {{ plan.name }}
-                    </h3>
-                    <h4>
-                        <sup>$</sup>{{ (plan.amount/plan.intervalCount/100).toFixed(2) }}<em> / Box</em>
-                    </h4>
-                    <h5 ng-if="plan.intervalCount===6"> ${{ plan.amount/100 }} HALF-YEAR </h5>
-                    <h5 ng-if="plan.intervalCount===3"> ${{ plan.amount/100 }} QUARTERLY </h5>
-                    <h5 ng-if="plan.intervalCount===1"> ${{ plan.amount/100 }} MONTHLY </h5>
-                    <p ng-show="indexOf(plan.id, 'starter')>-1" class="text-gray">3 Premium Artisan Bars</p>
-                    <p ng-show="indexOf(plan.id, 'starter')<0" class="text-gray">4 Premium Artisan Bars</p>
-                    <hr />
-
-                    <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan(plan)" class="btn btn-3d btn-success btn-block btn-lg">CHOOSE PLAN</a>
-
-                    <p class="margin-top-20 text-gray">
-                        <small>* Automatically re-bills every
-                            <span ng-if="plan.intervalCount===1">Month</span>
-                            <span ng-if="plan.intervalCount>1">{{ plan.intervalCount }} Months</span>
-                        </small>
-                    </p>
-                </div>
+        <div class="row margin-right-10">
+            <div class="col-xs-8">
+                <img class="img-responsive" src="http://placehold.it/900x400.png" />
             </div>
-
-            <div class="row">
-                <div class="col-md-6 col-xs-10 col-md-offset-3 col-xs-offset-1 margin-bottom-40">
-                    <img class="img-responsive" src="/assets/images/subscription_box.png" />
-                </div>
-                <div class="col-xs-10 col-xs-offset-1 margin-bottom-40">
-                    <p>
-                        No matter what the occasion, Cocoa Couriers gift boxes are the perfect treat for the chocolate lover in your life. Our standard gift boxes are available in 3 and 4 bar sizes. The specific bar combination will change throughout the year as our stock rotates so we can make sure you always get the freshest products. Whether your recipient is a craft chocolate lover or has never tried it this gift serves as the perfect introduction to fine, craft artisan chocolate. Looking to buy corporate gifts? Cocoa Courier gift boxes serve as the ultimate thank you for your clients, especially ones with a taste for the finer things in life. Remember this is the best chocolate in the world, and where else can you get the world’s best anything so easily?
-                    </p>
-                    <small class="margin-top-40 text-center"><strong>* Automatically Re-billed on the 15th of each period. Boxes are packaged and shipped on or shortly after the 15th each month.</strong></small>
-                </div>
+            <div class="col-xs-4">
+                <h1 class="text-center">
+                    BEANS
+                </h1>
+                <h4>
+                    The beans used in our Artisan Bars are organic and fair trade cacao beans from all over the world.
+                </h4>
             </div>
+        </div>
 
+        <div class="row margin-top-100 margin-left-10 margin-right-10">
+            <div class="col-xs-6">
+                <h1 class="text-center">
+                    QUALITY
+                </h1>
+                <h4>
+                    Copy about high quality bars are the only ones we choose. Our Artisan Bars created with love and are perfect for sharing.
+                </h4>
+            </div>
+            <div class="col-xs-4 col-xs-offset-1 col-lg-3 col-lg-offset-2">
+                <img class="img-responsive img-circle" src="http://placehold.it/400x400.png" />
+            </div>
+        </div>
+
+        <div class="row margin-top-100 margin-bottom-100 margin-left-10 margin-right-10">
+            <div class="col-xs-4 col-xs-offset-1 col-lg-3 col-lg-offset-1">
+                <img class="img-responsive img-circle" src="http://placehold.it/400x400.png" />
+            </div>
+            <div class="col-xs-6 col-lg-5 col-lg-offset-2">
+                <h1 class="text-center">
+                    THE RIGHT CHOICE
+                </h1>
+                <h4>
+                    A better way to shop and indulge. More copy about fair trade At vero eso aid ajjgle lslfo owqjf wqifn isdka dkdngkl skdmfpwef.
+                </h4>
+            </div>
         </div>
 
     </div>

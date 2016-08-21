@@ -4,6 +4,10 @@
 }
 
 
+.border-none {
+    border: none;
+}
+
 
 .img-wrapper {
     width: 100%;
@@ -121,6 +125,10 @@
 }
 
 
+
+.full-height {
+    height: 2000px;
+}
 
 
 
