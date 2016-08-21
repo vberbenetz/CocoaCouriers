@@ -1,25 +1,25 @@
-@font-face {
-    font-family: journal;
-    src: url(../fonts/journal.ttf);
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak .ng-hide {
+    display: none !important;
 }
 
+/* General Colour Scheme */
 
-.border-none {
-    border: none;
+.color-teal {
+    color: #88aa9a;
 }
 
-
-.img-wrapper {
-    width: 100%;
-    text-align: center;
-    overflow: hidden;
-}
-.img-wrapper img {
-    position: relative;
-    left: 300%;
-    margin-left: -600%;
+.color-dark-brown {
+    color: #49241e;
 }
 
+.color-grey {
+    color: #939393;
+}
+
+/* End Colour Scheme */
+
+
+/* Fonts */
 
 .font-journal {
     font-family: journal;
@@ -31,6 +31,10 @@
 
 .font-maven-pro {
     font-family: 'Maven Pro', sans-serif;
+}
+
+.font-lobster {
+    font-family: 'Lobster', sans-serif;
 }
 
 .font-nixie {
@@ -65,15 +69,39 @@
     font-family: 'Oswald', sans-serif;
 }
 
+/* End Fonts */
 
-[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak .ng-hide {
-    display: none !important;
+@font-face {
+    font-family: journal;
+    src: url(../fonts/journal.ttf);
 }
 
 
 
+
+.border-none {
+    border: none;
+}
+
+
+.img-wrapper {
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+}
+.img-wrapper img {
+    position: relative;
+    left: 300%;
+    margin-left: -600%;
+}
+
+
 .margin-top-5 {
     margin-top: 5px !important;
+}
+
+.margin-top-15 {
+    margin-top: 15px !important;
 }
 
 .margin-bottom-5 {
@@ -125,6 +153,14 @@
 }
 
 
+.rotate-neg-30 {
+    -webkit-transform: rotate(-30deg);
+    -moz-transform: rotate(-30deg);
+    -ms-transform: rotate(-30deg);
+    -o-transform: rotate(-30deg);
+    transform: rotate(-30deg);
+}
+
 
 .full-height {
     height: 2000px;
@@ -170,15 +206,26 @@
 
 
 .btn-flat-green {
- background-color: #27ae60; color: #FFF !important;
+    background-color: #27ae60; color: #FFF !important;
  }
+
+.btn-dark-brown {
+    background-color: #49241e; color: #FFF !important;
+    border: none;
+}
+.btn-dark-brown:hover,
+.btn-dark-brown:focus,
+.btn-dark-brown:active {
+    color:#fff !important;
+    background-color:#434343;
+    border: none;
+}
 
 .btn-mega {
      width: 300px;
      height:60px;
      font-size: 32px;
      line-height: 32px;
- 
  }
 
 .bg-royal-blue {

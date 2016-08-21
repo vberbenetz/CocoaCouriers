@@ -55,26 +55,34 @@
 
             <div ng-hide="$parent.customerSubscription">
                 <div class="col-sm-4 col-xs-12 margin-bottom-40" ng-repeat="plan in formPlans">
-                    <div class="price-clean">
-                        <h3 class="pricing-head size-40">
-                            {{ plan.name }}
-                        </h3>
+                    <div class="col-sm-10 col-sm-offset-1">
+                        <div class="price-clean border-none">
+                            <div class="pricing-head color-dark-brown">
+                                <div class="row">
+                                    <div class="font-lobster rotate-neg-30 size-25">
+                                            The
+                                    </div>
+                                    <div class="font-maven-pro size-30">
+                                        {{ plan.name.toUpperCase() }}
+                                    </div>
+                                </div>
+                            </div>
 
-                        <div class="row margin-left-20 margin-right-20">
-                            <img class="img-responsive" src="/assets/images/subscription_box.png" />
+                            <div class="row margin-left-20 margin-right-20 margin-top-15">
+                                <img class="img-responsive" src="/assets/images/subscription_page/CC_Subscription_TheOriginal.png" />
+                            </div>
+
+                            <h4 class="margin-top-20 size-30 font-maven-pro">
+                                <sup>$</sup>{{ (plan.amount/plan.intervalCount/100).toFixed(2) }}<em> / Box</em>
+                            </h4>
+                            <p ng-show="indexOf(plan.id, 'starter')>-1" class="text-gray">3 Premium Artisan Bars</p>
+                            <p ng-show="indexOf(plan.id, 'starter')<0" class="text-gray">4 Premium Artisan Bars</p>
+
+                            <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan(plan)" class="btn btn-3d btn-success btn-success btn-dark-brown margin-top-10">
+                                <span class="font-maven-pro size-20">&nbsp;&nbsp;BUY&nbsp;&nbsp;</span>
+                            </a>
+
                         </div>
-
-                        <h4 class="margin-top-20 size-50">
-                            <sup>$</sup>{{ (plan.amount/plan.intervalCount/100).toFixed(2) }}<em> / Box</em>
-                        </h4>
-                        <p ng-show="indexOf(plan.id, 'starter')>-1" class="text-gray">3 Premium Artisan Bars</p>
-                        <p ng-show="indexOf(plan.id, 'starter')<0" class="text-gray">4 Premium Artisan Bars</p>
-                        <hr />
-
-                        <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan(plan)" class="btn btn-3d btn-success btn-success btn-block btn-lg">
-                            BUY
-                        </a>
-
                     </div>
                 </div>
             </div>
