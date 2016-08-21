@@ -1,4 +1,14 @@
-<div class="row margin-top-50">
+<div class="row">
+
+    <div class="row">
+        <div class="post-content">
+            <p class="font-lobster font-style-italic text-white size-50">Quality Ingredients</p>
+            <div class="col-lg-offset-6 col-lg-6">
+                <p class="font-maven-pro text-white size-20">Each artisan chocolate bar crafted by our trusted partners is made with fair trade cocoa beans and high quality organic ingredients from around the world.</p>
+            </div>
+        </div>
+        <img class="img-responsive" style="margin-top:-347px;" src="/assets/images/subscription_page/CC_Subscription_Header.jpg">
+    </div>
 
     <div class="container" ng-hide="formPlans && $parent.loadedCustomerSubscription">
         <div class="cs-loader" style="height:30%;">
@@ -54,26 +64,24 @@
             </div>
 
             <div ng-hide="$parent.customerSubscription">
-                <div class="col-sm-4 col-xs-12 margin-bottom-40" ng-repeat="plan in formPlans">
-                    <div class="col-sm-10 col-sm-offset-1">
+                <div class="col-sm-offset-1 col-sm-10">
+                    <div class="col-sm-4 col-xs-12 margin-bottom-40" ng-repeat="plan in formPlans">
                         <div class="price-clean border-none">
-                            <div class="pricing-head color-dark-brown">
-                                <div class="row">
-                                    <div class="font-lobster rotate-neg-30 size-25">
-                                            The
-                                    </div>
-                                    <div class="font-maven-pro size-30">
-                                        {{ plan.name.toUpperCase() }}
-                                    </div>
-                                </div>
+                            <div class="pricing-head">
+                                <p class="font-maven-pro size-30 color-dark-brown">
+                                    <span class="font-lobster size-25 border-top-1 border-bottom-1 border-dark-brown">
+                                        The
+                                    </span>
+                                    &nbsp;{{ plan.name.toUpperCase() }}
+                                </p>
                             </div>
 
                             <div class="row margin-left-20 margin-right-20 margin-top-15">
                                 <img class="img-responsive" src="/assets/images/subscription_page/CC_Subscription_TheOriginal.png" />
                             </div>
 
-                            <h4 class="margin-top-20 size-30 font-maven-pro">
-                                <sup>$</sup>{{ (plan.amount/plan.intervalCount/100).toFixed(2) }}<em> / Box</em>
+                            <h4 class="margin-top-20 size-30 font-maven-pro color-teal">
+                                <sup>$</sup>{{ (plan.amount/plan.intervalCount/100).toFixed(2) }}/box
                             </h4>
                             <p ng-show="indexOf(plan.id, 'starter')>-1" class="text-gray">3 Premium Artisan Bars</p>
                             <p ng-show="indexOf(plan.id, 'starter')<0" class="text-gray">4 Premium Artisan Bars</p>
@@ -81,7 +89,6 @@
                             <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan(plan)" class="btn btn-3d btn-success btn-success btn-dark-brown margin-top-10">
                                 <span class="font-maven-pro size-20">&nbsp;&nbsp;BUY&nbsp;&nbsp;</span>
                             </a>
-
                         </div>
                     </div>
                 </div>

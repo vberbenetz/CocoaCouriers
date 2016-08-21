@@ -2,18 +2,23 @@
     display: none !important;
 }
 
+/* Set Default Font */
+body {
+    font-family: 'Maven Pro', sans-serif !important;
+}
+
 /* General Colour Scheme */
 
 .color-teal {
-    color: #88aa9a;
+    color: #88aa9a !important;
 }
 
 .color-dark-brown {
-    color: #49241e;
+    color: #49241e !important;
 }
 
 .color-grey {
-    color: #939393;
+    color: #939393 !important;
 }
 
 /* End Colour Scheme */
@@ -36,7 +41,7 @@
 
 
 .font-lobster {
-    font-family: 'Lobster', sans-serif;
+    font-family: 'Lobster Two', cursive;
 }
 
 .font-nixie {
@@ -85,6 +90,10 @@
     border: none;
 }
 
+.border-dark-brown {
+    border-color: #49241e;
+}
+
 
 .img-wrapper {
     width: 100%;
@@ -95,6 +104,16 @@
     position: relative;
     left: 300%;
     margin-left: -600%;
+}
+
+.post-content {
+    background: none repeat scroll 0 0;
+    text-shadow: 0 0 5px rgba(0,0,0,0.9);
+    margin: 0 auto;
+    text-align:right;
+    position: relative;
+    margin-top: 100px;
+    width:60%;
 }
 
 
@@ -152,15 +171,6 @@
 
 .margin-right-5 {
     margin-right: 5px !important;
-}
-
-
-.rotate-neg-30 {
-    -webkit-transform: rotate(-30deg);
-    -moz-transform: rotate(-30deg);
-    -ms-transform: rotate(-30deg);
-    -o-transform: rotate(-30deg);
-    transform: rotate(-30deg);
 }
 
 
