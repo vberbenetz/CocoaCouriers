@@ -65,7 +65,7 @@ var emailUtils = require('./app/utils/email_utils_legacy')(mailTransporter);
 var sendgrid = require('sendgrid')(configPriv.sendGridKey);
 var MailService = require('./app/utils/mail_service');
 var mailService = new MailService(sendgrid);
-
+/*
 // ------------------------------------
 // Passport auth
 // ------------------------------------
@@ -103,10 +103,10 @@ app.use( function (req, res, next) {
     }
     next();
 });
-
+*/
 // Web routes
 require('./app/routes/routes')(app, passport, pool, mailService);
-
+/*
 // Error Handler
 app.use(function (err, req, res, next) {
     if (err.code === 'EBADCSRFTOKEN') {
@@ -185,3 +185,6 @@ startupCtrl.testDbConn(pool, function(err, result) {
 log.info('================================');
 log.info('====     SERVER STARTED     ====');
 log.info('================================');
+*/
+
+app.listen(8080);
