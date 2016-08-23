@@ -9,15 +9,15 @@ body {
 
 /* General Colour Scheme */
 
-.color-teal {
+.cc-color-teal {
     color: #88aa9a !important;
 }
 
-.color-dark-brown {
+.cc-color-dark-brown {
     color: #49241e !important;
 }
 
-.color-grey {
+.cc-color-grey {
     color: #939393 !important;
 }
 
@@ -215,6 +215,10 @@ body {
  }
 
 
+.subscription-banner-height {
+    height: 200px;
+}
+
 
 .btn-flat-green {
     background-color: #27ae60; color: #FFF !important;
@@ -248,6 +252,10 @@ body {
  }
 .bg-cocoa {
     background-color: #34495e;
+}
+
+.cc-bg-teal {
+    background-color: #88aa9a;
 }
 
 .color-emerald-green {
