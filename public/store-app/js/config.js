@@ -19,16 +19,6 @@ function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProv
                 $window._fbq.push(['track', 'Search', {}]);
             }
         })
-        .state('subscribe', {
-            templateUrl: '../store-app/views/subscription.html',
-            controller: subscriptionCtrl,
-            url: "/subscribe",
-            onEnter: function(){
-                $window._fbq.push(['track', 'PixelInitialized', {}]);
-                $window._fbq.push(['track', 'PageView', {}]);
-                $window._fbq.push(['track', 'Search', {}]);
-            }
-        })
         .state('product', {
             templateUrl: '../store-app/views/product.html',
             controller: productCtrl,
@@ -69,6 +59,43 @@ function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProv
             url: '/order-filled',
             params: {
                 recentSub: null
+            }
+        })
+        .state('subscribe', {
+            templateUrl: '../store-app/views/subscription/subscription.html',
+            controller: subscriptionCtrl,
+            url: "/subscribe",
+            onEnter: function(){
+                $window._fbq.push(['track', 'PixelInitialized', {}]);
+                $window._fbq.push(['track', 'PageView', {}]);
+                $window._fbq.push(['track', 'Search', {}]);
+            }
+        })
+        .state('original', {
+            templateUrl: '../store-app/views/subscription/the_original.html',
+            url: "/subscribe/the-original",
+            onEnter: function(){
+                $window._fbq.push(['track', 'PixelInitialized', {}]);
+                $window._fbq.push(['track', 'PageView', {}]);
+                $window._fbq.push(['track', 'Search', {}]);
+            }
+        })
+        .state('deluxe', {
+            templateUrl: '../store-app/views/subscription/the_deluxe.html',
+            url: "/subscribe/the-deluxe",
+            onEnter: function(){
+                $window._fbq.push(['track', 'PixelInitialized', {}]);
+                $window._fbq.push(['track', 'PageView', {}]);
+                $window._fbq.push(['track', 'Search', {}]);
+            }
+        })
+        .state('chocoholic', {
+            templateUrl: '../store-app/views/subscription/the_chocoholic.html',
+            url: "/subscribe/the-chocoholic",
+            onEnter: function(){
+                $window._fbq.push(['track', 'PixelInitialized', {}]);
+                $window._fbq.push(['track', 'PageView', {}]);
+                $window._fbq.push(['track', 'Search', {}]);
             }
         });
 

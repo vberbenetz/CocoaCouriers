@@ -93,6 +93,10 @@ body {
     border-color: #49241e;
 }
 
+.border-cc-grey {
+    border-color: #939393 !important;
+}
+
 
 .img-wrapper {
     width: 100%;
