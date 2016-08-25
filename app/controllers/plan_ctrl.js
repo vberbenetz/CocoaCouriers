@@ -20,7 +20,8 @@ planCtrl.prototype = {
         var query = {
             statement: 'SELECT * from Plan WHERE ?',
             params: {
-                id: planId
+                id: planId,
+                visible: true
             }
         };
 
@@ -37,8 +38,10 @@ planCtrl.prototype = {
     list: function (dbConnPool, callback) {
 
         var query = {
-            statement: 'SELECT * from Plan',
-            params: []
+            statement: 'SELECT * from Plan WHERE ?',
+            params: {
+                visible: true
+            }
         };
 
         dbUtils.query(dbConnPool, query, function(err, rows) {

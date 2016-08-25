@@ -72,8 +72,9 @@ function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProv
             }
         })
         .state('original', {
-            templateUrl: '../store-app/views/subscription/the_original.html',
+            templateUrl: '../store-app/views/subscription/original.html',
             url: "/subscribe/the-original",
+            controller: subscriptionCtrl,
             onEnter: function(){
                 $window._fbq.push(['track', 'PixelInitialized', {}]);
                 $window._fbq.push(['track', 'PageView', {}]);
@@ -81,8 +82,9 @@ function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProv
             }
         })
         .state('deluxe', {
-            templateUrl: '../store-app/views/subscription/the_deluxe.html',
+            templateUrl: '../store-app/views/subscription/deluxe.html',
             url: "/subscribe/the-deluxe",
+            controller: subscriptionCtrl,
             onEnter: function(){
                 $window._fbq.push(['track', 'PixelInitialized', {}]);
                 $window._fbq.push(['track', 'PageView', {}]);
@@ -90,8 +92,9 @@ function config($stateProvider, $locationProvider, $httpProvider, $urlRouterProv
             }
         })
         .state('chocoholic', {
-            templateUrl: '../store-app/views/subscription/the_chocoholic.html',
+            templateUrl: '../store-app/views/subscription/chocoholic.html',
             url: "/subscribe/the-chocoholic",
+            controller: subscriptionCtrl,
             onEnter: function(){
                 $window._fbq.push(['track', 'PixelInitialized', {}]);
                 $window._fbq.push(['track', 'PageView', {}]);

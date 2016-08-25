@@ -253,6 +253,22 @@ function subscriptionCtrl ($scope, $window, $cookies, $state, appService) {
             return 0;
         });
         $scope.formPlans = filteredPlans;
+
+        var stateName = $state.current.name;
+
+        // Not the base subscribe page. Filter out the plan that pertains to this subscription page.
+        if (stateName !== 'subscribe') {
+            for (var plan of filteredPlans ) {
+                if (plan.id.startsWith(stateName)) {
+                    $scope.planForThisPage = plan;
+                    break;
+                }
+            }
+        }
+        else if (typeof $scope.planForThisPage !== 'undefined') {
+            delete $scope.planForThisPage;  // Remove the scope var if previously set to correctly subscribe to a plan
+        }
+
     });
 
     $scope.selectPlan = function(plan) {
@@ -271,6 +287,11 @@ function subscriptionCtrl ($scope, $window, $cookies, $state, appService) {
         $window._fbq.push(['track', 'AddToCart', {content_name: plan.name, value: plan.amount, currency: plan.currency}]);
 
         $state.go('checkout');
+    };
+
+    $scope.goToPlan = function(planId) {
+        var planStateName = planId.split('_')[0];
+        $state.go(planStateName);
     };
 
     // Expose indexOf function to view
