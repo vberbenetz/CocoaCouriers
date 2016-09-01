@@ -91,6 +91,12 @@ subscriptionCtrl.prototype = {
                 payload.trial_end = helpers.getNextBillingDate(1);
             }
 
+            // Check if currently under a vacation period
+            // Do not bill until after vacation period has ended.
+            if (helpers.isVacationPeriod()) {
+                payload.trial_end = helpers.getNextBillingDateAfterVacation;
+            }
+
             // Create subscription
             stripe.customers.createSubscription(customer.stripeId, payload, function(subErr, subscription) {
                 if (subErr) {

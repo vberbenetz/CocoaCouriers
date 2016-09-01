@@ -711,10 +711,13 @@ function cvcHelpCtrl($scope, $uibModalInstance) {
 
 function checkoutCtrl ($scope, $rootScope, $http, $window, $cookies, $state, $uibModal, stripe, appService) {
 
-    // Redirect during vacation if subscription
-    if ($scope.$parent.planToSub) {
-        $state.go('summer-vacation');
-    }
+    // Vacation period check
+    appService.isVacationPeriod().get(function(data) {
+        $scope.vacationPeriod = data.isVacation;
+    }, function(err) {
+        $scope.vacationPeriod = false;
+    });
+
 
     $scope.subtotal = 0;
     $scope.tax = {

@@ -27,6 +27,8 @@ function appService($resource) {
             }
         ),
 
+        isVacationPeriod: $resource('/api/isVacationPeriod'),
+
         shippingCost: $resource('/api/shipping-cost',
             {},
             {

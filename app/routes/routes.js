@@ -386,6 +386,11 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
         res.send(tax);
     });
 
+    app.get('/api/isVacationPeriod', function (req, res, next) {
+        var isVacationPeriod = helpers.isVacationPeriod();
+        res.send({isVacation: isVacationPeriod});
+    });
+
 
     // ==================== STRIPE ROUTES ======================= //
 

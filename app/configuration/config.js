@@ -31,6 +31,29 @@ config.coolDownPeriod = {
     end: 15
 };
 
+/**
+ * Vacation Period is when all persons who subscribe will be registered but not charged until the end.
+ * Behind the scenes, the user is put on a trial until the end period.
+ *
+ * Month and Day both start at 1.
+ *
+ * In the case of less than 1, it will be set to the 1st month or day respectively.
+ * In the case of greater than 12 for month or greater than number of days in current month, it will be set to max respectively.
+ * In the case of end date being less than start date, this will indicate that the vacation period rolls over a calendar year.
+ *
+ * @type {{start: {month: number, day: number}, end: {month: number, day: number}}}
+ */
+config.vacationPeriod = {
+    start: {
+        month: 6,
+        day: 1
+    },
+    end: {
+        month: 10,
+        day: 15
+    }
+};
+
 // Cost of item at which shipping becomes free (amount in cents)
 config.freeShippingCutoff = 5000;
 
