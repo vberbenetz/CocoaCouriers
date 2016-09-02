@@ -712,7 +712,7 @@ function cvcHelpCtrl($scope, $uibModalInstance) {
 function checkoutCtrl ($scope, $rootScope, $http, $window, $cookies, $state, $uibModal, stripe, appService) {
 
     // Vacation period check
-    appService.isVacationPeriod().get(function(data) {
+    appService.isVacationPeriod.get(function(data) {
         $scope.vacationPeriod = data.isVacation;
     }, function(err) {
         $scope.vacationPeriod = false;

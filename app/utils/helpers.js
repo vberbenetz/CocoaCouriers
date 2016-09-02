@@ -26,10 +26,10 @@ helpers.prototype = {
     },
 
     getNextBillingDateAfterVacation: function() {
-        var vacationPeriod = this.generateVacationDateStamps();
+        var vacationDates = this.generateVacationDateStamps();
 
         // Increment time by 1 second to 12:00:01 to take payment right after midnight
-        return Math.floor( (vacationPeriod.endTs / 1000) + 1 );
+        return Math.floor( (vacationDates.endTs / 1000) + 1 );
     },
 
     isCoolDownPeriod: function () {
@@ -49,8 +49,6 @@ helpers.prototype = {
         now = now.getTime();
 
         var vacationDates = this.generateVacationDateStamps();
-
-        console.log(vacationDates);
 
         return !! ( (now >= vacationDates.startTs) && (now <= vacationDates.endTs) );
     },

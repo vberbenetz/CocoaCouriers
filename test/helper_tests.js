@@ -5,7 +5,7 @@ var expect = require('chai').expect;
 
 describe('Cooldown period test', function(){
     it('should return false if within period, or true if not', function() {
-        var iscooldownmanual = false;
+        var iscooldownmanual = true;
         expect(helpers.isCoolDownPeriod()).to.equal(iscooldownmanual);
     })
 });

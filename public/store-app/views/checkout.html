@@ -35,11 +35,27 @@
 
             <div ng-show="($parent.cart.length > 0) || $parent.planToSub">
 
-                <div class="alert alert-danger">
-                    <strong>
-                        Please be aware that we will not ship your order until late September, due to the hot summer months.<br/>
-                        For more information please see our <a ui-sref="summer-vacation">summer break policy</a>.
-                    </strong>
+                <div class="alert alert-danger" ng-show="vacationPeriod">
+                    <p class="size-15" ng-hide="$parent.planToSub">
+                        <strong>
+                            Please be aware that we will not ship your order until mid October due to the hot summer months.
+                        </strong>
+                    </p>
+                    <p class="size-15 margin-top-10" ng-show="planToSub">
+                        <strong>
+                            Due to the hot summer months, we will ship your first box after October 15th.
+                        </strong>
+                    </p>
+                    <p class="size-15 margin-top-10" ng-show="planToSub">
+                        <strong>
+                            You will be signed up for your subscription upon checkout, but will not be charged until then.
+                        </strong>
+                    </p>
+                    <p class="size-15 margin-top-10">
+                        <strong>
+                            For more information please see our <a ui-sref="summer-vacation">summer break policy</a>.
+                        </strong>
+                    </p>
                 </div>
 
                 <!-- CVC HELP MODAL -->
