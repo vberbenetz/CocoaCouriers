@@ -49,8 +49,9 @@
             </p>
 
             <div class="text-center">
-                <a ng-click="selectPlan(planForThisPage)" href="" class="btn btn-3d btn-default btn-bordered btn-lg margin-top-30 margin-bottom-80">
-                    <span class="size-25">&nbsp;SUBSCRIBE NOW&nbsp;</span>
+                <a ng-click="selectPlan(planForThisPage)" href="" class="btn btn-3d cc-bg-teal text-white btn-bordered btn-lg margin-top-30 margin-bottom-80">
+                    <span ng-show="isMonth(8)||isMonth(9)" class="size-25">&nbsp;Get Your October Box&nbsp;</span>
+                    <span ng-hide="isMonth(8)||isMonth(9)" class="size-25">&nbsp;SUBSCRIBE NOW&nbsp;</span>
                 </a>
             </div>
 

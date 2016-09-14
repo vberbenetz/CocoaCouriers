@@ -303,6 +303,12 @@ function subscriptionCtrl ($scope, $window, $cookies, $state, appService) {
             return str.indexOf(subStr);
         }
     };
+
+    // Is month
+    $scope.isMonth = function(monthIdx) {
+        var now = new Date();
+        return (now.getMonth() === monthIdx);
+    }
 }
 
 function storeCtrl ($scope, $window, $state, $timeout, appService) {
