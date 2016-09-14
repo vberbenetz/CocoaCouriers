@@ -221,6 +221,10 @@ body {
 
 .subscription-banner-height {
     height: 200px;
+
+}
+.subscription-banner-padding-md {
+    height: 40px;
 }
 
 

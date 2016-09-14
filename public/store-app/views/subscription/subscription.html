@@ -55,12 +55,18 @@
 
             <div ng-hide="$parent.customerSubscription">
                 <div class="col-sm-offset-1 col-sm-10">
-                    <div class="col-sm-4 col-xs-12 margin-bottom-40" ng-repeat="plan in formPlans">
+                    <div class="col-md-4 col-sm-12 margin-bottom-40" ng-repeat="plan in formPlans">
                         <div class="price-clean border-none">
                             <a ng-click="goToPlan(plan.id)">
                                 <div class="pricing-head">
-                                    <p class="font-maven-pro size-30 color-dark-brown">
+                                    <p class="font-maven-pro size-30 color-dark-brown hidden-md">
                                         <span class="font-lobster size-25 border-top-1 border-bottom-1 border-dark-brown">
+                                            The
+                                        </span>
+                                        &nbsp;{{ plan.name.toUpperCase() }}
+                                    </p>
+                                    <p class="font-maven-pro size-25 color-dark-brown visible-md">
+                                        <span class="font-lobster size-20 border-top-1 border-bottom-1 border-dark-brown">
                                             The
                                         </span>
                                         &nbsp;{{ plan.name.toUpperCase() }}
@@ -68,7 +74,12 @@
                                 </div>
                             </a>
 
-                            <div class="row margin-left-20 margin-right-20 margin-top-15">
+                            <div class="row visible-md visible-lg margin-left-20 margin-right-20 margin-top-15">
+                                <a ng-click="goToPlan(plan.id)">
+                                    <img class="img-responsive" src="/assets/images/subscription_page/CC_Subscription_TheOriginal.png" />
+                                </a>
+                            </div>
+                            <div class="row visible-xs visible-sm margin-left-100 margin-right-100 margin-top-15">
                                 <a ng-click="goToPlan(plan.id)">
                                     <img class="img-responsive" src="/assets/images/subscription_page/CC_Subscription_TheOriginal.png" />
                                 </a>
@@ -119,8 +130,8 @@
     </div>
 
     <div class="row cc-bg-teal subscription-banner-height">
-        <div class="margin-left-20 margin-right-20">
-            <p class="text-center cc-color-dark-brown size-30 margin-top-50">
+        <div class="col-xs-12">
+            <p class="text-center margin-left-20 margin-right-20 cc-color-dark-brown size-30 margin-top-50">
                 Discover the world's finest artisan chocolate delivered monthly right to your door.
             </p>
             <div class="text-center">
@@ -130,5 +141,6 @@
             </div>
         </div>
     </div>
+    <div class="row cc-bg-teal subscription-banner-padding-md hidden-lg"></div>
 
 </div>
