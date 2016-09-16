@@ -140,6 +140,10 @@ body {
     margin-bottom: 100px !important;
 }
 
+.margin-bottom-neg-5 {
+    margin-bottom: -5px !important;
+}
+
 .margin-bottom-neg-10 {
     margin-bottom: -10px !important;
 }
@@ -264,6 +268,9 @@ body {
  }
 .bg-cocoa {
     background-color: #34495e;
+}
+.bg-chocolate-brown {
+    background-color: #49241e;
 }
 
 .cc-bg-teal {
