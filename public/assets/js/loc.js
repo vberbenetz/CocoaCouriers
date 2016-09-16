@@ -26,12 +26,12 @@ if (!uCrId) {
 
         if (uCrId === 'US') {
             $('#top-bar-country-img').attr('src', '/assets/images/flags/us.png');
-            $('#top-bar-country-text').text('USA');
+            $('#top-bar-country-text').text('USD');
             popFeatured(uCrId);
         }
         else {
             $('#top-bar-country-img').attr('src', '/assets/images/flags/ca.png');
-            $('#top-bar-country-text').text('CANADA');
+            $('#top-bar-country-text').text('CAD');
             popFeatured(uCrId);
         }
     });
@@ -39,11 +39,11 @@ if (!uCrId) {
 
 else if (uCrId && (uCrId === 'US')) {
     $('#top-bar-country-img').attr('src', '/assets/images/flags/us.png');
-    $('#top-bar-country-text').text('USA');
+    $('#top-bar-country-text').text('USD');
     popFeatured(uCrId);
 }
 else if (uCrId) {
     $('#top-bar-country-img').attr('src', '/assets/images/flags/ca.png');
-    $('#top-bar-country-text').text('CANADA');
+    $('#top-bar-country-text').text('CAD');
     popFeatured(uCrId);
 }
