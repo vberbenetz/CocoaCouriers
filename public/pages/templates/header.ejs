@@ -4,23 +4,13 @@
 
         <ul class="top-links list-inline pull-right">
             <li>
-                <a href="/partners" alt="Our Chocolate making partners">
-                    OUR PARTNERS
-                </a>
-            </li>
-            <li>
-                <a href="/contact" alt="Contact us">
-                    CONTACT
-                </a>
-            </li>
-            <li>
-                <a class="no-text-underline" href="/My-Account"><i class="fa fa-user hidden-xs"></i> MY ACCOUNT</a>
-            </li>
-            <li>
                 <div class="dropdown-toggle no-text-underline margin-left-10 margin-right-10">
                     <img class="flag-lang" id="top-bar-country-img" src="" width="16" height="11" alt="lang" />
                     <span id="top-bar-country-text"></span>
                 </div>
+            </li>
+            <li>
+                <a class="no-text-underline" href="/My-Account"><i class="fa fa-user hidden-xs"></i> MY ACCOUNT</a>
             </li>
         </ul>
 
@@ -60,25 +50,18 @@
                 <nav class="nav-main">
 
                     <ul id="topMain" class="nav nav-pills nav-main size-20">
-                        <!--
-                        <li class="">
-                            <a class="" href="/">
-                                HOME
-                            </a>
-                        </li>
-                        -->
-                        <li>
-                            <a href="/store" class="cc-color-dark-brown" alt="Shop the store for chocolate bar favorites">
-                                <strong>SHOP</strong>
-                            </a>
-                        </li>
                         <li>
                             <a href="/store/subscribe" class="cc-color-dark-brown" alt="Subscribe">
-                                <strong>SUBSCRIBE</strong>
+                                <strong>TASTE</strong>
                             </a>
                         </li>
                         <li>
-                            <a href="/store/item/classic-gift-box" class="cc-color-dark-brown" alt="Chocolate Gifts">
+                            <a href="/store" class="cc-color-dark-brown" alt="Shop the store for chocolate bar favorites">
+                                <strong>OUR CHOCOLATES</strong>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/store" class="cc-color-dark-brown" alt="Chocolate Gifts">
                                 <strong>GIFTS</strong>
                             </a>
                         </li>
@@ -97,3 +80,22 @@
     <!-- /Top Nav -->
 
 </div>
+
+<script type="text/javascript" src="/assets/js/loc.js"></script>
+
+<script type="text/javascript">
+    var cart = Cookies.get('cartPidQs');
+    var subInCart = Cookies.get('subPid');
+    $(document).ready( function() {
+        var cartLen = 0;
+        if (cart) {
+            var cartObj = jQuery.parseJSON(cart);
+            cartLen += cartObj.length;
+        }
+        if (subInCart) {
+            cartLen += 1;
+        }
+        $( '#top-bar-cart-item-count' ).text(cartLen);
+    });
+
+</script>
