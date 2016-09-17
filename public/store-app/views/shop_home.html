@@ -1,4 +1,18 @@
-<div>
+<div class="container" ng-hide="$parent.products">
+    <div class="cs-loader" style="height:30%;">
+        <div class="cs-loader-inner">
+            <label class="color-cocoa-brown">	●</label>
+            <label class="color-cocoa-brown">	●</label>
+            <label class="color-cocoa-brown">	●</label>
+            <label class="color-cocoa-brown">	●</label>
+            <label class="color-cocoa-brown">	●</label>
+            <label class="color-cocoa-brown">	●</label>
+        </div>
+    </div>
+    <div class="full-height"></div>
+</div>
+
+<div ng-show="$parent.products">
     <section class="page-header page-header-xs">
         <div class="container">
             <h1>STORE</h1>
@@ -202,3 +216,5 @@
     </section>
 
 </div>
+
+<div ng-include="'/pages/templates/footer.html'"></div>

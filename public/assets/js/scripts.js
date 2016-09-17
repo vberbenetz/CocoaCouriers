@@ -1,39 +1,3 @@
-/** ********************************************** **
-	@Author			Dorin Grigoras
-	@Website		www.stepofweb.com
-	@Last Update	Friday, August 21, 2015
-
-	NOTE! 	Do not change anything here if you want to
-			be able to update in the future! Please use
-			your custom script (eg. custom.js).
-
-
-	TABLE CONTENTS
-	-------------------------------
-
-
-	INLINE SCRIPTS
-	-------------------------------
-		COUNT TO
-			https://github.com/mhuggins/jquery-countTo
-
-		BROWSER DETECT
-
-		Appear
-			https://github.com/bas2k/jquery.appear/
-			
-		Parallax
-			http://www.ianlunn.co.uk/plugins/jquery-parallax/
-
-		jQuery Easing v1.3
-			http://gsgd.co.uk/sandbox/jquery/easing/
-
-		WOW - v1.0.3
-			http://mynameismatthieu.com/WOW/
-
-		Modernizr 2.7.1
-			http://modernizr.com/download/#-csstransforms3d-csstransitions-video-touch-shiv-cssclasses-addtest-prefixed-teststyles-testprop-testallprops-hasevent-prefixes-domprefixes-load
-*************************************************** **/
 	window.width = jQuery(window).width();
 
 	/* Init */
@@ -76,42 +40,25 @@
 		}
 
 		// Reinit on Ajax
-		_owl_carousel();
-		_flexslider();
+        _owl_carousel();
 		_popover();
 		_lightbox();
 		_mixitup();
 		_animate();
 		_onepageNav();
 		_scrollTo(false, 0);
-		_parallax();
-		_video();
-		_youtubeBG();
 		_toggle();
 		_placeholder();
-		_wrotate();
 		_lazyload();
 		_misc();
 		_countDown();
-		_masonryGallery();
-		_toastr(false,false,false,false);
-		_charts();
 		_select2();
 		_form();
 		_pickers();
-		_editors();
-		_pajinate();
-		_zoom();
-		_autosuggest();
 		_stepper();
 		_slimScroll();
 		_modalAutoLoad();
 		_bgimage();
-		_widget_flickr();
-		_widget_twitter();
-		_widget_facebook();
-		_widget_dribbble();
-		_widget_media();
 
 		/** Bootstrap Tooltip **/ 
 		jQuery("a[data-toggle=tooltip], button[data-toggle=tooltip], span[data-toggle=tooltip]").tooltip();
@@ -806,226 +753,163 @@
 
 
 
-/** 03. OWL Carousel
- **************************************************************** **/
-	function _owl_carousel() {
-		var _container = jQuery("div.owl-carousel");
+    /** 03. OWL Carousel
+     **************************************************************** **/
+    function _owl_carousel() {
+        var _container = jQuery("div.owl-carousel");
 
-		if(_container.length > 0) {
+        if(_container.length > 0) {
 
-			loadScript(plugin_path + 'owl-carousel/owl.carousel.min.js', function() {
+            loadScript(plugin_path + 'owl-carousel/owl.carousel.min.js', function() {
 
-				_container.each(function() {
+                _container.each(function() {
 
-					var slider 		= jQuery(this);
-					var options 	= slider.attr('data-plugin-options');
+                    var slider 		= jQuery(this);
+                    var options 	= slider.attr('data-plugin-options');
 
-					// Progress Bar
-					var $opt = eval('(' + options + ')');  // convert text to json
+                    // Progress Bar
+                    var $opt = eval('(' + options + ')');  // convert text to json
 
-					if($opt.progressBar == 'true') {
-						var afterInit = progressBar;
-					} else {
-						var afterInit = false;
-					}
+                    if($opt.progressBar == 'true') {
+                        var afterInit = progressBar;
+                    } else {
+                        var afterInit = false;
+                    }
 
-					var defaults = {
-						items: 					5,
-						itemsCustom: 			false,
-						itemsDesktop: 			[1199,4],
-						itemsDesktopSmall: 		[980,3],
-						itemsTablet: 			[768,2],
-						itemsTabletSmall: 		false,
-						itemsMobile: 			[479,1],
-						singleItem: 			true,
-						itemsScaleUp: 			false,
+                    var defaults = {
+                        items: 					5,
+                        itemsCustom: 			false,
+                        itemsDesktop: 			[1199,4],
+                        itemsDesktopSmall: 		[980,3],
+                        itemsTablet: 			[768,2],
+                        itemsTabletSmall: 		false,
+                        itemsMobile: 			[479,1],
+                        singleItem: 			true,
+                        itemsScaleUp: 			false,
 
-						slideSpeed: 			200,
-						paginationSpeed: 		800,
-						rewindSpeed: 			1000,
+                        slideSpeed: 			200,
+                        paginationSpeed: 		800,
+                        rewindSpeed: 			1000,
 
-						autoPlay: 				false,
-						stopOnHover: 			false,
+                        autoPlay: 				false,
+                        stopOnHover: 			false,
 
-						navigation: 			false,
-						navigationText: [
-											'<i class="fa fa-angle-left"></i>',
-											'<i class="fa fa-angle-right"></i>'
-										],
-						rewindNav: 				true,
-						scrollPerPage: 			false,
+                        navigation: 			false,
+                        navigationText: [
+                            '<i class="fa fa-angle-left"></i>',
+                            '<i class="fa fa-angle-right"></i>'
+                        ],
+                        rewindNav: 				true,
+                        scrollPerPage: 			false,
 
-						pagination: 			true,
-						paginationNumbers: 		false,
+                        pagination: 			true,
+                        paginationNumbers: 		false,
 
-						responsive: 			true,
-						responsiveRefreshRate: 	200,
-						responsiveBaseWidth: 	window,
+                        responsive: 			true,
+                        responsiveRefreshRate: 	200,
+                        responsiveBaseWidth: 	window,
 
-						baseClass: 				"owl-carousel",
-						theme: 					"owl-theme",
+                        baseClass: 				"owl-carousel",
+                        theme: 					"owl-theme",
 
-						lazyLoad: 				false,
-						lazyFollow: 			true,
-						lazyEffect: 			"fade",
+                        lazyLoad: 				false,
+                        lazyFollow: 			true,
+                        lazyEffect: 			"fade",
 
-						autoHeight: 			false,
+                        autoHeight: 			false,
 
-						jsonPath: 				false,
-						jsonSuccess: 			false,
+                        jsonPath: 				false,
+                        jsonSuccess: 			false,
 
-						dragBeforeAnimFinish: 	true,
-						mouseDrag: 				true,
-						touchDrag: 				true,
+                        dragBeforeAnimFinish: 	true,
+                        mouseDrag: 				true,
+                        touchDrag: 				true,
 
-						transitionStyle: 		false,
+                        transitionStyle: 		false,
 
-						addClassActive: 		false,
+                        addClassActive: 		false,
 
-						beforeUpdate: 			false,
-						afterUpdate: 			false,
-						beforeInit: 			false,
-						afterInit: 				afterInit,
-						beforeMove: 			false,
-						afterMove: 				(afterInit == false) ? false : moved,
-						afterAction: 			false,
-						startDragging: 			false,
-						afterLazyLoad: 			false
-					}
+                        beforeUpdate: 			false,
+                        afterUpdate: 			false,
+                        beforeInit: 			false,
+                        afterInit: 				afterInit,
+                        beforeMove: 			false,
+                        afterMove: 				(afterInit == false) ? false : moved,
+                        afterAction: 			false,
+                        startDragging: 			false,
+                        afterLazyLoad: 			false
+                    }
 
-					var config = jQuery.extend({}, defaults, options, slider.data("plugin-options"));
-					slider.owlCarousel(config).addClass("owl-carousel-init");
-					
+                    var config = jQuery.extend({}, defaults, options, slider.data("plugin-options"));
+                    slider.owlCarousel(config).addClass("owl-carousel-init");
 
-					// Progress Bar
-					var elem = jQuery(this);
 
-					//Init progressBar where elem is $("#owl-demo")
-					function progressBar(elem){
-					  $elem = elem;
-					  //build progress bar elements
-					  buildProgressBar();
-					  //start counting
-					  start();
-					}
-				 
-					//create div#progressBar and div#bar then prepend to $("#owl-demo")
-					function buildProgressBar(){
-					  $progressBar = jQuery("<div>",{
-						id:"progressBar"
-					  });
-					  $bar = jQuery("<div>",{
-						id:"bar"
-					  });
-					  $progressBar.append($bar).prependTo($elem);
-					}
+                    // Progress Bar
+                    var elem = jQuery(this);
 
-					function start() {
-					  //reset timer
-					  percentTime = 0;
-					  isPause = false;
-					  //run interval every 0.01 second
-					  tick = setInterval(interval, 10);
-					};
+                    //Init progressBar where elem is $("#owl-demo")
+                    function progressBar(elem){
+                        $elem = elem;
+                        //build progress bar elements
+                        buildProgressBar();
+                        //start counting
+                        start();
+                    }
 
-			 
-					var time = 7; // time in seconds
-					function interval() {
-					  if(isPause === false){
-						percentTime += 1 / time;
-						$bar.css({
-						   width: percentTime+"%"
-						 });
-						//if percentTime is equal or greater than 100
-						if(percentTime >= 100){
-						  //slide to next item 
-						  $elem.trigger('owl.next')
-						}
-					  }
-					}
-				 
-					//pause while dragging 
-					function pauseOnDragging(){
-					  isPause = true;
-					}
-				 
-					//moved callback
-					function moved(){
-					  //clear interval
-					  clearTimeout(tick);
-					  //start again
-					  start();
-					}
+                    //create div#progressBar and div#bar then prepend to $("#owl-demo")
+                    function buildProgressBar(){
+                        $progressBar = jQuery("<div>",{
+                            id:"progressBar"
+                        });
+                        $bar = jQuery("<div>",{
+                            id:"bar"
+                        });
+                        $progressBar.append($bar).prependTo($elem);
+                    }
 
-				});
+                    function start() {
+                        //reset timer
+                        percentTime = 0;
+                        isPause = false;
+                        //run interval every 0.01 second
+                        tick = setInterval(interval, 10);
+                    };
 
-			});
-		}
 
-	}
+                    var time = 7; // time in seconds
+                    function interval() {
+                        if(isPause === false){
+                            percentTime += 1 / time;
+                            $bar.css({
+                                width: percentTime+"%"
+                            });
+                            //if percentTime is equal or greater than 100
+                            if(percentTime >= 100){
+                                //slide to next item
+                                $elem.trigger('owl.next')
+                            }
+                        }
+                    }
 
-	
-/** 04. Flexslider
- **************************************************************** **/
-	function _flexslider() {
-		var _container = jQuery(".flexslider");
-		
-		if(_container.length > 0) {
+                    //pause while dragging
+                    function pauseOnDragging(){
+                        isPause = true;
+                    }
 
-			loadScript(plugin_path + 'slider.flexslider/jquery.flexslider-min.js', function() {
+                    //moved callback
+                    function moved(){
+                        //clear interval
+                        clearTimeout(tick);
+                        //start again
+                        start();
+                    }
 
-				if(jQuery().flexslider) {
-					var	_controlNav 	= _container.attr('data-controlNav'),
-						_slideshowSpeed = _container.attr('data-slideshowSpeed') || 7000,
-						_pauseOnHover	= _container.attr('data-pauseOnHover') || false;
+                });
 
-					if(_pauseOnHover == "true") {
-						_pauseOnHover = true;
-					} else{
-						_pauseOnHover = false;
-					}
+            });
+        }
 
-					if(_controlNav == 'thumbnails') {
-						_controlNav = 'thumbnails';
-					} else
-					if(_controlNav == 'true') {
-						_controlNav = true;
-					} else
-					if(_controlNav == 'false') {
-						_controlNav = false;
-					} else {
-						_controlNav = true;
-					}
-					
-					if(_controlNav == 'thumbnails' || _controlNav == false) {
-						_directionNav = false;
-					} else {
-						_directionNav = true;
-					}
-
-					jQuery(_container).flexslider({
-						animation		: "slide",
-						controlNav		: _controlNav,
-						slideshowSpeed	: parseInt(_slideshowSpeed) || 7000,
-						directionNav 	: _directionNav,
-						pauseOnHover	: _pauseOnHover,
-						start: function(slider){
-							jQuery('.flex-prev').html('<i class="fa fa-angle-left"></i>');
-							jQuery('.flex-next').html('<i class="fa fa-angle-right"></i>');
-						}
-					});
-
-					// Resize Flex Slider if exists!
-					_container.resize();
-
-				}
-
-			});
-		}
-	}
-	
-	
-	
+    }
 
 
 /** 04. Popover
@@ -1213,124 +1097,6 @@
 
 
 
-/** 07. Parallax
- **************************************************************** **/
-	function _parallax() {
-
-		if(jQuery().parallax) {
-
-			// jQuery(".parallax-1").css("background-attachment", "fixed");
-			jQuery(".parallax-1").parallax("50%", "0.1");
-
-			// jQuery(".parallax-2").css("background-attachment", "fixed");
-			jQuery(".parallax-2").parallax("50%", "0.2");
-
-			// jQuery(".parallax-3").css("background-attachment", "fixed");
-			jQuery(".parallax-3").parallax("50%", "0.3");
-
-			// jQuery(".parallax-4").css("background-attachment", "fixed");
-			jQuery(".parallax-4").parallax("50%", "0.4");
-
-		}
-
-
-		/** Slider Parallax 
-			Do not use overlay - will be very slow!
-		 **************************** **/
-		var _slider = jQuery('#slider');
-
-		if(_slider.length > 0) {
-			if(_slider.hasClass('parallax-slider')) {
-
-				var block_intro_top = _slider.offset().top;	
-			
-				jQuery(window).scroll(function() {
-
-					var _currentTop = jQuery(document).scrollTop(); 
-					
-					if(_currentTop < 768) {
-						var _sliderH 	= jQuery('#slider').height();
-
-						jQuery('#slider>div').css('top', (_currentTop*0.5));
-						jQuery('#slider>div').css('opacity', (1 - _currentTop/_sliderH*1));
-					}
-
-				});
-		
-			}
-		}
-
-	}
-
-
-
-
-/** 07. Video
- **************************************************************** **/
-	function _video() {
-
-		if(jQuery("section.section-video").length > 0) {
-			var _t = jQuery("section.section-video .section-container-video>video");
-				_w = jQuery(window).width();
-
-			_t.width(_w);
-			
-		}
-
-	}
-
-
-
-/** 07. Youtube Backround
- **************************************************************** **/
-	function _youtubeBG() {
-		var _container = jQuery('#YTPlayer');
-		
-		if(_container.length > 0) {
-			loadScript(plugin_path + 'jquery.mb.YTPlayer.min.js', function() {
-
-
-				if(jQuery().mb_YTPlayer) {
-					var disableMobile = false;
-					if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) { 
-						// disableMobile = true; 
-					}
-
-					if(disableMobile === false) {
-
-						jQuery(".player").mb_YTPlayer();
-
-						jQuery("#video-volume").bind("click", function(e) {
-							e.preventDefault();
-
-							jQuery('#YTPlayer').toggleVolume();
-						});
-
-						// audio control
-						jQuery("#video-volume").bind("click", function() {
-							if(jQuery('i.fa', this).hasClass('fa-volume-down')) {
-								jQuery('i.fa', this).removeClass('fa-volume-down');
-								jQuery('i.fa', this).removeClass('fa-volume-up');
-								jQuery('i.fa', this).addClass('fa-volume-up');
-							} else {
-								jQuery('i.fa', this).removeClass('fa-volume-up');
-								jQuery('i.fa', this).removeClass('fa-volume-v');
-								jQuery('i.fa', this).addClass('fa-volume-down');
-							}
-						});
-
-					} else {
-
-						jQuery(".player , #video-volume").hide();
-
-					}
-
-				}
-				
-			});
-		}
-	}
-
 
 /** 08. Mixitup Filter
  **************************************************************** **/
@@ -1439,64 +1205,6 @@
 
 
 
-/** 12. Word Rotate
- **************************************************************** **/
-	function _wrotate() {
-		jQuery(".word-rotator").each(function() {
-
-			var _t 				= jQuery(this),
-				_items 			= _t.find(".items"),
-				items 			= _items.find("> span"),
-				firstItem 		= items.eq(0),
-				firstItemClone 	= firstItem.clone(),
-				_iHeight 		= jQuery(this).height(),
-				_cItem 			= 1,
-				_cTop 			= 0,
-				_delay 			= jQuery(this).attr('data-delay') || 2000;
-
-			_items.append(firstItemClone);
-			_t.height(_iHeight).addClass("active");
-
-			setInterval(function() {
-				_cTop = (_cItem * _iHeight);
-
-				_items.animate({top: - (_cTop) + "px"}, 300, "easeOutQuad", function(){
-					_cItem++;
-
-					if(_cItem > items.length) {
-						_items.css("top", 0);
-						_cItem = 1;
-					}
-
-				});
-
-			}, _delay);
-
-		});
-
-
-		var _container = jQuery('span.rotate');
-		
-		if(_container.length > 0) {
-
-			loadScript(plugin_path + 'text-rotator/jquery.simple-text-rotator.min.js', function() {
-
-				_container.each(function() {
-					var _t 			= jQuery(this),
-						_animation 	= _t.attr('data-animation') || 'fade', // fade|flip|flipCube|flipUp|spin
-						_speed 		= _t.attr('data-speed') 	|| 2000;
-
-					_t.textrotator({
-						animation: 	_animation,
-						speed: 		parseInt(_speed)
-					});
-
-				});
-
-			});
-		
-		}
-	}
 
 
 
@@ -2100,231 +1808,6 @@
 
 
 
-/** Masonry Gallery
- **************************************************************** **/
-	function _masonryGallery() {
-
-		if(jQuery(".masonry-gallery").length > 0) {
-
-			jQuery(".masonry-gallery").each(function() {
-				var _container = jQuery(this),
-					columns		= 4;
-
-					 if(_container.hasClass('columns-2')) 	columns = 2;
-				else if(_container.hasClass('columns-3')) 	columns = 3;
-				else if(_container.hasClass('columns-4')) 	columns = 4;
-				else if(_container.hasClass('columns-5')) 	columns = 5;
-				else if(_container.hasClass('columns-6')) 	columns = 6;
-
-				var _firstElemWidth 	= _container.find('a:eq(0)').outerWidth(),
-					_bigImageNo 		= _container.attr('data-img-big'),
-					_containerWidth		= _container.width();
-
-
-				// Fix margins & Width
-                var postWidth = (_containerWidth/columns);
-					postWidth = Math.floor(postWidth);
-                if((postWidth * columns) >= _containerWidth) { 
-					_container.css({ 'margin-right': '-1px' }); 
-				}
-				if(columns < 6) {
-					_container.children('a').css({"width":postWidth+"px"});
-				}
-
-
-				// Set Big Image
-                if(parseInt(_bigImageNo) > 0) {
-
-					_bigImageNo 	= Number(_bigImageNo) - 1; 
-					_container.find('a:eq('+_bigImageNo+')').css({ width: _firstElemWidth*2 + 'px'});
-
-					loadScript(plugin_path + 'isotope/isotope.pkgd.min.js', function() {
-
-						setTimeout( function() {
-							_container.isotope({
-								masonry: {
-									columnWidth: _firstElemWidth
-								}
-							});
-
-							_container.isotope('layout');
-
-						}, 1000);
-					
-					});
-
-                }
-
-			});
-
-
-		}
-
-	}
-
-
-
-	
-/** Toastr
-
-	TYPE:
-		primary
-		info
-		error
-		sucess
-		warning
-
-	POSITION
-		top-right
-		top-left
-		top-center
-		top-full-width
-		bottom-right
-		bottom-left
-		bottom-center
-		bottom-full-width
-		
-	USAGE:
-		_toastr("My Message here","top-right","error",false);
-		
-	NOTE:
-		_onclick = url to redirect (example: http://www.stepofweb.com)
- **************************************************************** **/
-	function _toastr(_message,_position,_notifyType,_onclick) {
-		var _btn 	= jQuery(".toastr-notify");
-
-		if(_btn.length > 0 || _message != false) {
-
-			loadScript(plugin_path + 'toastr/toastr.js', function() {
-				// toastr.clear();
-
-				/** BUTTON CLICK
-				 ********************* **/
-				_btn.bind("click", function(e) {
-					e.preventDefault();
-
-
-					var _message 			= jQuery(this).attr('data-message'),
-						_notifyType 		= jQuery(this).attr('data-notifyType')			|| "default",
-						_position	 		= jQuery(this).attr('data-position')			|| "top-right",
-						_progressBar 		= jQuery(this).attr('data-progressBar') 		== "true" ? true : false,
-						_closeButton		= jQuery(this).attr('data-closeButton') 		== "true" ? true : false,
-						_debug		 		= jQuery(this).attr('data-debug') 				== "true" ? true : false,
-						_newestOnTop 		= jQuery(this).attr('data-newestOnTop') 		== "true" ? true : false,
-						_preventDuplicates	= jQuery(this).attr('data-preventDuplicates') 	== "true" ? true : false,
-						_showDuration 		= jQuery(this).attr('data-showDuration') 		|| "300",
-						_hideDuration 		= jQuery(this).attr('data-hideDuration') 		|| "1000",
-						_timeOut 			= jQuery(this).attr('data-timeOut') 			|| "5000",
-						_extendedTimeOut	= jQuery(this).attr('data-extendedTimeOut')		|| "1000",
-						_showEasing 		= jQuery(this).attr('data-showEasing') 			|| "swing",
-						_hideEasing 		= jQuery(this).attr('data-hideEasing') 			|| "linear",
-						_showMethod 		= jQuery(this).attr('data-showMethod') 			|| "fadeIn",
-						_hideMethod 		= jQuery(this).attr('data-hideMethod') 			|| "fadeOut";
-
-						toastr.options = {
-							"closeButton": 			_closeButton,
-							"debug": 				_debug,
-							"newestOnTop": 			_newestOnTop,
-							"progressBar": 			_progressBar,
-							"positionClass": 		"toast-" + _position,
-							"preventDuplicates": 	_preventDuplicates,
-							"onclick": 				null,
-							"showDuration": 		_showDuration,
-							"hideDuration": 		_hideDuration,
-							"timeOut": 				_timeOut,
-							"extendedTimeOut": 		_extendedTimeOut,
-							"showEasing": 			_showEasing,
-							"hideEasing": 			_hideEasing,
-							"showMethod": 			_showMethod,
-							"hideMethod": 			_hideMethod
-						}
-
-					toastr[_notifyType](_message);
-				});
-
-
-				/** JAVSCRIPT / ON LOAD
-				 ************************* **/
-				if(_message != false) {
-
-					if(_onclick != false) {
-						onclick = function() {
-							window.location = _onclick;
-						}
-					} else {
-						onclick = null
-					}
-
-					toastr.options = {
-						"closeButton": 			true,
-						"debug": 				false,
-						"newestOnTop": 			false,
-						"progressBar": 			true,
-						"positionClass": 		"toast-" + _position,
-						"preventDuplicates": 	false,
-						"onclick": 				onclick,
-						"showDuration": 		"300",
-						"hideDuration": 		"1000",
-						"timeOut": 				"5000",
-						"extendedTimeOut": 		"1000",
-						"showEasing": 			"swing",
-						"hideEasing": 			"linear",
-						"showMethod": 			"fadeIn",
-						"hideMethod": 			"fadeOut"
-					}
-
-					setTimeout(function(){
-						toastr[_notifyType](_message);
-					}, 1500); // delay 1.5s
-				}
-			});
-		
-		}
-
-	}
-
-
-/** Chart
- **************************************************************** **/
-	function _charts() {
-
-		/** Easy Pie Chart 
-		 ************************* **/
-		var _container = jQuery(".piechart");
-
-		if(_container.length > 0) {
-
-			loadScript(plugin_path + 'chart.easypiechart/dist/jquery.easypiechart.min.js', function() {
-
-				jQuery(".piechart").each(function() {
-					var _t = jQuery(this),
-						_size 		= _t.attr('data-size') || 150,
-						_animate 	= _t.attr('data-animate') || "3000";
-
-					_t.easyPieChart({
-						size: 			_size,
-						animate: 		_animate,
-						scaleColor: 	false,
-						trackColor: 	_t.attr('data-trackcolor') || 'rgba(0,0,0,0.04)',
-						lineWidth: 		_t.attr('data-width') || '2',
-						lineCap: 		'square',
-						barColor: 		_t.attr('data-color') || '#0093BF'
-					});
-
-					jQuery("span", this).attr('style', "line-height:"+_size+"px !important; height:"+_size+"px; width:"+_size+"px");
-					jQuery("i", this).attr('style', "line-height:"+_size+"px !important; height:"+_size+"px; width:"+_size+"px");
-					// jQuery("span", this).css({"line-height":_size+"px", "height":_size+"px", "width":_size+"px"});
-					// jQuery("i", this).css({"line-height":_size+"px", "height":_size+"px", "width":_size+"px"});
-
-				});
-		
-			});
-
-		}
-
-		
-	}
-
 
 
 /** Select2
@@ -2664,153 +2147,6 @@
 
 
 
-/** Editors
- **************************************************************** **/
-	function _editors() {
-
-		/** Summernote HTML Editor
-			<textarea class="summernote form-control" data-height="200"></textarea>
-		 ***************************** **/
-		var _container_1 = jQuery('textarea.summernote');
-		
-		if(_container_1.length > 0) {
-			
-			loadScript(plugin_path + 'editor.summernote/summernote.min.js', function() {
-		
-				if(jQuery().summernote) {
-
-					_container_1.each(function() {
-
-						var _lang = jQuery(this).attr('data-lang') || 'en-US';
-
-						if(_lang != 'en-US') { // Language!
-						alert(_lang);
-							loadScript(plugin_path + 'editor.summernote/lang/summernote-'+_lang+'.js');
-						}
-
-						jQuery(this).summernote({
-							height: jQuery(this).attr('data-height') || 200,
-							lang: 	jQuery(this).attr('data-lang') || 'en-US', // default: 'en-US'
-							toolbar: [
-							/*	[groupname, 	[button list]]	*/
-								['style', 		['style']],
-								['fontsize', 	['fontsize']],
-								['style', 		['bold', 'italic', 'underline','strikethrough', 'clear']],
-								['color', 		['color']],
-								['para', 		['ul', 'ol', 'paragraph']],
-								['table', 		['table']],
-								['media', 		['link', 'picture', 'video']],
-								['misc', 		['codeview', 'fullscreen', 'help']]
-							]
-						});
-					});
-
-				}
-			});
-		}
-
-
-
-
-
-		/** Markdown HTML Editor
-			<textarea class="markdown" data-height="300" name="content" data-provide="markdown" data-lang="en" rows="10"></textarea>
-		 ***************************** **/
-		var _container_2 = jQuery('textarea.markdown');
-		
-		if(_container_2.length > 0) {
-			
-			loadScript(plugin_path + 'editor.markdown/js/bootstrap-markdown.min.js', function() {
-		
-				if(jQuery().markdown) {
-
-					_container_2.each(function() {
-						var _t = jQuery(this);
-
-						var _lang = _t.attr('data-lang') || 'en';
-
-						if(_lang != 'en') { // Language!
-							loadScript(plugin_path + 'editor.markdown/locale/bootstrap-markdown.'+_lang+'.js');
-						}
-
-						jQuery(this).markdown({
-							autofocus:		_t.attr('data-autofocus') 	== "true" ? true : false,
-							savable:		_t.attr('data-savable') 	== "true" ? true : false,
-							height:			_t.attr('data-height') 		|| 'inherit',
-							language:		_lang == 'en' ? null : _lang
-						});
-
-					});
-
-				}
-				
-			});
-			
-		}
-
-	}
-
-
-
-
-
-
-/** Pajinate [jQuery Pagination]
-	USAGE
-	
-	<div class="pajinate" data-pajinante-items-per-page="8" data-pajinate-container=".pajinate-container">
-	
-		<div class="pajinate-container">
-		
-			<div>item1</div>
-			<div>item2</div>
-			<div>item3</div>
-			.....
-
-		</div>
-
-		<div class="pajinate-nav">
-			<ul class="pagination"><!-- pages added by pajinate plugin --></ul>
-		</div>
-
-	</div>
- **************************************************************** **/
-	function _pajinate() {
-		var _container = jQuery('div.pajinate');
-
-		if(_container.length > 0) {
-
-			loadScript(plugin_path + 'pajinate/jquery.pajinate.bootstrap.min.js', function() {
-			
-				if(jQuery().pajinate) {
-
-					_container.each(function() {
-						var _t 			= jQuery(this),
-							_perPage 	= _t.attr('data-pajinante-items-per-page') 	|| 8;
-							_numLinks 	= _t.attr('data-pajinante-num-links') 		|| 5;
-
-						_t.pajinate({
-							items_per_page 				: parseInt(_perPage),
-							num_page_links_to_display	: parseInt(_numLinks),
-							item_container_id 			: _t.attr('data-pajinate-container') || '.pajinate-container',
-							nav_panel_id 				: '.pajinate-nav ul',
-							show_first_last 			: false,
-							wrap_around					: true,
-							abort_on_small_lists 		: true,
-							start_page 					: 0,
-							nav_label_prev 				: '&laquo;',
-							nav_label_next 				: '&raquo;'
-						});
-
-					});
-				}
-			
-			});
-		
-		}
-
-	}
-
 
 
 
@@ -2869,133 +2205,6 @@
 
 
 
-
-
-/** Image Zoom
- **************************************************************** **/
-	function _zoom() {
-		var _container = jQuery('figure.zoom');
-		
-		if(_container.length > 0) {
-		
-			loadScript(plugin_path + 'image.zoom/jquery.zoom.min.js', function() {
-				
-				if(jQuery().zoom) {
-				
-					_container.each(function() {
-						var _t 		= jQuery(this),
-							_mode 	= _t.attr('data-mode'),
-							_id		= _t.attr('id');
-
-						if(_mode == 'grab') {
-							_t.zoom({ on:'grab' });
-						} else
-
-						if(_mode == 'click') {
-							_t.zoom({ on:'click' });
-						} else
-
-						if(_mode == 'toggle') {
-							_t.zoom({ on:'toggle' });
-						} else {
-							_t.zoom();
-						}
-
-
-						// Thumbnails
-						if(_id) {
-							jQuery('.zoom-more[data-for='+_id+'] a').bind("click", function(e) {
-								e.preventDefault();
-
-								var _href = jQuery(this).attr('href');
-								
-								if(_href != "#") {
-									jQuery('.zoom-more[data-for='+_id+'] a').removeClass('active');
-									jQuery(this).addClass('active');
-
-									jQuery('figure#'+_id + '>.lightbox').attr('href', _href);
-
-									jQuery('figure#'+_id + '>img').fadeOut(0, function() {
-										jQuery('figure#'+_id + '>img').attr('src', _href);
-									}).fadeIn(500);
-
-
-								}
-							});
-						}
-
-					});
-
-				}
-			
-			});
-		
-		}
-
-	}
-
-
-
-
-
-/** Autosuggest
-	http://twitter.github.io/typeahead.js/
- **************************************************************** **/
-	function _autosuggest() {
-		_container = jQuery('div.autosuggest');
-
-		if(_container.length > 0) {
-
-			loadScript(plugin_path + 'typeahead.bundle.js', function() {
-
-				if(jQuery().typeahead) {
-					
-					_container.each(function() {
-						var	_t 					= jQuery(this),
-							_minLength			= _t.attr('data-minLength') || 1,
-							_qryURL 			= _t.attr('data-queryURL'),
-							_limit	 			= _t.attr('data-limit') 	|| 10,
-							_autoload 			= _t.attr('data-autoload');
-							
-							if(_autoload == "false") {
-								return false;
-							}
-
-							/** **/
-							/* Bloodhound (Suggestion Engine) */
-							var _typeahead = new Bloodhound({
-								datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-								queryTokenizer: Bloodhound.tokenizers.whitespace,
-								limit:	_limit,
-								remote: {
-									url: _qryURL + '%QUERY',
-								},
- 							});
-
-							jQuery('.typeahead', _t).typeahead({
-								limit: 		_limit,
-								hint: 		_t.attr('data-hint') 		== "false" ? false : true,
-								highlight: 	_t.attr('data-highlight') 	== "false" ? false : true,
-								minLength: parseInt(_minLength),
-
-								cache: 			false,
-							},
-							{
-								name: '_typeahead',
-								source: _typeahead
-							});
-							/** **/
-  
-					});
-
-					
-				}
-				
-			});
-			
-		}
-
-	}
 
 
 
@@ -3212,229 +2421,6 @@
 		}
 	}
 
-
-
-
-/** Flickr Widget
-	<div class="widget-flickr clearfix lightbox margin-bottom-60" data-id="37304598@N02" data-limit="16" data-plugin-options='{"delegate": "a", "gallery": {"enabled": true}}'></div>
- **************************************************************** **/
-	function _widget_flickr() {
-		var _container = jQuery('.widget-flickr');
-
-		if(_container.length > 0) {
-
-			loadScript(plugin_path + 'widget.jflickr/jflickrfeed.min.js', function() {
-
-				if(jQuery().jflickrfeed) {
-					if(jQuery('.widget-flickr')) {
-
-						/** **/
-						_container.each(function() {
-							var _t 		= jQuery(this),
-								_id 	= _t.attr('data-id'),
-								_limit 	= _t.attr('data-limit') || 14;
-
-							_t.jflickrfeed({
-								limit: parseInt(_limit),
-								qstrings: {
-									id: _id
-								},
-								itemTemplate: '<li>'+
-												'<a href="{{image}}" title="{{title}}">' +
-													'<img src="{{image_s}}" alt="{{title}}" width="63" height="63" />' +
-												'</a>' +
-											  '</li>'
-							}, function(data) {
-								_lightbox();
-							});
-						
-						});
-						/** **/
-
-					}
-				}
-
-			});
-		
-		}
-
-	}
-
-
-
-
-/** Twitter Widget
- **************************************************************** **/
-	function _widget_twitter() {
-		var _container = jQuery(".widget-twitter");
-
-		if(_container.length > 0) {
-
-			loadScript(plugin_path + 'widget.twittie/twittie.min.js', function() {
-
-				if(jQuery().twittie) {
-					// jQuery('.example1 .tweet').twittie({
-						// dateFormat: '%b. %d, %Y',
-						// template: '{{tweet}} <div class="date">{{date}}</div>',
-						// count: 1,
-						// loadingText: 'Loading!'
-					// });
-
-						_container.each(function() {
-							var _t 		= jQuery(this),
-								_php 	= _t.attr('data-php'),			// PHP Script Path
-								_usr 	= _t.attr('data-username'),		// Twitter Username
-								_lmt 	= _t.attr('data-limit')	|| 3,	// Tweets Limit
-								
-								_url	= _php + "?username=" + _usr + "&limit=" + _lmt;
-
-							jQuery.getJSON(_url, function(tweets){
-								_t.html(format_twitter(tweets));
-							});
-
-						});
-
-				}
-			
-			});
-		
-		}
-
-	}
-
-	function format_twitter(twitt) {
-		var statusHTML = [];
-
-		for(var i=0; i<twitt.length; i++) {
-			var username = twitt[i].user.screen_name;
-
-			var status = twitt[i].text.replace(/((https?|s?ftp|ssh)\:\/\/[^"\s\<\>]*[^.,;'">\:\s\<\>\)\]\!])/g, function(url) {
-				return '<a href="'+url+'" target="_blank">'+url+'</a>';
-			}).replace(/\B@([_a-z0-9]+)/ig, function(reply) {
-				return  reply.charAt(0)+'<a href="http://twitter.com/'+reply.substring(1)+'" target="_blank">'+reply.substring(1)+'</a>';
-			});
-
-			statusHTML.push('<li><i class="fa fa-twitter"></i><span>'+status+'</span><small><a href="http://twitter.com/'+username+'/statuses/'+twitt[i].id_str+'" target="_blank">'+relative_time(twitt[i].created_at)+'</a></small></li>');
-		}
-
-		return statusHTML.join('');
-	}
-
-
-	function relative_time(time_value) {
-		var values 		= time_value.split(" "),
-			parsed_date = Date.parse(time_value),
-			relative_to = (arguments.length > 1) ? arguments[1] : new Date(),
-			delta 		= parseInt((relative_to.getTime() - parsed_date) / 1000);
-
-		time_value 		= values[1] + " " + values[2] + ", " + values[5] + " " + values[3];
-		delta 			= delta + (relative_to.getTimezoneOffset() * 60);
-
-		if (delta < 60) {
-			return 'less than a minute ago';
-		} else if(delta < 120) {
-			return 'about a minute ago';
-		} else if(delta < (60*60)) {
-			return (parseInt(delta / 60)).toString() + ' minutes ago';
-		} else if(delta < (120*60)) {
-			return 'about an hour ago';
-		} else if(delta < (24*60*60)) {
-			return 'about ' + (parseInt(delta / 3600)).toString() + ' hours ago';
-		} else if(delta < (48*60*60)) {
-			return '1 day ago';
-		} else {
-			return (parseInt(delta / 86400)).toString() + ' days ago';
-		}
-	}
-
-
-
-
-/** Facebook Widget
-	<div class="fb-like" data-href="http://www.stepofweb.com" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div>
- **************************************************************** **/
-	function _widget_facebook() {
-
-		/** Like & Share Button
-		 ************************ **/
-		var _container_1 = jQuery('div.fb-like');
-		var _container_2 = jQuery('div.fb-share-button');
-		
-		if(_container_1.length > 0 || _container_2.length > 0) {
-
-			jQuery('body').append('<div id="fb-root"></div>');
-
-			(function(d, s, id) {
-				var js, fjs = d.getElementsByTagName(s)[0];
-				if (d.getElementById(id)) return;
-				js = d.createElement(s); js.id = id;
-				js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.3";
-				fjs.parentNode.insertBefore(js, fjs);
-			}(document, 'script', 'facebook-jssdk'));
-		
-		}
-
-	}
-
-
-
-
-
-/** Dribbble Widget
- **************************************************************** **/
-	function _widget_dribbble() {
-		var _container = jQuery(".widget-dribbble");
-		
-		if(_container.length > 0) {
-
-			loadScript(plugin_path + 'widget.dribbble/jribbble.min.js', function() {
-
-					var _token 	= _container.attr('data-token') 	|| 'f688ac519289f19ce5cebc1383c15ad5c02bd58205cd83c86cbb0ce09170c1b4', // demo default
-						_target	= _container.attr('data-target') 	|| '_blank',
-						_shots	= _container.attr('data-shots') 	|| 2046896; // demo default
-
-					jQuery.jribbble.setToken(_token);
-
-					jQuery.jribbble.shots(_shots).rebounds().then(function(res) {
-						var html = [];
-
-						res.forEach(function(shot) {
-							html.push('<li>');
-							html.push('<a href="' + shot.html_url + '" target="' + _target + '">');
-							html.push('<img class="img-responsive" src="' + shot.images.normal + '" alt="image">');
-							html.push('</a></li>');
-						});
-
-						_container.html(html.join(''));
-					});
-			
-
-			});
-		
-		}
-
-	}
-
-
-
-
-
-/** Media Widget [mediaelement plugin]
- **************************************************************** **/
-	function _widget_media() {
-		var _container = jQuery(".widget-media");
-
-		if(_container.length > 0) {
-
-			loadScript(plugin_path + 'widget.mediaelementbuild/mediaelement-and-player.min.js', function() {
-
-
-			
-			});
-		
-		}
-
-	}
 
 
 

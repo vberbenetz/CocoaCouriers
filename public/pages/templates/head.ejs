@@ -42,6 +42,42 @@
 <meta name="p:domain_verify" content="d07e5988366084cccee855404a0bfc19" />
 <!--pintrest verification-->
 
+
+<!-- JAVASCRIPT FILES -->
+<script type="text/javascript" src="/assets/plugins/jquery/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="/assets/plugins/jquery/js-cookie.min.js"></script>
+<script type="text/javascript">var plugin_path = '/assets/plugins/';</script>
+<script type="text/javascript" src="/assets/js/scripts.js"></script>
+
+<script type="text/javascript">
+    (function() {
+        window._pa = window._pa || {};
+        var pa = document.createElement('script'); pa.type = 'text/javascript'; pa.async = true;
+        pa.src = ('https:' == document.location.protocol ? 'https:' : 'http:') + "//tag.marinsm.com/serve/56b8e3ecd1db8fef59000194.js";
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(pa, s);
+    })();
+</script>
+
+<script type="text/javascript" src="/assets/js/loc.js"></script>
+
+<script type="text/javascript">
+    var cart = Cookies.get('cartPidQs');
+    var subInCart = Cookies.get('subPid');
+    $(document).ready( function() {
+        var cartLen = 0;
+        if (cart) {
+            var cartObj = jQuery.parseJSON(cart);
+            cartLen += cartObj.length;
+        }
+        if (subInCart) {
+            cartLen += 1;
+        }
+        $( '#top-bar-cart-item-count' ).text(cartLen);
+    });
+
+</script>
+
+
 <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
