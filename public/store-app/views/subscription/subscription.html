@@ -32,7 +32,7 @@
                             </span>
                         </h3>
                         <h4>
-                            <sup>$</sup>{{ ($parent.customerSubscription.amount/$parent.customerSubscription.intervalCount/100).toFixed(2) }}<em> / Box</em>
+                            <sup>$</sup>{{ ($parent.customerSubscription.amount/$parent.customerSubscription.intervalCount/100).toFixed(2) }}<em> / Month</em>
                         </h4>
                         <h5 ng-if="$parent.customerSubscription.intervalCount===6"> ${{ $parent.customerSubscription.amount/100 }} SEMI-ANNUALLY </h5>
                         <h5 ng-if="$parent.customerSubscription.intervalCount===3"> ${{ $parent.customerSubscription.amount/100 }} QUARTERLY </h5>
@@ -86,7 +86,7 @@
                             </div>
 
                             <h4 class="margin-top-20 size-30 cc-color-teal">
-                                <sup>$</sup>{{ (plan.amount/plan.intervalCount/100).toFixed(0) }}/box
+                                <sup>$</sup>{{ (plan.amount/plan.intervalCount/100).toFixed(0) }}<em>/Month</em>
                             </h4>
                             <p class="cc-color-grey">{{ plan.numberOfBars }} Premium Artisan Bars</p>
 
