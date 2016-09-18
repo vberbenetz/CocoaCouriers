@@ -17,496 +17,367 @@
 
     <%- include pages/templates/header.ejs %>
 
-        <section class="height-750 bg-mainimage font-cursive">
-            <div class="overlay dark-3"></div>
-
-            <div class="display-table">
-                <div class="display-table-cell vertical-align-middle">
-
-                    <div class="container text-center">
-                        <div class="col-sm-12 col-md-6 pull-right text-right ">
-
-                            <h4 class="font-spin text-white size-60">We are <span id="js-rotating" class="color-emerald-green font-spin">Fair Trade, Delicious, Organic, Amazing Chocolate</span></h4>
-
-                            <p class="lead font-spin size-40 wow fadeInUp text-white" data-wow-delay="0.7s">
-                                The Best <span class="font-cursive color-emerald-green">Fair Trade</span> Chocolate in the world, Delivered
-                            </p>
-
-                            <a class="btn btn-default btn-lg bg-emerald-green size-40 text-white margin-top-20" href="/store/subscribe">Join The Club</a>
-                            <a class="btn btn-default btn-lg bg-black size-40 text-white margin-top-20 margin-left-15" href="/store">Shop Now</a>
-
-                        </div>
-
-                    </div>
-
-                </div>
+    <section class="nomargin nopadding">
+        <img src="/assets/images/CC_index_header.jpg" style="width: 100%;" />
+        <div class="col-xs-12 text-center">
+            <div class="visible-sm">
+                <a href="/store/subscribe" class="btn btn-3d btn-default btn-bordered border-white btn-translucid" style="margin-top:-15%;">
+                    <strong>&nbsp;&nbsp;JOIN THE CLUB&nbsp;&nbsp;</strong>
+                </a>
+                <a href="/store" class="btn btn-3d btn-default btn-bordered border-white btn-translucid" style="margin-top:-15%;">
+                    <strong>&nbsp;&nbsp;OUR SELECTION&nbsp;&nbsp;</strong>
+                </a>
             </div>
+            <div class="visible-md">
+                <a href="/store/subscribe" class="btn btn-3d btn-lg btn-default btn-bordered border-white btn-translucid" style="margin-top:-15%; border-width: 3px;">
+                    <span class="size-20"><strong>&nbsp;&nbsp;JOIN THE CLUB&nbsp;&nbsp;</strong></span>
+                </a>
+                <a href="/store" class="btn btn-3d btn-lg btn-default btn-bordered border-white btn-translucid" style="margin-top:-15%; border-width: 3px;">
+                    <span class="size-20"><strong>&nbsp;&nbsp;OUR SELECTION&nbsp;&nbsp;</strong></span>
+                </a>
+            </div>
+            <div class="visible-lg">
+                <a href="/store/subscribe" class="btn btn-3d btn-xlg btn-default btn-bordered border-white btn-translucid" style="margin-top:-15%; border-width: 5px;">
+                    <span class="size-25"><strong>&nbsp;&nbsp;JOIN THE CLUB&nbsp;&nbsp;</strong></span>
+                </a>
+                <a href="/store" class="btn btn-3d btn-xlg btn-default btn-bordered border-white btn-translucid" style="margin-top:-15%; border-width: 5px;">
+                    <span class="size-25"><strong>&nbsp;&nbsp;OUR SELECTION&nbsp;&nbsp;</strong></span>
+                </a>
+            </div>
+        </div>
+    </section>
 
-        </section>
-        <!-- /SLIDER -->
+    <div class="row margin-top-20">
+        <div class="visible-xs col-xs-12 text-center">
+            <a href="/store/subscribe" class="btn btn-3d btn-sm btn-default btn-bordered">
+                &nbsp;&nbsp;JOIN THE CLUB&nbsp;&nbsp;
+            </a>
+            <br/>
+            <a href="/store" class="btn btn-3d btn-sm btn-default btn-bordered">
+                &nbsp;&nbsp;OUR SELECTION&nbsp;&nbsp;
+            </a>
+        </div>
+    </div>
 
-        <section class="info-bar dark ">
+    <section id="other_features" class="nopadding nomargin">
+        <div class="container">
 
+            <!-- FEATURED BOXES 3 -->
+            <!-- FEATURED -->
+            <section id="index-featured-products" class="padding-bottom-100">
                 <div class="container">
 
-                <div class="row">
-                    <div class="col-sm-4 text-center">
-                        <i class="glyphicon glyphicon-globe"></i>
-                        <h3>FREE SHIPPING</h3>
-                        <p>Free shipping on all Subscriptions<br/> and $50+ orders to North America</p>
-                    </div>
+                    <h2 class="owl-featured noborder"><strong>FEATURED</strong> PRODUCTS</h2>
+                    <div class="owl-carousel featured nomargin owl-padding-10" data-plugin-options='{"singleItem": false, "items": "4", "stopOnHover":false, "autoPlay":4000, "autoHeight": false, "navigation": true, "pagination": false}'>
 
-                    <div class="col-sm-4 text-center">
-                        <i class="glyphicon glyphicon-usd"></i>
-                        <h3>MONEY BACK GUARANTEE</h3>
-                        <p>100% money back guarantee.</p>
-                    </div>
+                        <!-- item -->
+                        <div id="featured-item-1" class="shop-item nomargin">
 
-                    <div class="col-sm-4 text-center">
-                        <i class="glyphicon glyphicon-flag"></i>
-                        <h3>ORDER TRACKING</h3>
-                        <p>Track your chocolate after it ships!</p>
+                            <div class="thumbnail">
+                                <!-- product image(s) -->
+                                <a class="shop-item-image" href="/store/item/Dick-Taylor-Black-Fig">
+                                    <img class="img-responsive" src="/assets/store_media/full/MD0001-1.png" alt="shop first image" />
+                                    <img class="img-responsive" src="/assets/store_media/full/MD0001-2.png" alt="shop hover image" />
+                                </a>
+                                <!-- /product image(s) -->
+
+                            </div>
+
+                            <div class="shop-item-summary text-center">
+                                <h2>Madecasse - Toasted Coconut</h2>
+
+                                <hr/>
+
+                                <!-- rating -->
+                                <div class="row">
+                                    <img width="50" src="/assets/store_media/flavor_profiles/infused.png" />
+                                    <img width="50" src="/assets/store_media/flavor_profiles/dark.png" />
+                                    <img width="50" src="/assets/store_media/flavor_profiles/coarse.png" />
+                                </div>
+                                <!-- /rating -->
+
+                                <hr/>
+
+                                <!-- price -->
+                                <div class="shop-item-price">
+                                    $ 9.95 CAD
+                                </div>
+                                <!-- /price -->
+                            </div>
+
+                            <!-- buttons -->
+                            <div class="shop-item-buttons text-center">
+                                <a class="btn btn-default" href="/store/item/Dick-Taylor-Black-Fig"><i class="fa fa-cart-plus"></i> Add to Cart</a>
+                            </div>
+                            <!-- /buttons -->
+                        </div>
+                        <!-- /item -->
+
+                        <!-- item -->
+                        <div id="featured-item-2" class="shop-item nomargin">
+
+                            <div class="thumbnail">
+                                <!-- product image(s) -->
+                                <a class="shop-item-image" href="/store/item/Dick-Taylor-Black-Fig">
+                                    <!-- CAROUSEL -->
+                                    <div class="owl-carousel owl-padding-0 nomargin" data-plugin-options='{"singleItem": true, "autoPlay": 3000, "navigation": false, "pagination": false, "transitionStyle":"fadeUp"}'>
+                                        <img class="img-responsive" src="/assets/store_media/full/DT0001-1.png" alt="">
+                                        <img class="img-responsive" src="/assets/store_media/full/DT0001-2.png" alt="">
+                                    </div>
+                                    <!-- /CAROUSEL -->
+                                </a>
+                                <!-- /product image(s) -->
+                            </div>
+
+                            <div class="shop-item-summary text-center">
+                                <h2>Dick Taylor - Black Fig</h2>
+
+                                <hr/>
+
+                                <!-- rating -->
+                                <div class="row">
+                                    <img width="50" src="/assets/store_media/flavor_profiles/sweet.png" />
+                                    <img width="50" src="/assets/store_media/flavor_profiles/infused.png" />
+                                    <img width="50" src="/assets/store_media/flavor_profiles/dark.png" />
+                                </div>
+                                <!-- /rating -->
+
+                                <hr/>
+
+                                <!-- price -->
+                                <div class="shop-item-price">
+                                    $ 11.95 CAD
+                                </div>
+                                <!-- /price -->
+                            </div>
+
+                            <!-- buttons -->
+                            <div class="shop-item-buttons text-center">
+                                <a class="btn btn-default" href="/store/item/Dick-Taylor-Black-Fig"><i class="fa fa-cart-plus"></i> Add to Cart</a>
+                            </div>
+                            <!-- /buttons -->
+                        </div>
+                        <!-- /item -->
+
+                        <!-- item -->
+                        <div id="featured-item-3" class="shop-item nomargin">
+
+                            <div class="thumbnail">
+                                <!-- product image(s) -->
+                                <a class="shop-item-image" href="/store/item/Ritual-Fleur-De-Sel">
+                                    <img class="img-responsive" src="/assets/store_media/full/RI0001-1.png" alt="shop first image" />
+                                    <img class="img-responsive" src="/assets/store_media/full/RI0001-2.png" alt="shop hover image" />
+                                </a>
+                                <!-- /product image(s) -->
+
+                            </div>
+
+                            <div class="shop-item-summary text-center">
+                                <h2>Ritual - Fleur de Sel</h2>
+
+                                <hr/>
+
+                                <!-- rating -->
+                                <div class="row">
+                                    <img width="50" src="/assets/store_media/flavor_profiles/smooth.png" />
+                                    <img width="50" src="/assets/store_media/flavor_profiles/salted.png" />
+                                    <img width="50" src="/assets/store_media/flavor_profiles/infused.png" />
+                                </div>
+                                <!-- /rating -->
+
+                                <hr/>
+
+                                <!-- price -->
+                                <div class="shop-item-price">
+                                    $ 7.95 CAD
+                                </div>
+                                <!-- /price -->
+                            </div>
+
+                            <!-- buttons -->
+                            <div class="shop-item-buttons text-center">
+                                <a class="btn btn-default" href="/store/item/Ritual-Fleur-De-Sel"><i class="fa fa-cart-plus"></i> Add to Cart</a>
+                            </div>
+                            <!-- /buttons -->
+                        </div>
+                        <!-- /item -->
+
+                        <!-- item -->
+                        <div id="featured-item-4" class="shop-item nomargin">
+
+                            <div class="thumbnail">
+                                <!-- product image(s) -->
+                                <a class="shop-item-image" href="/store/item/Vintage-Plantations-75-Dark">
+                                    <img class="img-responsive" src="/assets/store_media/full/VI0001-1.png" alt="shop first image" />
+                                </a>
+                                <!-- /product image(s) -->
+                            </div>
+
+                            <div class="shop-item-summary text-center">
+                                <h2>Vintage Plantations - 75% Dark</h2>
+
+                                <hr/>
+
+                                <!-- rating -->
+                                <div class="row">
+                                    <img width="50" src="/assets/store_media/flavor_profiles/strong.png" />
+                                    <img width="50" src="/assets/store_media/flavor_profiles/smooth.png" />
+                                    <img width="50" src="/assets/store_media/flavor_profiles/dark.png" />
+                                </div>
+                                <!-- /rating -->
+
+                                <hr/>
+
+                                <!-- price -->
+                                <div class="shop-item-price">
+                                    $ 7.50 CAD
+                                </div>
+                                <!-- /price -->
+                            </div>
+
+                            <!-- buttons -->
+                            <div class="shop-item-buttons text-center">
+                                <a class="btn btn-default" href="/store/item/Vintage-Plantations-75-Dark"><i class="fa fa-cart-plus"></i> Add to Cart</a>
+                            </div>
+                            <!-- /buttons -->
+                        </div>
+                        <!-- /item -->
+
+                        <!-- item -->
+                        <div id="featured-item-5" class="shop-item nomargin">
+
+                            <div class="thumbnail">
+                                <!-- product image(s) -->
+                                <a class="shop-item-image" href="/store/item/Palette-De-Bine-Tanzanie">
+                                    <img class="img-responsive" src="/assets/store_media/full/PA0001-1.png" alt="shop first image" />
+                                </a>
+                                <!-- /product image(s) -->
+                            </div>
+
+                            <div class="shop-item-summary text-center">
+                                <h2>Palette De Bine - 72% Tanzanie </h2>
+
+                                <hr/>
+
+                                <!-- rating -->
+                                <div class="row">
+                                    <img width="50" src="/assets/store_media/flavor_profiles/strong.png" />
+                                    <img width="50" src="/assets/store_media/flavor_profiles/smooth.png" />
+                                    <img width="50" src="/assets/store_media/flavor_profiles/dark.png" />
+                                </div>
+                                <!-- /rating -->
+
+                                <hr/>
+
+                                <!-- price -->
+                                <div class="shop-item-price">
+                                    $ 10.95 CAD
+                                </div>
+                                <!-- /price -->
+                            </div>
+
+                            <!-- buttons -->
+                            <div class="shop-item-buttons text-center">
+                                <a class="btn btn-default" href="/store/item/Vintage-Plantations-75-Dark"><i class="fa fa-cart-plus"></i> Add to Cart</a>
+                            </div>
+                            <!-- /buttons -->
+                        </div>
+                        <!-- /item -->
+
+                        <!-- item -->
+                        <div id="featured-item-6" class="shop-item nomargin">
+
+                            <div class="thumbnail">
+                                <!-- product image(s) -->
+                                <a class="shop-item-image" href="/store/item/Raaka-Pink-Sea-Salt">
+                                    <img class="img-responsive" src="/assets/store_media/full/RA0001-1.png" alt="shop first image" />
+                                    <img class="img-responsive" src="/assets/store_media/full/RA0001-2.png" alt="shop hover image" />
+                                </a>
+                                <!-- /product image(s) -->
+                            </div>
+
+                            <div class="shop-item-summary text-center">
+                                <h2>Raaka - Pink Sea Salt</h2>
+
+                                <hr/>
+
+                                <!-- rating -->
+                                <div class="row">
+                                    <img width="50" src="/assets/store_media/flavor_profiles/salted.png" />
+                                    <img width="50" src="/assets/store_media/flavor_profiles/infused.png" />
+                                    <img width="50" src="/assets/store_media/flavor_profiles/citrus.png" />
+                                </div>
+                                <!-- /rating -->
+
+                                <hr/>
+
+                                <!-- price -->
+                                <div class="shop-item-price">
+                                    $ 9.95 CAD
+                                </div>
+                                <!-- /price -->
+                            </div>
+
+                            <!-- buttons -->
+                            <div class="shop-item-buttons text-center">
+                                <a class="btn btn-default" href="/store/item/Raaka-Pink-Sea-Salt"><i class="fa fa-cart-plus"></i> Add to Cart</a>
+                            </div>
+                            <!-- /buttons -->
+                        </div>
+                        <!-- /item -->
+
+                        <!-- item -->
+                        <div id="featured-item-7" class="shop-item nomargin">
+
+                            <div class="thumbnail">
+                                <!-- product image(s) -->
+                                <a class="shop-item-image" href="/store/item/Robert-Chocolate-70-Cocoa">
+                                    <img class="img-responsive" src="/assets/store_media/full/RC0001-1.png" alt="shop hover image" />
+                                    <img class="img-responsive" src="/assets/store_media/full/RC0001-2.png" alt="shop first image" />
+                                </a>
+                                <!-- /product image(s) -->
+                            </div>
+
+                            <div class="shop-item-summary text-center">
+                                <h2>Robert Chocolate - 70%</h2>
+
+                                <hr/>
+
+                                <!-- rating -->
+                                <div class="row">
+                                    <img width="50" src="/assets/store_media/flavor_profiles/smooth.png" />
+                                    <img width="50" src="/assets/store_media/flavor_profiles/dark.png" />
+                                </div>
+                                <!-- /rating -->
+
+                                <hr/>
+
+                                <!-- price -->
+                                <div class="shop-item-price">
+                                    $ 9.95 CAD
+                                </div>
+                                <!-- /price -->
+                            </div>
+
+                            <!-- buttons -->
+                            <div class="shop-item-buttons text-center">
+                                <a class="btn btn-default" href="/store/item/Robert-Chocolate-70-Cocoa"><i class="fa fa-cart-plus"></i> Add to Cart</a>
+                            </div>
+                            <!-- /buttons -->
+                        </div>
+                        <!-- /item -->
+
                     </div>
                 </div>
-                </div>
 
-        </section>
-        <!-- /INFO BAR -->
-
-
-       <!-- <section id="features" class="font-spin">
-            <div class="container">
-                <header class="text-center margin-bottom-30">
-                    <h2 class="font-spin color-emerald-green">How It Works</h2>
-                    <p class="lead font-spin">It's Simple!</p>
-                    <div class="row process-wizard process-wizard-default">
-
-                        <div class="col-xs-4 process-wizard-step complete">
-                            <div class="text-center process-wizard-stepnum">Step 1</div>
-                            <div class="progress"><div class="progress-bar"></div></div>
-                            <a href="#" class="process-wizard-dot"></a>
-                            <div class="process-wizard-info text-center">Select a Plan</div>
-                        </div>
-
-                        <div class="col-xs-4 process-wizard-step active"><!-- complete -->
-                    <!--        <div class="text-center process-wizard-stepnum">Step 2</div>
-                            <div class="progress"><div class="progress-bar"></div></div>
-                            <a href="#" class="process-wizard-dot"></a>
-                            <div class="process-wizard-info text-center">We Build Your Box</div>
-                        </div>
-
-                        <div class="col-xs-4 process-wizard-step disabled"><!-- complete -->
-                     <!--       <div class="text-center process-wizard-stepnum">Step 3</div>
-                            <div class="progress"><div class="progress-bar"></div></div>
-                            <a href="#" class="process-wizard-dot"></a>
-                            <div class="process-wizard-info text-center">You Receive Your Chocolate!</div>
-                        </div>
-                    </div>
-                </header>
-
-
-                <!-- FEATURED BOXES 3 -->
-               <!-- <div class="row font-spin">
-                    <div class="col-sm-8 col-sm-offset-2 text-center">
-                        <p class="">Every Month on the 15th (closest Monday) we will ship your box. If you make your first order after the 15th of any month, we will ship your first box
-                        right away, and your second box on the 15th of the next month!</p>
-                    </div>
-                    <div class="col-sm-12 text-center font-cursive">
-                        <a href="/subscribe" class="btn btn-3d btn-flat-green btn-mega padding-top-15 shadow-after-1">Subscribe Now!</a>
-
-                    </div>
-
-                </div>
-                <!-- /FEATURED BOXES 3 -->
-       <!--     </div>
-        </section>
-
-    <!-- /FEATURES -->
-
-        <section id="other_features" class="margin-top-neg-50">
-            <div class="container">
-
-                <!-- FEATURED BOXES 3 -->
-                <!-- FEATURED -->
-                <section id="index-featured-products" class="padding-bottom-100">
-                    <div class="container">
-
-                        <h2 class="owl-featured noborder"><strong>FEATURED</strong> PRODUCTS</h2>
-                        <div class="owl-carousel featured nomargin owl-padding-10" data-plugin-options='{"singleItem": false, "items": "4", "stopOnHover":false, "autoPlay":4000, "autoHeight": false, "navigation": true, "pagination": false}'>
-
-                            <!-- item -->
-                            <div id="featured-item-1" class="shop-item nomargin">
-
-                                <div class="thumbnail">
-                                    <!-- product image(s) -->
-                                    <a class="shop-item-image" href="/store/item/Dick-Taylor-Black-Fig">
-                                        <img class="img-responsive" src="/assets/store_media/full/MD0001-1.png" alt="shop first image" />
-                                        <img class="img-responsive" src="/assets/store_media/full/MD0001-2.png" alt="shop hover image" />
-                                    </a>
-                                    <!-- /product image(s) -->
-
-                                </div>
-
-                                <div class="shop-item-summary text-center">
-                                    <h2>Madecasse - Toasted Coconut</h2>
-
-                                    <hr/>
-
-                                    <!-- rating -->
-                                    <div class="row">
-                                        <img width="50" src="/assets/store_media/flavor_profiles/infused.png" />
-                                        <img width="50" src="/assets/store_media/flavor_profiles/dark.png" />
-                                        <img width="50" src="/assets/store_media/flavor_profiles/coarse.png" />
-                                    </div>
-                                    <!-- /rating -->
-
-                                    <hr/>
-
-                                    <!-- price -->
-                                    <div class="shop-item-price">
-                                        $ 9.95 CAD
-                                    </div>
-                                    <!-- /price -->
-                                </div>
-
-                                <!-- buttons -->
-                                <div class="shop-item-buttons text-center">
-                                    <a class="btn btn-default" href="/store/item/Dick-Taylor-Black-Fig"><i class="fa fa-cart-plus"></i> Add to Cart</a>
-                                </div>
-                                <!-- /buttons -->
-                            </div>
-                            <!-- /item -->
-
-                            <!-- item -->
-                            <div id="featured-item-2" class="shop-item nomargin">
-
-                                <div class="thumbnail">
-                                    <!-- product image(s) -->
-                                    <a class="shop-item-image" href="/store/item/Dick-Taylor-Black-Fig">
-                                        <!-- CAROUSEL -->
-                                        <div class="owl-carousel owl-padding-0 nomargin" data-plugin-options='{"singleItem": true, "autoPlay": 3000, "navigation": false, "pagination": false, "transitionStyle":"fadeUp"}'>
-                                            <img class="img-responsive" src="/assets/store_media/full/DT0001-1.png" alt="">
-                                            <img class="img-responsive" src="/assets/store_media/full/DT0001-2.png" alt="">
-                                        </div>
-                                        <!-- /CAROUSEL -->
-                                    </a>
-                                    <!-- /product image(s) -->
-                                </div>
-
-                                <div class="shop-item-summary text-center">
-                                    <h2>Dick Taylor - Black Fig</h2>
-
-                                    <hr/>
-
-                                    <!-- rating -->
-                                    <div class="row">
-                                        <img width="50" src="/assets/store_media/flavor_profiles/sweet.png" />
-                                        <img width="50" src="/assets/store_media/flavor_profiles/infused.png" />
-                                        <img width="50" src="/assets/store_media/flavor_profiles/dark.png" />
-                                    </div>
-                                    <!-- /rating -->
-
-                                    <hr/>
-
-                                    <!-- price -->
-                                    <div class="shop-item-price">
-                                        $ 11.95 CAD
-                                    </div>
-                                    <!-- /price -->
-                                </div>
-
-                                <!-- buttons -->
-                                <div class="shop-item-buttons text-center">
-                                    <a class="btn btn-default" href="/store/item/Dick-Taylor-Black-Fig"><i class="fa fa-cart-plus"></i> Add to Cart</a>
-                                </div>
-                                <!-- /buttons -->
-                            </div>
-                            <!-- /item -->
-
-                            <!-- item -->
-                            <div id="featured-item-3" class="shop-item nomargin">
-
-                                <div class="thumbnail">
-                                    <!-- product image(s) -->
-                                    <a class="shop-item-image" href="/store/item/Ritual-Fleur-De-Sel">
-                                        <img class="img-responsive" src="/assets/store_media/full/RI0001-1.png" alt="shop first image" />
-                                        <img class="img-responsive" src="/assets/store_media/full/RI0001-2.png" alt="shop hover image" />
-                                    </a>
-                                    <!-- /product image(s) -->
-
-                                </div>
-
-                                <div class="shop-item-summary text-center">
-                                    <h2>Ritual - Fleur de Sel</h2>
-
-                                    <hr/>
-
-                                    <!-- rating -->
-                                    <div class="row">
-                                        <img width="50" src="/assets/store_media/flavor_profiles/smooth.png" />
-                                        <img width="50" src="/assets/store_media/flavor_profiles/salted.png" />
-                                        <img width="50" src="/assets/store_media/flavor_profiles/infused.png" />
-                                    </div>
-                                    <!-- /rating -->
-
-                                    <hr/>
-
-                                    <!-- price -->
-                                    <div class="shop-item-price">
-                                        $ 7.95 CAD
-                                    </div>
-                                    <!-- /price -->
-                                </div>
-
-                                <!-- buttons -->
-                                <div class="shop-item-buttons text-center">
-                                    <a class="btn btn-default" href="/store/item/Ritual-Fleur-De-Sel"><i class="fa fa-cart-plus"></i> Add to Cart</a>
-                                </div>
-                                <!-- /buttons -->
-                            </div>
-                            <!-- /item -->
-
-                            <!-- item -->
-                            <div id="featured-item-4" class="shop-item nomargin">
-
-                                <div class="thumbnail">
-                                    <!-- product image(s) -->
-                                    <a class="shop-item-image" href="/store/item/Vintage-Plantations-75-Dark">
-                                        <img class="img-responsive" src="/assets/store_media/full/VI0001-1.png" alt="shop first image" />
-                                    </a>
-                                    <!-- /product image(s) -->
-                                </div>
-
-                                <div class="shop-item-summary text-center">
-                                    <h2>Vintage Plantations - 75% Dark</h2>
-
-                                    <hr/>
-
-                                    <!-- rating -->
-                                    <div class="row">
-                                        <img width="50" src="/assets/store_media/flavor_profiles/strong.png" />
-                                        <img width="50" src="/assets/store_media/flavor_profiles/smooth.png" />
-                                        <img width="50" src="/assets/store_media/flavor_profiles/dark.png" />
-                                    </div>
-                                    <!-- /rating -->
-
-                                    <hr/>
-
-                                    <!-- price -->
-                                    <div class="shop-item-price">
-                                        $ 7.50 CAD
-                                    </div>
-                                    <!-- /price -->
-                                </div>
-
-                                <!-- buttons -->
-                                <div class="shop-item-buttons text-center">
-                                    <a class="btn btn-default" href="/store/item/Vintage-Plantations-75-Dark"><i class="fa fa-cart-plus"></i> Add to Cart</a>
-                                </div>
-                                <!-- /buttons -->
-                            </div>
-                            <!-- /item -->
-
-                            <!-- item -->
-                            <div id="featured-item-5" class="shop-item nomargin">
-
-                                <div class="thumbnail">
-                                    <!-- product image(s) -->
-                                    <a class="shop-item-image" href="/store/item/Palette-De-Bine-Tanzanie">
-                                        <img class="img-responsive" src="/assets/store_media/full/PA0001-1.png" alt="shop first image" />
-                                    </a>
-                                    <!-- /product image(s) -->
-                                </div>
-
-                                <div class="shop-item-summary text-center">
-                                    <h2>Palette De Bine - 72% Tanzanie </h2>
-
-                                    <hr/>
-
-                                    <!-- rating -->
-                                    <div class="row">
-                                        <img width="50" src="/assets/store_media/flavor_profiles/strong.png" />
-                                        <img width="50" src="/assets/store_media/flavor_profiles/smooth.png" />
-                                        <img width="50" src="/assets/store_media/flavor_profiles/dark.png" />
-                                    </div>
-                                    <!-- /rating -->
-
-                                    <hr/>
-
-                                    <!-- price -->
-                                    <div class="shop-item-price">
-                                        $ 10.95 CAD
-                                    </div>
-                                    <!-- /price -->
-                                </div>
-
-                                <!-- buttons -->
-                                <div class="shop-item-buttons text-center">
-                                    <a class="btn btn-default" href="/store/item/Vintage-Plantations-75-Dark"><i class="fa fa-cart-plus"></i> Add to Cart</a>
-                                </div>
-                                <!-- /buttons -->
-                            </div>
-                            <!-- /item -->
-
-                            <!-- item -->
-                            <div id="featured-item-6" class="shop-item nomargin">
-
-                                <div class="thumbnail">
-                                    <!-- product image(s) -->
-                                    <a class="shop-item-image" href="/store/item/Raaka-Pink-Sea-Salt">
-                                        <img class="img-responsive" src="/assets/store_media/full/RA0001-1.png" alt="shop first image" />
-                                        <img class="img-responsive" src="/assets/store_media/full/RA0001-2.png" alt="shop hover image" />
-                                    </a>
-                                    <!-- /product image(s) -->
-                                </div>
-
-                                <div class="shop-item-summary text-center">
-                                    <h2>Raaka - Pink Sea Salt</h2>
-
-                                    <hr/>
-
-                                    <!-- rating -->
-                                    <div class="row">
-                                        <img width="50" src="/assets/store_media/flavor_profiles/salted.png" />
-                                        <img width="50" src="/assets/store_media/flavor_profiles/infused.png" />
-                                        <img width="50" src="/assets/store_media/flavor_profiles/citrus.png" />
-                                    </div>
-                                    <!-- /rating -->
-
-                                    <hr/>
-
-                                    <!-- price -->
-                                    <div class="shop-item-price">
-                                        $ 9.95 CAD
-                                    </div>
-                                    <!-- /price -->
-                                </div>
-
-                                <!-- buttons -->
-                                <div class="shop-item-buttons text-center">
-                                    <a class="btn btn-default" href="/store/item/Raaka-Pink-Sea-Salt"><i class="fa fa-cart-plus"></i> Add to Cart</a>
-                                </div>
-                                <!-- /buttons -->
-                            </div>
-                            <!-- /item -->
-
-                            <!-- item -->
-                            <div id="featured-item-7" class="shop-item nomargin">
-
-                                <div class="thumbnail">
-                                    <!-- product image(s) -->
-                                    <a class="shop-item-image" href="/store/item/Robert-Chocolate-70-Cocoa">
-                                        <img class="img-responsive" src="/assets/store_media/full/RC0001-1.png" alt="shop hover image" />
-                                        <img class="img-responsive" src="/assets/store_media/full/RC0001-2.png" alt="shop first image" />
-                                    </a>
-                                    <!-- /product image(s) -->
-                                </div>
-
-                                <div class="shop-item-summary text-center">
-                                    <h2>Robert Chocolate - 70%</h2>
-
-                                    <hr/>
-
-                                    <!-- rating -->
-                                    <div class="row">
-                                        <img width="50" src="/assets/store_media/flavor_profiles/smooth.png" />
-                                        <img width="50" src="/assets/store_media/flavor_profiles/dark.png" />
-                                    </div>
-                                    <!-- /rating -->
-
-                                    <hr/>
-
-                                    <!-- price -->
-                                    <div class="shop-item-price">
-                                        $ 9.95 CAD
-                                    </div>
-                                    <!-- /price -->
-                                </div>
-
-                                <!-- buttons -->
-                                <div class="shop-item-buttons text-center">
-                                    <a class="btn btn-default" href="/store/item/Robert-Chocolate-70-Cocoa"><i class="fa fa-cart-plus"></i> Add to Cart</a>
-                                </div>
-                                <!-- /buttons -->
-                            </div>
-                            <!-- /item -->
-
-                        </div>
-                    </div>
-
-                </section>
-                <!-- /FEATURED -->
-
-                <section style="border:none;" class="margin-bottom-neg-50">
-                    <div class="row">
-                        <header class="text-center margin-bottom-30">
-                            <h2 class="font-spin color-emerald-green">What's in the Box</h2>
-                            <p class="lead font-spin">Four of Our Favorite Bars are Selected Every Month</p>
-                        </header>
-                    </div>
-
-                    <div class="row text-center">
-                        <a href="/store" class="btn btn-xlg bg-emerald-green size-25 text-white">Shop All Bars Now</a>
-                    </div>
-                </section>
-
-                <!-- /FEATURED BOXES 3 -->
-            </div>
-        </section>
-        <!-- /FEATURES -->
-
-            <!-- -->
-            <section class="alternate margin-top-neg-50">
-                <div class="container">
-
-                    <div class="text-center">
-                        <h2 class="wow fadeInUp nomargin" data-wow-delay="0.3s">Learn More About Our Partners!</h2>
-
-                        <p class="lead font-lato size-30 wow fadeInUp margin-bottom-60" data-wow-delay="0.5s">Here Are Just a few of our featured makers, these are some of the most artistic people we've ever met! </p>
-
-                        <div class="text-center margin-top-10 margin-bottom-100">
-                            <div class="owl-carousel nomargin" data-plugin-options='{"singleItem": false, "autoPlay": true}'>
-                                <div>
-                                    <img class="img-responsive" src="/assets/images/partners/acalli.png" alt="">
-                                </div>
-                                <div>
-                                    <img class="img-responsive" src="/assets/images/partners/brasstown.png" alt="">
-                                </div>
-                                <div>
-                                    <img class="img-responsive" src="/assets/images/partners/habitual.png" alt="">
-                                </div>
-                                <div>
-                                    <img class="img-responsive" src="/assets/images/partners/hello_cocoa.png" alt="">
-                                </div>
-                                <div>
-                                    <img class="img-responsive" src="/assets/images/partners/kyya.png" alt="">
-                                </div>
-                                <div>
-                                    <img class="img-responsive" src="/assets/images/partners/ritual.png" alt="">
-                                </div>
-                                <div>
-                                    <img class="img-responsive" src="/assets/images/partners/starchild.png" alt="">
-                                </div>
-                                <div>
-                                    <img class="img-responsive" src="/assets/images/partners/pitchdark.png" alt="">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="margin-top-10">
-                            <a href="/partners" class="btn btn-3d btn-amber shadow-after-1 font-cursive size-25">Learn More</a>
-                        </div>
-                    </div>
-                </div>
             </section>
-            <!-- / -->
+            <!-- /FEATURED -->
 
+        </div>
+    </section>
 
-
-        <!-- Include the footer template -->
-        <%- include pages/templates/footer.ejs %>
-
-    <!--paralax section-->
-    <!-- /wrapper -->
+    <!-- Include the footer template -->
+    <%- include pages/templates/footer.ejs %>
 
 
 </div>
