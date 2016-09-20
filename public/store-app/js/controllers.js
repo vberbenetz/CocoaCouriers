@@ -308,6 +308,10 @@ function subscriptionCtrl ($scope, $window, $cookies, $state, appService) {
     $scope.isMonth = function(monthIdx) {
         var now = new Date();
         return (now.getMonth() === monthIdx);
+    };
+
+    $scope.startsWith = function(str1, str2) {
+        return !!(str1.startsWith(str2));
     }
 }
 

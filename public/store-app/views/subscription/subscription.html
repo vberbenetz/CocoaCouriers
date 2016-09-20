@@ -76,19 +76,21 @@
 
                             <div class="row visible-md visible-lg margin-left-20 margin-right-20 margin-top-15">
                                 <a ng-click="goToPlan(plan.id)">
-                                    <img class="img-responsive" src="/assets/images/subscription_page/CC_Subscription_TheOriginal.png" />
+                                    <img class="img-responsive" src="/assets/images/subscription_page/sub_box.png" />
                                 </a>
                             </div>
                             <div class="row visible-xs visible-sm margin-left-100 margin-right-100 margin-top-15">
                                 <a ng-click="goToPlan(plan.id)">
-                                    <img class="img-responsive" src="/assets/images/subscription_page/CC_Subscription_TheOriginal.png" />
+                                    <img class="img-responsive" src="/assets/images/subscription_page/sub_box.png" />
                                 </a>
                             </div>
 
                             <h4 class="margin-top-20 size-30 cc-color-teal">
                                 <sup>$</sup>{{ (plan.amount/plan.intervalCount/100).toFixed(0) }}<em>/Month</em>
                             </h4>
-                            <p class="cc-color-grey">{{ plan.numberOfBars }} Premium Artisan Bars</p>
+                            <p ng-if="startsWith(plan.id, 'original')" class="cc-color-grey">Treat yourself to premium artisan chocolate bars</p>
+                            <p ng-if="startsWith(plan.id, 'deluxe')" class="cc-color-grey">Enjoy artisan chocolate and luxurious products</p>
+                            <p ng-if="startsWith(plan.id, 'chocoholic')" class="cc-color-grey">Satisfy your every craving with the ultimate selection</p>
 
                             <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan(plan)" class="btn btn-3d btn-dark-brown margin-top-10">
                                 <span class="font-maven-pro size-20">&nbsp;&nbsp;BUY&nbsp;&nbsp;</span>
@@ -109,7 +111,7 @@
                 </p>
             </div>
             <div class="col-xs-4 col-xs-offset-2 col-lg-3 col-lg-offset-3">
-                <img class="img-responsive img-circle text-right" src="/assets/images/subscription_page/CC_Subscription_ETChocolate.jpg" />
+                <img class="img-responsive img-circle text-right" src="/assets/images/subscription_page/sub_main_circle.jpg" />
             </div>
         </div>
 
