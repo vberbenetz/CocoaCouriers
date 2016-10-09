@@ -1,6 +1,26 @@
 'use strict';
 
-function mainCtrl($scope, $rootScope, $window, appService) {
+function mainCtrl($scope, $rootScope, $window, $http, $cookies, appService) {
+
+    var c = $cookies.get('uCrId');
+    if (!c) {
+        $http({
+            url: 'https://ipinfo.io/json?token=039ebf07f4a8d2',
+            method: 'GET'
+        }).success(function(res) {
+            var expireDate = new Date();
+            expireDate.setDate(expireDate.getDate() + 1);
+            $cookies.put('uCrId', res.country, {'expires': expireDate});
+            $scope.userCountry = res.country;
+        }).error(function(err) {
+        });
+    }
+    else if ( (c == 'CA') || (c == 'US') ) {
+        $scope.userCountry = c;
+    }
+    else {
+        $scope.userCountry = 'CA';
+    }
 
     appService.stPubKey.get(function(data) {
         $rootScope.stPubKey = data.stPubKey;
@@ -745,45 +765,56 @@ function updateSubShippingCtrl ($scope, appService) {
     }
 }
 
-function updatePlanCtrl($scope, stService) {
+function updatePlanCtrl($scope, $window, $timeout, appService) {
 
-    if (typeof $scope.$parent.customer.subscriptions.data[0] !== 'undefined') {
-        $scope.currentPlan = $scope.$parent.customer.subscriptions.data[0].plan;
+    if (typeof $scope.$parent.customerSubscription === 'undefined') {
+        $window.location.href="/store/subscribe";
+    }
+    else {
+        $scope.loaded = true;
     }
 
-    $scope.selectPlan = function(planId) {
-        $scope.selectedPlan = planId;
-    };
+    appService.plan.query(function(plans) {
+        var filteredPlans = [];
+        var userRegion = $scope.$parent.userCountry;
 
-    $scope.updatePlan = function() {
+        plans.forEach(function(p) {
+            if (p.id.split('_')[1].toUpperCase().indexOf(userRegion) > -1) {
+                filteredPlans.push(p);
+            }
+        });
+        filteredPlans.sort(function(a, b) {
+            if ( (a.amount/a.intervalCount) > (b.amount/b.intervalCount) ) {
+                return 1;
+            }
+            if ( (a.amount/a.intervalCount) < (b.amount/b.intervalCount) ) {
+                return -1;
+            }
+            return 0;
+        });
+        $scope.plans = filteredPlans;
+    }, function(err) {});
 
-        var payload = {
-            plan: $scope.selectedPlan,
-            coupon: $scope.couponCode
-        };
+    $scope.updatePlan = function(newPlanId) {
 
-        // Subscribe to a new plan because the user was not subscribed or was removed because of a card charge issue
-        if (typeof $scope.currentPlan === 'undefined') {
-            stService.subscription.save(payload, function(newSubscription) {
-                if (typeof newSubscription.data[0] !== 'undefined') {
-                    $scope.currentPlan = newSubscription.data[0].plan;
-                }
-            }, function(err) {
-                var result = handleStCCErr(err.data);
-                $scope.$parent.customer.metadata.card_error_code = result.msg;
-                $scope.cardError = result.msg;
+        $scope.updateSuccess = false;
+        $scope.updateError = false;
+
+        appService.subscription.updatePlan({newPlanId: newPlanId}, function(newSubscription) {
+            $scope.$parent.customerSubscription = newSubscription;
+
+            appService.subscription.get(function(subscription) {
+                $scope.$parent.customerSubscription = subscription;
+
+                $scope.updateSuccess = true;
+                $timeout(function() {
+                    $window.location.href="/My-Account";
+                }, 4000);
             });
-        }
-        // Change existing subscription
-        else {
-            stService.subscription.updatePlan(payload, function(newSubscription) {
-                $scope.currentPlan = newSubscription.data[0].plan;
-            }, function(err) {
-                var result = handleStCCErr(err.data);
-                $scope.$parent.customer.metadata.card_error_code = result.msg;
-                $scope.cardError = result.msg;
-            });
-        }
+        }, function(err) {
+            $scope.updatedError = true;
+        });
+
     }
 
 }

@@ -814,19 +814,19 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
                 }
             });
         }
+        else if (req.query.newPlanId) {
+            subscriptionCtrl.update(req.user.stId, req.query.newPlanId, req.connection.remoteAddress, dbConnPool, function(err, result) {
+                if (err) {
+                    errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
+                }
+                else {
+                    res.send(result);
+                }
+            });
+        }
         else {
             res.status(400).send("bad_request");
         }
-/*
-        subscriptionCtrl.update(req.user.stId, req.query.newPlanId, req.connection.remoteAddress, function(err, result) {
-            if (err) {
-                errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
-            }
-            else {
-                res.send(result);
-            }
-        });
-*/
     });
 /*
     app.delete('/api/subscription', auth, function (req, res, next) {

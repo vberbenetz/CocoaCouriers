@@ -94,29 +94,46 @@
             </div>
             <div class="col-md-7 col-lg-9">
                 <div class="row">
-                    <div class="col-md-7">
-                        <h5 class="text-center" ng-show="customerSubscription.id">
-                            Currently subscribed to: <strong>{{ customerSubscription.name }}</strong>
-                        </h5>
-                        <div class="text-center" ng-hide="customerSubscription.id">
-                            <div class="row">
-                                <h5 class="visible-xs">Plans start as low as <strong>$26.99/month !</strong></h5>
-                                <h4 class="hidden-xs">Plans start as low as <strong>$26.99/month !</strong></h4>
-                            </div>
-                            <div class="row">
-                                <a href="/store/subscribe" class="btn btn-3d btn-lg bg-emerald-green text-white">Subscribe Now!</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-5">
-                        <strong ng-show="customerSubscription"><a class="pull-right btn btn-default" ng-href="/My-Account/update-subscription">Update / Cancel Plan</a></strong>
-                    </div>
-                    <div class="row" ng-show="customerSubscription.id">
+                    <div class="row">
                         <div class="col-md-7">
                             <div ng-show="customer">
                                 <div class="address-box">
                                     <div class="bg-emerald-green opacity-9 radius-8 padding-top-15 padding-bottom-15">
 
+                                        <h3 class="margin-left-15 text-white">
+                                            Your Plan:
+                                            <span class="fa fa-gift fa-2x text-white pull-right margin-right-15"></span>
+                                        </h3>
+
+                                        <div class="row">
+                                            <div class="col-xs-8">
+                                                <h5 class="row margin-left-15 margin-right-15">
+                                                    <span ng-show="customerSubscription.id" class="text-white">
+                                                        THE {{ (customerSubscription.name).toUpperCase() }} <br/>
+                                                        $ {{ (customerSubscription.amount/100).toFixed(0) }} / month
+                                                    </span>
+                                                    <span ng-hide="customerSubscription.id" class="text-white">
+                                                        <span class="visible-xs">Plans start as low as <strong>$35/month !</strong></span>
+                                                        <span class="hidden-xs">Plans start as low as <strong>$35/month !</strong></span>
+                                                    </span>
+                                                </h5>
+                                            </div>
+                                            <div class="col-xs-4">
+                                                <strong ng-hide="customerSubscription.id" class="margin-top-20 pull-right margin-right-15"><a class="btn btn-default" href="/store/subscribe">Subscribe!</a></strong>
+                                                <strong ng-show="customerSubscription.id" class="margin-top-20 pull-right margin-right-15"><a class="btn btn-default" ng-href="/My-Account/update-plan">Update</a></strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row margin-top-50" ng-show="customerSubscription.id">
+                        <div class="col-md-7">
+                            <div ng-show="customer">
+                                <div class="address-box">
+                                    <div class="bg-emerald-green opacity-9 radius-8 padding-top-15 padding-bottom-15">
                                         <h3 class="margin-left-15 text-white">
                                             Ship To:
                                             <span class="fa fa-truck fa-2x text-white pull-right margin-right-15"></span>

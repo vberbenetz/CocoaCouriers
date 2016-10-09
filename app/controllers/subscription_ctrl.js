@@ -191,7 +191,7 @@ subscriptionCtrl.prototype = {
 
     },
 
-    update: function (customerId, newPlanId, reqIP, callback) {
+    update: function (customerId, planId, reqIP, dbConnPool, callback) {
 
         var subscriptionCtrlObj = this;
 
@@ -227,24 +227,15 @@ subscriptionCtrl.prototype = {
                 }
                 else {
 
-                    // Switch plan to currency in which card originates from
-                    payload.plan = helpers.sourceCountryPlanId(newPlanId, customer.sources.data[0].country);
+                    if (customer.subscriptions.data[0]) {
 
-                    // Check if customer has a recurring subscription.
-                    // If not, subscribe them to the chosen plan
-                    var recurringSubscription = helpers.filterRecurringSubscriptions(customer.subscriptions);
-                    if (recurringSubscription === null) {
-                        subscriptionCtrlObj.create(customerId, newPlanId, null, reqIP, function(err, newSubscription) {
-                            return callback(err, newSubscription);
-                        });
-                    }
+                        // Switch plan to currency in which card originates from
+                        payload.plan = helpers.sourceCountryPlanId(planId, customer.sources.data[0].country);
 
-                    // Switch plan to start after the current plan that is paid for expires
-                    else {
-                        payload.trial_end = recurringSubscription.current_period_end;
+                        payload.trial_end = customer.subscriptions.data[0].current_period_end;
 
                         // Update the customer's subscription to the new plan
-                        stripe.customers.updateSubscription(customerId, recurringSubscription.id, payload, function(err, subscription) {
+                        stripe.customers.updateSubscription(customerId, customer.subscriptions.data[0].id, payload, function(err, subscription) {
                             if (err) {
                                 console.log(err);
                                 return callback({
@@ -258,10 +249,37 @@ subscriptionCtrl.prototype = {
                             }
                             else {
                                 log.info("Updated subscription", subscription, reqIP);
-                                return callback(false, subscription);
+
+                                var subUpdateQuery = {
+                                    statement: 'UPDATE Subscription SET ? WHERE ? AND ?',
+                                    params: [
+                                        {
+                                            plan_id: payload.plan
+                                        },
+                                        {
+                                            stripeId: customerId
+                                        },
+                                        {
+                                            subscriptionId: subscription.id
+                                        }
+                                    ]
+                                };
+
+                                dbUtils.query(dbConnPool, subUpdateQuery, function(err, result) {
+                                    if (err) {
+                                        return callback(err, null);
+                                    }
+                                    else {
+                                        return callback(false, subscription);
+                                    }
+                                });
                             }
                         });
                     }
+                    else {
+                        return callback(true, null);
+                    }
+
                 }
 
             }

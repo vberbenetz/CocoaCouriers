@@ -45,6 +45,13 @@ function appService($resource) {
         subscription: $resource('/api/subscription',
             {},
             {
+                updatePlan: {
+                    method: 'PUT',
+                    params: {
+                        newPlanId: '@newPlanId'
+                    },
+                    isArray: false
+                },
                 updateShippingAddress: {
                     method: 'PUT',
                     params: {
@@ -57,6 +64,8 @@ function appService($resource) {
         ),
 
         subscriptionAltShippingAddress: $resource('/api/subscription/shipping-address'),
+
+        plan: $resource('/api/plan'),
 
         logout: $resource('/logout')
     }

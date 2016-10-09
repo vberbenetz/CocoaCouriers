@@ -41,7 +41,8 @@ function config($routeProvider, $locationProvider, stripeProvider) {
             controller: 'billingHistoryCtrl',
             templateUrl: '/manage-account-app/views/billing_details.html'
         })
-        .when('/update-subscription', {
+        .when('/update-plan', {
+            controller: 'updatePlanCtrl',
             templateUrl: '/manage-account-app/views/update_subscription.html'
         });
 

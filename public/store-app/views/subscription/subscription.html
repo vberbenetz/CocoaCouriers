@@ -18,84 +18,58 @@
     <div class="container" ng-show="formPlans && $parent.loadedCustomerSubscription">
 
         <div class="row margin-bottom-100">
-            <div ng-show="$parent.customerSubscription">
-                <div class="col-md-4 col-sm-4 col-xs-8 col-sm-push-4 col-xs-push-2 margin-bottom-100">
-                    <div class="price-clean">
-                        <h3 class="pricing-head" ng-show="$parent.customerSubscription.intervalCount>1">{{ $parent.customerSubscription.intervalCount }} Month Plan</h3>
-                        <h3 class="pricing-head" ng-show="$parent.customerSubscription.intervalCount===1">
-                            Monthly
-                            <span class="text-black" ng-show="indexOf($parent.customerSubscription.plan_id, 'starter')>-1">
-                                Starter Plan
-                            </span>
-                            <span class="text-black" ng-show="indexOf($parent.customerSubscription.plan_id, 'starter')<0">
-                                Plan
-                            </span>
-                        </h3>
-                        <h4>
-                            <sup>$</sup>{{ ($parent.customerSubscription.amount/$parent.customerSubscription.intervalCount/100).toFixed(2) }}<em> / Month</em>
-                        </h4>
-                        <h5 ng-if="$parent.customerSubscription.intervalCount===6"> ${{ $parent.customerSubscription.amount/100 }} SEMI-ANNUALLY </h5>
-                        <h5 ng-if="$parent.customerSubscription.intervalCount===3"> ${{ $parent.customerSubscription.amount/100 }} QUARTERLY </h5>
-                        <h5 ng-if="$parent.customerSubscription.intervalCount===1"> ${{ $parent.customerSubscription.amount/100 }} MONTHLY </h5>
-                        <p ng-show="indexOf($parent.customerSubscription.plan_id, 'starter')>-1" class="text-gray">3 Premium Artisan Bars</p>
-                        <p ng-show="indexOf($parent.customerSubscription.plan_id, 'starter')<0" class="text-gray">4 Premium Artisan Bars</p>
-                        <hr />
+            <div class="col-sm-offset-1 col-sm-10">
+                <div class="col-md-4 col-sm-12 margin-bottom-40" ng-repeat="plan in formPlans">
+                    <div class="price-clean" ng-class="{'thick-pricing-box' : plan.id===$parent.customerSubscription.id}">
+                        <a ng-click="goToPlan(plan.id)">
+                            <div class="pricing-head">
+                                <p class="font-maven-pro size-30 color-dark-brown hidden-md">
+                                    <span class="font-lobster size-25 border-top-1 border-bottom-1 border-dark-brown">
+                                        The
+                                    </span>
+                                    &nbsp;{{ plan.name.toUpperCase() }}
+                                </p>
+                                <p class="font-maven-pro size-25 color-dark-brown visible-md">
+                                    <span class="font-lobster size-20 border-top-1 border-bottom-1 border-dark-brown">
+                                        The
+                                    </span>
+                                    &nbsp;{{ plan.name.toUpperCase() }}
+                                </p>
+                            </div>
+                        </a>
 
-                        <p class="margin-top-20 margin-bottom-20 text-gray">
-                            <small>* Automatically re-bills every
-                                <span ng-if="$parent.customerSubscription.intervalCount===1">Month</span>
-                                <span ng-if="$parent.customerSubscription.intervalCount>1">{{ $parent.customerSubscription.intervalCount }} Months</span>
-                                on the 15th
-                            </small>
-                        </p>
-                        <a href="/My-Account" class="btn btn-3d btn-success btn-block btn-lg">Update Subscription</a>
-                    </div>
-                </div>
-            </div>
-
-            <div ng-hide="$parent.customerSubscription">
-                <div class="col-sm-offset-1 col-sm-10">
-                    <div class="col-md-4 col-sm-12 margin-bottom-40" ng-repeat="plan in formPlans">
-                        <div class="price-clean border-none">
+                        <div class="row visible-md visible-lg margin-left-20 margin-right-20 margin-top-15">
                             <a ng-click="goToPlan(plan.id)">
-                                <div class="pricing-head">
-                                    <p class="font-maven-pro size-30 color-dark-brown hidden-md">
-                                        <span class="font-lobster size-25 border-top-1 border-bottom-1 border-dark-brown">
-                                            The
-                                        </span>
-                                        &nbsp;{{ plan.name.toUpperCase() }}
-                                    </p>
-                                    <p class="font-maven-pro size-25 color-dark-brown visible-md">
-                                        <span class="font-lobster size-20 border-top-1 border-bottom-1 border-dark-brown">
-                                            The
-                                        </span>
-                                        &nbsp;{{ plan.name.toUpperCase() }}
-                                    </p>
-                                </div>
+                                <img class="img-responsive" src="/assets/images/subscription_page/sub_box.png" />
                             </a>
+                        </div>
+                        <div class="row visible-xs visible-sm margin-left-100 margin-right-100 margin-top-15">
+                            <a ng-click="goToPlan(plan.id)">
+                                <img class="img-responsive" src="/assets/images/subscription_page/sub_box.png" />
+                            </a>
+                        </div>
 
-                            <div class="row visible-md visible-lg margin-left-20 margin-right-20 margin-top-15">
-                                <a ng-click="goToPlan(plan.id)">
-                                    <img class="img-responsive" src="/assets/images/subscription_page/sub_box.png" />
-                                </a>
-                            </div>
-                            <div class="row visible-xs visible-sm margin-left-100 margin-right-100 margin-top-15">
-                                <a ng-click="goToPlan(plan.id)">
-                                    <img class="img-responsive" src="/assets/images/subscription_page/sub_box.png" />
-                                </a>
-                            </div>
+                        <h4 class="margin-top-20 size-30 cc-color-teal">
+                            <sup>$</sup>{{ (plan.amount/plan.intervalCount/100).toFixed(0) }}<em>/Month</em>
+                        </h4>
+                        <p ng-if="startsWith(plan.id, 'original')" class="cc-color-grey">Treat yourself to premium artisan chocolate bars</p>
+                        <p ng-if="startsWith(plan.id, 'deluxe')" class="cc-color-grey">Enjoy artisan chocolate and luxurious products</p>
+                        <p ng-if="startsWith(plan.id, 'chocoholic')" class="cc-color-grey">Satisfy your every craving with the ultimate selection</p>
 
-                            <h4 class="margin-top-20 size-30 cc-color-teal">
-                                <sup>$</sup>{{ (plan.amount/plan.intervalCount/100).toFixed(0) }}<em>/Month</em>
-                            </h4>
-                            <p ng-if="startsWith(plan.id, 'original')" class="cc-color-grey">Treat yourself to premium artisan chocolate bars</p>
-                            <p ng-if="startsWith(plan.id, 'deluxe')" class="cc-color-grey">Enjoy artisan chocolate and luxurious products</p>
-                            <p ng-if="startsWith(plan.id, 'chocoholic')" class="cc-color-grey">Satisfy your every craving with the ultimate selection</p>
-
+                        <div ng-hide="$parent.customerSubscription">
                             <a href="" ng-disabled="formPlans.length==0" ng-click="selectPlan(plan)" class="btn btn-3d btn-dark-brown margin-top-10">
                                 <span class="font-maven-pro size-20">&nbsp;&nbsp;BUY&nbsp;&nbsp;</span>
                             </a>
                         </div>
+                        <div ng-show="$parent.customerSubscription">
+                            <a ng-show="plan.id!==$parent.customerSubscription.id" href="/My-Account/" class="btn btn-3d btn-dark-brown margin-top-10">
+                                <span class="font-maven-pro size-20">&nbsp;&nbsp;UPDATE&nbsp;&nbsp;</span>
+                            </a>
+                            <a ng-show="plan.id===$parent.customerSubscription.id" href="" class="btn btn-3d btn-default margin-top-10">
+                                <span class="font-maven-pro size-20">&nbsp;&nbsp;CURRENT&nbsp;&nbsp;</span>
+                            </a>
+                        </div>
+
                     </div>
                 </div>
             </div>

@@ -142,6 +142,7 @@ helpers.prototype = {
     },
 
     sourceCountryPlanId: function(planId, isoCountry) {
+
         var splitPlanId = planId.split('_');
         var newPlanId = splitPlanId[0];
 
@@ -177,16 +178,6 @@ helpers.prototype = {
             default:
                 return null;
         }
-    },
-
-    filterRecurringSubscriptions: function (subscriptions) {
-        for (var i = 0; i < subscriptions.data.length; i++) {
-            if (subscriptions.data[i].plan.metadata.is_gift === 'false') {
-                return subscriptions.data[i];
-            }
-        }
-
-        return null;
     },
 
     formatStripeShipping: function (obj) {
