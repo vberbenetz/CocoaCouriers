@@ -248,7 +248,7 @@ subscriptionCtrl.prototype = {
                                 }, null);
                             }
                             else {
-                                log.info("Updated subscription", subscription, reqIP);
+                                log.info("Updated subscription on stripe", subscription, reqIP);
 
                                 var subUpdateQuery = {
                                     statement: 'UPDATE Subscription SET ? WHERE ? AND ?',
@@ -270,6 +270,7 @@ subscriptionCtrl.prototype = {
                                         return callback(err, null);
                                     }
                                     else {
+                                        log.info("Updated subscription locally", subscription, reqIP);
                                         return callback(false, subscription);
                                     }
                                 });
@@ -335,7 +336,7 @@ subscriptionCtrl.prototype = {
         });
     },
 
-    cancel: function (customerId, subscriptionId, reqIP, callback) {
+    cancel: function (customerId, subscriptionId, reqIP, dbConnPool, callback) {
 
         stripe.customers.cancelSubscription(customerId, subscriptionId, function(err, confirmation) {
             if (err) {
@@ -350,8 +351,24 @@ subscriptionCtrl.prototype = {
                 }, null);
             }
             else {
-                log.info("Cancelled subscription", {customerId: customerId, subscriptionId: subscriptionId}, reqIP);
-                return callback(false, confirmation);
+                log.info("Cancelled subscription on stripe", {customerId: customerId, subscriptionId: subscriptionId}, reqIP);
+
+                var subCancelQuery = {
+                    statement: 'DELETE FROM Subscription WHERE ?',
+                    params: {
+                        subscriptionId: subscriptionId
+                    }
+                };
+
+                dbUtils.query(dbConnPool, subCancelQuery, function(err, result) {
+                    if (err) {
+                        return callback(err, null);
+                    }
+                    else {
+                        log.info("Cancelled subscription locally", subscriptionId, reqIP);
+                        return callback(false, confirmation);
+                    }
+                });
             }
         })
     }

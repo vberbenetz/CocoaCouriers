@@ -828,12 +828,12 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
             res.status(400).send("bad_request");
         }
     });
-/*
+
     app.delete('/api/subscription', auth, function (req, res, next) {
         var customerId = req.user.stId;
-        var subscriptionId = req.query.subscriptionId;
+        var subscriptionId = req.query.subId;
 
-        subscriptionCtrl.cancel(customerId, subscriptionId, req.connection.remoteAddress, function(err, result) {
+        subscriptionCtrl.cancel(customerId, subscriptionId, req.connection.remoteAddress, dbConnPool, function(err, result) {
             if (err) {
                 errorHandler.handle(res, err, req.user, req.connection.remoteAddress);
             }
@@ -842,7 +842,7 @@ module.exports = function(app, passport, dbConnPool, emailUtils) {
             }
         });
     });
-*/
+
     // ----------------- Coupon Related ------------------------ //
     app.get('/api/coupon', function (req, res, next) {
 

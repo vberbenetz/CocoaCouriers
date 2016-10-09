@@ -4,6 +4,9 @@
     <h1 class="text-center"><a href="/My-Account"><button class="btn btn-green pull-left"><span class="fa fa-chevron-left"></span> Back</button></a> Update Plan <button class="btn btn-default pull-right" ng-click="logout()">Logout</button></h1>
 
     <div class="divider double-line"></div>
+    <pre>
+        {{ $parent.customerSubscription }}
+    </pre>
 
     <div class="row margin-bottom-100">
         <div class="col-sm-offset-1 col-sm-10">
@@ -67,6 +70,27 @@
                 <div class="alert alert-success" ng-show="updateSuccess">
                     <strong>Successfully update your subscription!</strong>
                 </div>
+            </div>
+
+            <div class="col-xs-12 margin-top-50">
+                <uib-accordion close-others="false">
+                    <div uib-accordion-group class="panel-danger" heading="+ Cancel Subscription">
+                        <h4>Are you sure you want to Cancel your Subscription?</h4>
+                        <div class="pull-left">
+                            <small>* Cancellations between the 14th and 16th of the month will incur the current month's charge, and will receive that month's box.</small>
+                        </div>
+                        <button class="btn btn-danger pull-right" ng-click="cancelSubscription()">Cancel Subscription</button>
+
+                        <div class="col-xs-12 margin-top-30">
+                            <div class="alert alert-danger" ng-show="cancelError">
+                                <strong>There was an error cancelling your subscription. Please try again, or contact us.</strong>
+                            </div>
+                            <div class="alert alert-success" ng-show="cancelSuccess">
+                                <strong>Successfully cancelled your subscription!</strong>
+                            </div>
+                        </div>
+                    </div>
+                </uib-accordion>
             </div>
         </div>
     </div>

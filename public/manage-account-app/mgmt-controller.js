@@ -815,6 +815,22 @@ function updatePlanCtrl($scope, $window, $timeout, appService) {
             $scope.updatedError = true;
         });
 
+    };
+
+    $scope.cancelSubscription = function() {
+        $scope.cancelSuccess = false;
+        $scope.cancelError = false;
+
+        appService.subscription.cancelSub({subId: $scope.$parent.customerSubscription.subscriptionId}, function(result) {
+            delete $scope.$parent.customerSubscription;
+
+            $scope.cancelSuccess = true;
+            $timeout(function() {
+                $window.location.href="/My-Account";
+            }, 4000);
+        }, function(err) {
+            $scope.cancelError = true;
+        });
     }
 
 }

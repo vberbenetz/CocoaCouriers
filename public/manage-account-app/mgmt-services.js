@@ -59,6 +59,13 @@ function appService($resource) {
                         altShippingAddrId: '@altShippingAddrId'
                     },
                     isArray: false
+                },
+                cancelSub: {
+                    method: 'DELETE',
+                    params: {
+                        subId: '@subId'
+                    },
+                    isArray: false
                 }
             }
         ),
