@@ -1,4 +1,5 @@
 # Cocoa Couriers
+This is a complete guide on setting up a webserver and deploying the website. It also contains a code summary and a general business operations guide.
 
 ## Installation and Deployment
 If in cluster mode, deploy to an instance that has enough resources to support at least 200MB x NUMBER_OF_CORES
@@ -203,3 +204,57 @@ This includes:
 - update billing
 - update subscription shipping address
 - update/cancel subscription plan
+
+## General Buiness Operation
+#### Fulfilling Subscriptions
+When a customer subscribes, they will only be charged for that subscription between the 15th and the end of that month. This means that we are alerted to a new subscription shipment via email notification from Stripe, on a successful charge.
+
+To retrieve details about the shipping address, type of subscription, and whether a specific message was included with this order, the following needs to be done using database queries:
+
+Retrieve the subscription list, and match up the ***stripeId*** in the ***Subscription*** table, with that on the Stripe Dashboard. This will return a row which will include the Plan ID, as setup in the Stripe Dashboard, under Plans. The id is specific to a region, so note the suffix of the code (cad or usd). This will also show you whether there is an ***altShippingAddressId***, which indicates that the customer is sending the order to an address which is not their billing address.
+```
+SELECT * FROM Subscription WHERE stripeId='cus_7s8wfQQFbmRekA';
+
++--------------------+--------------------+----------------------+------------+------------+--------------------+---------------
+| stripeId           | subscriptionId     | altShippingAddressId | discountId | taxPercent | plan_id            |
++--------------------+--------------------+----------------------+------------+------------+--------------------+---------------
+| cus_7s8wfQQFbmRekA | sub_7s8wnSLvmf5fLJ |                 NULL | NULL       |         13 | monthly_cad        |
+```
+
+If ***altShippingAddressId*** is false for that row, the shipping address will need to be the billing address. Street2 and Street3 are the addition address lines such as apartment or suite. If they are null, then there are no other address lines:
+```
+SELECT * FROM BillingAddress WHERE stripeId='cus_7s8wfQQFbmRekA';
++--------------------+---------+---------+------------------+---------+------------+-------+----------------+---------+---------+
+| stripeId           | city    | country | name             | company | postalCode | state | street1        | street2 | street3 |
++--------------------+---------+---------+------------------+---------+------------+-------+----------------+---------+---------
+| cus_7s8wfQQFbmRekA | Toronto | CA      | John Doe | NULL    | M4M2B4     | ON    | 1 Bay Street | NULL    | NULL    |
++--------------------+---------+---------+------------------+---------+------------+-------+----------------+---------+---------
+```
+Otherwise, if there is a number in the ***altShippingAddressId*** field, then you must ship that order to that address:
+```
+SELECT * FROM AltShippingAddress WHERE id=44;
++---------+---------+--------------------+------------+---------+------------+-------+---------------+---------+---------+----+
+| city    | country | stripeId           | name       | company | postalCode | state | street1       | street2 | street3 | id |
++---------+---------+--------------------+------------+---------+------------+-------+----------------------+---------+---------
+| Toronto | CA      | cus_9fRYMzXFqQIDTz | John Doe   | NULL    | M5V3C9     | ON    | 1 Bay Street  | Apt 306 | NULL    | 40 |
++---------+---------+--------------------+------------+---------+------------+-------+----------------------+---------+---------
+```
+
+Finally, to determine whether the customer would like to include a message within the gift, you will need to check under the specific Subscrtipion on the Stripe dashboard, under the "metadata" section. If a message needs to be included, it will be shown here as a key value pair under the variable ***orderMsg***
+
+#### Fulfilling Custom Orders
+Like with subscriptions, Stripe will send you an email for a successful charge of a custom order (gift box, or combination of bars from the store). These are stored under within the ***Shipment*** table. You will need to match up Customer ID from the Stripe dashboard, to the *stripeId* in this table. The below query will map the shipment to the shipment items, and retrieve all the product codes for the items which need to be shipped in this order. Afterwards, the product_id can be matched up with that in the Product table, to get more information on the product to ship.
+
+```
+SELECT Shipment.id, ShipmentItem.product_id, ShipmentItem.quantity FROM Shipment INNER JOIN ShipmentItem ON Shipment.id=ShipmentItem.shipmentId WHERE Shipment.stripeCustomerId='cus_9huQLBDzTBqJUD';
++---------+------------+----------+
+| id      | product_id | quantity |
++---------+------------+----------+
+| 1004862 | CS0002     |        1 |
+| 1004862 | DT0001     |        1 |
+| 1004862 | MD0001     |        1 |
+| 1004862 | RA0001     |        1 |
+| 1004862 | RA0002     |        1 |
++---------+------------+----------+
+```
+Finally, to check whether this needs to be shipped to the BillingAddress or an Alternate Shipping Address, select the shipment by the Id from the ***Shipment*** table, and check whether the altShippingAddress column is null or not. The same process is now followed as per the Subscription section. Additional messages with the order can also be retrieve from the Shipment table, as one of the columns of the Shipment row.
