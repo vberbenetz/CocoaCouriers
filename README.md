@@ -125,8 +125,8 @@ module.exports = configPriv;
 
 3) Create product images folder for the ***Store*** component. Location is required as the store loads images dynamically based on database parameters, used in the ***store-app***:
 ```
-  mkdir /assets/product_images/thumbnails
-  mkdir /assets/product_images/full
+  mkdir /public/assets/product_images/thumbnails
+  mkdir /public/assets/product_images/full
 ```
 
 4) Import product images in the following name format:
@@ -166,3 +166,40 @@ Restart should not be used in cluster mode. User Reload instead:
     pm2 reload cocoacouriers_server.js
 ```
 This makes sure to not forcefully kill any of the clustered applications.
+
+## Code Layout Summary
+The site is divided into 3 main application parts. The backend application (NodeJS + ExpressJS server) resides unders ***/app***, followed by 2 frontend Angular apps ***/public/manage-account-app*** and ***store-app***. The static pages are served up in .ejs format (Jade), with the head (all the includes & JS init code), header (html header page bar), and footer all included as templates within each HTML page.
+
+#### Backend App
+The backend application is broken up into controllers and routes. The routes serve up both static pages, as well as the API routes for the AJAX requests done by the frontend applications. Each API route is connected to a controller which handles the business logic behind the call. In addition to this, there are also a number of utilities:
+
+- db_utils: Wraps the database calls, or handle the connection pool, as well as error handling.
+- mail_service: Mail template generator which sends the mail payload to Sendgrid
+- logger: Setup of the logging format
+- errorHandler: Formats error for logging
+
+The configuration folder contains the general config for application properties, config_priv for storage of API keys and other sensitive items, and passport which is used for user authentication.
+
+Finally, the main server file is located in ***/cocoacouriers_server.js*** and is the file which intializes and creates the http server. It is configured to redirect all http routes to https routes by default.
+
+#### Store App (Frontend)
+The frontend store app can be found under ***/public/store-app***
+This app launches when the user navigates to cocoacouriers.com/store
+It takes care of the subscription process (/store/subscribe), populating the store, and the checkout process.
+
+There are several controllers included in this app:
+- mainCtrl: handles the initialization of the application, as well as processing data within the cookies to track the shopping cart, customer location and data
+- subscriptionCtrl: handles the user navigation through the available subscriptions (retrieves from DB)
+- storeCtrl: handles retrieving and populating the store with the available products (sorting by DB parameters)
+- productCtrl: handles retrieving data about the product as well as populating the related images
+- cartCtrl: handles the users shopping cart
+- checkoutCtrl: handles the form validation, and calls to the backend to update the DB and transaction with Stripe
+- postCheckoutCtrl: handles order confirmation after successful charge
+
+#### Manage Account App (Frontend)
+This app takes care of the customer logging in and updating their personal information.
+This includes:
+- update password
+- update billing
+- update subscription shipping address
+- update/cancel subscription plan
