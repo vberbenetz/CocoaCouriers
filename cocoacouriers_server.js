@@ -44,22 +44,6 @@ var pool = mysql.createPool({
 });
 
 // ------------------------------------
-// Mailer Setup - GMAIL OAUTH
-// ------------------------------------
-/*
-var nodemailer = require('nodemailer');
-var xoauth2Generator = require('xoauth2').createXOAuth2Generator(configPriv.gmailXOAuth2);
-var mailTransporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        xoauth2: xoauth2Generator
-    }
-});
-
-var emailUtils = require('./app/utils/email_utils_legacy')(mailTransporter);
-*/
-
-// ------------------------------------
 // SendGrid Mail Service Setup
 // ------------------------------------
 var sendgrid = require('sendgrid')(configPriv.sendGridKey);
@@ -159,28 +143,6 @@ http.createServer(function (req, res) {
     res.end();
 }).listen(configPriv.server.http_port);
 
-
-// Test database and email services on startup
-var startupCtrl = require('./app/controllers/startup_ctrl');
-startupCtrl.testDbConn(pool, function(err, result) {
-    var dbErr = null;
-    if (err) {
-        dbErr = err;
-        log.error('Database Startup Connection Test Failed!!!');
-    }
-    else {
-        log.info('Database Startup Connection Test Successful');
-    }
-    startupCtrl.testEmail(mailService, dbErr, configPriv.env, function(err, result) {
-        if (err) {
-            log.error('Email Startup Test Failed!!!');
-            log.error(err);
-        }
-        else {
-            log.info('Email Startup Test Successful');
-        }
-    });
-});
 
 log.info('================================');
 log.info('====     SERVER STARTED     ====');
